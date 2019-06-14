@@ -1,0 +1,116 @@
+<div class="col-md-10">
+  <div class="btnbar" style="width: inherit">
+    <h3 style="float: left">Roles</h3>
+    <li>
+      <button mat-button style="color:rgb(58, 56, 56)"><span class="glyphicon glyphicon-import"></span><p role="presentation">Import</p></button>
+    </li>
+    <li>
+      <button (click)="exportAsXLSX()" mat-button style="color:rgb(58, 56, 56)"><span class="glyphicon glyphicon-export"></span><p role="presentation">Export</p></button>
+    </li>
+    <li>
+      <button mat-button (click)="OnSubmit()" style="color:rgb(7, 192, 7)"><span class="glyphicon glyphicon-floppy-disk"></span><p role="presentation">Save</p></button>
+    </li>
+    <li>
+      <button mat-button style="color:rgb(212, 2, 2)"><span class="glyphicon glyphicon-remove"></span><p role="presentation">Remove</p></button>
+    </li>
+    <li>
+      <button mat-button style="color:rgb(58, 56, 56)"><span class="glyphicon glyphicon-search"></span><p role="presentation">Search</p></button>
+    </li>
+  </div>
+  <br><br>
+  <div class="pg-assnpro" style="height: calc( 100vh - 115px)">
+    <body>
+      <hr>
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              New Entry
+            </mat-panel-title>
+            <mat-panel-description>
+              New Role Can be assigned To An Employee Here
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-card>
+            <mat-form-field>
+              <input type="text" placeholder="Employee Id" matInput [formControl]="myControl" [matAutocomplete]="auto">
+            </mat-form-field>
+
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let empdrop of empdroplist" [value]="option">{{empdrop.emp_Id}}</mat-option>
+            </mat-autocomplete>&nbsp;&nbsp;
+            <mat-form-field style="width: 250px;">
+              <input matInput placeholder="Employee Name">
+            </mat-form-field>&nbsp;&nbsp;
+            <mat-form-field style="width: 250px;">
+              <input matInput placeholder="Designation">
+            </mat-form-field>&nbsp;&nbsp;
+            <mat-form-field style="width: 250px;">
+              <input matInput placeholder="Role Description">
+            </mat-form-field>&nbsp;&nbsp;
+            <mat-form-field>
+              <mat-label>Role Status</mat-label>
+              <mat-select [(ngModel)]="selectedValue" name="Billable">
+                <mat-option [value]="value">Active</mat-option>
+                <mat-option [value]="value">Inactive</mat-option>
+              </mat-select>
+            </mat-form-field><br><hr class="cardhr">
+            <mat-form-field style="width: 185px;">
+              <input matInput placeholder="Role Assign Date" [matDatepicker]="RoleAsnDate">
+              <mat-datepicker-toggle matSuffix [for]="RoleAsnDate"></mat-datepicker-toggle>
+              <mat-datepicker #RoleAsnDate></mat-datepicker>
+            </mat-form-field>&nbsp;&nbsp;
+            <mat-form-field style="width: 185px;">
+              <input matInput placeholder="Role End Date" [matDatepicker]="RoleendDate">
+              <mat-datepicker-toggle matSuffix [for]="RoleendDate"></mat-datepicker-toggle>
+              <mat-datepicker #RoleendDate></mat-datepicker>
+            </mat-form-field>
+          </mat-card>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <br>
+      <hr>
+      <mat-card>
+        <table>
+          <tr style="background:#8BBC58">
+            <th><input type="checkbox"></th>
+            <th></th>
+            <th>Employee Id</th>
+            <th>Employee Name</th>
+            <th>Designation</th>
+            <th>Role Description</th>
+            <th>Role Status</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+          </tr>
+          <tr *ngFor="let role of RoleAttributeList">
+            <td><input type="checkbox"></td>
+            <td style="width:70px;">
+              <button (click)="edit(role.employee_Id)"><span class="glyphicon glyphicon-pencil"></span></button>
+              <button type="button" (click)="delete(role.employee_Id)"><span class="glyphicon glyphicon-trash btn-bg" style="color:red"></span></button>
+            </td>
+            <td>{{role.employee_Id}}</td>
+
+            <td *ngIf="role.employee_Id === EditRowId"><input type="text" [(ngModel)]="role.employee_Name" /></td>
+            <td *ngIf="role.employee_Id!==EditRowId">{{role.employee_Name}}</td>
+
+            <td *ngIf="role.employee_Id === EditRowId"><input type="text" [(ngModel)]="role.role_Designation" /></td>
+            <td *ngIf="role.employee_Id!==EditRowId">{{role.role_Designation}}</td>
+
+            <td *ngIf="role.employee_Id === EditRowId"><input type="text" [(ngModel)]="role.role_Description" /></td>
+            <td *ngIf="role.employee_Id!==EditRowId">{{role.role_Description}}</td>
+
+            <td *ngIf="role.employee_Id === EditRowId"><input type="text" [(ngModel)]="role.role_Status" /></td>
+            <td *ngIf="role.employee_Id!==EditRowId">{{role.role_Status}}</td>
+
+            <td *ngIf="role.employee_Id === EditRowId"><input type="text" [(ngModel)]="role.role_StartDate" /></td>
+            <td *ngIf="role.employee_Id!==EditRowId">{{role.role_StartDate |date:'dd-MMM-yyyy'}}</td>
+
+            <td *ngIf="role.employee_Id === EditRowId"><input type="text" [(ngModel)]="role.role_EndDate" /></td>
+            <td *ngIf="role.employee_Id!==EditRowId">{{role.role_EndDate |date:'dd-MMM-yyyy'}}</td>
+          </tr>
+        </table>
+      </mat-card>
+    </body>
+  </div>
+</div>

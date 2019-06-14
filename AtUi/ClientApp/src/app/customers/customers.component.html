@@ -1,0 +1,82 @@
+<div class="col-md-10">
+  <div class="btnbar" style="width: inherit">
+    <h3 style="float: left">Customers</h3>
+    <li>
+      <button mat-button style="color:rgb(58, 56, 56)"><span class="glyphicon glyphicon-import"></span><p role="presentation">Import</p></button>
+    </li>
+    <li>
+      <button (click)="exportAsXLSX()" mat-button style="color:rgb(58, 56, 56)"><span class="glyphicon glyphicon-export"></span><p role="presentation">Export</p></button>
+    </li>
+    <li>
+      <button mat-button (click)="OnSubmit()" style="color:rgb(7, 192, 7)"><span class="glyphicon glyphicon-floppy-disk"></span><p role="presentation">Save</p></button>
+    </li>
+    <li>
+      <button mat-button style="color:rgb(212, 2, 2)"><span class="glyphicon glyphicon-remove"></span><p role="presentation">Remove</p></button>
+    </li>
+    <li>
+      <button mat-button style="color:rgb(58, 56, 56)"><span class="glyphicon glyphicon-search"></span><p role="presentation">Search</p></button>
+    </li>
+  </div>
+  <br><br>
+  <div class="pg-assnpro" style="height: calc( 100vh - 115px)">
+    <body>
+      <hr>
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              New Entry
+            </mat-panel-title>
+            <mat-panel-description>
+              New Customer Details Can Be Added Here
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-card>
+            <mat-form-field style="width: 250px;">
+              <input matInput placeholder="Customer Name">
+            </mat-form-field>&nbsp;&nbsp;
+            <mat-form-field style="width: 250px;">
+              <input matInput placeholder="Location">
+            </mat-form-field>&nbsp;&nbsp;
+          </mat-card>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <br>
+      <hr>
+      <mat-card>
+        <table>
+          <tr style="background:#8BBC58">
+            <th><input type="checkbox"></th>
+            <th></th>
+            <th>S.No</th>
+            <th>Customer Code</th>
+            <th>Customer Name</th>
+            <th>Location Id</th>
+            <th>Project Id</th>
+            <th>Status</th>
+          </tr>
+          <tbody>
+            <tr *ngFor="let cu of cust;let i= index">
+              <td><input type="checkbox" /></td>
+              <td>
+                <button (click)="edit(cu.cust_code)"><span class="glyphicon glyphicon-pencil"></span></button>
+                <button><span (click)="DeleteCustomer(cu.cust_code)" class="glyphicon glyphicon-trash btn-bg" style="color:red"></span></button>
+                <button><span (click)="cancel(cu.cust_code)" class="glyphicon glyphicon-remove"></span></button>
+                <button><span (click)="UpdateCustomer(cu)" class="glyphicon glyphicon-ok" style="color:green"></span></button>
+              <td>{{i+1}}</td>
+              <td>{{cu.cust_code}}</td>
+              <td *ngIf="cu.cust_code === EditRowId"><input type="text" [(ngModel)]="cu.cust_name" /></td>
+              <td *ngIf="cu.cust_code!==EditRowId">{{cu.cust_name}}</td>
+              <td *ngIf="cu.cust_code === EditRowId"><input type="text" [(ngModel)]="cu.location_id" /></td>
+              <td *ngIf="cu.cust_code!==EditRowId">{{cu.location_id}}</td>
+              <td *ngIf="cu.cust_code === EditRowId"><input type="text" [(ngModel)]="cu.project_Id" /></td>
+              <td *ngIf="cu.cust_code!==EditRowId">{{cu.project_Id}}</td>
+              <td *ngIf="cu.cust_code === EditRowId"><input type="text" [(ngModel)]="cu.status" /></td>
+              <td *ngIf="cu.cust_code!==EditRowId">{{cu.status}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </mat-card>
+    </body>
+  </div>
+</div>

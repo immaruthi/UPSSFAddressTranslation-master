@@ -1,0 +1,123 @@
+<div class="col-md-10">
+  <div class="btnbar" style="width: inherit">
+    <h3 style="float: left">User Registration</h3>
+    <!--<li>
+      <button mat-button style="color:rgb(58, 56, 56)"><span class="glyphicon glyphicon-import"></span><p role="presentation">Import</p></button>
+    </li>
+    <li>
+      <button mat-button (click)="exportAsXLSX()" type="button" style="color:rgb(58, 56, 56)"><span class="glyphicon glyphicon-export"></span><p role="presentation">Export</p></button>
+    </li>
+    <li>
+      <button mat-button type="button" (click)="OnSubmit()" style="color:rgb(7, 192, 7)"><span class="glyphicon glyphicon-floppy-disk"></span><p role="presentation">Save</p></button>
+    </li>
+    <li>
+      <button mat-button type="button" style="color:rgb(212, 2, 2)"><span class="glyphicon glyphicon-remove"></span><p role="presentation">Remove</p></button>
+    </li>
+    <li>
+      <button mat-button type="button" style="color:rgb(58, 56, 56)"><span class="glyphicon glyphicon-search"></span><p role="presentation">Search</p></button>
+    </li>-->
+  </div>
+
+  <br><br>
+
+  <div class="pg-assnpro" style="height: calc( 100vh - 115px)">
+    <body>
+      <hr>
+      <!--<form name="form" (ngSubmit)="onSubmit(ipUser.value,ipUser1.value,ipUser2.value,ipUser3.value)">
+        <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
+          <label for="firstName">First Name</label>
+          <input #ipUser type="text" name="firstName" required />
+          <div *ngIf="f.submitted && !firstName.valid" class="help-block">First Name is required</div>
+        </div>
+        <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
+          <label for="lastName">Last Name</label>
+          <input #ipUser1 type="text" name="lastName" required />
+          <div *ngIf="f.submitted && !lastName.valid" class="help-block">Last Name is required</div>
+        </div>
+        <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
+          <label for="username">Username</label>
+          <input #ipUser2 type="text" name="username" required />
+          <div *ngIf="f.submitted && !username.valid" class="help-block">Username is required</div>
+        </div>
+        <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+          <label for="password">Password</label>
+          <input #ipUser3 type="password" name="password" required />
+          <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
+        </div>
+        <div class="form-check">
+          <a [routerLink]="['/login']" class="btn btn-link">Cancel</a>
+          <button type="submit" class="btn btn-link" style="float:left;background-color: #4CAF50;color:#FFFFFF">Register</button>
+          <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+        </div>
+      </form>-->
+
+      <form class="login-form" form id="loginbox" [formGroup]="registerForm" (ngSubmit)="onSubmit(ipUser1.value,ipUser2.value,ipUser3.value,ipPwd.value)">
+        <div class="form-group">
+          <div style="margin-bottom: 25px" class="input-group">
+            <label for="firstName">First Name</label>
+            <input #ipUser1 type="text" id="login-firstName" formControlName="firstName" class="form-control" name="firstname" value="" >
+          </div>
+        </div>
+        <div class="form-group">
+          <div style="margin-bottom: 25px" class="input-group">
+            <label for="lastName">Last Name</label>
+            <input #ipUser2 type="text" id="login-lastName" formControlName="lastName" class="form-control" name="lastname" value="" >
+          </div>
+        </div>
+        <div class="form-group">
+          <div style="margin-bottom: 25px" class="input-group">
+            <label for="userName">User Name</label>
+            <input #ipUser3 type="text" id="login-username" formControlName="userName" class="form-control" name="username" value="" placeholder="Email address">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div style="margin-bottom: 25px" class="input-group">
+            <label for="firstName">Password</label>
+            <input #ipPwd id="login-password" type="password" name="password" placeholder="Password" formControlName="password" class="form-control">
+          </div>
+        </div>
+        <!--<a href="#forgot">Forgot Password?</a>-->
+        <div class="form-check">
+          <button type="submit" class="btn btn-login" style="float:left;background-color:green;color:white">Register</button>
+        </div>
+      </form>
+
+      <!--<mat-tab-group>
+    <mat-tab label="Edge Practice">
+      <mat-card>
+        <span style="font-family:calibri; font-weight: bold; color: rgb(107, 107, 107)">Want To Add New Edge Practice?</span><br><br>
+        <mat-form-field style="width: 250px;">
+          <input matInput placeholder="Edge Practice">
+        </mat-form-field><br>
+      </mat-card>
+    </mat-tab>
+    <mat-tab label="Department">
+      <mat-card>
+        <span style="font-family:calibri; font-weight: bold; color: rgb(107, 107, 107)">Want to Add new Department?</span><br><br>
+        <mat-form-field style="width: 250px;">
+          <input matInput placeholder="Department">
+        </mat-form-field>&nbsp;&nbsp;
+      </mat-card>
+    </mat-tab>
+    <mat-tab label="Designation">
+      <mat-card>
+        <span style="font-family:calibri; font-weight: bold; color: rgb(107, 107, 107)">Want to Add new Designation?</span><br><br>
+        <mat-form-field style="width: 250px;">
+          <input matInput placeholder="Designation">
+        </mat-form-field>&nbsp;&nbsp;
+      </mat-card>
+    </mat-tab>
+    <mat-tab label="Center of Excellence">
+      <mat-card>
+        <span style="font-family:calibri; font-weight: bold; color: rgb(107, 107, 107)">Want to Add new Center of Excellence?</span><br><br>
+        <mat-form-field style="width: 250px;">
+          <input matInput placeholder="Center of Excellence">
+        </mat-form-field>&nbsp;&nbsp;
+      </mat-card>
+    </mat-tab>
+  </mat-tab-group>-->
+      <hr>
+    </body>
+  </div>
+

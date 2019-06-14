@@ -1,0 +1,107 @@
+<div class="col-md-10">
+  <div class="btnbar" style="width: inherit">
+    <h3 style="float: left">Projects</h3>
+    <li>
+      <button mat-button style="color:rgb(58, 56, 56)"><span class="glyphicon glyphicon-import"></span><p role="presentation">Import</p></button>
+    </li>
+    <li>
+      <button (click)="exportAsXLSX()" mat-button style="color:rgb(58, 56, 56)"><span class="glyphicon glyphicon-export"></span><p role="presentation">Export</p></button>
+    </li>
+    <li>
+      <button mat-button (click)="OnSubmit()" style="color:rgb(7, 192, 7)"><span class="glyphicon glyphicon-floppy-disk"></span><p role="presentation">Save</p></button>
+    </li>
+    <li>
+      <button mat-button style="color:rgb(212, 2, 2)"><span class="glyphicon glyphicon-remove"></span><p role="presentation">Remove</p></button>
+    </li>
+    <li>
+      <button mat-button style="color:rgb(58, 56, 56)"><span class="glyphicon glyphicon-search"></span><p role="presentation">Search</p></button>
+    </li>
+  </div>
+  <br><br>
+  <div class="pg-assnpro" style="height: calc( 100vh - 115px )">
+    <body>
+      <hr>
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              New Entry
+            </mat-panel-title>
+            <mat-panel-description>
+              New Project Details Can Be Added Here
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-card>
+            <mat-form-field style="width: 100px;">
+              <input matInput placeholder="Project Id">
+            </mat-form-field>&nbsp;&nbsp;
+            <mat-form-field style="width: 250px;">
+              <input matInput placeholder="Project Name">
+            </mat-form-field>&nbsp;&nbsp;
+            <mat-form-field style="width: 250px;">
+              <input matInput placeholder="Project Description">
+            </mat-form-field>&nbsp;&nbsp;
+            <mat-form-field style="width: 185px;">
+              <input matInput placeholder="Start Date" [matDatepicker]="StartDate">
+              <mat-datepicker-toggle matSuffix [for]="StartDate"></mat-datepicker-toggle>
+              <mat-datepicker #StartDate></mat-datepicker>
+            </mat-form-field>&nbsp;&nbsp;
+            <mat-form-field style="width: 185px;">
+              <input matInput placeholder="End Date" [matDatepicker]="EndtDate">
+              <mat-datepicker-toggle matSuffix [for]="EndtDate"></mat-datepicker-toggle>
+              <mat-datepicker #EndtDate></mat-datepicker>
+            </mat-form-field>&nbsp;&nbsp;
+            <mat-form-field>
+              <mat-label>Project Status</mat-label>
+              <mat-select [(ngModel)]="selectedValue" name="ProjectStatus">
+                <mat-option [value]="value">
+                  Active
+                </mat-option>
+                <mat-option [value]="value">
+                  Inactive
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-card>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <br>
+      <hr>
+      <mat-card>
+        <table>
+          <tr style="background:#8BBC58">
+            <th><input type="checkbox"></th>
+            <th> </th>
+            <th>Project ID</th>
+            <th>Project Name</th>
+            <th>Project Description</th>
+            <th>Project Assign Date</th>
+            <th>Project End Date</th>
+            <th>Project Status</th>
+          </tr>
+          <tr *ngFor="let pr of projectlist">
+            <td><input type="checkbox"></td>
+            <td><button (click)="edit(pr.project_ID)"><span class="glyphicon glyphicon-pencil"></span></button><button><span (click)="disable(pr.project_ID)" class="glyphicon glyphicon-trash btn-bg" style="color:red"></span></button><button><span (click)="cancel(pr.project_ID)" class="glyphicon glyphicon-remove"></span></button><button><span (click)="update(pr)" class="glyphicon glyphicon-ok" style="color:green"></span></button>
+
+            <td>{{pr.project_ID}}</td>
+
+            <td *ngIf="pr.project_ID === EditRowId"><input type="text" [(ngModel)]="pr.project_Name" /></td>
+            <td *ngIf="pr.project_ID!==EditRowId">{{pr.project_Name}}</td>
+
+            <td *ngIf="pr.project_ID === EditRowId"><input type="text" [(ngModel)]="pr.project_Description" /></td>
+            <td *ngIf="pr.project_ID!==EditRowId">{{pr.project_Description}}</td>
+
+            <td *ngIf="pr.project_ID === EditRowId"><input type="text" [(ngModel)]="pr.project_StartDate" /></td>
+            <td *ngIf="pr.project_ID!==EditRowId">{{pr.project_StartDate|date:'dd-MMM-yyyy'}}</td>
+
+            <td *ngIf="pr.project_ID === EditRowId"><input type="text" [(ngModel)]="pr.project_EndDate" /></td>
+            <td *ngIf="pr.project_ID!==EditRowId"> {{pr.project_EndDate|date:'dd-MMM-yyyy'}}</td>
+
+            <td *ngIf="pr.project_ID === EditRowId"><input type="text" [(ngModel)]="pr.project_Status" /></td>
+            <td *ngIf="pr.project_ID!==EditRowId"> {{pr.project_Status}}</td>
+          </tr>
+        </table>
+      </mat-card>
+    </body>
+  </div>
+</div>

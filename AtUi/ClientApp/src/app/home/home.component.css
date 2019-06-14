@@ -1,0 +1,41 @@
+.heading {
+  font-style: italic;
+  padding: 4px;
+  width: 100%;
+}
+
+h3 {
+  padding-left: 20px;
+  font-weight: bold;
+}
+
+.pg-assnpro {
+  padding: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.col-md-10 {
+  position: relative;
+  float: right;
+  overflow-y: none;
+  overflow-x: none;
+  padding: 0;
+}
+
+p {
+  font-size: 10px;
+  padding: 0;
+  margin: 0;
+}
+
+mat-card {
+  background-color: rgb(242, 243, 243);
+}
+
+.cardhr {
+  border-color: rgb(255, 210, 21);
+}
