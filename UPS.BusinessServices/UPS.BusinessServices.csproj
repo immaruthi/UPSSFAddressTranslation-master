@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UPS.DataObjects\UPS.DataObjects.csproj" />
+    <ProjectReference Include="..\UPS.ServicesAsyncActions\UPS.ServicesAsyncActions.csproj" />
+    <ProjectReference Include="..\UPS.ServicesDataRepository\UPS.ServicesDataRepository.csproj" />
+  </ItemGroup>
+
+</Project>

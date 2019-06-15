@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UPS.BusinessServices;
+using UPS.DataObjects.UserData;
 
 namespace AtService.Controllers
 {
@@ -32,6 +34,18 @@ namespace AtService.Controllers
             sqlDataAdapter.Fill(ds);
 
             return Ok(ds);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetUser()
+        {
+            var response = await UserServicesAsync.userServicesAsync.GetUserDataResponse();
+            if (response.Success)
+            {
+                return Ok(response.UserData);
+            }
+            return StatusCode(500);
         }
     }
 }

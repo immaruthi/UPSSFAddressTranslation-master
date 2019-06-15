@@ -13,4 +13,11 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\UPS.BusinessServices\UPS.BusinessServices.csproj" />
+    <ProjectReference Include="..\UPS.DataObjects\UPS.DataObjects.csproj" />
+    <ProjectReference Include="..\UPS.ServicesAsyncActions\UPS.ServicesAsyncActions.csproj" />
+    <ProjectReference Include="..\UPS.ServicesDataRepository\UPS.ServicesDataRepository.csproj" />
+  </ItemGroup>
+
 </Project>
