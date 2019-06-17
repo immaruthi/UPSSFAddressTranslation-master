@@ -1,23 +1,36 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { UserService } from '../services/UserService';
+
+
+import { Http, RequestOptions, Headers, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';  
 import * as XLSX from 'xlsx';
 /**
  * @title Table with pagination
  */
 @Component({
   selector: 'workflow',
-  styleUrls: ['workflow.component.css'],
+  styleUrls: ['workflow.component.scss'],
   templateUrl: 'workflow.component.html',
 })
 export class WorkflowComponent {
   arrayBuffer: any;
   file: File;
+  fileToUpload: File = null;
   //displayedColumns = ['position', 'name', 'weight', 'symbol'];
-  displayedColumns = ['WorkflowID', 'Owner', 'FileName', 'Status', 'CreatedAt'];
-  dataSource = new MatTableDataSource<Element>
-    (ELEMENT_DATA);
+  displayedColumns = ['id', 'usR_FST_NA', 'flE_NA', 'wfL_STA_TE', 'crD_DT'];
+  dataSource = new MatTableDataSource<Element>();
+  constructor(private userService: UserService) {
+
+  }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  //set paginator(value: MatPaginator) {
+  //  this.dataSource.paginator = value;
+  //}
+
 
   /**
   * Set the paginator after the view init since this component will
@@ -26,6 +39,18 @@ export class WorkflowComponent {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
+
+  ngOnInit() {;
+    var user = localStorage.getItem("Emp_Id");
+    this.userService.getAllWorkflows(user)
+      .subscribe((data: any) => {
+
+        this.dataSource.data = data;
+        this.dataSource.paginator = this.paginator;
+        //console.log(this.arrayBuffer);
+      });
+    //this.dataSource = getAllWorkflows();
+} 
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
@@ -53,48 +78,33 @@ export class WorkflowComponent {
     };
     reader.readAsText(target.files[0]);
   }
-//inside export class
 
-//incomingfile(event)
-//{
-//  this.file = event.target.files[0];
-//  this.Upload();
-//}
+  handleFileInput(files: FileList) {
+    var user = localStorage.getItem("Emp_Id");
+    this.fileToUpload = files.item(0);
+    this.userService.postFile(this.fileToUpload,user)
+      .subscribe((data: any) => {
 
-//Upload() {
-//  let fileReader = new FileReader();
-//  fileReader.onload = (e) => {
-//    this.arrayBuffer = fileReader.result;
-//    var data = new Uint8Array(this.arrayBuffer);
-//    var arr = new Array();
-//    for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
-//    var bstr = arr.join("");
-//    var workbook = XLSX.read(bstr, { type: "binary" });
-//    var first_sheet_name = workbook.SheetNames[0];
-//    var worksheet = workbook.Sheets[first_sheet_name];
-//    console.log(XLSX.utils.sheet_to_json(worksheet, { raw: true }));
-//  }
-//  fileReader.readAsArrayBuffer(this.file);
-//}
+        this.dataSource.data = data;
+           this.dataSource.paginator = this.paginator;
+        //console.log(this.arrayBuffer);
+      });
+  }
 
+ 
 }
 
 
 
 export interface Element {
-  WorkflowID: number;
-  Owner: string;
-  FileName: string;
-  Status: string;
-  CreatedAt: string;
+  id: number;
+  usR_FST_NA: string;
+  
+  //udT_DT: string;
+  flE_NA: string;
+  wfL_STA_TE: string;
+  crD_DT: string;
+ 
 }
 
-const ELEMENT_DATA: Element[] = [
-  { WorkflowID: 1, Owner: 'Aravind', FileName: 'adsd', Status: 'Translated', CreatedAt: '20-Jun-2999' },
-  { WorkflowID: 2, Owner: 'James', FileName: 'sfds', Status: 'Verified', CreatedAt: '30-Jun-2029' },
-  { WorkflowID: 3, Owner: 'John', FileName: 'dsd', Status: 'Done', CreatedAt: '20-Jun-2019' },
-  { WorkflowID: 4, Owner: 'Wang', FileName: 'dsd', Status: 'Done', CreatedAt: '21-Jun-2029' },
-  { WorkflowID: 5, Owner: 'Kelvin', FileName: 'sdsd', Status: 'Verified', CreatedAt: '30-Jun-2019' },
-  { WorkflowID: 6, Owner: 'Yang', FileName: 'sdsd', Status: 'Translated', CreatedAt: '21-Jun-2019' },
-];
 

@@ -36,6 +36,7 @@ import { ExcelService } from './services/ExcelExport';
 
 import { WorkflowComponent } from './workflow/workflow.component';
 import { WorkflowService } from './services/WorkflowService';
+import { ShipmentComponent } from './shipping-data/shipment.component';
 
 
 
@@ -57,7 +58,8 @@ import { WorkflowService } from './services/WorkflowService';
     CustomersComponent,
     AdminconfigComponent,
     AlertDialogComponent,
-    WorkflowComponent
+    WorkflowComponent,
+    ShipmentComponent
    
   ],
   imports: [
@@ -84,7 +86,8 @@ import { WorkflowService } from './services/WorkflowService';
           { path: 'home', canActivate: [AuthGuard], component: HomeComponent },
           { path: 'assignProjects', canActivate: [AuthGuard],component: AssignProjectsComponent },
           { path: 'employee', canActivate: [AuthGuard],component: EmployeeComponent  },
-          { path: 'workflow', canActivate: [AuthGuard], component: WorkflowComponent  },
+          { path: 'workflow', canActivate: [AuthGuard], component: WorkflowComponent },
+          { path: 'shipment', canActivate: [AuthGuard], component: ShipmentComponent },
           { path: 'projects', canActivate: [AuthGuard],component: ProjectsComponent  },
           { path: 'roles', canActivate: [AuthGuard], component: RolesComponent },
           { path: 'customers', canActivate: [AuthGuard], component: CustomersComponent },

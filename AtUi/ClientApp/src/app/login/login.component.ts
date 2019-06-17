@@ -76,7 +76,7 @@ export class LoginComponent {
 
                 if (this.isExists) {
                   //this.router.navigate(['/counter', name]);
-                  this.router.navigate(['/home']);
+                  this.router.navigate(['/workflow']);
                   this.setSession(name, password);
 
 

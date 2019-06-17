@@ -8,42 +8,45 @@
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
     </mat-form-field>
   </div>
-  <div class="">
-    <input type="file" id="fileUpload1" hidden (change)="onFileChange($event)" />
-    <label for="fileUpload1" class="btn btn-info">Upload</label>
+  <div class="form-group">
+    <label for="file">Choose File</label>
+    <input type="file"
+           id="file" hidden
+           (change)="handleFileInput($event.target.files)">
   </div>
+ 
 </div>
 
 <div class="example-container mat-elevation-z8">
-  <mat-table #table [dataSource]="dataSource">
+  <mat-table #table [dataSource]="dataSource" style="overflow:scroll; height:525px;">
 
     <!-- Position Column -->
-    <ng-container matColumnDef="WorkflowID">
+    <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef> WorkflowID </mat-header-cell>
-      <mat-cell *matCellDef="let element"><a fxFlexFill [routerLink]="['/shipment']" class="mat-row-link"> {{element.WorkflowID}}</a> </mat-cell>
+      <mat-cell *matCellDef="let element"><a fxFlexFill [routerLink]="['/shipment']" class="mat-row-link"> {{element.id}}</a> </mat-cell>
     </ng-container>
 
     <!-- Name Column -->
-    <ng-container matColumnDef="Owner">
+    <ng-container matColumnDef="usR_FST_NA">
       <mat-header-cell *matHeaderCellDef> Owner </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.Owner}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.usR_FST_NA}} </mat-cell>
     </ng-container>
 
     <!-- Weight Column -->
-    <ng-container matColumnDef="FileName">
+    <ng-container matColumnDef="flE_NA">
       <mat-header-cell *matHeaderCellDef> File Name </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.FileName}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.flE_NA}} </mat-cell>
     </ng-container>
 
     <!-- Symbol Column -->
-    <ng-container matColumnDef="Status">
+    <ng-container matColumnDef="wfL_STA_TE">
       <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.Status}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.wfL_STA_TE}} </mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="CreatedAt">
+    <ng-container matColumnDef="crD_DT">
       <mat-header-cell *matHeaderCellDef> CreatedAt </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.CreatedAt}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.crD_DT}} </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
