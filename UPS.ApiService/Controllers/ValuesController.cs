@@ -8,6 +8,7 @@ using System.Data.Sql;
 using System.Data.SqlClient;
 using System.Data;
 using AtService.Models;
+using UPS.ServicesDataRepository;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,16 +22,21 @@ namespace UPS.AddressTranslationService.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
+            ShipmentService shipmentService = new ShipmentService();
+            shipmentService.CreateShipment(new DataObjects.Shipment.ShipmentDataRequest()
+            {
+                SHP_ADR_TE = "test"
+            });
 
-            SqlConnection connection = new SqlConnection(GetConnectionString.connectionString);
+            //SqlConnection connection = new SqlConnection(GetConnectionString.connectionString);
 
-            connection.Open();
+            //connection.Open();
 
-            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter("select * from [ADR-BK]", connection);
+            //SqlDataAdapter sqlDataAdapter = new SqlDataAdapter("select * from [ADR-BK]", connection);
 
-            DataSet ds = new DataSet();
+            //DataSet ds = new DataSet();
 
-            sqlDataAdapter.Fill(ds);
+            //sqlDataAdapter.Fill(ds);
 
             return new string[] { "value1", "value2" };
         }

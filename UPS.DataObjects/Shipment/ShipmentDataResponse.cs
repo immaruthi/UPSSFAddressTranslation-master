@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace UPS.DataObjects.UserData
+namespace UPS.DataObjects.Shipment
 {
-    public class UserDataResponse
+    public class ShipmentDataResponse
     {
-        public IEnumerable<USR> UserData { get; set; }
+        public IEnumerable<ShipmentDataRequest> Catalogs { get; set; }
         public bool Success { get; set; }
         public Exception OperationException { get; set; }
     }

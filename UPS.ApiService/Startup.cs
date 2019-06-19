@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using UPS.ServicesDataRepository;
+using UPS.ServicesDataRepository.DataContext;
 
 namespace UPS.AddressTranslationService
 {
@@ -34,14 +35,20 @@ namespace UPS.AddressTranslationService
         {
 
 
+            new GetConnectionString().getconnection(Configuration);
+
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
 
-            new AtServicesContext().AddContextConfiguration(Configuration);
+            //services.AddDbContext<UPSDataContext>(
+            //    option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            //new AtServicesContext().AddContextConfiguration(Configuration);
 
             services.AddDbContext<ApplicationDbContext>(
                 option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            new GetConnectionString().getconnection(Configuration);
+
 
             services.AddIdentity<IdentityUser, IdentityRole>(
                 option =>
@@ -72,7 +79,7 @@ namespace UPS.AddressTranslationService
                 };
             });
 
-            //services.AddIdentityServerAuthentication()
+            //services.AddIdentityServerAuthentication();
 
 
 

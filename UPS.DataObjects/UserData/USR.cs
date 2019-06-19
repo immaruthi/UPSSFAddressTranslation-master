@@ -4,7 +4,7 @@ using System.Text;
 
 namespace UPS.DataObjects.UserData
 {
-    public class UserData
+    public class USR
     {
         public int ID { get; set; }
         public string USR_FST_NA { get; set; }
