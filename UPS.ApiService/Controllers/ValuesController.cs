@@ -22,11 +22,6 @@ namespace UPS.AddressTranslationService.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            ShipmentService shipmentService = new ShipmentService();
-            shipmentService.CreateShipment(new DataObjects.Shipment.ShipmentDataRequest()
-            {
-                SHP_ADR_TE = "test"
-            });
 
             //SqlConnection connection = new SqlConnection(GetConnectionString.connectionString);
 

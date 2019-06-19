@@ -15,9 +15,9 @@ namespace UPS.DataObjects.Shipment
         [Column("WFL-ID")]
         public int WFL_ID { get; set; }
         [Column("QQS-TRA-LG-ID")]
-        public int QQS_TRA_LG_ID { get; set; }
+        public int? QQS_TRA_LG_ID { get; set; }
         [Column("SF-TRA-LG-ID")]
-        public int SF_TRA_LG_ID { get; set; }
+        public int? SF_TRA_LG_ID { get; set; }
         [Column("SMT-STA-NR")]
         public string SMT_STA_NR { get; set; }
         [Column("SMT-NR-TE")]
@@ -94,5 +94,7 @@ namespace UPS.DataObjects.Shipment
         public string EXP_TYP { get; set; }
         [Column("COD-TE")]
         public string COD_TE { get; set; }
+
+
     }
 }

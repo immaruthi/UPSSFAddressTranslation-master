@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UPS.DataObjects.Shipment;
 using UPS.DataObjects.UserData;
+using UPS.DataObjects.WR_FLW;
 
 namespace UPS.ServicesDataRepository.DataContext
 {
@@ -53,6 +54,10 @@ namespace UPS.ServicesDataRepository.DataContext
             set;
         }
         public DbSet<ShipmentDataRequest> shipmentDataRequests
+        {
+            get; set;
+        }
+        public DbSet<WorkflowDataRequest> workflowDataRequests
         {
             get; set;
         }
