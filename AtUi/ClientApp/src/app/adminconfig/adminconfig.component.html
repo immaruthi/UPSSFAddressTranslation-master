@@ -73,15 +73,15 @@
 
         <div class="form-group">
           <div style="margin-bottom: 25px" class="input-group">
-            <label for="firstName">Password</label>
-            <input #ipPwd id="login-password" type="password" name="password" placeholder="Password" formControlName="password" class="form-control">
+            <label for="password">Password</label>
+            <input #ipPwd id="login-password" minlength="8" maxlength="20" type="password" name="password" placeholder="Password" formControlName="password" class="form-control">
           </div>
-        </div>
-        <!--<a href="#forgot">Forgot Password?</a>-->
-        <div class="form-check">
-          <button type="submit" class="btn btn-login" style="float:left;background-color:green;color:white">Register</button>
-        </div>
-      </form>
+          </div>
+          <!--<a href="#forgot">Forgot Password?</a>-->
+          <div class="form-check">
+            <button type="submit" class="btn btn-login" style="float:left;background-color:green;color:white">Register</button>
+          </div>
+</form>
 
       <!--<mat-tab-group>
     <mat-tab label="Edge Practice">
