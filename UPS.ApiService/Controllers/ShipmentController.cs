@@ -22,11 +22,13 @@ using System.IO;
 using UPS.AddressTranslationService.Controllers;
 using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Cors;
 
 namespace AtService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("SiteCorsPolicy")]
     public class ShipmentController : ControllerBase
     {
 
