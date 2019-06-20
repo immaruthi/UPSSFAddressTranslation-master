@@ -100,8 +100,8 @@ namespace RMG.Controllers
             SqlConnection conn = new SqlConnection(GetConnectionString.connectionString);
             conn.Open();
             //string query = "select * from [WR-FLW] inner join [USR] on USR.ID = [WR-FLW].[CRD-BY-NR] ";
-            string query = "select * from [WR-FLW] ";// +
-                //"inner join [USR] on USR.ID = [WR-FLW].[CRD-BY-NR] where USR.ID = (select [ID] from [USR] where [USR].[USR-EML-TE]= '"+ EmpID+"')";
+            string query = "select * from [WR-FLW] " +
+                "inner join [USR] on USR.ID = [WR-FLW].[CRD-BY-NR] where 1 = 1"; // USR.ID = (select [ID] from [USR] where [USR].[USR-EML-TE]= '"+ EmpID+"')";
             SqlCommand command = new SqlCommand(query, conn);
 
             SqlDataReader reader = command.ExecuteReader();
