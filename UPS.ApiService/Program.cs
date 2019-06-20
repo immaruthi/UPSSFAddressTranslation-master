@@ -14,11 +14,21 @@ namespace UPS.AddressTranslationService
     {
         public static void Main(string[] args)
         {
+
+            //var config = new ConfigurationBuilder()
+            //             .AddJsonFile("hosting.json", optional: true)
+            //             .Build();
+
+
             CreateWebHostBuilder(args).Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseWebRoot("www")
+                .UseIISIntegration()
                 .UseStartup<Startup>();
     }
 }

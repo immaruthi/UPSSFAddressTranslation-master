@@ -12,11 +12,16 @@ using UPS.ServicesDataRepository;
 using UPS.DataObjects.Shipment;
 using Microsoft.EntityFrameworkCore;
 using UPS.ServicesDataRepository.DataContext;
+using UPS.Quincus.APP;
+using UPS.Quincus.APP.Response;
+using Microsoft.Extensions.Configuration;
 using ExcelFileRead;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using UPS.AddressTranslationService.Controllers;
+using Microsoft.AspNetCore.Hosting.Internal;
+using Microsoft.AspNetCore.Hosting;
 
 namespace AtService.Controllers
 {
@@ -24,6 +29,16 @@ namespace AtService.Controllers
     [ApiController]
     public class ShipmentController : ControllerBase
     {
+
+        private readonly IConfiguration configuration;
+        private readonly IHostingEnvironment hostingEnvironment;
+
+        public ShipmentController(IConfiguration Configuration, IHostingEnvironment HostingEnvironment)
+        {
+            this.configuration = Configuration;
+            this.hostingEnvironment = HostingEnvironment;
+        }
+
         private int _workflowID = 0;
         [Route("ExcelFileUpload")]
         [HttpPost]
@@ -39,10 +54,13 @@ namespace AtService.Controllers
                 {
                     if (file.Length > 0)
                     {
-                        var filePath = Path.Combine(@"D:\UserExcels", file.FileName);
+                        //string paths = hostingEnvironment.WebRootPath;
+
+                        var filePath = Path.Combine(hostingEnvironment.WebRootPath, file.FileName);
+
+                        //var filePath = Path.Combine(@"D:\UserExcels", file.FileName);
                         using (var fileStream = new FileStream(filePath, FileMode.Create))
                         {
-
                             //FileStream stream = File.Open(fileName, FileMode.Open, FileAccess.Read);
                             //response = new ExcelExtension().Test(filePath);
                             await file.CopyToAsync(fileStream);
@@ -144,6 +162,49 @@ namespace AtService.Controllers
             shipmentService = new ShipmentService();
             List<ShipmentDataRequest> shipmentDataRequests = shipmentService.GetShipment(wid);
             return shipmentDataRequests;
+        }
+
+
+        [Route("UpdateShipmentCode")]
+        [HttpPost]
+        public async Task<ActionResult> UpdateShipmentCode([FromBody] ShipmentGeoCodes shipmentGeoCodes)
+        {
+            QuincusResponse quincusResponse = null;
+
+            QuincusTokenDataResponse quincusTokenDataResponse = QuincusService.GetToken(new UPS.Quincus.APP.Configuration.QuincusParams()
+            {
+                endpoint = configuration["Quincus:TokenEndPoint"],
+                password= configuration["Quincus:Password"],
+                username= configuration["Quincus:UserName"],
+
+            });
+
+            if (quincusTokenDataResponse.ResponseStatus)
+            {
+
+                quincusResponse = QuincusService.GetGeoCodeReponseFromQuincus(new UPS.Quincus.APP.Request.QuincusGeoCodeDataRequest()
+                {
+                    endpoint = configuration["Quincus:GeoCodeEndPoint"],
+                    id = shipmentGeoCodes.geoCode,
+                    quincusTokenData = quincusTokenDataResponse.quincusTokenData
+                });
+
+                if(quincusTokenDataResponse.ResponseStatus)
+                {
+
+                    IList<Geocode> geocodes = quincusResponse.QuincusReponseData.geocode;
+
+                    string TranslatedCode = geocodes[0].translated_adddress;
+
+                    return Ok(quincusResponse.QuincusReponseData);
+                }
+            }
+            else
+            {
+                return Ok(quincusTokenDataResponse.exception);
+            }
+
+            return Ok("Error");
         }
     }
 }
