@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using AtService.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ namespace UPS.AddressTranslationService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("SiteCorsPolicy")]
     public class WorkflowController : ControllerBase
     {
         private WorkflowService workflowService {get; set;}

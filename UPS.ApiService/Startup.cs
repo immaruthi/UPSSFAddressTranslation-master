@@ -7,6 +7,7 @@ using AtService.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -25,7 +26,7 @@ namespace UPS.AddressTranslationService
         {
             Configuration = configuration;
         }
-
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         //public IConfiguration Configuration { get; }
 
         public IConfiguration Configuration { get; }
@@ -38,7 +39,22 @@ namespace UPS.AddressTranslationService
             new GetConnectionString().getconnection(Configuration);
 
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
+            // ********************
+            // Setup CORS
+            // ********************
+            var corsBuilder = new CorsPolicyBuilder();
+            corsBuilder.AllowAnyHeader();
+            corsBuilder.AllowAnyMethod();
+            corsBuilder.AllowAnyOrigin(); // For anyone access.
+            //corsBuilder.WithOrigins("https://addresstranslation.azurewebsites.net"); // for a specific url. Don't add a forward slash on the end!
+            corsBuilder.WithOrigins("https://atservicetest.azurewebsites.net"); // for a specific url. Don't add a forward slash on the end!
+            corsBuilder.AllowCredentials();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("SiteCorsPolicy", corsBuilder.Build());
+            });
+            //services.AddCors(options => { options.AddPolicy(MyAllowSpecificOrigins, builder => { builder.WithOrigins("https://atservicetest.azurewebsites.net", "https://addresstranslation.azurewebsites.net"); }); });
             //services.AddDbContext<UPSDataContext>(
             //    option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -101,11 +117,13 @@ namespace UPS.AddressTranslationService
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();
+            //app.UseCors(MyAllowSpecificOrigins);
 
             //app.Run(async (context) =>
             //{
             //    await context.Response.WriteAsync("Hello World!");
             //});
+            app.UseCors("SiteCorsPolicy");
         }
 
     }
