@@ -7,7 +7,7 @@ import 'rxjs/add/operator/map';
 export class HttpService {
   
   //private LOCAL_API_URL = window.location.origin + '/';
-  private LOCAL_API_URL = 'https://atservicetest.azurewebsites.net/';
+  private LOCAL_API_URL = 'https://addresstranslation.azurewebsites.net/';
   
   constructor(private _http: HttpClient) {
     if (location.hostname == "localhost") {
