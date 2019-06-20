@@ -2,6 +2,9 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
+import { ShippingService } from '../../services/shipping.service';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+
 
 @Component({
   selector: 'app-translate',
@@ -10,13 +13,22 @@ import { FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
 })
 export class TranslateComponent implements OnInit {
   displayedColumns =
-    ['select', 'WFL_ID', 'SMT_NR_TE', 'SHP_DT',
-      'SHP_CPY_NA', 'SHP_ADR_TE', 'SHP_ADR_TR_TE', 'ORG_CTY_TE', 'ORG_PSL_CD', 'RCV_CPY_TE', 'RCV_ADR_TE', 'DST_CTY_TE',
-      'DST_PSL_TE'
-    ];
+    //['select', 'smT_NR_TE', 'shP_DT',
+    //  'shP_CPY_NA', 'shP_ADR_TE', 'shP_ADR_TR_TE', 'orG_CTY_TE', 'orG_PSL_CD', 'rcV_CPY_TE', 'rcV_ADR_TE', 'dsT_CTY_TE',
+    //  'dsT_PSL_TE'
+    //];
+    ['select', 'smT_STA_NR', 'smT_NR_TE', 'shP_DT', 'shP_CPY_NA', 'fsT_INV_LN_DES_TE', 'shP_ADR_TE',
+      'shP_ADR_TR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD', 'imP_SLC_TE', 'rcV_CPY_TE',
+      'rcV_ADR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'coD_TE'];
+
+  public ResponseData: any[] = [];
+  public dataSource: any[] = [];
+  public errorMessage: string;
+
   //dataSource = new MatTableDataSource<Element>();
   selection = new SelectionModel<any>(true, []);
-  constructor() {
+  constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
+              private router: Router) {
 
   }
 
@@ -33,6 +45,19 @@ export class TranslateComponent implements OnInit {
   }
 
   ngOnInit() {
+       
+    const WorkflowID = this.activatedRoute.snapshot.params.WorkflowID;
+    if (WorkflowID) {
+      this.getTranslateData(WorkflowID);
+    }
+  }
+
+  getTranslateData(WorkflowID: any) {
+    this.ResponseData = [];
+    this.shippingService.getTranslateData(WorkflowID).subscribe((response: any) => {
+      this.ResponseData = response;
+      this.dataSource = response;
+    }, error => (this.errorMessage = <any>error));
   }
 
   isAllSelected() {
@@ -41,22 +66,8 @@ export class TranslateComponent implements OnInit {
     return numSelected === numRows;
   }
 
-  //// Editable function
-  //updateField(index, field) {
-  //  const control = this.getControl(index, field);
-  //  if (control.valid) {
-  //    this.core.update(index, field, control.value);
-  //  }
-
-  //}
-
-  //getControl(index, fieldName) {
-  //  const a = this.controls.at(index).get(fieldName) as FormControl;
-  //  return this.controls.at(index).get(fieldName) as FormControl;
-  //}
-  //// Editable Ends
-
-  masterToggle() {
+  
+    masterToggle() {
     this.isAllSelected() ?
       this.selection.clear() :
       this.dataSource.forEach(row => this.selection.select(row));
@@ -70,26 +81,7 @@ export class TranslateComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
 
-  dataSource = [
-    {
-      WFL_ID: 1, SMT_NR_TE: 'AF3977VBWDD', SHP_ADR_TE: '1384 BROADWAY 25TH FLOOR NY', SHP_ADR_TR_TE: '1384 BROADWAY 25TH FLOOR NY', RCV_CPY_TE: 'BASF CHEMICALS CO., LTD', RCV_ADR_TE: 'SUITE 601_602,SHANGHAI TIMES SQUARE NO:93 HUAI HAI MIDDLE ROAD LUWAN D.', RCV_ADR_CN: '', DST_CTY_TE: 'SHANGHAI', DST_PSL_TE: '201137', Status: 'Uploaded'
-    },
-    {
-      WFL_ID: 2, SMT_NR_TE: 'AF3977VBWDD', SHP_ADR_TE: '1384 BROADWAY 25TH FLOOR NY', SHP_ADR_TR_TE: '1384 BROADWAY 25TH FLOOR NY', RCV_CPY_TE: 'BASF CHEMICALS CO., LTD', RCV_ADR_TE: 'SUITE 601_602,SHANGHAI TIMES SQUARE NO:93 HUAI HAI MIDDLE ROAD LUWAN D.', RCV_ADR_CN: '', DST_CTY_TE: 'SHANGHAI', DST_PSL_TE: '201137', Status: 'Uploaded'
-    },
-    {
-      WFL_ID: 3, SMT_NR_TE: 'AF3977VBWDD', SHP_ADR_TE: '1384 BROADWAY 25TH FLOOR NY', SHP_ADR_TR_TE: '1384 BROADWAY 25TH FLOOR NY', RCV_CPY_TE: 'BASF CHEMICALS CO., LTD', RCV_ADR_TE: 'SUITE 601_602,SHANGHAI TIMES SQUARE NO:93 HUAI HAI MIDDLE ROAD LUWAN D.', RCV_ADR_CN: '', DST_CTY_TE: 'SHANGHAI', DST_PSL_TE: '201137', Status: 'Uploaded'
-    },
-    {
-      WFL_ID: 4, SMT_NR_TE: 'AF3977VBWDD', SHP_ADR_TE: '1384 BROADWAY 25TH FLOOR NY', SHP_ADR_TR_TE: '1384 BROADWAY 25TH FLOOR NY', RCV_CPY_TE: 'BASF CHEMICALS CO., LTD', RCV_ADR_TE: 'SUITE 601_602,SHANGHAI TIMES SQUARE NO:93 HUAI HAI MIDDLE ROAD LUWAN D.', RCV_ADR_CN: '', DST_CTY_TE: 'SHANGHAI', DST_PSL_TE: '201137', Status: 'Uploaded'
-    },
-    {
-      WFL_ID: 5, SMT_NR_TE: 'AF3977VBWDD', SHP_ADR_TE: '1384 BROADWAY 25TH FLOOR NY', SHP_ADR_TR_TE: '1384 BROADWAY 25TH FLOOR NY', RCV_CPY_TE: 'BASF CHEMICALS CO., LTD', RCV_ADR_TE: 'SUITE 601_602,SHANGHAI TIMES SQUARE NO:93 HUAI HAI MIDDLE ROAD LUWAN D.', RCV_ADR_CN: '', DST_CTY_TE: 'SHANGHAI', DST_PSL_TE: '201137', Status: 'Uploaded'
-    },
-    {
-      WFL_ID: 6, SMT_NR_TE: 'AF3977VBWDD', SHP_ADR_TE: '1384 BROADWAY 25TH FLOOR NY', SHP_ADR_TR_TE: '1384 BROADWAY 25TH FLOOR NY', RCV_CPY_TE: 'BASF CHEMICALS CO., LTD', RCV_ADR_TE: 'SUITE 601_602,SHANGHAI TIMES SQUARE NO:93 HUAI HAI MIDDLE ROAD LUWAN D.', RCV_ADR_CN: '', DST_CTY_TE: 'SHANGHAI', DST_PSL_TE: '201137', Status: 'Uploaded'
-    },
-  ];
+  
   updateField(index, field) {
     debugger;
     const control = this.getControl(index, field);

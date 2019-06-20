@@ -8,13 +8,13 @@
         <li class="dropdown" appDropdown>
           <button class="dropdown-toggle" role="button"><span class="glyphicon glyphicon-user"></span> My Profile<span class="caret"></span></button>
           <ul class="dropdown-menu">
-            <li><a href="#"> Edit</a></li>
-            <li><a href="#">Settings</a></li>
+            <!--<li><a href="#"> Edit</a></li>
+            <li><a href="#">Settings</a></li>-->
             <li><a style="cursor: pointer" (click)="logout()">Logout</a></li>
           </ul>
         </li>
       </ul>
-      <li style="float:right; padding-top:14px; padding-right:35px; list-style:none; font-family:Courier New;">[Welcome User:{{employeeId}} Last-Login:{{loginfo |date:'dd-MMM-yyyy HH:mm:ss'}}]</li>
+      <li style="float:right; padding-top:14px; padding-right:35px; list-style:none; font-family:Courier New;">[Welcome User:{{employeeId}}]</li>
 
     </div>
   </div>
