@@ -1,0 +1,27 @@
+@import "colors";
+//overrides
+input {
+  outline: none !important;
+
+  &:focus {
+    outline: none !important;
+  }
+}
+
+//custom
+.input-error {
+  color: $error_color;
+  font-size: 11px;
+  font-style: italic;
+}
+
+.b-0 {
+  .mat-form-field-infix {
+    border: 0 !important;
+  }
+}
+
+.ng-select-hint {
+  position: relative;
+  top: -1.3rem;
+}

@@ -1,5 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~ag-grid-community/dist/styles/ag-grid.css";
+@import "~ag-grid-community/dist/styles/ag-theme-balham.css";
 .confirm-dialog-container .mat-dialog-container {
   border-radius: .25em .25em .4em .4em;
   padding: 0px;

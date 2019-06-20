@@ -1,0 +1,28 @@
+@import "colors";
+
+.mat-button, .mat-flat-button {
+  border-radius: 0 !important;
+  padding: 1px 25px !important;
+  font-weight: 300;
+
+  &.mat-btn-sm {
+    padding: 0px 18px !important;
+    line-height: 30px;
+    font-size: 12px !important;
+  }
+
+  &.mat-primary-btn {
+    color: $white;
+    background: $primary;
+  }
+
+  &.mat-success-btn {
+    color: $white;
+    background: $success;
+  }
+
+  &.mat-danger-btn {
+    color: $white;
+    background: $danger;
+  }
+}

@@ -82,7 +82,7 @@ namespace UPS.AddressTranslationService
             //services.AddIdentityServerAuthentication();
 
 
-
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
         }
 
