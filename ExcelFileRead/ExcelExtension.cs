@@ -122,9 +122,7 @@ namespace ExcelFileRead
                 
                 JSONString = JsonConvert.SerializeObject(result.Tables[0]);
 
-               // ExcelDataObject excelDataObject = JsonConvert.DeserializeObject<ExcelDataObject>(JSONString);
-
-
+                // ExcelDataObject excelDataObject = JsonConvert.DeserializeObject<ExcelDataObject>(JSONString);
                var excelDataObject2 = JsonConvert.DeserializeObject<List<ExcelDataObject>>(JSONString);
 
 
@@ -134,9 +132,6 @@ namespace ExcelFileRead
             {
                 return ex.Message.ToString();
             }
-
-            return JSONString;
-
         }
 
     }
