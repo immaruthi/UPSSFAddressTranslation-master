@@ -1,27 +1,42 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { UserService } from '../services/UserService';
-
-
 import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';  
 import * as XLSX from 'xlsx';
+import { FormControl } from '@angular/forms';
+import { LoaderService } from '../shared/loader/loader.service';
+import { List } from 'linq-typescript';
+
 /**
  * @title Table with pagination
  */
+
 @Component({
   selector: 'workflow',
   styleUrls: ['workflow.component.scss'],
   templateUrl: 'workflow.component.html',
 })
+
 export class WorkflowComponent {
+
   arrayBuffer: any;
   file: File;
   fileToUpload: File = null;
   //displayedColumns = ['position', 'name', 'weight', 'symbol'];
   displayedColumns = ['id', 'usR_FST_NA', 'flE_NA', 'wfL_STA_TE', 'crD_DT'];
   dataSource = new MatTableDataSource<Element>();
-  constructor(private userService: UserService) {
+
+  fileNameControl = new FormControl('');
+  isValidFile: boolean = true;
+   workFlowStatus=[
+  { key: 1, value: 'InProgress' },
+     { key: 2, value: 'Uploaded' }
+]; // create an empty array
+
+
+
+  constructor(private userService: UserService, private _loaderService: LoaderService) {
 
   }
 
@@ -40,16 +55,14 @@ export class WorkflowComponent {
     this.dataSource.paginator = this.paginator;
   }
 
-  ngOnInit() {;
+  ngOnInit() {
     var user = localStorage.getItem("Emp_Id");
     this.userService.getAllWorkflows(user)
       .subscribe((data: any) => {
 
         this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
-        //console.log(this.arrayBuffer);
       });
-    //this.dataSource = getAllWorkflows();
 } 
 
   applyFilter(filterValue: string) {
@@ -80,17 +93,38 @@ export class WorkflowComponent {
   }
 
   handleFileInput(files: FileList) {
-    var user = localStorage.getItem("Emp_Id");
+    debugger;
     this.fileToUpload = files.item(0);
-    this.userService.postFile(this.fileToUpload,user)
-      .subscribe((data: any) => {
+    let fileName = this.fileToUpload.name;
+    this.fileNameControl.setValue(fileName);
+    if (!this.validateFile(fileName)) {
+      this.isValidFile = false;
+      return;
+    }
+    else {
+      this.isValidFile = true;
+      var user = localStorage.getItem("Emp_Id");
+  
+      this.userService.postFile(this.fileToUpload, user)
+        .subscribe((data: any) => {
 
-        this.dataSource.data = data;
-           this.dataSource.paginator = this.paginator;
-        //console.log(this.arrayBuffer);
-      });
+          this.dataSource.data = data;
+          this.dataSource.paginator = this.paginator;
+          //console.log(this.arrayBuffer);
+        });
+
+    }
+
   }
-
+  validateFile(name: String) {
+    var ext = name.substring(name.lastIndexOf('.') + 1);
+    if (ext.toLowerCase() == 'xlsx' || ext.toLowerCase() == 'xls') {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
  
 }
 
