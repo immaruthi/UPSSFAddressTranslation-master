@@ -23,7 +23,7 @@
     <!-- Position Column -->
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef> WorkflowID </mat-header-cell>
-      <mat-cell *matCellDef="let element"><a fxFlexFill [routerLink]="['/shipment']" class="mat-row-link"> {{element.id}}</a> </mat-cell>
+      <mat-cell *matCellDef="let element"><a fxFlexFill [routerLink]="['/shipment',element.id]" class="mat-row-link"> {{element.id}}</a> </mat-cell>
     </ng-container>
 
     <!-- Name Column -->

@@ -38,6 +38,18 @@ import { WorkflowComponent } from './workflow/workflow.component';
 import { WorkflowService } from './services/WorkflowService';
 import { ShipmentComponent } from './shipping-data/shipment.component';
 
+/* Modules Import */
+import { AppRoutingModule } from './shared/app-routing.module';
+import { UploadedDataComponent } from './shipping-data/uploaded-data/uploaded-data.component';
+
+/* External Modules */
+import { AgGridModule } from 'ag-grid-angular';
+import { SentToSfComponent } from './shipping-data/sent-to-sf/sent-to-sf.component';
+import { TranslateComponent } from './shipping-data/translate/translate.component';
+import { EditableComponent } from './shared/editable/editable.component';
+import { EditModeDirective } from './shared/editable/edit-mode.directive';
+import { ViewModeDirective } from './shared/editable/view-mode.directive';
+import { EditOnEnterDirective } from './shared/editable/edit-on-enter.directive';
 
 
 @NgModule({
@@ -59,7 +71,14 @@ import { ShipmentComponent } from './shipping-data/shipment.component';
     AdminconfigComponent,
     AlertDialogComponent,
     WorkflowComponent,
-    ShipmentComponent
+    ShipmentComponent,
+    UploadedDataComponent,
+    SentToSfComponent,
+    TranslateComponent,
+    EditableComponent,
+    EditModeDirective,
+    ViewModeDirective,
+    EditOnEnterDirective
    
   ],
   imports: [
@@ -69,32 +88,8 @@ import { ShipmentComponent } from './shipping-data/shipment.component';
     FormsModule,
     MaterialModule,
     ReactiveFormsModule,
-    RouterModule.forRoot([
-      {
-        path: '',
-        component: LoginlayoutComponent,
-        children: [
-          { path: '', canActivate: [LoginGuard],component: LoginComponent, pathMatch: 'full' },
-        ]
-      },
-
-      // App routes goes here here
-      {
-        path: '',
-        component: ApplayoutComponent,
-        children: [
-          { path: 'home', canActivate: [AuthGuard], component: HomeComponent },
-          { path: 'assignProjects', canActivate: [AuthGuard],component: AssignProjectsComponent },
-          { path: 'employee', canActivate: [AuthGuard],component: EmployeeComponent  },
-          { path: 'workflow', canActivate: [AuthGuard], component: WorkflowComponent },
-          { path: 'shipment', canActivate: [AuthGuard], component: ShipmentComponent },
-          { path: 'projects', canActivate: [AuthGuard],component: ProjectsComponent  },
-          { path: 'roles', canActivate: [AuthGuard], component: RolesComponent },
-          { path: 'customers', canActivate: [AuthGuard], component: CustomersComponent },
-          { path: 'config', canActivate: [AuthGuard], component: AdminconfigComponent }
-        ]
-      },
-    ])
+    AppRoutingModule,
+    AgGridModule.withComponents([])
   ],
   providers: [WorkflowService, EmployeeService,ProjectService, RoleService, UserService, AuthGuard, CustomerService, LoginGuard, AssignProjectService, ExcelService, HomeService, DialogService],
   bootstrap: [AppComponent],

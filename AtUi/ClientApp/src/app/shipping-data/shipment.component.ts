@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ShipmentDetails } from '../models/shipmentDetails';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 /**
  * @title Basic table
@@ -9,24 +11,48 @@ import { Component } from '@angular/core';
   templateUrl: 'shipment.component.html',
 })
 export class ShipmentComponent {
- // displayedColumns = ['position', 'name', 'weight', 'symbol'];
-  displayedColumns = ['WorkflowID', 'Owner', 'FileName', 'Status', 'CreatedAt'];
-  dataSource = ELEMENT_DATA;
+  isLinear = false;
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
+
+  constructor(private _formBuilder: FormBuilder) { }
+
+  ngOnInit() {
+    this.firstFormGroup = this._formBuilder.group({
+      firstCtrl: ['', Validators.required]
+    });
+    this.secondFormGroup = this._formBuilder.group({
+      secondCtrl: ['', Validators.required]
+    });
+  }
 }
 
-export interface Element {
-  WorkflowID: number;
-  Owner: string;
-  FileName: string;
-  Status: string;
-  CreatedAt: string;
-}
 
-const ELEMENT_DATA: Element[] = [
-  { WorkflowID: 1, Owner: 'Aravind', FileName: 'adsd', Status: 'Translated', CreatedAt: '20-Jun-2999' },
-  { WorkflowID: 2, Owner: 'James', FileName: 'sfds', Status: 'Verified', CreatedAt: '30-Jun-2029' },
-  { WorkflowID: 3, Owner: 'John', FileName: 'dsd', Status: 'Done', CreatedAt: '20-Jun-2019' },
-  { WorkflowID: 4, Owner: 'Wang', FileName: 'dsd', Status: 'Done', CreatedAt: '21-Jun-2029' },
-  { WorkflowID: 5, Owner: 'Kelvin', FileName: 'sdsd', Status: 'Verified', CreatedAt: '30-Jun-2019' },
-  { WorkflowID: 6, Owner: 'Yang', FileName: 'sdsd', Status: 'Translated', CreatedAt: '21-Jun-2019' },
+const ELEMENT_DATA: ShipmentDetails[] = [
+  {
+    WFL_ID: 1, SMT_NR_TE: '', SHP_DT: '', SHP_CPY_NA: '', SHP_ADR_TE: '', ORG_CTY_TE: '',
+    ORG_PSL_CD: '', RCV_CPY_TE: '', RCV_ADR_TE: '', DST_CTY_TE: '', DST_PSL_TE:''
+  },
+  {
+    WFL_ID: 2, SMT_NR_TE: '', SHP_DT: '', SHP_CPY_NA: '', SHP_ADR_TE: '', ORG_CTY_TE: '',
+    ORG_PSL_CD: '', RCV_CPY_TE: '', RCV_ADR_TE: '', DST_CTY_TE: '', DST_PSL_TE: ''
+  },
+  {
+    WFL_ID: 3, SMT_NR_TE: '', SHP_DT: '', SHP_CPY_NA: '', SHP_ADR_TE: '', ORG_CTY_TE: '',
+    ORG_PSL_CD: '', RCV_CPY_TE: '', RCV_ADR_TE: '', DST_CTY_TE: '', DST_PSL_TE: ''
+  },
+  {
+    WFL_ID: 4, SMT_NR_TE: '', SHP_DT: '', SHP_CPY_NA: '', SHP_ADR_TE: '', ORG_CTY_TE: '',
+    ORG_PSL_CD: '', RCV_CPY_TE: '', RCV_ADR_TE: '', DST_CTY_TE: '', DST_PSL_TE: ''
+  },
+  {
+    WFL_ID: 5, SMT_NR_TE: '', SHP_DT: '', SHP_CPY_NA: '', SHP_ADR_TE: '', ORG_CTY_TE: '',
+    ORG_PSL_CD: '', RCV_CPY_TE: '', RCV_ADR_TE: '', DST_CTY_TE: '', DST_PSL_TE: ''
+  },
+  {
+    WFL_ID: 6, SMT_NR_TE: '', SHP_DT: '', SHP_CPY_NA: '', SHP_ADR_TE: '', ORG_CTY_TE: '',
+    ORG_PSL_CD: '', RCV_CPY_TE: '', RCV_ADR_TE: '', DST_CTY_TE: '', DST_PSL_TE: ''
+  },
+
+  
 ];

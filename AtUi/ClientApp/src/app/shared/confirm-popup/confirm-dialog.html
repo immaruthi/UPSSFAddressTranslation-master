@@ -1,0 +1,13 @@
+<div class="text-center">
+  <h1 mat-dialog-title>Confirm!</h1>
+
+  <div class="mt-5" mat-dialog-content>
+    <h6>{{data.message}}</h6>
+  </div>
+
+  <div class="mt-5">
+    <button (click)="onConfirm()" class="mat-success-btn m-2" mat-button>Confirm.</button>
+    <button (click)="onNoClick()" class="mat-danger-btn  m-2" mat-button>No Thanks!</button>
+  </div>
+</div>
+

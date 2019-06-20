@@ -1,48 +1,52 @@
-<div class="content-section-header">
-  <h4>Alerts </h4>
-</div>
+<section class="breadcrumb-section pb-3">
+  <h5 class="section-title card"></h5>
+</section>
+
+<section class="content-section">
+
+  <!--<button mat-raised-button (click)="isLinear = true" id="toggle-linear">Enable linear mode</button>-->
+
+  <mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper">
+    <mat-step [stepControl]="firstFormGroup">
+      <form [formGroup]="firstFormGroup">
+        <ng-template matStepLabel>Uploaded Shipment Details</ng-template>
+ 
+        <app-uploaded-data></app-uploaded-data>
+        <div>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+      <form [formGroup]="secondFormGroup">
+        <ng-template matStepLabel>Translate</ng-template>
+         <app-translate></app-translate>
+       
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Sent To SF</ng-template>
+      <app-sent-to-sf></app-sent-to-sf>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)="stepper.reset()">Reset</button>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Done</ng-template>
+      You are now done.
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)="stepper.reset()">Reset</button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</section>
 
 
 
-<div class="example-container mat-elevation-z8">
-  <mat-table #table [dataSource]="dataSource">
-
-    <!-- Position Column -->
-    <ng-container matColumnDef="WorkflowID">
-      <mat-header-cell *matHeaderCellDef> WorkflowID </mat-header-cell>
-      <mat-cell *matCellDef="let element"><a fxFlexFill [routerLink]="['/shipment']" class="mat-row-link"> {{element.WorkflowID}}</a> </mat-cell>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="Owner">
-      <mat-header-cell *matHeaderCellDef> Owner </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.Owner}} </mat-cell>
-    </ng-container>
-
-    <!-- Weight Column -->
-    <ng-container matColumnDef="FileName">
-      <mat-header-cell *matHeaderCellDef> File Name </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.FileName}} </mat-cell>
-    </ng-container>
-
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="Status">
-      <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.Status}} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="CreatedAt">
-      <mat-header-cell *matHeaderCellDef> CreatedAt </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.CreatedAt}} </mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
-
-  <mat-paginator #paginator
-                 [pageSize]="10"
-                 [pageSizeOptions]="[5, 10, 20]"
-                 [showFirstLastButtons]="true">
-  </mat-paginator>
-</div>

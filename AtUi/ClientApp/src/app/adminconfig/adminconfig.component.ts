@@ -53,7 +53,7 @@ export class AdminconfigComponent implements OnInit {
 
       this.userService.InsertUser(firstname, lastname, username, password).subscribe((data: boolean) => {
         this.dialogService.openAlertDialog('Data Inserted');
-        this.router.navigate(['/home']);
+        this.router.navigate(['/workflow']);
       });
 
       //check userid
