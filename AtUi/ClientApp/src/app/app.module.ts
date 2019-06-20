@@ -33,6 +33,8 @@ import { AdminconfigComponent } from './adminconfig/adminconfig.component';
 import { AlertDialogComponent } from './dialogs/alert-dialog/alert-dialog.component';
 import { DialogService } from './services/dialog.service';
 import { ExcelService } from './services/ExcelExport';
+import { ShippingService } from './services/shipping.service';
+import { HttpService } from './shared/http.service';
 
 import { WorkflowComponent } from './workflow/workflow.component';
 import { WorkflowService } from './services/WorkflowService';
@@ -55,7 +57,6 @@ import { EditableComponent } from './shared/editable/editable.component';
 import { EditModeDirective } from './shared/editable/edit-mode.directive';
 import { ViewModeDirective } from './shared/editable/view-mode.directive';
 import { EditOnEnterDirective } from './shared/editable/edit-on-enter.directive';
-
 
 @NgModule({
   declarations: [
@@ -106,7 +107,10 @@ import { EditOnEnterDirective } from './shared/editable/edit-on-enter.directive'
     AuthGuard, CustomerService, LoginGuard,
     AssignProjectService, ExcelService, HomeService,
     DialogService,
-    LoaderService],
+      ShippingService,
+      HttpService,
+      LoaderService,
+    ],
   bootstrap: [AppComponent],
   entryComponents: [LoginComponent, AlertDialogComponent]
 
