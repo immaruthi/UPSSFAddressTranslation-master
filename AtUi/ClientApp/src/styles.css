@@ -1,7 +1,62 @@
-/* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-@import "~ag-grid-community/dist/styles/ag-grid.css";
-@import "~ag-grid-community/dist/styles/ag-theme-balham.css";
+/* You can add global styles to this file, and also import other style files */
+
+img.img-fluid.flex-center {
+  max-height: 84px !important;
+  padding: 3% !important;
+}
+
+
+.d-inline-block {
+  display: inline-block;
+}
+
+.readonly {
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  opacity: 0.5 !important;
+}
+
+.form-check-input[type="checkbox"] + label, label.btn input[type="checkbox"] + label {
+  padding-left: 25px !important;
+}
+
+
+@media (min-width: 1200px) {
+
+  .fixed-sn main, .fixed-sn .page-footer .container-fluid {
+    margin: 1%;
+  }
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+
+.content-section {
+  background: #fff;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  padding: 25px 10px;
+  border-radius: 4px;
+
+}
+
+a, .a {
+  color: steelblue !important;
+  cursor: pointer !important;
+}
+
+  a:hover, .a:hover {
+    color: $blue-bright-text !important;
+    text-decoration: none !important;
+  }
+
 .confirm-dialog-container .mat-dialog-container {
   border-radius: .25em .25em .4em .4em;
   padding: 0px;

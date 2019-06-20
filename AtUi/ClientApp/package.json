@@ -34,6 +34,7 @@
     "file-saver": "^2.0.2",
     "filesaver": "0.0.13",
     "hammerjs": "^2.0.8",
+    "linq-typescript": "^1.0.251",
     "ngx-take-until-destroy": "^5.4.0",
     "primeicons": "^1.0.0",
     "primeng": "^8.0.0",

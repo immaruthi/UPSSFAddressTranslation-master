@@ -44,6 +44,11 @@ import { ShipmentComponent } from './shipping-data/shipment.component';
 import { AppRoutingModule } from './shared/app-routing.module';
 import { UploadedDataComponent } from './shipping-data/uploaded-data/uploaded-data.component';
 
+/*Shared Component*/
+
+import { AlertDialog, ConfirmDialog, ConfirmPopupComponent } from './shared/confirm-popup/confirm-popup.component';
+import { LoaderComponent } from './shared/loader/loader.component';
+import { LoaderService } from './shared/loader/loader.service';
 /* External Modules */
 import { AgGridModule } from 'ag-grid-angular';
 import { SentToSfComponent } from './shipping-data/sent-to-sf/sent-to-sf.component';
@@ -79,7 +84,11 @@ import { EditOnEnterDirective } from './shared/editable/edit-on-enter.directive'
     EditableComponent,
     EditModeDirective,
     ViewModeDirective,
-    EditOnEnterDirective
+    EditOnEnterDirective,
+    LoaderComponent,
+    AlertDialog,
+    ConfirmDialog,
+    ConfirmPopupComponent
    
   ],
   imports: [
@@ -92,7 +101,16 @@ import { EditOnEnterDirective } from './shared/editable/edit-on-enter.directive'
     AppRoutingModule,
     AgGridModule.withComponents([])
   ],
-  providers: [WorkflowService, EmployeeService, ProjectService, RoleService, UserService, AuthGuard, CustomerService, LoginGuard, AssignProjectService, ExcelService, HomeService, DialogService, ShippingService, HttpService],
+  providers: [
+    WorkflowService, EmployeeService,
+    ProjectService, RoleService, UserService,
+    AuthGuard, CustomerService, LoginGuard,
+    AssignProjectService, ExcelService, HomeService,
+    DialogService,
+      ShippingService,
+      HttpService,
+      LoaderService,
+    ],
   bootstrap: [AppComponent],
   entryComponents: [LoginComponent, AlertDialogComponent]
 
