@@ -75,8 +75,11 @@ export class TranslateComponent implements OnInit {
   }
 
   /** Method to Translate the Data*/
-  translate() {
-    alert('Success !!');
+  public sendForTranslate() {
+    //alert('Success !!');
+    const dataForTranslate = this.dataSource.data; // Any changes can do here for sending array
+    //this.shippingService.sendDataForTranslate(dataForTranslate);
+    console.log(dataForTranslate);
   }
 
   //updateField(index, field) {
