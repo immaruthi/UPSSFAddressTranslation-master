@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using RMG.Models;
+using AtUi.Models;
 
-namespace RMG.Controllers
+namespace AtUi.Controllers
 {
     [Route("api/[Controller]")]
     public class HomeController : Controller
@@ -10,28 +10,28 @@ namespace RMG.Controllers
         [HttpGet("[action]")]
         public int GetallEmployeeCount()
         {
-            HomeContext context = HttpContext.RequestServices.GetService(typeof(RMG.Models.HomeContext)) as HomeContext;
+            HomeContext context = HttpContext.RequestServices.GetService(typeof(AtUi.Models.HomeContext)) as HomeContext;
             return 100;//context.GetallEmployeeCount();
         }
 
         [HttpGet("[action]")]
         public int GetallEmpProjCount()
         {
-            HomeContext context = HttpContext.RequestServices.GetService(typeof(RMG.Models.HomeContext)) as HomeContext;
+            HomeContext context = HttpContext.RequestServices.GetService(typeof(AtUi.Models.HomeContext)) as HomeContext;
             return 100;//context.GetallEmpProjCount();
         }
 
         [HttpGet("[action]")]
         public int GetallEmpBenchCount()
         {
-            HomeContext context = HttpContext.RequestServices.GetService(typeof(RMG.Models.HomeContext)) as HomeContext;
+            HomeContext context = HttpContext.RequestServices.GetService(typeof(AtUi.Models.HomeContext)) as HomeContext;
             return 10;//context.GetallEmpBenchCount();
         }
 
         [HttpGet("[action]")]
         public int GetallProjCount()
         {
-            HomeContext context = HttpContext.RequestServices.GetService(typeof(RMG.Models.HomeContext)) as HomeContext;
+            HomeContext context = HttpContext.RequestServices.GetService(typeof(AtUi.Models.HomeContext)) as HomeContext;
             return 10;
             //context.GetallProjCount();
         }
@@ -39,7 +39,7 @@ namespace RMG.Controllers
         [HttpGet("[action]")]
         public int GetallCustomerCount()
         {
-            HomeContext context = HttpContext.RequestServices.GetService(typeof(RMG.Models.HomeContext)) as HomeContext;
+            HomeContext context = HttpContext.RequestServices.GetService(typeof(AtUi.Models.HomeContext)) as HomeContext;
             return 10;
             //context.GetallCustomerCount();
         }
