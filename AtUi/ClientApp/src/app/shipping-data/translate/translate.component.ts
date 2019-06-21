@@ -22,7 +22,8 @@ export class TranslateComponent implements OnInit {
       'rcV_ADR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'coD_TE'];
 
   public ResponseData: any[] = [];
-  public dataSource: any[] = [];
+  //public dataSource: any[] = [];
+  dataSource = new MatTableDataSource<Element>();
   public errorMessage: string;
 
   //dataSource = new MatTableDataSource<Element>();
@@ -41,7 +42,7 @@ export class TranslateComponent implements OnInit {
   * be able to query its view for the initialized paginator.
   */
   ngAfterViewInit() {
-    //this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.paginator;
   }
 
   ngOnInit() {
@@ -56,13 +57,14 @@ export class TranslateComponent implements OnInit {
     this.ResponseData = [];
     this.shippingService.getTranslateData(WorkflowID).subscribe((response: any) => {
       this.ResponseData = response;
-      this.dataSource = response;
+      this.dataSource.data = response;
+      this.dataSource.paginator = this.paginator;
     }, error => (this.errorMessage = <any>error));
   }
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.length;
+    const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
 
@@ -70,7 +72,7 @@ export class TranslateComponent implements OnInit {
     masterToggle() {
     this.isAllSelected() ?
       this.selection.clear() :
-      this.dataSource.forEach(row => this.selection.select(row));
+      this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
   /** The label for the checkbox on the passed row */

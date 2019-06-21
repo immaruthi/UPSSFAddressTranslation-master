@@ -54,7 +54,8 @@ export class UserService {
     debugger;
     let Emp_Id = user;
     //const endpoint = 'api/ExcelWorkflow/UploadExcel';
-    const endpoint = 'https://atservicetest.azurewebsites.net/api/Shipment/ExcelFileUpload';
+    //const endpoint = 'https://atservicetest.azurewebsites.net/api/Shipment/ExcelFileUpload';
+    const endpoint = window.location.origin + '/api/Shipment/ExcelFileUpload';
     const formData: FormData = new FormData();
     let headers = new HttpHeaders();
     headers.append('Content-Type', 'multipart/form-data');

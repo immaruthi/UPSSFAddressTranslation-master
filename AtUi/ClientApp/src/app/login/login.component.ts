@@ -18,6 +18,9 @@ export class LoginComponent {
   isExpanded = false;
   isExists: boolean;
   userIsExists: boolean;
+  public hasError = (controlName: string, errorName: string) => {
+    return this.registerForm.controls[controlName].hasError(errorName);
+  }
 
 
   constructor(private userService: UserService, private router: Router, private formBuilder: FormBuilder, private dialogService: DialogService) {

@@ -1,144 +1,106 @@
-@import url("//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css");
-
-
-
-
-
-
 .login-block {
-  background: #DE6262; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to bottom, #c4b71a, white); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to bottom, #9c6b0b, white); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: url(assets/images/translation-bg.png) no-repeat;
   float: left;
   width: 100%;
   height: 100vh;
-  padding: 115px 0;
+  padding: 168px 276px;
 }
 
-.banner-sec {
-  background: url(https://www.simplilearn.com/ice9/free_resources_article_thumb/Data-Science-vs.-Big-Data-vs.jpg) no-repeat left bottom;
-  background-size: cover;
-  min-height: 500px;
-  border-radius: 0 10px 10px 0;
+.block {
+  background: #FFFFFF;
+  box-shadow: 0 0 20px 8px rgba(0,0,0,0.18);
+  border-radius: 10px;
+  padding: 0;
+  margin: 0;
+  width: 1048px;
+  height: 461px;
+}
+
+.row {
+  height: 461px;
+  width: 1048px;
+  margin: 0;
   padding: 0;
 }
 
-.container {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 15px 20px 0px rgba(0,0,0,0.1);
+.col-md-6 {
+  padding: 0;
+  margin: 0;
 }
 
-.carousel-inner {
-  border-radius: 0 10px 10px 0;
+.fll {
+  float: left;
 }
 
-.carousel-caption {
-  text-align: left;
-  left: 5%;
+.flr {
+  float: right;
 }
 
-.login-sec {
-  padding: 50px 30px;
-  position: relative;
+.trans {
+  height: 340px;
+  width: 373px;
+  margin-top: 65px;
+  margin-left: 76px;
 }
 
-  .login-sec .copy-text {
-    position: absolute;
-    width: 80%;
-    bottom: 20px;
-    font-size: 13px;
-    text-align: center;
-  }
-
-    .login-sec .copy-text i {
-      color: #FEB58A;
-    }
-
-    .login-sec .copy-text a {
-      color: #E36262;
-    }
-
-  .login-sec h2 {
-    margin-bottom: 30px;
-    font-weight: 800;
-    font-size: 30px;
-    color: #DE6262;
-  }
-
-    .login-sec h2:after {
-      content: " ";
-      width: 100px;
-      height: 5px;
-      background: #FEB58A;
-      display: block;
-      margin-top: 20px;
-      border-radius: 3px;
-      margin-left: auto;
-      margin-right: auto
-    }
-
-.center {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
+.logo {
+  margin: 57px 232px 0px 237px;
+  height: 60px;
+  width: 56px;
 }
 
-
-.btn-login {
-  background: #008AC2;
-  color: #fff;
+.app-txt {
+  font-size: 27px;
+  width: 298px;
+  margin: 0px 80px 0px 120px;
+  font-family: helvetica;
   font-weight: 600;
+  color: #FFB200;
+  text-align: center;
 }
 
-.banner-text {
-  width: 70%;
-  position: absolute;
-  bottom: 40px;
-  padding-left: 20px;
+.usertxt {
+  width: 367px;
+  height: 41px;
+  margin: 20px 58px 0px 100px;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px;
+  font-size: 13px;
+  padding: 16px;
 }
 
-  .banner-text h2 {
-    color: #fff;
-    font-weight: 600;
-  }
-
-    .banner-text h2:after {
-      content: " ";
-      width: 100px;
-      height: 5px;
-      background: #FFF;
-      display: block;
-      margin-top: 20px;
-      border-radius: 3px;
-    }
-
-  .banner-text p {
-    color: #fff;
-  }
-
-img {
-  height: 30px;
-  width: auto;
-  display: block;
-  margin-top: 20px;
-  border-radius: 3px;
-  margin-left: auto;
-  margin-right: auto
+.pwdtxt {
+  width: 367px;
+  height: 41px;
+  margin: 30px 58px 10px 100px;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px;
+  font-size: 13px;
+  padding: 16px;
 }
 
-.smallbar {
-  content: " ";
-  width: 110px;
-  height: 5px;
-  background: #FEB58A;
-  display: block;
-  margin-top: 20px;
-  border-radius: 3px;
-  margin-left: auto;
-  margin-right: auto
+.warn {
+  font-size: 13px;
+  font-family: helvetica;
+  margin: 0px 200px 0px 120px;
+  font-weight: 600;
+  color: #CC0000;
 }
 
-.login-form input {
+.btn {
+  width: 191px;
+  height: 40px;
+  background: #351C15;
+  border-radius: 6px;
+  color: #FFFFFF;
+  font-size: 17px;
+  font-weight: 600;
+  margin: 20px 140px 0px 190px;
+}
+
+input:focus {
+  border: 1px solid #351C15;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.27);
+  border-radius: 4px;
+  outline-color: #351C15;
 }

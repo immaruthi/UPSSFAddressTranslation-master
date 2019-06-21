@@ -1,29 +1,53 @@
-img {
-  width: auto;
-  height: 25px;
-}
-
 nav {
-  /* box-shadow: 0px 0px 10px 0px; */
   width: 100%;
-  border-radius: 0%;
+  border-radius: 0;
   border: none;
-  color: white;
-  background-color: darkgoldenrod;
-  height: 50px;
+  background: #282829;
+  height: 63px;
+  padding: 0;
+  margin: 0;
+}
+.container-fluid{
+  padding:0;
 }
 
-button {
-  border: inherit;
-  background-color: inherit;
-  padding: 15px 0px 10px 0px;
+.navbar-header {
+  padding: 0;
+  margin: 0;
 }
 
-.below {
-  padding-top: 50px;
-  border: inherit;
-  border-bottom: solid;
-  border-width: 0.7px;
-  border-color: gray;
-  position: static;
+.logo {
+  width: 40px;
+  height: 40px;
+  margin: 10px 40px 7px 105px;
+}
+.collapse {
+  margin: 10px 0px 0px 0px;
+}
+
+.apptxt {
+  font-family: Helvetica;
+  font-size: 28px;
+  color: #FFB500;
+}
+.navbar-right{
+  margin-top: 10px; 
+}
+
+.user {
+  color: #FFFFFF;
+  font-size: 17px;
+  width: 125px;
+  margin: 0px 40px 0px 0px;
+}
+
+.logout {
+  color: #FFFFFF;
+  margin-right: 100px;
+  font-size: 17px;
+  width: 125px;
+}
+
+a:hover {
+  text-decoration: none;
 }
