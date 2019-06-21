@@ -21,11 +21,11 @@ constructor(private userService: UserService, private router: Router) { }
     this.router.navigate(['']);
   }
   ngOnInit() {
-    this.userService.getLoginData(localStorage.getItem("Emp_Id"))
-      .subscribe((data: LoginData) => {
-        this.log_info = data;
-        this.employeeId = this.log_info.emp_Id;
-        this.loginfo = this.log_info.last_Login_Date;
-      });
+    //this.userService.getLoginData(localStorage.getItem("Emp_Id"))
+    //  .subscribe((data: LoginData) => {
+    //    this.log_info = data;
+    this.employeeId = localStorage.getItem("Emp_Id");
+    // this.loginfo = this.log_info.last_Login_Date;
+    //  });
   }
 }
