@@ -9,16 +9,15 @@ import { HttpService } from '../shared/http.service';
 export class ShippingService {
   constructor(private httpClient: HttpClient, private router: Router, private httpService: HttpService) { }
 
-  getTranslate(WorkflowID: any) {
-    //const params = new HttpParams()
-    //  .set('userId', userId)
-    //  .set('password', password);
-    //return this.httpClient.get(`api/Login/ValidateUser`, { params })
-    //return this.httpClient.get(`https://localhost:44330/api/values/ValidateUser`, { params })
-    this.httpService.makeGetRequest('api/Shipment', [{ wid: 1 }]);
+  public getTranslate(WorkflowID: any) {
+    this.httpService.makeGetRequest('api/Shipment', [{ wid: WorkflowID }]);
   }
 
   public getTranslateData(WorkflowID: any): Observable<any[]> {
     return this.httpService.makeGetRequest('api/Shipment?wid=' + WorkflowID);
   }
+
+  //public sendDataForTranslate(data: any[]): Observable<any[]> {
+  //  return this.httpService.makePostRequest('', data);
+  //}
 }
