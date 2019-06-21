@@ -1,17 +1,31 @@
-﻿using AtUi.Models;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using RMG.Models;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
+﻿using Microsoft.AspNetCore.Mvc;
+using UPS.ServicesDataRepository;
+using UPS.DataObjects.Shipment;
+using Microsoft.EntityFrameworkCore;
+using UPS.ServicesDataRepository.DataContext;
+using UPS.Quincus.APP;
+using UPS.Quincus.APP.Response;
+using Microsoft.Extensions.Configuration;
+using ExcelFileRead;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 using System.IO;
+using UPS.AddressTranslationService.Controllers;
+using Microsoft.AspNetCore.Hosting.Internal;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Cors;
+using UPS.DataObjects.WR_FLW;
+using System.Data.SqlClient;
+using AtService.Models;
+using System;
 using System.Net.Http.Headers;
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using System.Collections.Generic;
 
-namespace RMG.Controllers
+namespace AtService.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
+    [EnableCors("SiteCorsPolicy")]
     public class ExcelWorkflowController : Controller
     {
         private IHostingEnvironment _hostingEnvironment;
@@ -22,9 +36,9 @@ namespace RMG.Controllers
         }
 
         [HttpPost("[action]")]
-        public List<ExcelWorkflow> UploadExcel(string Emp_Id)
+        public List<WorkflowDataRequest> UploadExcel(string Emp_Id)
         {
-            List<ExcelWorkflow> excelwkflow = new List<ExcelWorkflow>();
+            List<WorkflowDataRequest> excelwkflow = new List<WorkflowDataRequest>();
 
             var file = Request.Form.Files[0];
 
@@ -92,9 +106,9 @@ namespace RMG.Controllers
             return EmpID;
         }
 
-        public List<ExcelWorkflow> ExcelData(string EmpID)
+        public List<WorkflowDataRequest> ExcelData(string EmpID)
         {
-            List<ExcelWorkflow> excelWorkflowsLst = new List<ExcelWorkflow>();
+            List<WorkflowDataRequest> excelWorkflowsLst = new List<WorkflowDataRequest>();
 
 
             SqlConnection conn = new SqlConnection(GetConnectionString.connectionString);
@@ -112,9 +126,9 @@ namespace RMG.Controllers
             //{
             while (reader.Read())
             {
-                ExcelWorkflow exflow = new ExcelWorkflow();
+                WorkflowDataRequest exflow = new WorkflowDataRequest();
                 exflow.ID = Convert.ToInt32(reader[0]);
-                exflow.USR_FST_NA = reader["USR-FST-NA"].ToString();
+                //exflow.USR_FST_NA = reader["USR-FST-NA"].ToString();
                 exflow.FLE_NA = reader["FLE-NA"].ToString();
                 exflow.WFL_STA_TE = Convert.ToInt32(reader["WFL-STA-TE"]);
                 exflow.CRD_DT = reader["CRD-DT"].ToString();
@@ -132,9 +146,9 @@ namespace RMG.Controllers
 
         }
 
-        public List<ExcelWorkflow> ExcelData()
+        public List<WorkflowDataRequest> ExcelData()
         {
-            List<ExcelWorkflow> excelWorkflowsLst = new List<ExcelWorkflow>();
+            List<WorkflowDataRequest> excelWorkflowsLst = new List<WorkflowDataRequest>();
 
 
             SqlConnection conn = new SqlConnection(GetConnectionString.connectionString);
@@ -151,9 +165,9 @@ namespace RMG.Controllers
             //{
             while (reader.Read())
             {
-                ExcelWorkflow exflow = new ExcelWorkflow();
+                WorkflowDataRequest exflow = new WorkflowDataRequest();
                 exflow.ID = Convert.ToInt32(reader[0]);
-                exflow.USR_FST_NA = reader["USR-FST-NA"].ToString();
+                //exflow.USR_FST_NA = reader["USR-FST-NA"].ToString();
                 exflow.FLE_NA = reader["FLE-NA"].ToString();
                 exflow.WFL_STA_TE = Convert.ToInt32(reader["WFL-STA-TE"]);
                 exflow.CRD_DT = reader["CRD-DT"].ToString();
@@ -177,9 +191,9 @@ namespace RMG.Controllers
 
 
         [HttpGet("[action]")]
-        public List<ExcelWorkflow> getExcelData(string Emp_Id)
+        public List<WorkflowDataRequest> getExcelData(string Emp_Id)
         {
-            List<ExcelWorkflow> lst = new List<ExcelWorkflow>();
+            List<WorkflowDataRequest> lst = new List<WorkflowDataRequest>();
             lst = ExcelData(Emp_Id);
             return lst;
         }

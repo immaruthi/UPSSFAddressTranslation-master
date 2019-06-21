@@ -68,11 +68,11 @@ export class LoginComponent {
     else {
 
       //check userid
-      this.userService.ValidateUserId(name)
-        .subscribe((data: boolean) => {
-          this.userIsExists = data;
+      //this.userService.ValidateUserId(name)
+      //  .subscribe((data: boolean) => {
+      //    this.userIsExists = data;
 
-          if (data) {
+      //    if (data) {
             this.userService.ValidateUser(name, password)
               .subscribe((data: boolean) => {
                 this.isExists = data;
@@ -85,17 +85,17 @@ export class LoginComponent {
 
                 }
                 else {
-                  this.dialogService.openAlertDialog('Please Check The Password Entered');
+                  this.dialogService.openAlertDialog('Please provide valid credentials');
                 }
 
               });
 
-          }
-          else {
-            this.dialogService.openAlertDialog('Please Check The UserName Entered');
-          }
+          //}
+          //else {
+          //  this.dialogService.openAlertDialog('Please Check The UserName Entered');
+          //}
 
-        });
+        //});
 
 
     }
