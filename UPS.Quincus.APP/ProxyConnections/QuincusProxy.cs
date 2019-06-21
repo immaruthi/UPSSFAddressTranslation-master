@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using UPS.DataObjects.Shipment;
 using UPS.Quincus.APP.Configuration;
 using UPS.Quincus.APP.Request;
 using UPS.Quincus.APP.Response;
+using UPS.Quincus.APP.Utilities;
 
 namespace UPS.Quincus.APP.ProxyConnections
 {
@@ -54,6 +56,56 @@ namespace UPS.Quincus.APP.ProxyConnections
             return quincusTokenDataResponse;
         }
 
+
+        public static QuincusTranslatedAddressResponse GetTranslatedAddressResponse(QuincusAddressTranslationRequest quincusAddressTranslationRequest)
+        {
+            string response = string.Empty;
+            QuincusTranslatedAddressResponse quincusTranslatedAddressResponse = new QuincusTranslatedAddressResponse();
+
+            try
+            {
+                
+                string content = GetRequestContextForAddress.GetAddressStringFromRequest(quincusAddressTranslationRequest.shipmentWorkFlowRequests);
+
+                if (!string.IsNullOrWhiteSpace(content))
+                {
+
+                    var httpWebRequest = (HttpWebRequest)WebRequest.Create(
+                        quincusAddressTranslationRequest.endpoint);
+                    httpWebRequest.ContentType = "application/json";
+                    httpWebRequest.Headers.Add("AUTHORIZATION", "JWT " + quincusAddressTranslationRequest.token);
+                    httpWebRequest.Method = "POST";
+                    using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                    {
+                        var input = content;
+
+                        streamWriter.Write(input);
+                        streamWriter.Flush();
+                        streamWriter.Close();
+                    }
+
+                    var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        response = streamReader.ReadToEnd();
+                    }
+
+                    quincusTranslatedAddressResponse.ResponseData = JsonConvert.DeserializeObject<GetBatchResponseForAddressTranslation>(response);
+                    quincusTranslatedAddressResponse.Response = true;
+                }
+                else
+                {
+
+                }
+            }
+            catch(Exception exception)
+            {
+                quincusTranslatedAddressResponse.exception = exception;
+            }
+
+            return quincusTranslatedAddressResponse;            
+        }
 
         public static QuincusResponse GetQuincusResponse(QuincusGeoCodeDataRequest quincusGeoCodeDataRequest)
         {

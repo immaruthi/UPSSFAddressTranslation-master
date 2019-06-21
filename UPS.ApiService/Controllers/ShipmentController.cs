@@ -28,7 +28,7 @@ namespace AtService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("SiteCorsPolicy")]
+    //[EnableCors("SiteCorsPolicy")]
     public class ShipmentController : ControllerBase
     {
 
@@ -166,6 +166,68 @@ namespace AtService.Controllers
             return shipmentDataRequests;
         }
 
+        [Route("GetTranslationAddress")]
+        [HttpPost]
+        public async Task<ActionResult> GetTranslationAddress([FromBody] List<ShipmentWorkFlowRequest> shipmentWorkFlowRequest)
+        {
+
+            QuincusTranslatedAddressResponse quincusTranslatedAddressResponse = new QuincusTranslatedAddressResponse();
+
+            QuincusTokenDataResponse quincusTokenDataResponse = QuincusService.GetToken(new UPS.Quincus.APP.Configuration.QuincusParams()
+            {
+                endpoint = configuration["Quincus:TokenEndPoint"],
+                password = configuration["Quincus:Password"],
+                username = configuration["Quincus:UserName"],
+
+            });
+
+            if (quincusTokenDataResponse.ResponseStatus)
+            {
+                quincusTranslatedAddressResponse = QuincusService.GetTranslationAddress(new UPS.Quincus.APP.Request.QuincusAddressTranslationRequest()
+                {
+                    endpoint= configuration["Quincus:GeoCodeEndPoint"],
+                    shipmentWorkFlowRequests= shipmentWorkFlowRequest,
+                    token = quincusTokenDataResponse.quincusTokenData.token
+                });
+
+                if(quincusTranslatedAddressResponse.Response)
+                {
+                    return Ok(quincusTranslatedAddressResponse.ResponseData);
+
+                    //var getAddressTranslation = quincusTranslatedAddressResponse.ResponseData;
+
+                    
+
+                    //var QuincusResponse = QuincusService.GetGeoCodeReponseFromQuincus(new UPS.Quincus.APP.Request.QuincusGeoCodeDataRequest()
+                    //{
+                    //    endpoint = configuration["Quincus:GeoCodeEndPoint"],
+                    //    id = quincusTranslatedAddressResponse.ResponseData.batch_id,
+                    //    quincusTokenData = quincusTokenDataResponse.quincusTokenData
+                    //});
+
+                    //if (QuincusResponse.ResponseStatus)
+                    //{
+
+                    //    return Ok(QuincusResponse.QuincusReponseData);
+                        
+                    //}
+                    //else
+                    //{
+                    //    return Ok(QuincusResponse.Exception);
+                    //}
+                }
+                else
+                {
+                    return Ok(quincusTranslatedAddressResponse.exception);
+                }
+
+            }
+            else
+            {
+                return Ok(quincusTokenDataResponse.exception);
+            }
+        }
+
 
         [Route("UpdateShipmentCode")]
         [HttpPost]
@@ -191,14 +253,17 @@ namespace AtService.Controllers
                     quincusTokenData = quincusTokenDataResponse.quincusTokenData
                 });
 
-                if(quincusTokenDataResponse.ResponseStatus)
+                if(quincusResponse.ResponseStatus)
                 {
+                    if (quincusResponse.QuincusReponseData != null)
+                    {
 
-                    IList<Geocode> geocodes = quincusResponse.QuincusReponseData.geocode;
+                        IList<Geocode> geocodes = quincusResponse.QuincusReponseData.geocode;
 
-                    string TranslatedCode = geocodes[0].translated_adddress;
+                        string TranslatedCode = geocodes[0].translated_adddress;
 
-                    return Ok(quincusResponse.QuincusReponseData);
+                        return Ok(quincusResponse.QuincusReponseData);
+                    }
                 }
             }
             else
