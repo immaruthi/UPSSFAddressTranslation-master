@@ -19,11 +19,11 @@ namespace UPS.DataObjects.Shipment
         [Column("SF-TRA-LG-ID")]
         public int? SF_TRA_LG_ID { get; set; }
         [Column("SMT-STA-NR")]
-        public string SMT_STA_NR { get; set; }
+        public int? SMT_STA_NR { get; set; }
         [Column("SMT-NR-TE")]
         public string SMT_NR_TE { get; set; }
         [Column("PCS-QTY-NR")]
-        public string PCS_QTY_NR { get; set; }
+        public int? PCS_QTY_NR { get; set; }
         [Column("PKG-NR-TE")]
         public string PKG_NR_TE { get; set; }
         [Column("PKG-WGT-DE")]
@@ -39,9 +39,9 @@ namespace UPS.DataObjects.Shipment
         [Column("PY-MT-TE")]
         public string PY_MT_TE { get; set; }
         [Column("SHP-DT")]
-        public string SHP_DT { get; set; }
+        public DateTime? SHP_DT { get; set; }
         [Column("PK-UP-TM")]
-        public string PK_UP_TM { get; set; }
+        public DateTime? PK_UP_TM { get; set; }
         [Column("BIL-TYP-TE")]
         public string BIL_TYP_TE { get; set; }
         [Column("SMT-VAL-DE")]

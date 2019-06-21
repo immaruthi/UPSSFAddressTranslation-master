@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs';
+import { List } from 'linq-typescript';
 
 @Injectable()
 export class UserService {
@@ -49,19 +50,27 @@ export class UserService {
 
     return this.httpClient.get(`api/ExcelWorkflow/getExcelData`, { params })
   }
-  postFile(fileToUpload: File, user:any): Observable<Object> {
-    const endpoint = 'api/ExcelWorkflow/UploadExcel';
+  postFile(fileToUpload: File, user: any): Observable<Object> {
+    debugger;
+    let Emp_Id = user;
+    //const endpoint = 'api/ExcelWorkflow/UploadExcel';
+    //const endpoint = 'https://atservicetest.azurewebsites.net/api/Shipment/ExcelFileUpload';
+    const endpoint = window.location.origin + '/api/Shipment/ExcelFileUpload';
     const formData: FormData = new FormData();
-    let headers = new Headers()
-    let options = new RequestOptions({ headers: headers });
+    let headers = new HttpHeaders();
+    headers.append('Content-Type', 'multipart/form-data');
+    headers.append('Accept', 'application/json');
+    //let options = new RequestOptions({ headers: headers });
+    
     formData.append('Emp_ID', user);
-    formData.append('fileKey', fileToUpload, fileToUpload.name);
-    return this.httpClient
-      .post(endpoint, formData)
+    formData.append('excelFileName', fileToUpload, fileToUpload.name);
+    let fileList = new List<File>([fileToUpload]);
+    var body = 'excelFileName=' + formData + '&Emp_Id= 8';
+    return this.httpClient.post(endpoint, formData)
       .map((response: Response) => {
         console.log(response);
         return response;
-      })
+      });
   }
 
   //logout service method

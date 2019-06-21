@@ -38,46 +38,46 @@ namespace AtService.Controllers
                 return View();
             }
 
-        [Route("ExcelFileUpload")]
-        [HttpPost]
-        public async Task<ActionResult> ExcelFile(IList<IFormFile> excelFileName)
-        {
-            try
-            {
-                //string response = string.Empty;
-                if (excelFileName != null)
-                {
+        //[Route("ExcelFileUpload")]
+        //[HttpPost]
+        //public async Task<ActionResult> ExcelFile(IList<IFormFile> excelFileName)
+        //{
+        //    try
+        //    {
+        //        //string response = string.Empty;
+        //        if (excelFileName != null)
+        //        {
 
-                    //var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
-                    foreach (var file in excelFileName)
-                    {
-                        if (file.Length > 0)
-                        {
-                            string paths = hostingEnvironment.WebRootPath;
+        //            //var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
+        //            foreach (var file in excelFileName)
+        //            {
+        //                if (file.Length > 0)
+        //                {
+        //                    string paths = hostingEnvironment.WebRootPath;
 
-                            var filePath = Path.Combine(hostingEnvironment.WebRootPath, file.FileName);
-                            using (var fileStream = new FileStream(filePath, FileMode.Create))
-                            {
+        //                    var filePath = Path.Combine(hostingEnvironment.WebRootPath, file.FileName);
+        //                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+        //                    {
 
-                                //FileStream stream = File.Open(fileName, FileMode.Open, FileAccess.Read);
-                                //response = new ExcelExtension().Test(filePath);
-                                await file.CopyToAsync(fileStream);
-                            }
+        //                        //FileStream stream = File.Open(fileName, FileMode.Open, FileAccess.Read);
+        //                        //response = new ExcelExtension().Test(filePath);
+        //                        await file.CopyToAsync(fileStream);
+        //                    }
 
-                            return Ok(new ExcelExtension().Test(filePath));
-                        }
-                    }
+        //                    return Ok(new ExcelExtension().Test(filePath));
+        //                }
+        //            }
 
-                    //return Ok(excelFileName.FileName);
-                }
-            }
-            catch(Exception exception)
-            {
-                return Ok(exception);
-            }
+        //            //return Ok(excelFileName.FileName);
+        //        }
+        //    }
+        //    catch(Exception exception)
+        //    {
+        //        return Ok(exception);
+        //    }
 
-            return Ok("Uploaded");
-        }
+        //    return Ok("Uploaded");
+        //}
 
 
         [Route("Login")]

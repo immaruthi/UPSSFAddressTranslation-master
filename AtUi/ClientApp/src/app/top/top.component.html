@@ -1,23 +1,14 @@
-<nav class="navbar" style="position:fixed; z-index: 1;">
+<nav class="navbar" style="position:relative; z-index: 1;">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a href="#home" class="navbar-brand"><img src="https://cdn.worldvectorlogo.com/logos/ups.svg" style="height:50px;" alt="UPS - Address Translation"></a>
+      <a href="#"><img class="logo" src="assets/images/logo.png" alt="UPS-Logo"></a>
     </div>
     <div class="collapse navbar-collapse">
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown" appDropdown>
-          <button class="dropdown-toggle" role="button"><span class="glyphicon glyphicon-user"></span> My Profile<span class="caret"></span></button>
-          <ul class="dropdown-menu">
-            <!--<li><a href="#"> Edit</a></li>
-            <li><a href="#">Settings</a></li>-->
-            <li><a style="cursor: pointer" (click)="logout()">Logout</a></li>
-          </ul>
-        </li>
-      </ul>
-      <li style="float:right; padding-top:14px; padding-right:35px; list-style:none; font-family:Courier New;">[Welcome User:{{employeeId}}]</li>
-
+      <span class="apptxt">UPS Address Translation</span>
+      <div class="navbar navbar-right">
+        <a href="#" id="usericon"><span class="user"><span class="glyphicon glyphicon-user"></span> {{employeeId}}</span></a>
+        <a style="cursor: pointer" (click)="logout()" id="logouticon"><span class="logout"><span class="glyphicon glyphicon-log-out"></span> Logout</span></a>
+      </div>
     </div>
   </div>
 </nav>
-<div class="container-fluid below">
-</div>

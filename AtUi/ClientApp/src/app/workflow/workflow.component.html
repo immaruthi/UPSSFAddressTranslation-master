@@ -15,7 +15,7 @@
         <div class="col-md-6">
           <form class="example-form">
             <mat-form-field class="example-full-width" *ngIf="fileNameControl.value!= ''">
-              <input matInput placeholder="Choose file to upload" [formControl]="fileNameControl">
+              <input matInput placeholder="Choose file to upload" [formControl]="fileNameControl" name="excelFileName">
               <mat-hint *ngIf="isValidFile" style="color:orange">!Supported file formate .xlsx and .xls</mat-hint>
               <mat-hint *ngIf="!isValidFile" style="color:red">
                 Please enter a valid file format

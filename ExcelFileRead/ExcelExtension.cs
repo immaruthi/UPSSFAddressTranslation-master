@@ -124,9 +124,6 @@ namespace ExcelFileRead
             {
                 return ex.Message.ToString();
             }
-
-            //return JSONString;
-
         }
 
     }

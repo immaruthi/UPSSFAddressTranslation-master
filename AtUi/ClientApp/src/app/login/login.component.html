@@ -1,46 +1,21 @@
 <section class="login-block">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4 login-sec">
-        <!--<h2 class="text-center" style="color:#004280">Pactera</h2>-->
-        <div class="verticalhorizontal">
-          <img src="https://cdn.worldvectorlogo.com/logos/ups.svg" style="height:150px;width:150px" alt="Logo">
+  <div class="block">
+    <div class="col-md-6 fll">
+      <img class="trans" src="assets/images/picture.png" alt="translation">
+    </div>
+    <div class="col-md-6 flr">
+      <img class="logo" src="assets/images/logo.png" alt="Ups-Logo"><span class="app-txt">UPS Address Translation</span>
+      <form class="login-form" form id="loginbox" [formGroup]="registerForm" (ngSubmit)="onSubmit(ipUser.value,ipPwd.value)">
+        <div class="form-group">
+          <input #ipUser id="login-username" class="form-control usertxt" type="text" placeholder="User ID" formControlName="userId" name="userid" value="">
         </div>
-        <div class="smallbar"></div>
-        <div>
-          <br />
-          <form class="login-form" form id="loginbox" [formGroup]="registerForm" (ngSubmit)="onSubmit(ipUser.value,ipPwd.value)">
-            <div class="form-group">
-              <div style="margin-bottom: 25px" class="input-group">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                <input #ipUser type="text" id="login-username" formControlName="userId" class="form-control" name="userid" value="" placeholder="Email address">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <div style="margin-bottom: 25px" class="input-group">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                <input #ipPwd id="login-password" type="password" name="password" placeholder="Password" formControlName="password" class="form-control">
-              </div>
-            </div>
-            <!--<a href="#forgot">Forgot Password?</a>-->
-            <div class="form-check">
-              <button type="submit" class="btn btn-login" style="float:right;">Submit</button>
-            </div>
-
-          </form>
+        <div class="form-group">
+          <input #ipPwd id="login-password" class="form-control pwdtxt" type="password" placeholder="Password" formControlName="password">
         </div>
-        <div class="copy-text"></div>
-      </div>
-      <div class="col-md-8 banner-sec">
-
-        <div class="carousel-caption d-none d-md-block">
-          <div class="banner-text">
-            <h2 style="color:yellow">Address Translation</h2>
-            <p>Address Intelligence Tool for UPS </p>
-          </div>
+        <div class="form-check">
+          <button type="submit" class="btn">Get Start</button>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </section>
