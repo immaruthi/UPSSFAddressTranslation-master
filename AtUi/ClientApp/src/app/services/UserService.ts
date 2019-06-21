@@ -4,16 +4,20 @@ import { Router } from '@angular/router';
 import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { List } from 'linq-typescript';
-
+import { HttpService } from '../shared/http.service';
+import { environment } from '../../environments/environment';
+ 
 @Injectable()
 export class UserService {
-  constructor(private httpClient: HttpClient, private router: Router) { }
+  constructor(private httpClient: HttpClient, private router: Router,
+              private httpService: HttpService) { }
 
   ValidateUser(userId: any, password: any) {
     const params = new HttpParams()
       .set('userId', userId)
       .set('password', password);
-    return this.httpClient.get(`api/Login/ValidateUser`, { params })
+    //return this.httpService.makeGetRequest('api/Login/ValidateUser', { params })
+    return this.httpClient.get(environment.LOCAL_API_URL + `api/Login/ValidateUser`, { params })
     //return this.httpClient.get(`https://localhost:44330/api/values/ValidateUser`, { params })
   }
 
@@ -21,7 +25,7 @@ export class UserService {
     const params = new HttpParams()
       .set('userId', userId)
 
-    return this.httpClient.get(`api/Login/ValidateUserId`, { params })
+    return this.httpClient.get(environment.LOCAL_API_URL + `api/Login/ValidateUserId`, { params })
     //return this.httpClient.get(`https://localhost:44330/api/values/ValidateUserId`, { params })
 
   }
@@ -29,7 +33,7 @@ export class UserService {
     const params = new HttpParams()
       .set('Emp_Id', userId)
 
-    return this.httpClient.get(`api/Login/getLoginData`, { params })
+    return this.httpClient.get(environment.LOCAL_API_URL + `api/Login/getLoginData`, { params })
     //return this.httpClient.get(`https://localhost:44330/api/values/getLoginData`, { params })
 
   }
@@ -40,7 +44,7 @@ export class UserService {
       .set('lastName', lastName)
       .set('userName', userName)
       .set('password', password);
-    return this.httpClient.get(`api/Login/InsertUser`, { params })
+    return this.httpClient.get(environment.LOCAL_API_URL + `api/Login/InsertUser`, { params })
     //return this.httpClient.get(`https://localhost:44330/api/values/ValidateUser`, { params })
   }
 
@@ -48,14 +52,14 @@ export class UserService {
     const params = new HttpParams()
       .set('Emp_Id', user)
 
-    return this.httpClient.get(`api/ExcelWorkflow/getExcelData`, { params })
+    return this.httpClient.get(environment.LOCAL_API_URL + `api/ExcelWorkflow/getExcelData`, { params })
   }
   postFile(fileToUpload: File, user: any): Observable<Object> {
     debugger;
     let Emp_Id = user;
     //const endpoint = 'api/ExcelWorkflow/UploadExcel';
     //const endpoint = 'https://atservicetest.azurewebsites.net/api/Shipment/ExcelFileUpload';
-    const endpoint = window.location.origin + '/api/Shipment/ExcelFileUpload';
+    const endpoint = environment.LOCAL_API_URL + 'api/Shipment/ExcelFileUpload';
     const formData: FormData = new FormData();
     let headers = new HttpHeaders();
     headers.append('Content-Type', 'multipart/form-data');
