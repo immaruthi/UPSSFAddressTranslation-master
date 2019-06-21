@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RMG.Models;
+using AtUi.Models;
 
-namespace RMG
+namespace AtUi
 {
     public class Startup
     {
@@ -32,6 +32,9 @@ namespace RMG
             corsBuilder.AllowAnyHeader();
             corsBuilder.AllowAnyMethod();
             corsBuilder.AllowAnyOrigin(); // For anyone access.
+            corsBuilder.WithOrigins("http://localhost:65182"); // for a specific url. Don't add a forward slash on the end!
+            corsBuilder.WithOrigins("http://localhost:65182/shipment"); // for a specific url. Don't add a forward slash on the end!
+            corsBuilder.WithOrigins("http://localhost:65182/workflow"); // for a specific url. Don't add a forward slash on the end!
             corsBuilder.WithOrigins("https://addresstranslation.azurewebsites.net"); // for a specific url. Don't add a forward slash on the end!
             //corsBuilder.WithOrigins("https://atservicetest.azurewebsites.net"); // for a specific url. Don't add a forward slash on the end!
             corsBuilder.AllowCredentials();
@@ -46,11 +49,6 @@ namespace RMG
             new GetConnectionString().getconnection(Configuration);
 
             services.Add(new ServiceDescriptor(typeof(LoginContext), new LoginContext(Configuration.GetConnectionString("DefaultConnection"))));
-            services.Add(new ServiceDescriptor(typeof(EmployeeContext), new EmployeeContext(Configuration.GetConnectionString("DefaultConnection"))));
-            services.Add(new ServiceDescriptor(typeof(ProjectContext), new ProjectContext(Configuration.GetConnectionString("DefaultConnection"))));
-            services.Add(new ServiceDescriptor(typeof(RoleContext), new RoleContext(Configuration.GetConnectionString("DefaultConnection"))));
-            services.Add(new ServiceDescriptor(typeof(CustomerContext), new CustomerContext(Configuration.GetConnectionString("DefaultConnection"))));
-            services.Add(new ServiceDescriptor(typeof(AssignProjectContext), new AssignProjectContext(Configuration.GetConnectionString("DefaultConnection"))));
             services.Add(new ServiceDescriptor(typeof(HomeContext), new HomeContext(Configuration.GetConnectionString("DefaultConnection"))));
             services.Add(new ServiceDescriptor(typeof(LoginDataContext), new LoginDataContext(Configuration.GetConnectionString("DefaultConnection"))));
 

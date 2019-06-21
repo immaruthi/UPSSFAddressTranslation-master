@@ -11,20 +11,13 @@ import { LoginComponent } from './login/login.component';
 import { TopComponent } from './top/top.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { DropdownDirective } from './shared/dropdown.directive';
-import { AssignProjectsComponent } from './assign-projects/assign-projects.component';
-import { EmployeeComponent } from './employee/employee.component';
-import { ProjectsComponent } from './projects/projects.component';
-import { RolesComponent } from './roles/roles.component';
 import { ProjectService } from './services/ProjectService';
-import { RoleService } from './services/RoleService';
 import { LoginlayoutComponent} from './layout/loginlayout/loginlayout.component';
 import { ApplayoutComponent } from './layout/applayout/applayout.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserService } from './services/UserService';
 import { AuthGuard } from './services/AuthGuard';
 import { LoginGuard } from './services/LoginGuard';
-import { CustomersComponent } from './customers/customers.component';
-import { CustomerService } from './services/CustomerService';
 import { AssignProjectService } from './Services/AssignProjectService';
 
 import { HomeService } from './services/HomeService';
@@ -66,14 +59,9 @@ import { EditOnEnterDirective } from './shared/editable/edit-on-enter.directive'
     SidebarComponent,
     DropdownDirective,
     HomeComponent,
-    AssignProjectsComponent,
-    EmployeeComponent,
-    ProjectsComponent,
-    RolesComponent,
     LoginlayoutComponent,
     ApplayoutComponent,
     LoginComponent,
-    CustomersComponent,
     AdminconfigComponent,
     AlertDialogComponent,
     WorkflowComponent,
@@ -103,8 +91,8 @@ import { EditOnEnterDirective } from './shared/editable/edit-on-enter.directive'
   ],
   providers: [
     WorkflowService, EmployeeService,
-    ProjectService, RoleService, UserService,
-    AuthGuard, CustomerService, LoginGuard,
+    ProjectService, UserService,
+    AuthGuard, LoginGuard,
     AssignProjectService, ExcelService, HomeService,
     DialogService,
       ShippingService,
