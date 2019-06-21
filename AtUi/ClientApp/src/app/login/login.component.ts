@@ -85,7 +85,7 @@ export class LoginComponent {
 
                 }
                 else {
-                  this.dialogService.openAlertDialog('Please Check The Password Entered');
+                  this.dialogService.openAlertDialog('Please provide valid credentials');
                 }
 
               });
