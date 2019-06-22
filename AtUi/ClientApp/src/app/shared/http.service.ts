@@ -39,6 +39,18 @@ export class HttpService {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     return this._http.post(this.LOCAL_API_URL + url, body, {headers: headers});
   }
+
+  /**
+   * Make a XML POST request
+   * @param url
+   * @param body
+   * @returns {Observable<any>}
+   */
+  makePostRequestXML(url: string, body?: any): Observable<any> {
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/xml');
+    return this._http.post(this.LOCAL_API_URL + url, body, { headers: headers });
+  }
   
   /**
    * Make a PUT request

@@ -49,7 +49,10 @@ export class SentToSfComponent implements OnInit {
     this.ResponseData = [];
     this.shippingService.getDataForSendToSF(WorkflowID).subscribe((response: any) => {
       this.ResponseData = response;
-      this.dataSource.data = response;
+      for (let i = 0; i < this.ResponseData.length; i++) {
+        this.ResponseData[i].smT_STA_NR = this.shippingService.getStatusText(this.ResponseData[i].smT_STA_NR);
+      }
+      this.dataSource.data = this.ResponseData;
       this.dataSource.paginator = this.paginator;
     }, error => (this.errorMessage = <any>error));
   }
@@ -61,6 +64,11 @@ export class SentToSfComponent implements OnInit {
   }
 
   sendToSF() {
-    alert('Working In Progress !!');
+    // alert('Working In Progress !!');
+    const dataForSendToSF = this.dataSource.data; // Any changes can do here for sending array
+    this.shippingService.sendDataToSF(dataForSendToSF).subscribe((response: any) => {
+      this.getDataForSendToSF(this.WorkflowID);
+    }, error => (this.errorMessage = <any>error));
+    console.log(dataForSendToSF);
   }
 }
