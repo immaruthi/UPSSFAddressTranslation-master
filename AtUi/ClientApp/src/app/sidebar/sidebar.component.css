@@ -1,33 +1,28 @@
 .col-md-2 {
-  margin-left: 0;
+  margin: 0;
+  margin-top:63px;
   padding: 0;
-  position: relative;
-  width:auto;
-}
-.sidebar {
   height: calc( 100vh - 63px);
   background-color: #351C15;
-  /*position: relative;*/
+  position: relative;
   overflow-y: auto;
-  padding: 0;
-  /*width: 285px;*/
+  overflow-x:hidden;
 }
-
 ul li {
   width: 270px;
   height: 63px;
-  margin: 9px 0px 0px 1px;
+  margin: 9px 0px 0px 0px;
   padding: 22.5px 0px 14px 0px;
 }
 
   ul li a {
     color: #FFFFFF !important;
-    padding-left: 81px;
+    padding-left: 40px;
   }
 
-  a:hover {
-    text-decoration: none;
-  }
-a::after {
-  text-decoration: none;
+a:focus, a:hover{
+  text-decoration:none;
+}
+.active{
+  background:#795A47;
 }

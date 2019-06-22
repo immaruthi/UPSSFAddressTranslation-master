@@ -1,29 +1,24 @@
-<div class="content-section-header pb-3">
-  <h4>Work Flow </h4>
-</div>
-
-<div class="content-section">
-
-  <div class="table-responsive">
+<div class="col-md-10">
+  <div class="routepage">
+    <h4>Work Flow </h4>
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-3">
         <mat-form-field>
           <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
         </mat-form-field>
       </div>
-      <div class="col-md-8 text-right">
-        <div class="col-md-6">
+      <div class="col-md-9 text-right">
+        <div class="col-md-5">
           <form class="example-form">
             <mat-form-field class="example-full-width" *ngIf="fileNameControl.value!= ''">
               <input matInput placeholder="Choose file to upload" [formControl]="fileNameControl" name="excelFileName">
-              <mat-hint *ngIf="isValidFile" style="color:orange">!Supported file formate .xlsx and .xls</mat-hint>
               <mat-hint *ngIf="!isValidFile" style="color:red">
-                Please enter a valid file format
+                Please enter a valid file format(.xlsx or.xls)
               </mat-hint>
             </mat-form-field>
-            </form>
+          </form>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-4">
           <div class="form-group">
             <label for="file" class="btn btn-info">Upload </label>
             <input type="file"
@@ -33,49 +28,52 @@
         </div>
       </div>
     </div>
-
     <div>
-      <mat-table #table [dataSource]="dataSource" class="mat-table" style="width: 100%" matSort>
+      <mat-table class="table" [dataSource]="dataSource" matSort>
         <!-- Position Column -->
-        <ng-container matColumnDef="id">
-          <mat-header-cell *matHeaderCellDef> Workflow Id </mat-header-cell>
-          <mat-cell *matCellDef="let element"><a fxFlexFill [routerLink]="['/shipment',element.id]" class="mat-row-link"> {{element.id}}</a> </mat-cell>
+        <ng-container matColumnDef="id" class="container">
+          <mat-header-cell *matHeaderCellDef class="header-cell"> Workflow Id </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            
+              <a fxFlexFill [routerLink]="['/shipment',element.id]" class="mat-row-link cell">
+               {{element.id}}
+              </a>
+              
+          </mat-cell>
         </ng-container>
-
         <!-- Name Column -->
-        <ng-container matColumnDef="usR_FST_NA">
-          <mat-header-cell *matHeaderCellDef> Owner </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.usR_FST_NA}} </mat-cell>
+        <ng-container matColumnDef="usR_FST_NA" class="container">
+          <mat-header-cell *matHeaderCellDef class="header-cell"> Owner </mat-header-cell>
+          <mat-cell *matCellDef="let element" class="cell">
+            <span  class="sort-header">{{element.usR_FST_NA}}</span>
+          </mat-cell>
         </ng-container>
-
         <!-- Weight Column -->
-        <ng-container matColumnDef="flE_NA">
-          <mat-header-cell *matHeaderCellDef> File Name </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.flE_NA}} </mat-cell>
+        <ng-container matColumnDef="flE_NA" class="container">
+          <mat-header-cell *matHeaderCellDef class="header-cell"> File Name </mat-header-cell>
+          <mat-cell *matCellDef="let element" class="cell">
+            <span  class="sort-header">{{element.flE_NA}}</span>
+          </mat-cell>
         </ng-container>
-
         <!-- Symbol Column -->
-        <ng-container matColumnDef="wfL_STA_TE" >
-          <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-          <mat-cell *matCellDef="let element">{{workFlowStatus[element.wfL_STA_TE].value}} </mat-cell>
+        <ng-container matColumnDef="wfL_STA_TE" class="container">
+          <mat-header-cell *matHeaderCellDef class="header-cell"> Status </mat-header-cell>
+          <mat-cell *matCellDef="let element" class="cell">
+            <span  class="sort-header">{{workFlowStatus[element.wfL_STA_TE].value}}</span>
+          </mat-cell>
         </ng-container>
-
-        <ng-container matColumnDef="crD_DT">
-          <mat-header-cell *matHeaderCellDef> Created Date </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.crD_DT}} </mat-cell>
+        <ng-container matColumnDef="crD_DT" class="container">
+          <mat-header-cell *matHeaderCellDef class="header-cell"> Created Date </mat-header-cell>
+          <mat-cell *matCellDef="let element" class="cell">
+            <span  class="sort-header">{{element.crD_DT}}</span>
+          </mat-cell>
         </ng-container>
-
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-
+        <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
       </mat-table>
       <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
-
       </mat-paginator>
     </div>
-
+    <app-loader></app-loader>
   </div>
-
-  <app-loader></app-loader>
 </div>
-

@@ -17,6 +17,7 @@ export class UserService {
       .set('userId', userId)
       .set('password', password);
     //return this.httpService.makeGetRequest('api/Login/ValidateUser', { params })
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
     return this.httpClient.get(environment.LOCAL_API_URL + `api/Login/ValidateUser`, { params })
     //return this.httpClient.get(`https://localhost:44330/api/values/ValidateUser`, { params })
   }

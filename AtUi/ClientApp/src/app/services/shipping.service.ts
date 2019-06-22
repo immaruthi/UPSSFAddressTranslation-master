@@ -4,20 +4,36 @@ import { Router } from '@angular/router';
 import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { HttpService } from '../shared/http.service';
+import { ShipmentDetails } from '../models/shipmentDetails';
+import { shipmentStatus } from '../shared/enums.service';
 
 @Injectable()
 export class ShippingService {
-  constructor(private httpClient: HttpClient, private router: Router, private httpService: HttpService) { }
+  constructor(private httpClient: HttpClient, private router: Router,
+    private httpService: HttpService) { }
 
-  //public getTranslate(WorkflowID: any) {
-  //  this.httpService.makeGetRequest('api/Shipment', [{ wid: WorkflowID }]);
-  //}
-
-  public getTranslateData(WorkflowID: any): Observable<any[]> {
+  public getUploadedData(WorkflowID: any): Observable<any> {
+    return this.httpService.makeGetRequest('api/Shipment?wid=' + WorkflowID);
+  }
+  
+  public getTranslateData(WorkflowID: any): Observable<any> {
     return this.httpService.makeGetRequest('api/Shipment?wid=' + WorkflowID);
   }
 
-  public sendDataForTranslate(data: any[]): Observable<any[]> {
-    return this.httpService.makePostRequest('', data);  // Add URL here for send for translate
+  public getDataForSendToSF(WorkflowID: any): Observable<any> {
+    return this.httpService.makeGetRequest('api/Shipment?wid=' + WorkflowID);
+  }
+
+  public sendDataForTranslate(data: any[]): Observable<any> {
+    return this.httpService.makePostRequest('api/Shipment/GetTranslationAddress', data);  // Add URL here for send for translate
+  }
+
+  public sendDataToSF(data: any[]): Observable<any[]> {
+    return this.httpService.makePostRequestXML('', data);
+  }
+
+  public UpdateShippingAddress(data: ShipmentDetails): Observable<ShipmentDetails> {
+
+    return this.httpService.makePostRequest('need to add url', data);
   }
 }

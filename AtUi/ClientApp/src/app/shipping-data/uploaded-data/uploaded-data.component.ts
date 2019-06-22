@@ -1,6 +1,11 @@
-
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { ShipmentDetails } from '../../models/shipmentdetails';
+import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { SelectionModel } from '@angular/cdk/collections';
+import { FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
+import { ShippingService } from '../../services/shipping.service';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Constants } from '../../shared/Constants';
 
 @Component({
   selector: 'app-uploaded-data',
@@ -9,42 +14,52 @@ import { ShipmentDetails } from '../../models/shipmentdetails';
 })
 export class UploadedDataComponent implements OnInit {
 
-  constructor() { }
+  displayedColumns =
+    ['smT_STA_NR', 'smT_NR_TE', 'shP_DT', 'shP_CPY_NA', 'fsT_INV_LN_DES_TE', 'shP_ADR_TE',
+      'shP_ADR_TR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD', 'imP_SLC_TE',
+      'rcV_CPY_TE', 'rcV_ADR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'coD_TE'
+    ];
+
+  public ResponseData: any[] = [];
+  public WorkflowID: any;
+  public shipmentStatusList = Constants.ShipmentStatusList;
+  dataSource = new MatTableDataSource<Element>();
+  public errorMessage: string;
+  selection = new SelectionModel<any>(true, []);
+
+  constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
+    private router: Router) {
+  }
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  /**
+  * Set the paginator after the view init since this component will
+  * be able to query its view for the initialized paginator.
+  */
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
 
   ngOnInit() {
+    this.WorkflowID = this.activatedRoute.snapshot.params.WorkflowID;
+    if (this.WorkflowID) {
+      this.getUploadedData(this.WorkflowID);
+    }
   }
-  displayedColumns =
-    ['WFL_ID', 'SMT_NR_TE', 'SHP_ADR_TE', 'RCV_ADR_TE', 'RCV_ADR_CN', 'DST_CTY_TE',
-      'DST_PSL_TE','Status'
-    ];
-  dataSource = ELEMENT_DATA;
+
+  getUploadedData(WorkflowID: any) {
+    this.ResponseData = [];
+    this.shippingService.getUploadedData(WorkflowID).subscribe((response: any) => {
+      this.ResponseData = response;
+      this.dataSource.data = this.ResponseData;
+      this.dataSource.paginator = this.paginator;
+    }, error => (this.errorMessage = <any>error));
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
 }
-
-const ELEMENT_DATA: ShipmentDetails[] = [
-  {
-    WFL_ID: 1, SMT_NR_TE: 'AF3977VBWDD', SHP_ADR_TE: '1384 BROADWAY 25TH FLOOR NY', RCV_CPY_TE: 'BASF CHEMICALS CO., LTD', RCV_ADR_TE: 'SUITE 601_602,SHANGHAI TIMES SQUARE NO:93 HUAI HAI MIDDLE ROAD LUWAN D.', RCV_ADR_CN: '', DST_CTY_TE: 'SHANGHAI', DST_PSL_TE: '201137', Status: 'Uploaded'
-  },
-  {
-    WFL_ID: 2, SMT_NR_TE: 'AF3977VBWDD', SHP_ADR_TE: '77 ADELAIDE ST W RM/STE 1 ON', RCV_CPY_TE: 'BASF CHEMICALS CO., LTD', RCV_ADR_TE: 'NO.7 BLDG, NO.96 ZHAOJIABANG RD. ', RCV_ADR_CN: '', DST_CTY_TE: 'SHANGHAI', DST_PSL_TE: '200177', Status: 'Uploaded'
-  },
-  {
-    WFL_ID: 3, SMT_NR_TE: 'AF3977VBWDD', SHP_ADR_TE: '1384 BROADWAY 25TH FLOOR NY', RCV_CPY_TE: 'BASF CHEMICALS CO., LTD', RCV_ADR_TE: 'NO.7 BLDG, NO.96 ZHAOJIABANG RD. ', RCV_ADR_CN: '', DST_CTY_TE: 'SHANGHAI', DST_PSL_TE: '200337', Status: 'Uploaded'
-  },
-  {
-    WFL_ID: 4, SMT_NR_TE: 'AF3977VBWDD', SHP_ADR_TE: '1384 BROADWAY 25TH FLOOR NY', RCV_CPY_TE: 'BASF CHEMICALS CO., LTD', RCV_ADR_TE: 'NO.7 BLDG, NO.96 ZHAOJIABANG RD. ', RCV_ADR_CN: '', DST_CTY_TE: 'SHANGHAI', DST_PSL_TE: '200157', Status: 'Uploaded'
-  },
-  {
-    WFL_ID: 5, SMT_NR_TE: 'AF3977VBWDD', SHP_ADR_TE: '77 ADELAIDE ST W RM/STE 1 ON', RCV_CPY_TE: 'BASF CHEMICALS CO., LTD', RCV_ADR_TE: 'NO.7 BLDG, NO.96 ZHAOJIABANG RD. ', RCV_ADR_CN: '', DST_CTY_TE: 'SHANGHAI', DST_PSL_TE: '200134', Status: 'Uploaded'
-  },
-  {
-    WFL_ID: 5, SMT_NR_TE: 'AF3977VBWDD', SHP_ADR_TE: '77 ADELAIDE ST W RM/STE 1 ON', RCV_CPY_TE: 'BASF CHEMICALS CO., LTD', RCV_ADR_TE: 'NO.7 BLDG, NO.96 ZHAOJIABANG RD. ', RCV_ADR_CN: '', DST_CTY_TE: 'SHANGHAI', DST_PSL_TE: '200134', Status: 'Uploaded'
-  },
-  {
-    WFL_ID: 5, SMT_NR_TE: 'AF3977VBWDD', SHP_ADR_TE: '77 ADELAIDE ST W RM/STE 1 ON', RCV_CPY_TE: 'BASF CHEMICALS CO., LTD', RCV_ADR_TE: 'NO.7 BLDG, NO.96 ZHAOJIABANG RD. ', RCV_ADR_CN: '', DST_CTY_TE: 'SHANGHAI', DST_PSL_TE: '200134', Status: 'Uploaded'
-  },
-  {
-    WFL_ID: 5, SMT_NR_TE: 'AF3977VBWDD', SHP_ADR_TE: '77 ADELAIDE ST W RM/STE 1 ON', RCV_CPY_TE: 'BASF CHEMICALS CO., LTD', RCV_ADR_TE: 'NO.7 BLDG, NO.96 ZHAOJIABANG RD. ', RCV_ADR_CN: '', DST_CTY_TE: 'SHANGHAI', DST_PSL_TE: '200134', Status: 'Uploaded'
-  },
-
-];
-

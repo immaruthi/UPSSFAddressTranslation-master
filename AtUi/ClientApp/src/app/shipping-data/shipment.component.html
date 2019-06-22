@@ -1,52 +1,51 @@
-<section class="breadcrumb-section pb-3">
-  <h5 class="section-title card"></h5>
-</section>
+<div class="col-md-10">
+  <div class="routepage">
+    <h5 class="section-title card"></h5>
+    <!--<button mat-raised-button (click)="isLinear = true" id="toggle-linear">Enable linear mode</button>-->
 
-<section class="content-section">
+    <mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper">
+      <mat-step [stepControl]="firstFormGroup">
+        <form [formGroup]="firstFormGroup">
+          <ng-template matStepLabel>Uploaded Shipment Details</ng-template>
+          <!--<app-translate></app-translate>-->
+          <app-uploaded-data></app-uploaded-data>
+          <div>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="secondFormGroup">
+        <form [formGroup]="secondFormGroup">
+          <ng-template matStepLabel>Translate</ng-template>
+          <app-translate></app-translate>
 
-  <!--<button mat-raised-button (click)="isLinear = true" id="toggle-linear">Enable linear mode</button>-->
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
 
-  <mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper">
-    <mat-step [stepControl]="firstFormGroup">
-      <form [formGroup]="firstFormGroup">
-        <ng-template matStepLabel>Uploaded Shipment Details</ng-template>
-        <app-translate></app-translate>
-        <!--<app-uploaded-data></app-uploaded-data>-->
-        <div>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </form>
-    </mat-step>
-    <mat-step [stepControl]="secondFormGroup">
-      <form [formGroup]="secondFormGroup">
-        <ng-template matStepLabel>Translate</ng-template>
-         <app-translate></app-translate>
-       
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </form>
-    </mat-step>
-
-    <mat-step>
-      <ng-template matStepLabel>Sent To SF</ng-template>
-      <app-sent-to-sf></app-sent-to-sf>
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
-      </div>
-    </mat-step>
-    <mat-step>
-      <ng-template matStepLabel>Done</ng-template>
-      You are now done.
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
-      </div>
-    </mat-step>
-  </mat-horizontal-stepper>
-</section>
-
-
-
+      <mat-step [stepControl]="thirdFormGroup">
+        <form [formGroup]="secondFormGroup">
+          <ng-template matStepLabel>Sent To SF</ng-template>
+          <app-sent-to-sf></app-sent-to-sf>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="fourthFormGroup">
+        <form [formGroup]="secondFormGroup">
+          <ng-template matStepLabel>Done</ng-template>
+          You are now done.
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+          </div>
+        </form>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </div>
+</div>
