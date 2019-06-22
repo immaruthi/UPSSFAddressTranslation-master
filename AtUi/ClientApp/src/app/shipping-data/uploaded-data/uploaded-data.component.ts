@@ -52,9 +52,6 @@ export class UploadedDataComponent implements OnInit {
     this.ResponseData = [];
     this.shippingService.getUploadedData(WorkflowID).subscribe((response: any) => {
       this.ResponseData = response;
-      //for (let i = 0; i < this.ResponseData.length; i++) {
-      //  this.ResponseData[i].smT_STA_NR = this.shippingService.getStatusText(this.ResponseData[i].smT_STA_NR);
-      //}
       this.dataSource.data = this.ResponseData;
       this.dataSource.paginator = this.paginator;
     }, error => (this.errorMessage = <any>error));

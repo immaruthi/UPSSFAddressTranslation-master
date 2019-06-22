@@ -9,84 +9,85 @@
   </div>
 </div>
 <br />
-<div class="table-div">
-  <mat-table #table [dataSource]="dataSource">
-    <ng-container matColumnDef="smT_STA_NR">
-      <mat-header-cell *matHeaderCellDef> SHP Status </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{shipmentStatusList[element.smT_STA_NR].value}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="smT_NR_TE">
-      <mat-header-cell *matHeaderCellDef> SHP Number </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.smT_NR_TE}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="shP_DT">
-      <mat-header-cell *matHeaderCellDef> SHP Date </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.shP_DT}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="shP_CPY_NA">
-      <mat-header-cell *matHeaderCellDef> SHP Company Name </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.shP_CPY_NA}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="fsT_INV_LN_DES_TE">
-      <mat-header-cell *matHeaderCellDef> Specification </mat-header-cell>
-      <mat-cell *matCellDef="let element;let index = index"> {{element.fsT_INV_LN_DES_TE}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="shP_ADR_TE">
-      <mat-header-cell *matHeaderCellDef> SHP Address </mat-header-cell>
-      <mat-cell *matCellDef="let element;let index = index"> {{element.shP_ADR_TE}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="shP_ADR_TR_TE">
-      <mat-header-cell *matHeaderCellDef> SHP Translated Address </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.shP_ADR_TR_TE}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="shP_CTC_TE">
-      <mat-header-cell *matHeaderCellDef> SHP Contact </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.shP_CTC_TE}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="shP_PH_TE">
-      <mat-header-cell *matHeaderCellDef> SHP Phone </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.shP_PH_TE}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="orG_CTY_TE">
-      <mat-header-cell *matHeaderCellDef> Origin City </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.orG_CTY_TE}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="orG_PSL_CD">
-      <mat-header-cell *matHeaderCellDef> Origin Postal code </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.orG_PSL_CD}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="imP_SLC_TE">
-      <mat-header-cell *matHeaderCellDef> IMP SLC </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.imP_SLC_TE}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="rcV_CPY_TE">
-      <mat-header-cell *matHeaderCellDef> Receiving Company </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.rcV_CPY_TE}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="rcV_ADR_TE">
-      <mat-header-cell *matHeaderCellDef> Receive Address </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.rcV_ADR_TE}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="dsT_CTY_TE">
-      <mat-header-cell *matHeaderCellDef> DST City </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.dsT_CTY_TE}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="dsT_PSL_TE">
-      <mat-header-cell *matHeaderCellDef> DST Postal Code </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.dsT_PSL_TE}} </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="coD_TE">
-      <mat-header-cell *matHeaderCellDef> COD </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.coD_TE}} </mat-cell>
-    </ng-container>
+<div class="table-responsive">
+  <div class="row">
+    <mat-table class="table" [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="smT_STA_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> SHP Status </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{shipmentStatusList[element.smT_STA_NR].value}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="smT_NR_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> SHP Number </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.smT_NR_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="shP_DT" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> SHP Date </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.shP_DT}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="shP_CPY_NA" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> SHP Company Name </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.shP_CPY_NA}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="fsT_INV_LN_DES_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Specification </mat-header-cell>
+        <mat-cell *matCellDef="let element;let index = index" class="cell"> {{element.fsT_INV_LN_DES_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="shP_ADR_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> SHP Address </mat-header-cell>
+        <mat-cell *matCellDef="let element;let index = index" class="cell"> {{element.shP_ADR_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="shP_ADR_TR_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> SHP Translated Address </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.shP_ADR_TR_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="shP_CTC_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> SHP Contact </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.shP_CTC_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="shP_PH_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> SHP Phone </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.shP_PH_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="orG_CTY_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Origin City </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.orG_CTY_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="orG_PSL_CD" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Origin Postal code </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.orG_PSL_CD}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="imP_SLC_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> IMP SLC </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.imP_SLC_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="rcV_CPY_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Receiving Company </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.rcV_CPY_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="rcV_ADR_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Receive Address </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.rcV_ADR_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="dsT_CTY_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> DST City </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.dsT_CTY_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="dsT_PSL_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> DST Postal Code </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.dsT_PSL_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="coD_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> COD </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.coD_TE}} </mat-cell>
+      </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
-
-  <mat-paginator #paginator
-                 [pageSize]="5"
-                 [pageSizeOptions]="[5, 10, 20]"
-                 [showFirstLastButtons]="true">
-  </mat-paginator>
-</div>
+      <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
+    </mat-table>
+  </div>
+    <mat-paginator #paginator
+                   [pageSize]="5"
+                   [pageSizeOptions]="[5, 10, 20]"
+                   [showFirstLastButtons]="true">
+    </mat-paginator>
+  </div>

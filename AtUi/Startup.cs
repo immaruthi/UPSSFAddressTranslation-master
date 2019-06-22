@@ -24,6 +24,8 @@ namespace AtUi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             // ********************
             // Setup CORS
@@ -39,10 +41,10 @@ namespace AtUi
             //corsBuilder.WithOrigins("https://atservicetest.azurewebsites.net"); // for a specific url. Don't add a forward slash on the end!
             corsBuilder.AllowCredentials();
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("SiteCorsPolicy", corsBuilder.Build());
-            });
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy("SiteCorsPolicy", corsBuilder.Build());
+            //});
 
             //services.AddCors( options => { options.AddPolicy(MyAllowSpecificOrigins, builder => { builder.WithOrigins("https://atservicetest.azurewebsites.net", "https://addresstranslation.azurewebsites.net"); }); });
 
@@ -76,6 +78,8 @@ namespace AtUi
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
+            app.UseCors(builder => builder.AllowAnyOrigin());
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -94,9 +98,13 @@ namespace AtUi
                 {
                     spa.UseAngularCliServer(npmScript: "start");
                 }
+
             });
+
+            
+
             //app.UseCors(MyAllowSpecificOrigins);
-            app.UseCors("SiteCorsPolicy");
+            //app.UseCors("SiteCorsPolicy");
         }
     }
 }
