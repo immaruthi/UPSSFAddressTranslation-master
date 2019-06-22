@@ -23,3 +23,6 @@ table {
 a {
   text-decoration: underline;
 }
+.col-md-2{
+  float:right;
+}

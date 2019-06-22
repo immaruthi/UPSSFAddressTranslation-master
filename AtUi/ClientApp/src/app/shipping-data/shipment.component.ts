@@ -14,6 +14,8 @@ export class ShipmentComponent {
   isLinear = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
+  thirdFormGroup: FormGroup;
+  fourthFormGroup: FormGroup;
 
   constructor(private _formBuilder: FormBuilder) { }
 
@@ -22,6 +24,12 @@ export class ShipmentComponent {
       firstCtrl: ['', Validators.required]
     });
     this.secondFormGroup = this._formBuilder.group({
+      secondCtrl: ['', Validators.required]
+    });
+    this.thirdFormGroup = this._formBuilder.group({
+      secondCtrl: ['', Validators.required]
+    });
+    this.fourthFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required]
     });
   }

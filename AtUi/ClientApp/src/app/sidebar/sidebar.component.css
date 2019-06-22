@@ -20,9 +20,9 @@ ul li {
     padding-left: 40px;
   }
 
-  a:hover {
-    text-decoration: none;
-  }
-a::after {
-  text-decoration: none;
+a:focus, a:hover{
+  text-decoration:none;
+}
+.active{
+  background:#795A47;
 }

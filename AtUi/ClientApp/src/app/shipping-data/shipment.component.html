@@ -26,21 +26,25 @@
         </form>
       </mat-step>
 
-      <mat-step>
-        <ng-template matStepLabel>Sent To SF</ng-template>
-        <app-sent-to-sf></app-sent-to-sf>
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button (click)="stepper.reset()">Reset</button>
-        </div>
+      <mat-step [stepControl]="thirdFormGroup">
+        <form [formGroup]="secondFormGroup">
+          <ng-template matStepLabel>Sent To SF</ng-template>
+          <app-sent-to-sf></app-sent-to-sf>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+          </div>
+        </form>
       </mat-step>
-      <mat-step>
-        <ng-template matStepLabel>Done</ng-template>
-        You are now done.
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button (click)="stepper.reset()">Reset</button>
-        </div>
+      <mat-step [stepControl]="fourthFormGroup">
+        <form [formGroup]="secondFormGroup">
+          <ng-template matStepLabel>Done</ng-template>
+          You are now done.
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+          </div>
+        </form>
       </mat-step>
     </mat-horizontal-stepper>
   </div>

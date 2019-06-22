@@ -53,6 +53,6 @@ nav {
   width: 125px;
 }
 
-a:hover {
+a:hover, a:after {
   text-decoration: none;
 }
