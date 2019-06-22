@@ -131,8 +131,8 @@ namespace AtService.Controllers
                 //exflow.USR_FST_NA = reader["USR-FST-NA"].ToString();
                 exflow.FLE_NA = reader["FLE-NA"].ToString();
                 exflow.WFL_STA_TE = Convert.ToInt32(reader["WFL-STA-TE"]);
-                exflow.CRD_DT = reader["CRD-DT"].ToString();
-                exflow.UDT_DT = reader["UDT-DT"].ToString();
+                exflow.CRD_DT = reader["CRD-DT"] != null || reader["CRD-DT"].ToString() != string.Empty ? Convert.ToDateTime(reader["CRD-DT"].ToString()): DateTime.Now;
+                exflow.UDT_DT = reader["UDT-DT"] != null || reader["UDT-DT"].ToString() != string.Empty ? Convert.ToDateTime(reader["UDT-DT"].ToString()): DateTime.Now;
 
                 excelWorkflowsLst.Add(exflow);
             }
@@ -170,8 +170,8 @@ namespace AtService.Controllers
                 //exflow.USR_FST_NA = reader["USR-FST-NA"].ToString();
                 exflow.FLE_NA = reader["FLE-NA"].ToString();
                 exflow.WFL_STA_TE = Convert.ToInt32(reader["WFL-STA-TE"]);
-                exflow.CRD_DT = reader["CRD-DT"].ToString();
-                exflow.UDT_DT = reader["UDT-DT"].ToString();
+                exflow.CRD_DT = reader["CRD-DT"] != null || reader["CRD-DT"].ToString() != string.Empty ? Convert.ToDateTime(reader["CRD-DT"].ToString()) : DateTime.Now;
+                exflow.UDT_DT = reader["UDT-DT"] != null || reader["UDT-DT"].ToString() != string.Empty ? Convert.ToDateTime(reader["UDT-DT"].ToString()) : DateTime.Now;
 
                 excelWorkflowsLst.Add(exflow);
             }

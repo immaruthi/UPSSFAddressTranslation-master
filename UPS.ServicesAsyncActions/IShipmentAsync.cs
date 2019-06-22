@@ -7,7 +7,10 @@ namespace UPS.ServicesAsyncActions
 {
     public interface IShipmentAsync
     {
-        int CreateShipment(ShipmentDataRequest shipmentData);
         List<ShipmentDataRequest> GetShipment(int workflowID);
+        int CreateShipment(ShipmentDataRequest shipmentData);
+        ShipmentDataResponse CreateShipments(List<ShipmentDataRequest> shipmentDataRequests);
+        ShipmentDataResponse UpdateShipmentStatusById(ShipmentDataRequest shipmentDataRequest);
+        ShipmentDataResponse UpdateShipmentAddressById(ShipmentDataRequest shipmentDataRequest);
     }
 }

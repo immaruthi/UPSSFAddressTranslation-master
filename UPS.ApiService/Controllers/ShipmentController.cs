@@ -23,6 +23,8 @@ using UPS.AddressTranslationService.Controllers;
 using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Cors;
+using UPS.DataObjects.Shipment;
+using UPS.DataObjects.WR_FLW;
 
 namespace AtService.Controllers
 {
@@ -71,8 +73,9 @@ namespace AtService.Controllers
                         string JSONString = new ExcelExtension().Test(filePath);
                         var excelDataObject2 = JsonConvert.DeserializeObject<List<ExcelDataObject>>(JSONString);
                         WorkflowController workflowController = new WorkflowController();
-                        _workflowID = workflowController.Post(file, Emp_Id);
-                        result = this.Post(excelDataObject2, _workflowID);
+                        WorkflowDataResponse response = (workflowController.CreateWorkflow(file, Emp_Id)).Value;
+                        _workflowID = response.Workflow.ID;
+                        result = this.CreateShipments(excelDataObject2, _workflowID);
                     }
                 }
 
@@ -85,9 +88,9 @@ namespace AtService.Controllers
         private ShipmentService shipmentService { get; set; }
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
-        public ActionResult Post(List<ExcelDataObject> excelDataObjects, int workflowID)
+        public ActionResult CreateShipments(List<ExcelDataObject> excelDataObjects, int workflowID)
         {
-            List<ShipmentDataRequest> shipmentdata = null;
+            ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
             try
             {
                 List<ShipmentDataRequest> shipmentData = new List<ShipmentDataRequest>();
@@ -138,24 +141,44 @@ namespace AtService.Controllers
                     shipmentData.Add(shipmentDataRequest);
                 }
                 shipmentService = new ShipmentService();
-                bool status = shipmentService.CreateShipments(shipmentData);
-                //shipmentService.CreateShipment(new ShipmentDataRequest()
-                //{
-                //    SHP_ADR_TE = "test1",
-                //    WFL_ID = 1,
-                //    SF_TRA_LG_ID = null,
-                //    QQS_TRA_LG_ID = null
-                //});
-                shipmentdata = this.GetShipmentData(workflowID);
+                shipmentDataResponse  = shipmentService.CreateShipments(shipmentData);
+                shipmentDataResponse.Success = true;
+                return Ok(shipmentDataResponse);
             }
             catch(Exception ex)
             {
+                shipmentDataResponse.Success = false;
+                shipmentDataResponse.OperationException = ex;
 
             }
-            return Ok(shipmentdata);
+            return Ok(shipmentDataResponse);
         }
 
         //private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
+        [Route("UpdateShipmentStatusById")]
+        [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult> UpdateShipmentStatusById([FromBody] ShipmentDataRequest shipmentDataRequest)
+        {
+            shipmentService = new ShipmentService();
+            ShipmentDataResponse shipmentDataResponse = shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
+            return Ok(shipmentDataResponse);
+        }
+
+        [Route("UpdateShipmentAddressById")]
+        [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult> UpdateShipmentAddressById([FromBody] ShipmentDataRequest shipmentDataRequest)
+        {
+            shipmentService = new ShipmentService();
+            ShipmentDataResponse shipmentDataResponse = shipmentService.UpdateShipmentAddressById(shipmentDataRequest);
+            return Ok(shipmentDataResponse);
+        }
+
+        //private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
+        [Route("GetShipmentData")]
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
