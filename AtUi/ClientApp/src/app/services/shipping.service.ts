@@ -9,11 +9,15 @@ import { HttpService } from '../shared/http.service';
 export class ShippingService {
   constructor(private httpClient: HttpClient, private router: Router, private httpService: HttpService) { }
 
-  //public getTranslate(WorkflowID: any) {
-  //  this.httpService.makeGetRequest('api/Shipment', [{ wid: WorkflowID }]);
-  //}
-
+  public getUploadedData(WorkflowID: any): Observable<any[]> {
+    return this.httpService.makeGetRequest('api/Shipment?wid=' + WorkflowID);
+  }
+  
   public getTranslateData(WorkflowID: any): Observable<any[]> {
+    return this.httpService.makeGetRequest('api/Shipment?wid=' + WorkflowID);
+  }
+
+  public getDataForSendToSF(WorkflowID: any): Observable<any[]> {
     return this.httpService.makeGetRequest('api/Shipment?wid=' + WorkflowID);
   }
 

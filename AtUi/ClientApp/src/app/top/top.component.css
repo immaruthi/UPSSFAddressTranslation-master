@@ -7,6 +7,11 @@ nav {
   padding: 0;
   margin: 0;
 }
+.navbar{
+  height:63px;
+  margin:0;
+  padding:0;
+}
 .container-fluid{
   padding:0;
 }
@@ -23,8 +28,8 @@ nav {
 }
 .collapse {
   margin: 10px 0px 0px 0px;
+  height:63px;
 }
-
 .apptxt {
   font-family: Helvetica;
   font-size: 28px;

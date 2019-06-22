@@ -7,7 +7,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
  */
 @Component({
   selector: 'shipment-data',
-  styleUrls: ['shipment.component.scss'],
+  styleUrls: ['shipment.component.css'],
   templateUrl: 'shipment.component.html',
 })
 export class ShipmentComponent {

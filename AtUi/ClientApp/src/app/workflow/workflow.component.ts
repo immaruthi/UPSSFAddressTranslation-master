@@ -16,7 +16,7 @@ import { Constants } from '../shared/Constants';
 
 @Component({
   selector: 'workflow',
-  styleUrls: ['workflow.component.scss'],
+  styleUrls: ['workflow.component.css'],
   templateUrl: 'workflow.component.html',
 })
 
