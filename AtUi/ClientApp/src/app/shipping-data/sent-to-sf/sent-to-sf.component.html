@@ -13,7 +13,7 @@
   <mat-table #table [dataSource]="dataSource">
     <ng-container matColumnDef="smT_STA_NR">
       <mat-header-cell *matHeaderCellDef> SHP Status </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.smT_STA_NR}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{shipmentStatusList[element.smT_STA_NR].value}} </mat-cell>
     </ng-container>
     <ng-container matColumnDef="smT_NR_TE">
       <mat-header-cell *matHeaderCellDef> SHP Number </mat-header-cell>
