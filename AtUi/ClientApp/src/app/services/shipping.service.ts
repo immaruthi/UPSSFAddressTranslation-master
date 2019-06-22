@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { HttpService } from '../shared/http.service';
+import { ShipmentDetails } from '../models/shipmentDetails';
 import { shipmentStatus } from '../shared/enums.service';
 
 @Injectable()
@@ -41,5 +42,10 @@ export class ShippingService {
     } else {
       return 'Undefined';
     }
+  }
+
+  public UpdateShippingAddress(data: ShipmentDetails): Observable<ShipmentDetails> {
+
+    return this.httpService.makePostRequest('need to add url', data);
   }
 }

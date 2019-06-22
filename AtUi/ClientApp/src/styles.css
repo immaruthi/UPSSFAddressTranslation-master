@@ -117,7 +117,7 @@ mat-flat-button {
   font-size: 20px;
 }
 
-.mat-header-row {
+/*.mat-header-row {
   background: #f2f2f2;
 
   font: segoeui-bold, 14px, #212121;
@@ -134,9 +134,9 @@ mat-flat-button {
 .mat-row {
 
   font: segoeui, 14px, #212121;
-}
+}*/
 
-.mat-row:nth-child(odd) {
+/*.mat-row:nth-child(odd) {
   background: #f2f2f2;
 }
 .example-container {
@@ -150,4 +150,66 @@ mat-header-cell:nth-child(1) {
 mat-cell:nth-child(5),
 mat-header-cell:nth-child(5) {
   flex: 0 0 10%;
+}*/
+
+
+
+.table {
+  width: 100vw;
+  max-width: 100%;
+  overflow: auto;
+  margin-bottom: 10px;
+  display: table;
+  border-collapse: collapse;
+  margin: 0px;
+}
+
+.row,
+.header-row {
+  display: table-row;
+  min-height: 36px !important;
+}
+
+.cell,
+.header-cell {
+  word-wrap: initial;
+  display: table-cell;
+  padding: 0px 5px;
+  line-break: unset;
+  width: fit-content;
+  white-space: nowrap;
+  overflow: hidden;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.header-row,
+.header-cell {
+  margin: 0 auto;
+  min-height: 100px !important;
+  text-align: center;
+  vertical-align: middle;
+  align-self: center;
+}
+
+.sort-header {
+  display: flex;
+  align-content: center;
+  text-align: center;
+  justify-content: center;
+  font-size: 12pt;
+}
+
+.header-cell {
+  font-weight: bold;
+}
+
+
+
+.mat-card {
+  min-width: max-content;
+  max-width: max-content;
+}
+.mat-row:nth-child(odd) {
+  background: #f2f2f2;
 }

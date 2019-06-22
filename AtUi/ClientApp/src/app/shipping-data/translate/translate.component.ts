@@ -1,9 +1,13 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
-import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatDialog, MatSnackBar, MatSnackBarConfig, MatProgressSpinner } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
 import { ShippingService } from '../../services/shipping.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { DataService } from '../../services/data.service';
+import { AddressEditModelComponent } from '../address-edit-model/address-edit-model.component';
+import { ShipmentDetails } from '../../models/shipmentDetails';
+import { Constants } from '../../shared/Constants';
 
 
 @Component({
@@ -14,7 +18,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 
 export class TranslateComponent implements OnInit {
   displayedColumns =
-    ['select', 'smT_STA_NR', 'smT_NR_TE', 'shP_DT', 'shP_CPY_NA', 'fsT_INV_LN_DES_TE', 'shP_ADR_TE',
+    ['select','actions', 'smT_STA_NR', 'smT_NR_TE', 'shP_DT', 'shP_CPY_NA', 'fsT_INV_LN_DES_TE', 'shP_ADR_TE',
       'shP_ADR_TR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD', 'imP_SLC_TE',
       'rcV_CPY_TE', 'rcV_ADR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'coD_TE'
     ];
@@ -26,7 +30,9 @@ export class TranslateComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
-              private router: Router) {
+    private router: Router, public dialog: MatDialog,
+    public dataService: DataService,
+    private snackBar: MatSnackBar) {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -44,6 +50,27 @@ export class TranslateComponent implements OnInit {
     if (this.WorkflowID) {
       this.getTranslateData(this.WorkflowID);
     }
+  }
+
+  openSuccessMessageNotification(message: string) {
+    let config = new MatSnackBarConfig();
+    this.snackBar.open(message, '',
+      {
+        duration: Constants.SNAKBAR_SHOW_DURATION,
+        verticalPosition: "top",
+        horizontalPosition: "right",
+        extraClasses: 'custom-class-success'
+      });
+  }
+  openErrorMessageNotification(message: string) {
+    let config = new MatSnackBarConfig();
+    this.snackBar.open(message, '',
+      {
+        duration: Constants.SNAKBAR_SHOW_DURATION,
+        verticalPosition: "top",
+        horizontalPosition: "right",
+        extraClasses: 'custom-class-error'
+      });
   }
 
   getTranslateData(WorkflowID: any) {
@@ -93,17 +120,32 @@ export class TranslateComponent implements OnInit {
     console.log(dataForTranslate);
   }
 
-  //updateField(index, field) {
-  //  debugger;
-  //  const control = this.getControl(index, field);
-  //  //if (control.valid) {
-  //  //  //this.core.update(index, field, control.value);
-  //  //}
-  //}
+  startEdit(i: number, shipmentDetailToUpdate: any) {
+    let shipmentDetails = shipmentDetailToUpdate;
+    const dialogRef = this.dialog.open(AddressEditModelComponent, {
+      data: {
+        Id: shipmentDetailToUpdate.id,
+        shP_ADR_TE: shipmentDetailToUpdate.shP_ADR_TE,
+        shP_ADR_TR_TE: shipmentDetailToUpdate.shP_ADR_TR_TE,
+        coD_TE: shipmentDetailToUpdate.coD_TE
+      }
+    });
 
-  //getControl(index, fieldName) {
-  //  debugger;
-  //  //const a = this.controls.at(index).get(fieldName) as FormControl;
-  //  //return this.controls.at(index).get(fieldName) as FormControl;
-  //}
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        let updatedDetails = this.dataService.getDialogData();
+
+        shipmentDetails.shP_ADR_TE = updatedDetails.shP_ADR_TE;
+        shipmentDetails.shP_ADR_TR_TE = updatedDetails.shP_ADR_TR_TE;
+        shipmentDetails.coD_TE = updatedDetails.coD_TE;
+
+        this.shippingService.UpdateShippingAddress(shipmentDetails).subscribe(response => {
+          console.log(response)
+          this.openSuccessMessageNotification("Data Updated Succesfully");
+        },
+          error => this.openErrorMessageNotification("Error while updating data"))
+      }
+    });
+  }
+
 }
