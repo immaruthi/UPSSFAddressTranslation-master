@@ -11,20 +11,20 @@ export class ShippingService {
   constructor(private httpClient: HttpClient, private router: Router,
     private httpService: HttpService) { }
 
-  public getUploadedData(WorkflowID: any): Observable<any[]> {
+  public getUploadedData(WorkflowID: any): Observable<any> {
     return this.httpService.makeGetRequest('api/Shipment?wid=' + WorkflowID);
   }
   
-  public getTranslateData(WorkflowID: any): Observable<any[]> {
+  public getTranslateData(WorkflowID: any): Observable<any> {
     return this.httpService.makeGetRequest('api/Shipment?wid=' + WorkflowID);
   }
 
-  public getDataForSendToSF(WorkflowID: any): Observable<any[]> {
+  public getDataForSendToSF(WorkflowID: any): Observable<any> {
     return this.httpService.makeGetRequest('api/Shipment?wid=' + WorkflowID);
   }
 
-  public sendDataForTranslate(data: any[]): Observable<any[]> {
-    return this.httpService.makePostRequest('', data);  // Add URL here for send for translate
+  public sendDataForTranslate(data: any[]): Observable<any> {
+    return this.httpService.makePostRequest('api/Shipment/GetTranslationAddress', data);  // Add URL here for send for translate
   }
 
   public sendDataToSF(data: any[]): Observable<any[]> {
