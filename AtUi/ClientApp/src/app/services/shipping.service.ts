@@ -32,18 +32,6 @@ export class ShippingService {
     return this.httpService.makePostRequestXML('', data);
   }
 
-  public getStatusText(statusID: any) {
-    if (statusID === shipmentStatus.Uploaded) {
-      return 'Uploaded';
-    } else if (statusID === shipmentStatus.Translated) {
-      return 'Translated';
-    } else if (statusID === shipmentStatus.Done) {
-      return 'Done';
-    } else {
-      return 'Undefined';
-    }
-  }
-
   public UpdateShippingAddress(data: ShipmentDetails): Observable<ShipmentDetails> {
 
     return this.httpService.makePostRequest('need to add url', data);
