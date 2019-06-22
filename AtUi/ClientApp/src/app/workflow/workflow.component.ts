@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { MatPaginator, MatTableDataSource, MatSnackBar } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatSnackBar, MatSnackBarConfig, MatProgressSpinner } from '@angular/material';
 import { UserService } from '../services/UserService';
 import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';  
@@ -8,6 +8,7 @@ import { FormControl } from '@angular/forms';
 import { LoaderService } from '../shared/loader/loader.service';
 import { List } from 'linq-typescript';
 import { Constants } from '../shared/Constants';
+
 
 
 /**
@@ -61,14 +62,41 @@ export class WorkflowComponent {
   }
 
   ngOnInit() {
+  
+    this.getWorkflowDetails();
+} 
+
+  getWorkflowDetails() {
     var user = localStorage.getItem("Emp_Id");
     this.userService.getAllWorkflows(user)
       .subscribe((data: any) => {
 
         this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
+
+      },
+        error => console.log(error));
+  }
+  openSuccessMessageNotification(message: string) {
+    let config = new MatSnackBarConfig();
+    this.snackBar.open(message, '',
+      {
+        duration: Constants.SNAKBAR_SHOW_DURATION,
+        verticalPosition: "top",
+        horizontalPosition: "right",
+        extraClasses:'custom-class-success'
       });
-} 
+  }
+  openErrorMessageNotification(message: string) {
+    let config = new MatSnackBarConfig();
+    this.snackBar.open(message, '',
+      {
+        duration: Constants.SNAKBAR_SHOW_DURATION,
+        verticalPosition: "top",
+        horizontalPosition: "right",
+        extraClasses: 'custom-class-error'
+      });
+  }
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
@@ -98,7 +126,6 @@ export class WorkflowComponent {
   }
 
   handleFileInput(files: FileList) {
-    debugger;
     this.fileToUpload = files.item(0);
     let fileName = this.fileToUpload.name;
     this.fileNameControl.setValue(fileName);
@@ -112,30 +139,15 @@ export class WorkflowComponent {
   
       this.userService.postFile(this.fileToUpload, user)
         .subscribe((data: any) => {
-
-          this.dataSource.data = data;
-          this.dataSource.paginator = this.paginator;
-          this.snackBar.open("File Uploaded Succesfully", 'Ok', {
-            duration: Constants.SNAKBAR_SHOW_DURATION,
-            verticalPosition: 'top',
-            horizontalPosition: 'end',
-          });
+          this.getWorkflowDetails();
+          this.openSuccessMessageNotification("File Uploaded succesfully");
         },
         error =>
         {
-          console.log(error);
-          this.snackBar.open("Error while uploading file,Please try again", 'Error',
-            {
-              duration: Constants.SNAKBAR_SHOW_DURATION,
-              verticalPosition: 'top',
-              horizontalPosition: 'end',
-
-            });
+          this.openErrorMessageNotification("Error while uploading file")
         }
       );
-
     }
-
   }
   validateFile(name: String) {
     var ext = name.substring(name.lastIndexOf('.') + 1);
@@ -148,8 +160,6 @@ export class WorkflowComponent {
   }
  
 }
-
-
 
 export interface Element {
   id: number;

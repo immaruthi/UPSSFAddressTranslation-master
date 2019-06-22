@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { HttpService } from '../shared/http.service';
+import { ShipmentDetails } from '../models/shipmentDetails';
 
 @Injectable()
 export class ShippingService {
@@ -23,5 +24,10 @@ export class ShippingService {
 
   public sendDataForTranslate(data: any[]): Observable<any[]> {
     return this.httpService.makePostRequest('', data);  // Add URL here for send for translate
+  }
+
+  public UpdateShippingAddress(data: ShipmentDetails): Observable<ShipmentDetails> {
+
+    return this.httpService.makePostRequest('need to add url', data);
   }
 }

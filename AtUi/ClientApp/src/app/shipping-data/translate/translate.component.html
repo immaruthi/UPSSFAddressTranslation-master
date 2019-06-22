@@ -28,12 +28,15 @@
         </mat-checkbox>
       </td>
     </ng-container>
-
-    <!--<ng-container matColumnDef="WFL_ID">
-    <mat-header-cell *matHeaderCellDef> WorkflowID </mat-header-cell>
-
-    <mat-cell *matCellDef="let element"><a fxFlexFill routerLink="/shipment/{{element.WFL_ID}}" class="mat-row-link"> {{element.WFL_ID}}</a> </mat-cell>
-  </ng-container>-->
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+      <mat-cell *matCellDef="let row; let i=index;">
+        <button mat-icon-button (click)="startEdit(i,row)" >
+            <span class="glyphicon glyphicon-edit"></span>
+        </button>
+      </mat-cell>
+    </ng-container>
+   
     <ng-container matColumnDef="smT_STA_NR">
       <mat-header-cell *matHeaderCellDef> SHP Status </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.smT_STA_NR}} </mat-cell>
