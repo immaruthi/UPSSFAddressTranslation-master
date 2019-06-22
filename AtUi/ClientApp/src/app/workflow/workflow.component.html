@@ -10,13 +10,12 @@
         <div class="col-md-8 text-right">
           <div class="col-md-6">
             <form class="example-form">
-              <mat-form-field class="example-full-width" *ngIf="fileNameControl.value!= ''">
-                <input matInput placeholder="Choose file to upload" [formControl]="fileNameControl" name="excelFileName">
-                <mat-hint *ngIf="isValidFile" style="color:orange">!Supported file formate .xlsx and .xls</mat-hint>
-                <mat-hint *ngIf="!isValidFile" style="color:red">
-                  Please enter a valid file format
-                </mat-hint>
-              </mat-form-field>
+                <mat-form-field class="example-full-width" *ngIf="fileNameControl.value!= ''">
+                    <input matInput placeholder="Choose file to upload" [formControl]="fileNameControl" name="excelFileName">
+                    <mat-hint *ngIf="!isValidFile" style="color:red">
+                        Please enter a valid file format(.xlsx or.xls)
+                    </mat-hint>
+                </mat-form-field>
             </form>
           </div>
           <div class="col-md-2">

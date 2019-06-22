@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatSnackBar } from '@angular/material';
 import { UserService } from '../services/UserService';
 import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';  
@@ -7,6 +7,8 @@ import * as XLSX from 'xlsx';
 import { FormControl } from '@angular/forms';
 import { LoaderService } from '../shared/loader/loader.service';
 import { List } from 'linq-typescript';
+import { Constants } from '../shared/Constants';
+
 
 /**
  * @title Table with pagination
@@ -36,7 +38,10 @@ export class WorkflowComponent {
 
 
 
-  constructor(private userService: UserService, private _loaderService: LoaderService) {
+  constructor(
+    private userService: UserService,
+    private _loaderService: LoaderService,
+    private snackBar: MatSnackBar) {
 
   }
 
@@ -110,8 +115,24 @@ export class WorkflowComponent {
 
           this.dataSource.data = data;
           this.dataSource.paginator = this.paginator;
-          //console.log(this.arrayBuffer);
-        });
+          this.snackBar.open("File Uploaded Succesfully", 'Ok', {
+            duration: Constants.SNAKBAR_SHOW_DURATION,
+            verticalPosition: 'top',
+            horizontalPosition: 'end',
+          });
+        },
+        error =>
+        {
+          console.log(error);
+          this.snackBar.open("Error while uploading file,Please try again", 'Error',
+            {
+              duration: Constants.SNAKBAR_SHOW_DURATION,
+              verticalPosition: 'top',
+              horizontalPosition: 'end',
+
+            });
+        }
+      );
 
     }
 

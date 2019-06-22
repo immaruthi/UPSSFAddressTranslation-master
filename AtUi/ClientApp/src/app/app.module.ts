@@ -19,6 +19,7 @@ import { UserService } from './services/UserService';
 import { AuthGuard } from './services/AuthGuard';
 import { LoginGuard } from './services/LoginGuard';
 import { AssignProjectService } from './Services/AssignProjectService';
+import { DataService } from './services/data.service';
 
 import { HomeService } from './services/HomeService';
 import { MaterialModule } from './shared/MaterialModule'
@@ -50,6 +51,7 @@ import { EditableComponent } from './shared/editable/editable.component';
 import { EditModeDirective } from './shared/editable/edit-mode.directive';
 import { ViewModeDirective } from './shared/editable/view-mode.directive';
 import { EditOnEnterDirective } from './shared/editable/edit-on-enter.directive';
+import { AddressEditModelComponent } from './shipping-data/address-edit-model/address-edit-model.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +78,8 @@ import { EditOnEnterDirective } from './shared/editable/edit-on-enter.directive'
     LoaderComponent,
     AlertDialog,
     ConfirmDialog,
-    ConfirmPopupComponent
+    ConfirmPopupComponent,
+    AddressEditModelComponent,
    
   ],
   imports: [
@@ -97,10 +100,11 @@ import { EditOnEnterDirective } from './shared/editable/edit-on-enter.directive'
     DialogService,
       ShippingService,
       HttpService,
-      LoaderService,
+    LoaderService,
+    DataService
     ],
   bootstrap: [AppComponent],
-  entryComponents: [LoginComponent, AlertDialogComponent]
+  entryComponents: [LoginComponent, AlertDialogComponent, AddressEditModelComponent]
 
 })
 export class AppModule { }
