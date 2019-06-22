@@ -14,7 +14,7 @@ import { List } from 'linq-typescript';
 
 @Component({
   selector: 'workflow',
-  styleUrls: ['workflow.component.scss'],
+  styleUrls: ['workflow.component.css'],
   templateUrl: 'workflow.component.html',
 })
 

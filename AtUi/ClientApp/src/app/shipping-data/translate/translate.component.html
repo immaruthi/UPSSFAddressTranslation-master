@@ -1,8 +1,15 @@
-<div>
-  <button class="btn btn-primary" (click)="sendForTranslate()"> Translate </button>
+<div class="row">
+  <div class="col-md-6">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+  </div>
+  <div class="col-md-6 text-right">
+    <button class="btn btn-primary" (click)="sendForTranslate()"> Translate </button>
+  </div>
 </div>
 <br />
-<div class="example-container mat-elevation-z8">
+<div>
   <mat-table #table [dataSource]="dataSource">
     <!-- Position Column -->
     <ng-container matColumnDef="select">
