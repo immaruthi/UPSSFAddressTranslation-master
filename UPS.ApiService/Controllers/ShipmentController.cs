@@ -166,6 +166,18 @@ namespace AtService.Controllers
             return shipmentDataRequests;
         }
 
+        [Route("CreateOrder")]
+        [HttpPost]
+        public async Task<ActionResult> CreateOrderShipment()
+        {
+
+            
+
+
+
+            return Ok();
+        }
+
         [Route("GetTranslationAddress")]
         [HttpPost]
         public async Task<ActionResult> GetTranslationAddress([FromBody] List<ShipmentWorkFlowRequest> shipmentWorkFlowRequest)
