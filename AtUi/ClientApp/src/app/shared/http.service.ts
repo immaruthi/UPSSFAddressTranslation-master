@@ -2,17 +2,19 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class HttpService {
-  
-  private LOCAL_API_URL = window.location.origin + '/';
+
+  private LOCAL_API_URL = environment.LOCAL_API_URL;
+  //private LOCAL_API_URL = window.location.origin + '/';
   //private LOCAL_API_URL = 'https://atservicetest.azurewebsites.net/';
   
   constructor(private _http: HttpClient) {
-    if (location.hostname == "localhost") {
-      this.LOCAL_API_URL = 'https://localhost:44330/';
-    }
+    //if (location.hostname == "localhost") {
+    //  this.LOCAL_API_URL = 'https://localhost:44330/';
+    //}
   }
   
   /**
@@ -32,7 +34,7 @@ export class HttpService {
    * @param body
    * @returns {Observable<any>}
    */
-  makePostRequest(url: string, body?: any) {
+  makePostRequest(url: string, body?: any): Observable<any> {
     
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     return this._http.post(this.LOCAL_API_URL + url, body, {headers: headers});

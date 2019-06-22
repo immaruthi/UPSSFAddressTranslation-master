@@ -9,4 +9,8 @@
     <PackageReference Include="System.Net.Requests" Version="4.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\UPS.DataObjects\UPS.DataObjects.csproj" />
+  </ItemGroup>
+
 </Project>

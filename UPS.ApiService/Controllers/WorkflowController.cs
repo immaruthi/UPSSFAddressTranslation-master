@@ -45,7 +45,7 @@ namespace UPS.AddressTranslationService.Controllers
             WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
             workflowDataRequest.FLE_NA = fromFile.FileName;
             workflowDataRequest.CRD_BY_NR = Emp_Id;
-            workflowDataRequest.CRD_DT = DateTime.Now;
+            workflowDataRequest.CRD_DT = DateTime.Now.ToString();
             workflowDataRequest.WFL_STA_TE = 1;
             workflowService = new WorkflowService();
             wid = workflowService.CreateWorkflow(workflowDataRequest);

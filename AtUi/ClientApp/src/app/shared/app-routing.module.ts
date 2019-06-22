@@ -10,7 +10,6 @@ import { ApplayoutComponent } from '../layout/applayout/applayout.component';
 import { WorkflowComponent } from '../workflow/workflow.component';
 import { ShipmentComponent } from '../shipping-data/shipment.component';
 import { AdminconfigComponent } from '../adminconfig/adminconfig.component';
-import { RolesComponent } from '../roles/roles.component';
 const routes: Routes = [
   
   {
@@ -26,7 +25,6 @@ const routes: Routes = [
     children: [
       { path: 'workflow', canActivate: [AuthGuard], component: WorkflowComponent },
       { path: 'shipment/:WorkflowID', canActivate: [AuthGuard], component: ShipmentComponent },
-      { path: 'roles', canActivate: [AuthGuard], component: RolesComponent },
       { path: 'config', canActivate: [AuthGuard], component: AdminconfigComponent },
       { path: 'home', canActivate: [AuthGuard], component: WorkflowComponent }
     ]

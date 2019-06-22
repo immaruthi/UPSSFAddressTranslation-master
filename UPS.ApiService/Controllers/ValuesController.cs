@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using UPS.AddressTranslationService.Models;
 using System.Data.Sql;
 using System.Data.SqlClient;
 using System.Data;

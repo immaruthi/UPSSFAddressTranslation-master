@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 using System.Data;
 using AtUi.Models;
 
-namespace RMG.Models
+namespace AtUi.Models
 {
     public class LoginContext
     {
