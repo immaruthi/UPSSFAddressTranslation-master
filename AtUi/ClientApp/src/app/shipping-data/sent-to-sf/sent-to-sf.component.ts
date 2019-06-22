@@ -19,6 +19,7 @@ export class SentToSfComponent implements OnInit {
     ];
 
   public ResponseData: any[] = [];
+  public WorkflowID: any;
   dataSource = new MatTableDataSource<Element>();
   public errorMessage: string;
   selection = new SelectionModel<any>(true, []);
@@ -38,9 +39,9 @@ export class SentToSfComponent implements OnInit {
   }
 
   ngOnInit() {
-    const WorkflowID = this.activatedRoute.snapshot.params.WorkflowID;
-    if (WorkflowID) {
-      this.getDataForSendToSF(WorkflowID);
+    this.WorkflowID = this.activatedRoute.snapshot.params.WorkflowID;
+    if (this.WorkflowID) {
+      this.getDataForSendToSF(this.WorkflowID);
     }
   }
 

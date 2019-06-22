@@ -21,6 +21,7 @@ export class UploadedDataComponent implements OnInit {
     ];
 
   public ResponseData: any[] = [];
+  public WorkflowID: any;
   dataSource = new MatTableDataSource<Element>();
   public errorMessage: string;
   selection = new SelectionModel<any>(true, []);
@@ -40,9 +41,9 @@ export class UploadedDataComponent implements OnInit {
   }
 
   ngOnInit() {
-    const WorkflowID = this.activatedRoute.snapshot.params.WorkflowID;
-    if (WorkflowID) {
-      this.getUploadedData(WorkflowID);
+    this.WorkflowID = this.activatedRoute.snapshot.params.WorkflowID;
+    if (this.WorkflowID) {
+      this.getUploadedData(this.WorkflowID);
     }
   }
 

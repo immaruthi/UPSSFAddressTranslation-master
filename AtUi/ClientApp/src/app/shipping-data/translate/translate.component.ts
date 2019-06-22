@@ -20,6 +20,7 @@ export class TranslateComponent implements OnInit {
     ];
 
   public ResponseData: any[] = [];
+  public WorkflowID: any;
   dataSource = new MatTableDataSource<Element>();
   public errorMessage: string;
   selection = new SelectionModel<any>(true, []);
@@ -39,9 +40,9 @@ export class TranslateComponent implements OnInit {
   }
 
   ngOnInit() {   
-    const WorkflowID = this.activatedRoute.snapshot.params.WorkflowID;
-    if (WorkflowID) {
-      this.getTranslateData(WorkflowID);
+    this.WorkflowID = this.activatedRoute.snapshot.params.WorkflowID;
+    if (this.WorkflowID) {
+      this.getTranslateData(this.WorkflowID);
     }
   }
 
@@ -82,9 +83,10 @@ export class TranslateComponent implements OnInit {
 
   /** Method to Translate the Data*/
   public sendForTranslate() {
-    //alert('Success !!');
     const dataForTranslate = this.dataSource.data; // Any changes can do here for sending array
-    //this.shippingService.sendDataForTranslate(dataForTranslate);
+    this.shippingService.sendDataForTranslate(dataForTranslate).subscribe((response: any) => {
+      this.getTranslateData(this.WorkflowID);
+    }, error => (this.errorMessage = <any>error));
     console.log(dataForTranslate);
   }
 
