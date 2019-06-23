@@ -136,7 +136,6 @@ export class TranslateComponent implements OnInit {
         shipmentDetails.shP_ADR_TE = updatedDetails.shP_ADR_TE;
         shipmentDetails.shP_ADR_TR_TE = updatedDetails.shP_ADR_TR_TE;
         shipmentDetails.coD_TE = updatedDetails.coD_TE;
-
         this.shippingService.UpdateShippingAddress(shipmentDetails).subscribe(response => {
           console.log(response)
           this.openSuccessMessageNotification("Data Updated Succesfully");
@@ -146,4 +145,14 @@ export class TranslateComponent implements OnInit {
     });
   }
 
+  rowTranslate(i, shipmentWorkFlowRequest) {
+    this.shippingService.sendDataForTranslate([shipmentWorkFlowRequest]).subscribe(
+      (response:any) => {
+   
+        console.log(response)
+        shipmentWorkFlowRequest.shP_ADR_TR_TE = response.addresses[0].address;
+      this.openSuccessMessageNotification("Data Updated Succesfully");
+    },
+      error => this.openErrorMessageNotification("Error while updating data"));
+  };
 }
