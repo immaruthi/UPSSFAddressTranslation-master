@@ -105,7 +105,6 @@ export class WorkflowComponent {
   }
 
   onFileChange(evt: any) {
-    debugger;
     /* wire up file reader */
     const target: DataTransfer = <DataTransfer>(evt.target);
     if (target.files.length !== 1) throw new Error('Cannot use multiple files');

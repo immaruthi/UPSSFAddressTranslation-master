@@ -6,7 +6,6 @@
         <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
       </mat-form-field>
     </div>-->
-    <input matInput />
     <div class="form">
       <mat-form-field >
         <input matInput  class="form-control"  placeholder="Shipping address" value="{{data.shP_ADR_TE}}" [(ngModel)]="data.shP_ADR_TE" name="shP_ADR_TE" required>
@@ -26,8 +25,8 @@
     </div>
 
     <div mat-dialog-actions>
-      <button mat-button [type]="submit" [disabled]="!formControl.valid" [mat-dialog-close]="1" (click)="stopEdit()">Save</button>
-      <button mat-button (click)="onNoClick()" tabindex="-1">Cancel</button>
+      <button  mat-raised-button [type]="submit" [disabled]="!formControl.valid" [mat-dialog-close]="1" (click)="stopEdit()" color="primary">Save</button>
+      <button  mat-raised-button (click)="onNoClick()"  color="warn">Cancel</button>
     </div>
   </form>
 </div>

@@ -24,7 +24,7 @@ export class ShippingService {
     return this.httpService.makeGetRequest('api/Shipment/GetShipmentData?wid=' + WorkflowID);
   }
 
-  public sendDataForTranslate(data: any[]): Observable<any> {
+  public sendDataForTranslate(data: any): Observable<any> {
     return this.httpService.makePostRequest('api/Shipment/GetTranslationAddress', data);  // Add URL here for send for translate
   }
 
@@ -34,6 +34,6 @@ export class ShippingService {
 
   public UpdateShippingAddress(data: ShipmentDetails): Observable<ShipmentDetails> {
 
-    return this.httpService.makePostRequest('need to add url', data);
+    return this.httpService.makePostRequest('api/Shipment/UpdateShipmentAddressById', data);
   }
 }
