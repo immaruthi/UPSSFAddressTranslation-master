@@ -46,9 +46,9 @@ namespace AtService.Controllers
         private int _workflowID = 0;
         [Route("ExcelFileUpload")]
         [HttpPost]
-        public async Task<ActionResult> ExcelFile(IList<IFormFile> excelFileName, int Emp_Id=1)
+        public IEnumerable<ShipmentDataRequest> ExcelFile(IList<IFormFile> excelFileName, int Emp_Id=1)
         {
-            ActionResult result = null;
+            IEnumerable<ShipmentDataRequest> result = null;
             //string response = string.Empty;
             if (excelFileName != null)
             {
@@ -67,28 +67,28 @@ namespace AtService.Controllers
                         {
                             //FileStream stream = File.Open(fileName, FileMode.Open, FileAccess.Read);
                             //response = new ExcelExtension().Test(filePath);
-                            await file.CopyToAsync(fileStream);
+                            file.CopyToAsync(fileStream);
                         }
 
                         string JSONString = new ExcelExtension().Test(filePath);
                         var excelDataObject2 = JsonConvert.DeserializeObject<List<ExcelDataObject>>(JSONString);
                         WorkflowController workflowController = new WorkflowController();
-                        WorkflowDataResponse response = (workflowController.CreateWorkflow(file, Emp_Id)).Value;
+                        WorkflowDataResponse response = ((WorkflowDataResponse)((ObjectResult)(workflowController.CreateWorkflow(file, Emp_Id)).Result).Value);
                         _workflowID = response.Workflow.ID;
-                        result = this.CreateShipments(excelDataObject2, _workflowID);
+                        result = ((ShipmentDataResponse)((ObjectResult)this.CreateShipments(excelDataObject2, _workflowID).Result).Value).Shipments;
                     }
                 }
 
                 //return Ok(excelFileName.FileName);
             }
 
-            return Ok(result);
+            return result;
         }
 
         private ShipmentService shipmentService { get; set; }
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
-        public ActionResult CreateShipments(List<ExcelDataObject> excelDataObjects, int workflowID)
+        public ActionResult<ShipmentDataResponse> CreateShipments(List<ExcelDataObject> excelDataObjects, int workflowID)
         {
             ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
             try

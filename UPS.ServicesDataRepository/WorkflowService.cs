@@ -53,7 +53,8 @@ namespace UPS.ServicesDataRepository
                     workflowDataRequest.FLE_NA = workflowData.FLE_NA;
                     workflowDataRequest.WFL_STA_TE = workflowData.WFL_STA_TE;
                     workflowDataRequest.CRD_BY_NR = workflowData.CRD_BY_NR;
-                    workflowDataRequest.CRD_DT = DateTime.ParseExact(DateTime.Now.ToShortDateString(), "yyyy-MM-dd HH:mm.ss.ffffff", CultureInfo.InvariantCulture);
+                    workflowDataRequest.CRD_DT = DateTime.Now;
+                    //DateTime.ParseExact(DateTime.Now.ToShortDateString(), "yyyy-MM-dd HH:mm.ss.ffffff", CultureInfo.InvariantCulture);
                     context.workflowDataRequests.Add(workflowDataRequest);
                     context.Entry(workflowDataRequest).State = EntityState.Added;
                     context.SaveChanges();
