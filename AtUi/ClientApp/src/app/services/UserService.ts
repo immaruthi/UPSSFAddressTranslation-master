@@ -58,7 +58,6 @@ export class UserService {
     return this.httpClient.get(environment.LOCAL_API_URL + `api/ExcelWorkflow/getExcelData`, { params })
   }
   postFile(fileToUpload: File, user: any): Observable<Object> {
-    debugger;
     let Emp_Id = user;
     //const endpoint = 'api/ExcelWorkflow/UploadExcel';
     //const endpoint = 'https://atservicetest.azurewebsites.net/api/Shipment/ExcelFileUpload';

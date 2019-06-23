@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { RouterModule } from '@angular/router';
 import { EmployeeService } from '../app/services/EmployeeService';
 import { AppComponent } from './app.component';
@@ -21,6 +21,7 @@ import { LoginGuard } from './services/LoginGuard';
 import { AssignProjectService } from './Services/AssignProjectService';
 import { DataService } from './services/data.service';
 
+import { LoaderInterceptor } from "./shared/loader/loaderIntercepter";
 import { HomeService } from './services/HomeService';
 import { MaterialModule } from './shared/MaterialModule'
 import { AdminconfigComponent } from './adminconfig/adminconfig.component';
@@ -101,7 +102,12 @@ import { AddressEditModelComponent } from './shipping-data/address-edit-model/ad
       ShippingService,
       HttpService,
     LoaderService,
-    DataService
+    DataService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoaderInterceptor,
+      multi: true
+    }
     ],
   bootstrap: [AppComponent],
   entryComponents: [LoginComponent, AlertDialogComponent, AddressEditModelComponent]

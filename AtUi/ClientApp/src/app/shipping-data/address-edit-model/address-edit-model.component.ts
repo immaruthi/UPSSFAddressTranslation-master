@@ -12,7 +12,6 @@ export class AddressEditModelComponent {
 
   constructor(public dialogRef: MatDialogRef<AddressEditModelComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public dataService: DataService) {
-    debugger;
   }
 
   formControl = new FormControl('', [
@@ -33,7 +32,6 @@ export class AddressEditModelComponent {
   }
 
   stopEdit(): void {
-    debugger;
     this.dataService.updateIssue(this.data);
   }
 }

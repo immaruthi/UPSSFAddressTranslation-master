@@ -23,6 +23,9 @@ using UPS.AddressTranslationService.Controllers;
 using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Cors;
+using UPS.DataObjects.Shipment;
+using UPS.DataObjects.WR_FLW;
+using UPS.Quincus.APP.Request;
 
 namespace AtService.Controllers
 {
@@ -44,9 +47,9 @@ namespace AtService.Controllers
         private int _workflowID = 0;
         [Route("ExcelFileUpload")]
         [HttpPost]
-        public async Task<ActionResult> ExcelFile(IList<IFormFile> excelFileName, int Emp_Id=1)
+        public IEnumerable<ShipmentDataRequest> ExcelFile(IList<IFormFile> excelFileName, int Emp_Id=1)
         {
-            ActionResult result = null;
+            IEnumerable<ShipmentDataRequest> result = null;
             //string response = string.Empty;
             if (excelFileName != null)
             {
@@ -65,29 +68,30 @@ namespace AtService.Controllers
                         {
                             //FileStream stream = File.Open(fileName, FileMode.Open, FileAccess.Read);
                             //response = new ExcelExtension().Test(filePath);
-                            await file.CopyToAsync(fileStream);
+                            file.CopyToAsync(fileStream);
                         }
 
                         string JSONString = new ExcelExtension().Test(filePath);
                         var excelDataObject2 = JsonConvert.DeserializeObject<List<ExcelDataObject>>(JSONString);
                         WorkflowController workflowController = new WorkflowController();
-                        _workflowID = workflowController.Post(file, Emp_Id);
-                        result = this.Post(excelDataObject2, _workflowID);
+                        WorkflowDataResponse response = ((WorkflowDataResponse)((ObjectResult)(workflowController.CreateWorkflow(file, Emp_Id)).Result).Value);
+                        _workflowID = response.Workflow.ID;
+                        result = ((ShipmentDataResponse)((ObjectResult)this.CreateShipments(excelDataObject2, _workflowID).Result).Value).Shipments;
                     }
                 }
 
                 //return Ok(excelFileName.FileName);
             }
 
-            return Ok(result);
+            return result;
         }
 
         private ShipmentService shipmentService { get; set; }
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
-        public ActionResult Post(List<ExcelDataObject> excelDataObjects, int workflowID)
+        public ActionResult<ShipmentDataResponse> CreateShipments(List<ExcelDataObject> excelDataObjects, int workflowID)
         {
-            List<ShipmentDataRequest> shipmentdata = null;
+            ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
             try
             {
                 List<ShipmentDataRequest> shipmentData = new List<ShipmentDataRequest>();
@@ -138,24 +142,44 @@ namespace AtService.Controllers
                     shipmentData.Add(shipmentDataRequest);
                 }
                 shipmentService = new ShipmentService();
-                bool status = shipmentService.CreateShipments(shipmentData);
-                //shipmentService.CreateShipment(new ShipmentDataRequest()
-                //{
-                //    SHP_ADR_TE = "test1",
-                //    WFL_ID = 1,
-                //    SF_TRA_LG_ID = null,
-                //    QQS_TRA_LG_ID = null
-                //});
-                shipmentdata = this.GetShipmentData(workflowID);
+                shipmentDataResponse  = shipmentService.CreateShipments(shipmentData);
+                shipmentDataResponse.Success = true;
+                return Ok(shipmentDataResponse);
             }
             catch(Exception ex)
             {
+                shipmentDataResponse.Success = false;
+                shipmentDataResponse.OperationException = ex;
 
             }
-            return Ok(shipmentdata);
+            return Ok(shipmentDataResponse);
         }
 
         //private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
+        [Route("UpdateShipmentStatusById")]
+        [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult> UpdateShipmentStatusById([FromBody] ShipmentDataRequest shipmentDataRequest)
+        {
+            shipmentService = new ShipmentService();
+            ShipmentDataResponse shipmentDataResponse = shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
+            return Ok(shipmentDataResponse);
+        }
+
+        [Route("UpdateShipmentAddressById")]
+        [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult> UpdateShipmentAddressById([FromBody] ShipmentDataRequest shipmentDataRequest)
+        {
+            shipmentService = new ShipmentService();
+            ShipmentDataResponse shipmentDataResponse = shipmentService.UpdateShipmentAddressById(shipmentDataRequest);
+            return Ok(shipmentDataResponse);
+        }
+
+        //private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
+        [Route("GetShipmentData")]
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
@@ -166,16 +190,62 @@ namespace AtService.Controllers
             return shipmentDataRequests;
         }
 
-        [Route("CreateOrder")]
+        [Route("CreateOrderShipment")]
         [HttpPost]
-        public async Task<ActionResult> CreateOrderShipment()
+        public async Task<ActionResult> CreateOrderShipment([FromBody] SFOrderXMLRequest sFOrderXMLRequest)
         {
+            //sFOrderXMLRequest.XMLMessage = "<Request lang=\"zh-CN\" service=\"OrderService\"><Head>LJ_T6NVV</Head><Body><Order orderid=\"19066630501176234\" custid=\"7551234567\" j_company=\"顺丰速运\" j_contact=\"李XXX\" j_tel=\"13865659879\" j_mobile=\"13865659879\" j_province=\"北京\" j_city=\"北京市\" j_county=\"福田区\" j_address=\"广东省深圳市广东省深圳市福田区新洲十一街万基商务大厦10楼\" d_company=\"京东\" d_contact=\"刘XX\" d_tel=\"13965874855\" d_mobile=\"13965874855\" d_county=\"北京经济技术开发区\" d_address=\"北京北京市北京亦庄经济技术开发区科创十一街18号院\" cargo_total_weight=\"5.0\" remark=\"KC客户,深圳市-北京市\" pay_method=\"1\" is_docall=\"1\" need_return_tracking_no=\"1\" express_type=\"154\" parcel_quantity=\"6\" cargo_length=\"10.0\" cargo_width=\"10.0\" cargo_height=\"10.0\" sendstarttime=\"2019-05-21 16:35:50\"><Cargo name=\"电子产品,\" count=\"2\" unit=\"件\"/></Order></Body></Request>"; 
 
-            
+            SFCreateOrderServiceRequest sFCreateOrderServiceRequest = new SFCreateOrderServiceRequest()
+            {
+                AccessNumber = configuration["SFExpress:Access Number"],
+                BaseURI = configuration["SFExpress:Base URI"],
+                Checkword = configuration["SFExpress:Checkword"],
+                RequestURI = configuration["SFExpress:Place Order URI"],
+                RequestOrderXMLMessage = sFOrderXMLRequest.XMLMessage,
+                
+            };
 
+            GetSFCreateOrderServiceResponse getSFCreateOrderServiceResponse = QuincusService.SFExpressCreateOrder(sFCreateOrderServiceRequest);
+             
+            if(getSFCreateOrderServiceResponse.Response)
+            {
+                return Ok(getSFCreateOrderServiceResponse.OrderResponse);
+            }
+            else
+            {
+                return Ok(getSFCreateOrderServiceResponse.exception);
+            }
 
+        }
 
-            return Ok();
+        [Route("CancelOrderShipment")]
+        [HttpPost]
+        public async Task<ActionResult> CancelOrderShipment([FromBody] SFOrderXMLRequest sFOrderXMLRequest)
+        {
+            //sFOrderXMLRequest.XMLMessage = "<Request service=\"OrderConfirmService\" lang=\"zh-CN\"><Head>LJ_T6NVV</Head><Body><OrderConfirm orderid=\"19066630505714563\" dealtype=\"2\"></OrderConfirm></Body></Request>"; 
+
+            SFCancelOrderServiceRequest sFCancelOrderServiceRequest = new SFCancelOrderServiceRequest()
+            {
+                AccessNumber = configuration["SFExpress:Access Number"],
+                BaseURI = configuration["SFExpress:Base URI"],
+                Checkword = configuration["SFExpress:Checkword"],
+                RequestURI = configuration["SFExpress:Cancel Order URI"],
+                RequestOrderXMLMessage = sFOrderXMLRequest.XMLMessage,
+
+            };
+
+            GetSFCancelOrderServiceResponse getSFCancelOrderServiceResponse = QuincusService.SFExpressCancelOrder(sFCancelOrderServiceRequest);
+
+            if (getSFCancelOrderServiceResponse.Response)
+            {
+                return Ok(getSFCancelOrderServiceResponse.OrderResponse);
+            }
+            else
+            {
+                return Ok(getSFCancelOrderServiceResponse.exception);
+            }
+
         }
 
         [Route("GetTranslationAddress")]

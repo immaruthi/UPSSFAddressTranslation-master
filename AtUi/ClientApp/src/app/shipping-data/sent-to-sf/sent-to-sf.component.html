@@ -5,11 +5,11 @@
     </mat-form-field>
   </div><br />
   <div class="col-md-6 text-right">
-    <button class="btn btn-primary" (click)="sendToSF()"> Send To SF </button>
+    <button mat-raised-button color="primary" (click)="sendToSF()"> Send To SF </button>
   </div>
 </div>
 <br />
-<div class="table-responsive">
+<div class="table-responsive overflow-x-none">
   <div class="row">
     <mat-table class="table" [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="smT_STA_NR" class="container">
@@ -85,9 +85,12 @@
       <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
     </mat-table>
   </div>
-    <mat-paginator #paginator
-                   [pageSize]="5"
-                   [pageSizeOptions]="[5, 10, 20]"
-                   [showFirstLastButtons]="true">
-    </mat-paginator>
-  </div>
+</div>
+<div>
+  <mat-paginator #paginator
+                 [pageSize]="5"
+                 [pageSizeOptions]="[5, 10, 20]"
+                 [showFirstLastButtons]="true">
+  </mat-paginator>
+</div>
+

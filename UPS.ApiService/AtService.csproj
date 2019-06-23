@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Application.SFExpressIntegration\Application.SFExpressIntegration.csproj" />
     <ProjectReference Include="..\ExcelFileRead\ExcelFileRead.csproj" />
     <ProjectReference Include="..\UPS.DataObjects\UPS.DataObjects.csproj" />
     <ProjectReference Include="..\UPS.Quincus.APP\UPS.Quincus.APP.csproj" />
