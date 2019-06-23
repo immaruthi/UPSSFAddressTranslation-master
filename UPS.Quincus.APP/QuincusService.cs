@@ -32,5 +32,19 @@ namespace UPS.Quincus.APP
             return quincusReponse;
         }
 
+        public static GetSFCreateOrderServiceResponse SFExpressCreateOrder(SFCreateOrderServiceRequest sFCreateOrderServiceRequest)
+        {
+            GetSFCreateOrderServiceResponse getSFCreateOrderServiceResponse =  new SFExpressProxy().getSFCreateOrderServiceResponse(sFCreateOrderServiceRequest).Result;
+
+            return getSFCreateOrderServiceResponse;
+        }
+
+        public static GetSFCancelOrderServiceResponse SFExpressCancelOrder(SFCancelOrderServiceRequest sFCancelOrderServiceRequest)
+        {
+            GetSFCancelOrderServiceResponse getSFCancelOrderServiceResponse = new SFExpressProxy().getSFCancelOrderServiceResponse(sFCancelOrderServiceRequest).Result;
+
+            return getSFCancelOrderServiceResponse;
+        }
+
     }
 }
