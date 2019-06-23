@@ -14,6 +14,16 @@ namespace UPS.ServicesDataRepository
     {
         private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
 
+        public List<ShipmentDataRequest> GetShipment(int workflowID)
+        {
+
+            optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+            var context = new ApplicationDbContext(optionsBuilder.Options);
+            var shipments = context.shipmentDataRequests.Where(w => w.WFL_ID == workflowID).OrderBy(s => s.SHP_ADR_TE).ToList();
+            return shipments;
+        }
+
         public int CreateShipment(ShipmentDataRequest shipmentData)
         {
             optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
@@ -69,9 +79,10 @@ namespace UPS.ServicesDataRepository
 
             return 0;
         }
-        public bool CreateShipments(List<ShipmentDataRequest> shipmentData)
+
+        public ShipmentDataResponse CreateShipments(List<ShipmentDataRequest> shipmentData)
         {
-            bool status = false;
+            ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
             optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
             using (var context = new ApplicationDbContext(optionsBuilder.Options))
@@ -126,25 +137,79 @@ namespace UPS.ServicesDataRepository
                 try
                 {
                     context.SaveChanges();
+                    shipmentDataResponse.Shipments = context.shipmentDataRequests;
+                    shipmentDataResponse.Success = true;
+                    return shipmentDataResponse;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-
+                    shipmentDataResponse.Success = false;
+                    shipmentDataResponse.OperationException = ex;
                 }
-                status = true;
             }
 
-            return status;
+            return shipmentDataResponse;
         }
 
-        public List<ShipmentDataRequest> GetShipment(int workflowID)
+        public ShipmentDataResponse UpdateShipmentStatusById(ShipmentDataRequest shipmentDataRequest)
         {
+            ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
+            try
+            {
+                optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+                optionsBuilder.EnableSensitiveDataLogging(true);
 
-            optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+                using (var context = new ApplicationDbContext(optionsBuilder.Options))
+                {
+                    ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == shipmentDataRequest.ID).FirstOrDefault();
+                    data.ID = shipmentDataRequest.ID;
+                    data.WFL_ID = shipmentDataRequest.WFL_ID;
+                    data.SMT_STA_NR = shipmentDataRequest.SMT_STA_NR;
+                    context.shipmentDataRequests.Update(data);
+                    context.Entry(shipmentDataRequest).State = EntityState.Detached;
+                    context.SaveChanges();
+                    shipmentDataResponse.Shipment = context.shipmentDataRequests.Where(s => s.ID == shipmentDataRequest.ID).FirstOrDefault();
+                    shipmentDataResponse.Success = true;
+                    return shipmentDataResponse;
+                }
+            }
+            catch(Exception ex)
+            {
+                shipmentDataResponse.Success = false;
+                shipmentDataResponse.OperationException = ex;
+            }
+            return shipmentDataResponse;
+        }
 
-            var context = new ApplicationDbContext(optionsBuilder.Options);
-            var shipments = context.shipmentDataRequests.Where(w => w.WFL_ID == workflowID).OrderBy(s => s.SHP_ADR_TE).ToList();
-            return shipments;
+        public ShipmentDataResponse UpdateShipmentAddressById(ShipmentDataRequest shipmentDataRequest)
+        {
+            ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
+            try
+            {
+                optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+                using (var context = new ApplicationDbContext(optionsBuilder.Options))
+                {
+                    ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == shipmentDataRequest.ID).FirstOrDefault();
+                    data.ID = shipmentDataRequest.ID;
+                    data.WFL_ID = shipmentDataRequest.WFL_ID;
+                    data.SHP_ADR_TE = shipmentDataRequest.SHP_ADR_TE;
+                    data.SHP_ADR_TR_TE = shipmentDataRequest.SHP_ADR_TR_TE; 
+                    data.COD_TE = shipmentDataRequest.COD_TE;
+                    context.shipmentDataRequests.Update(data);
+                    context.Entry(shipmentDataRequest).State = EntityState.Detached;
+                    context.SaveChanges();
+                    shipmentDataResponse.Shipment = context.shipmentDataRequests.Where(s => s.ID == shipmentDataRequest.ID).FirstOrDefault();
+                    shipmentDataResponse.Success = true;
+                    return shipmentDataResponse;
+                }
+            }
+            catch (Exception ex)
+            {
+                shipmentDataResponse.Success = false;
+                shipmentDataResponse.OperationException = ex;
+            }
+            return shipmentDataResponse;
         }
     }
 }

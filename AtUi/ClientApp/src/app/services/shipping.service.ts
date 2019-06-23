@@ -13,15 +13,15 @@ export class ShippingService {
     private httpService: HttpService) { }
 
   public getUploadedData(WorkflowID: any): Observable<any> {
-    return this.httpService.makeGetRequest('api/Shipment?wid=' + WorkflowID);
+    return this.httpService.makeGetRequest('api/Shipment/GetShipmentData?wid=' + WorkflowID);
   }
   
   public getTranslateData(WorkflowID: any): Observable<any> {
-    return this.httpService.makeGetRequest('api/Shipment?wid=' + WorkflowID);
+    return this.httpService.makeGetRequest('api/Shipment/GetShipmentData?wid=' + WorkflowID);
   }
 
   public getDataForSendToSF(WorkflowID: any): Observable<any> {
-    return this.httpService.makeGetRequest('api/Shipment?wid=' + WorkflowID);
+    return this.httpService.makeGetRequest('api/Shipment/GetShipmentData?wid=' + WorkflowID);
   }
 
   public sendDataForTranslate(data: any[]): Observable<any> {
