@@ -29,7 +29,7 @@ export class ShippingService {
   }
 
   public sendDataToSF(data: any[]): Observable<any[]> {
-    return this.httpService.makePostRequestXML('', data);
+    return this.httpService.makePostRequestXML('api/Shipment/CreateOrderShipment', data);
   }
 
   public UpdateShippingAddress(data: ShipmentDetails): Observable<ShipmentDetails> {
