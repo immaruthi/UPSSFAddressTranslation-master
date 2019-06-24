@@ -274,29 +274,27 @@ namespace AtService.Controllers
 
                 if(quincusTranslatedAddressResponse.Response)
                 {
-                    return Ok(quincusTranslatedAddressResponse.ResponseData);
+                    //return Ok(quincusTranslatedAddressResponse.ResponseData);
 
-                    //var getAddressTranslation = quincusTranslatedAddressResponse.ResponseData;
+                    var getAddressTranslation = quincusTranslatedAddressResponse.ResponseData;
 
-                    
+                    var QuincusResponse = QuincusService.GetGeoCodeReponseFromQuincus(new UPS.Quincus.APP.Request.QuincusGeoCodeDataRequest()
+                    {
+                        endpoint = configuration["Quincus:GeoCodeEndPoint"],
+                        id = quincusTranslatedAddressResponse.ResponseData.batch_id,
+                        quincusTokenData = quincusTokenDataResponse.quincusTokenData
+                    });
 
-                    //var QuincusResponse = QuincusService.GetGeoCodeReponseFromQuincus(new UPS.Quincus.APP.Request.QuincusGeoCodeDataRequest()
-                    //{
-                    //    endpoint = configuration["Quincus:GeoCodeEndPoint"],
-                    //    id = quincusTranslatedAddressResponse.ResponseData.batch_id,
-                    //    quincusTokenData = quincusTokenDataResponse.quincusTokenData
-                    //});
+                    if (QuincusResponse.ResponseStatus)
+                    {
 
-                    //if (QuincusResponse.ResponseStatus)
-                    //{
+                        return Ok(QuincusResponse.QuincusReponseData);
 
-                    //    return Ok(QuincusResponse.QuincusReponseData);
-                        
-                    //}
-                    //else
-                    //{
-                    //    return Ok(QuincusResponse.Exception);
-                    //}
+                    }
+                    else
+                    {
+                        return Ok(QuincusResponse.Exception);
+                    }
                 }
                 else
                 {
