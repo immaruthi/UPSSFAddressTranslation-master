@@ -19,9 +19,9 @@ import { DialogService } from '../../services/dialog.service';
 
 export class TranslateComponent implements OnInit {
   displayedColumns =
-    ['select','actions', 'smT_STA_NR', 'smT_NR_TE', 'shP_DT', 'shP_CPY_NA', 'fsT_INV_LN_DES_TE', 'shP_ADR_TE',
+    ['select', 'actions', 'smT_STA_NR', 'smT_NR_TE', 'shP_DT', 'shP_CPY_NA', 'fsT_INV_LN_DES_TE', 'shP_ADR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE',
       'shP_ADR_TR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD', 'imP_SLC_TE',
-      'rcV_CPY_TE', 'rcV_ADR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'coD_TE'
+      'dsT_CTY_TE', 'dsT_PSL_TE', 'coD_TE'
     ];
 
   public ResponseData: any[] = [];
@@ -77,10 +77,8 @@ export class TranslateComponent implements OnInit {
   }
 
   getTranslateData(WorkflowID: any) {
-    this.ResponseData = [];
     this.shippingService.getTranslateData(WorkflowID).subscribe((response: any) => {
-      this.ResponseData = response;
-      this.dataSource.data = this.ResponseData;
+      this.dataSource.data = response;
       this.dataSource.paginator = this.paginator;
     }, error => (this.errorMessage = <any>error));
   }
@@ -131,7 +129,8 @@ export class TranslateComponent implements OnInit {
     const dialogRef = this.dialog.open(AddressEditModelComponent, {
       data: {
         Id: shipmentDetailToUpdate.id,
-        shP_ADR_TE: shipmentDetailToUpdate.shP_ADR_TE,
+        //shP_ADR_TE: shipmentDetailToUpdate.shP_ADR_TE,
+        rcV_ADR_TE: shipmentDetailToUpdate.rcV_ADR_TE,
         shP_ADR_TR_TE: shipmentDetailToUpdate.shP_ADR_TR_TE,
         coD_TE: shipmentDetailToUpdate.coD_TE
       }
@@ -141,7 +140,8 @@ export class TranslateComponent implements OnInit {
       if (result === 1) {
         let updatedDetails = this.dataService.getDialogData();
 
-        shipmentDetails.shP_ADR_TE = updatedDetails.shP_ADR_TE;
+        //shipmentDetails.shP_ADR_TE = updatedDetails.shP_ADR_TE;
+        shipmentDetails.rcV_ADR_TE = updatedDetails.rcV_ADR_TE;
         shipmentDetails.shP_ADR_TR_TE = updatedDetails.shP_ADR_TR_TE;
         shipmentDetails.coD_TE = updatedDetails.coD_TE;
         this.shippingService.UpdateShippingAddress(shipmentDetails).subscribe(response => {
