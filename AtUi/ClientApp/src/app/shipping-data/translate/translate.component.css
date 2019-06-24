@@ -24,6 +24,151 @@
 }
 .table-div {
   width: 100%;
-  height: 470px;
+  height: 435px;
   overflow: auto;
+}
+
+mat-table {
+  width: 100%;
+  min-width: 3300px;
+  padding: 0;
+}
+
+mat-row {
+  padding: 0;
+  margin: 0% 1% 0% 0%;
+}
+
+mat-header-row {
+  padding: 0;
+}
+
+mat-cell {
+  padding: 20px;
+  width: 150px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+mat-header-cell {
+  padding: 20px;
+  width: 150px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Select*/
+mat-cell:nth-child(1) {
+  margin-left:20px;
+  padding: 20px;
+  width: 70px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Select*/
+mat-header-cell:nth-child(1) {
+  margin-left: 20px;
+  padding: 20px;
+  width: 70px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*SHP Company Name*/
+mat-cell:nth-child(4) {
+  padding: 20px;
+  width: 200px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*SHP Company Name*/
+mat-header-cell:nth-child(4) {
+  padding: 20px;
+  width: 200px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*SHP Address*/
+mat-cell:nth-child(6) {
+  padding: 20px;
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*SHP Address*/
+mat-header-cell:nth-child(6) {
+  padding: 20px;
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Receiving Company*/
+mat-cell:nth-child(7) {
+  padding: 20px;
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Receiving Company*/
+mat-header-cell:nth-child(7) {
+  padding: 20px;
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Receive Address*/
+mat-cell:nth-child(8) {
+  padding: 20px;
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Receive Address*/
+mat-header-cell:nth-child(8) {
+  padding: 20px;
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*SHP Translated Address*/
+mat-cell:nth-child(9) {
+  padding: 20px;
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*SHP Translated Address*/
+mat-header-cell:nth-child(9) {
+  padding: 20px;
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+mat-row:nth-child(even) {
+  background-color: rgb(214, 213, 213);
 }

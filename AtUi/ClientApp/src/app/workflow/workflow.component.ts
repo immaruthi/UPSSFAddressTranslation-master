@@ -140,10 +140,12 @@ export class WorkflowComponent {
         .subscribe((data: any) => {
           this.getWorkflowDetails();
           this.openSuccessMessageNotification("File Uploaded succesfully");
+          this.fileNameControl.setValue('');
         },
         error =>
         {
-          this.openErrorMessageNotification("Error while uploading file")
+          this.openErrorMessageNotification("Error while uploading file");
+          this.fileNameControl.setValue('');
         }
       );
     }

@@ -29,11 +29,12 @@ img.img-fluid.flex-center {
   }
 }
 
-html, body {
+html {
   height: 100%;
 }
 
 body {
+  min-height:100%;
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
@@ -154,7 +155,7 @@ mat-header-cell:nth-child(5) {
 
 
 
-.table {
+/*.table {
   width: 100vw;
   max-width: 100%;
   overflow: auto;
@@ -216,4 +217,4 @@ mat-header-cell:nth-child(5) {
 }
 .overflow-x-none .mat-table {
   overflow: hidden !important;
-}
+}*/
