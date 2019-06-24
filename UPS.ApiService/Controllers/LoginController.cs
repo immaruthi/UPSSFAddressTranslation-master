@@ -18,10 +18,10 @@ namespace AtService.Controllers
         {
             loginContext = new LoginContext(GetConnectionString.connectionString);
         }
-        [HttpGet("[action]")]
-        public bool ValidateUser(String userId, String password)
+        [HttpPost("[action]")]
+        public bool ValidateUser([FromBody] LoginContextData loginContextData)
         {
-            return loginContext.ValidateUser(userId, password);
+            return loginContext.ValidateUser(loginContextData.Username, loginContextData.Password);
         }
 
         [HttpGet("[action]")]

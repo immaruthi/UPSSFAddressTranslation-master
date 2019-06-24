@@ -8,6 +8,7 @@ import { DataService } from '../../services/data.service';
 import { AddressEditModelComponent } from '../address-edit-model/address-edit-model.component';
 import { ShipmentDetails } from '../../models/shipmentDetails';
 import { Constants } from '../../shared/Constants';
+import { DialogService } from '../../services/dialog.service';
 
 
 @Component({
@@ -33,7 +34,8 @@ export class TranslateComponent implements OnInit {
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
     private router: Router, public dialog: MatDialog,
     public dataService: DataService,
-    private snackBar: MatSnackBar) {
+    private snackBar: MatSnackBar,
+    private dialogService: DialogService) {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -111,11 +113,17 @@ export class TranslateComponent implements OnInit {
 
   /** Method to Translate the Data*/
   public sendForTranslate() {
-    const dataForTranslate = this.dataSource.data; // Any changes can do here for sending array
-    this.shippingService.sendDataForTranslate(dataForTranslate).subscribe((response: any) => {
-      this.getTranslateData(this.WorkflowID);
-    }, error => (this.errorMessage = <any>error));
-    console.log(dataForTranslate);
+    const checkedCount = this.selection.selected.length;
+    if (checkedCount <= 0) {
+      this.dialogService.openAlertDialog('Please select atleast one row to Translate');
+    } else {
+      const dataForTranslate = this.selection.selected; // Any changes can do here for sending array
+      this.shippingService.sendDataForTranslate(dataForTranslate).subscribe((response: any) => {
+        this.getTranslateData(this.WorkflowID); // Can change this according to the response
+      }, error => (this.errorMessage = <any>error));
+      console.log(dataForTranslate);
+      this.selection.clear();
+    }
   }
 
   startEdit(i: number, shipmentDetailToUpdate: any) {
