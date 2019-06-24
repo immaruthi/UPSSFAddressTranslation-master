@@ -47,17 +47,16 @@ namespace UPS.AddressTranslationService
             corsBuilder.AllowAnyHeader();
             corsBuilder.AllowAnyMethod();
             corsBuilder.AllowAnyOrigin(); // For anyone access.
-            //corsBuilder.WithOrigins("https://addresstranslation.azurewebsites.net"); // for a specific url. Don't add a forward slash on the end!
-            corsBuilder.WithOrigins("https://atservicetest.azurewebsites.net"); // for a specific url. Don't add a forward slash on the end!
+            corsBuilder.WithOrigins("https://localhost:81"); // for a specific url. Don't add a forward slash on the end!
             corsBuilder.WithOrigins("https://localhost:44330"); // for a specific url. Don't add a forward slash on the end!
-            corsBuilder.WithOrigins("https://localhost:44330/api/shipment"); // for a specific url. Don't add a forward slash on the end!
-            corsBuilder.WithOrigins("https://localhost:44330/api/workflow"); // for a specific url. Don't add a forward slash on the end!
+
+            corsBuilder.WithOrigins("https://atservicetest.azurewebsites.net"); // for a specific url. Don't add a forward slash on the end!
             corsBuilder.AllowCredentials();
 
-            //services.AddCors(options =>
-            //{
-            //    options.AddPolicy("SiteCorsPolicy", corsBuilder.Build());
-            //});
+            services.AddCors(options =>
+            {
+                options.AddPolicy("SiteCorsPolicy", corsBuilder.Build());
+            });
             //services.AddCors(options => { options.AddPolicy(MyAllowSpecificOrigins, builder => { builder.WithOrigins("https://atservicetest.azurewebsites.net", "https://addresstranslation.azurewebsites.net"); }); });
             //services.AddDbContext<UPSDataContext>(
             //    option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -129,7 +128,7 @@ namespace UPS.AddressTranslationService
             //{
             //    await context.Response.WriteAsync("Hello World!");
             //});
-            //app.UseCors("SiteCorsPolicy");
+            app.UseCors("SiteCorsPolicy");
         }
 
     }

@@ -8,8 +8,13 @@ namespace UPS.Quincus.APP.Request
     {
         public class QuincusAddressRequestDataObject
         {
-            public int id { get; set; }
+            public string id { get; set; }
+            public string recipient { get; set; }
             public string address { get; set; }
+            public string addressline1 { get; set; }
+            public string addressline2 { get; set; }
+            public string addressline3 { get; set; }
+            public string addressline4 { get; set; }
             public string city { get; set; }
             public string region { get; set; }
             public string country { get; set; }

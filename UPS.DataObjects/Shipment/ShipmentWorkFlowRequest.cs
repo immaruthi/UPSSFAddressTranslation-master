@@ -38,8 +38,8 @@ namespace UPS.DataObjects.Shipment
         public object imP_SLC_TE { get; set; }
         public object imP_NR { get; set; }
         public object rcV_CPY_TE { get; set; }
-        public object rcV_ADR_TE { get; set; }
-        public object dsT_CTY_TE { get; set; }
+        public string rcV_ADR_TE { get; set; }
+        public string dsT_CTY_TE { get; set; }
         public object dsT_PSL_TE { get; set; }
         public object csG_CTC_TE { get; set; }
         public object pH_NR { get; set; }

@@ -10,7 +10,7 @@ namespace AtService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[EnableCors("SiteCorsPolicy")]
+    [EnableCors("SiteCorsPolicy")]
     public class LoginController : ControllerBase
     {
         public LoginContext loginContext = null;
