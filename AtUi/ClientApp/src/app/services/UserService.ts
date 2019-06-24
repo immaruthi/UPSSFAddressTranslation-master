@@ -13,14 +13,8 @@ export class UserService {
               private httpService: HttpService) { }
 
   ValidateUser(userId: any, password: any) {
-    const params = new HttpParams()
-      .set('userId', userId)
-      .set('password', password);
-    //return this.httpService.makeGetRequest('api/Login/ValidateUser', { params })
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.httpClient.get(environment.LOCAL_API_URL + `api/Login/ValidateUser`, { params })
-    //const data = { userId: userId, password: password };
-    //return this.httpService.makePostRequest(`api/Login/ValidateUser`, data)
+    const data = { Username: userId, Password: password };
+    return this.httpService.makePostRequest(`api/Login/ValidateUser`, data)
     //return this.httpClient.get(`https://localhost:44330/api/values/ValidateUser`, { params })
   }
 
