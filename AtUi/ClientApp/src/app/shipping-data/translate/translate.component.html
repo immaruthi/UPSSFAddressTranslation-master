@@ -32,10 +32,10 @@
       <ng-container matColumnDef="actions" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell"> Action </mat-header-cell>
         <mat-cell *matCellDef="let row; let i=index;" class="cell">
-          <button mat-icon-button  (click)="rowTranslate(i,row)" color="primary">
-             translate 
+          <button mat-icon-button (click)="rowTranslate(i,row)" color="primary">
+            translate
           </button>
-          <button mat-icon-button (click)="startEdit(i,row)" >
+          <button mat-icon-button (click)="startEdit(i,row)">
             <span class="glyphicon glyphicon-edit"></span>
           </button>
         </mat-cell>
@@ -44,6 +44,10 @@
       <ng-container matColumnDef="smT_STA_NR" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell"> SHP Status </mat-header-cell>
         <mat-cell *matCellDef="let element" class="cell"> {{shipmentStatusList[element.smT_STA_NR].value}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="wfL_ID" class="container" hidden>
+        <mat-header-cell *matHeaderCellDef class="header-cell" hidden> WFL Number </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell" hidden> {{element.wfL_ID}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="smT_NR_TE" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell"> SHP Number </mat-header-cell>

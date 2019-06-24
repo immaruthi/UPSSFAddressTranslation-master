@@ -158,8 +158,9 @@ export class TranslateComponent implements OnInit {
       (response:any) => {
    
         console.log(response)
-        shipmentWorkFlowRequest.shP_ADR_TR_TE = response.addresses[0].address;
-      this.openSuccessMessageNotification("Data Updated Succesfully");
+        //shipmentWorkFlowRequest.shP_ADR_TR_TE = response.Shipments[0].address;
+        this.openSuccessMessageNotification("Data Updated Succesfully");
+        this.getTranslateData(this.WorkflowID);
     },
       error => this.openErrorMessageNotification("Error while updating data"));
   };

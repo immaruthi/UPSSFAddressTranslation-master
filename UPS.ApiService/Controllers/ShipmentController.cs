@@ -252,7 +252,11 @@ namespace AtService.Controllers
         [HttpPost]
         public async Task<ActionResult> GetTranslationAddress([FromBody] List<ShipmentWorkFlowRequest> shipmentWorkFlowRequest)
         {
-
+            int wid = 0;
+            if(shipmentWorkFlowRequest.Any())
+            {
+                wid = shipmentWorkFlowRequest.FirstOrDefault().wfL_ID;
+            }
             QuincusTranslatedAddressResponse quincusTranslatedAddressResponse = new QuincusTranslatedAddressResponse();
 
             QuincusTokenDataResponse quincusTokenDataResponse = QuincusService.GetToken(new UPS.Quincus.APP.Configuration.QuincusParams()
@@ -287,9 +291,20 @@ namespace AtService.Controllers
 
                     if (QuincusResponse.ResponseStatus)
                     {
-
+                        ShipmentDataRequest shipment = new ShipmentDataRequest();
+                        List<Geocode> geocodes = (List<Geocode>)((QuincusReponseData)QuincusResponse.QuincusReponseData).geocode;
+                        List<ShipmentDataRequest> shipmentsDataRequest = new List<ShipmentDataRequest>(geocodes.Count);
+                        for(int i =0; i < geocodes.Count; i++)
+                        {
+                            ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
+                            shipmentDataRequest.ID = Convert.ToInt32(geocodes[i].id);
+                            shipmentDataRequest.WFL_ID = wid;
+                            shipmentDataRequest.SHP_ADR_TR_TE = geocodes[i].translated_adddress;
+                            shipmentsDataRequest.Add(shipmentDataRequest);
+                        }
+                        ShipmentService shipmentService = new ShipmentService();
+                        shipmentService.UpdateShipmentAddressByIds(shipmentsDataRequest);
                         return Ok(QuincusResponse.QuincusReponseData);
-
                     }
                     else
                     {

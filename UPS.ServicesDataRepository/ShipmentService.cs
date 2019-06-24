@@ -87,7 +87,7 @@ namespace UPS.ServicesDataRepository
 
             using (var context = new ApplicationDbContext(optionsBuilder.Options))
             {
-                foreach(ShipmentDataRequest Data in shipmentData)
+                foreach (ShipmentDataRequest Data in shipmentData)
                 {
                     ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
                     shipmentDataRequest.BIL_TYP_TE = Data.BIL_TYP_TE;
@@ -137,7 +137,7 @@ namespace UPS.ServicesDataRepository
                 try
                 {
                     context.SaveChanges();
-                    shipmentDataResponse.Shipments = context.shipmentDataRequests;
+                    shipmentDataResponse.Shipments = context.shipmentDataRequests.ToList();
                     shipmentDataResponse.Success = true;
                     return shipmentDataResponse;
                 }
@@ -174,7 +174,7 @@ namespace UPS.ServicesDataRepository
                     return shipmentDataResponse;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 shipmentDataResponse.Success = false;
                 shipmentDataResponse.OperationException = ex;
@@ -194,8 +194,8 @@ namespace UPS.ServicesDataRepository
                     ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == shipmentDataRequest.ID).FirstOrDefault();
                     data.ID = shipmentDataRequest.ID;
                     data.WFL_ID = shipmentDataRequest.WFL_ID;
-                    data.SHP_ADR_TE = shipmentDataRequest.SHP_ADR_TE;
-                    data.SHP_ADR_TR_TE = shipmentDataRequest.SHP_ADR_TR_TE; 
+                    data.RCV_ADR_TE = shipmentDataRequest.RCV_ADR_TE;
+                    data.SHP_ADR_TR_TE = shipmentDataRequest.SHP_ADR_TR_TE;
                     data.COD_TE = shipmentDataRequest.COD_TE;
                     context.shipmentDataRequests.Update(data);
                     context.Entry(shipmentDataRequest).State = EntityState.Detached;
@@ -204,6 +204,46 @@ namespace UPS.ServicesDataRepository
                     shipmentDataResponse.Success = true;
                     return shipmentDataResponse;
                 }
+            }
+            catch (Exception ex)
+            {
+                shipmentDataResponse.Success = false;
+                shipmentDataResponse.OperationException = ex;
+            }
+            return shipmentDataResponse;
+        }
+
+        public ShipmentDataResponse UpdateShipmentAddressByIds(List<ShipmentDataRequest> shipmentDataRequest)
+        {
+            ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
+            try
+            {
+                optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+
+                optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+                var context = new ApplicationDbContext(optionsBuilder.Options);
+
+                //using (var context = new ApplicationDbContext(optionsBuilder.Options))
+                //{
+                foreach (ShipmentDataRequest request in shipmentDataRequest)
+                {
+                    ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == request.ID).FirstOrDefault();
+                    //ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == request.ID).FirstOrDefault();
+                    data.ID = request.ID;
+                    data.WFL_ID = request.WFL_ID;
+                    //data.RCV_ADR_TE = request.RCV_ADR_TE;
+                    data.SHP_ADR_TR_TE = request.SHP_ADR_TR_TE;
+                    //data.COD_TE = request.COD_TE;
+                    context.shipmentDataRequests.Update(data);
+                    context.Entry(request).State = EntityState.Detached;
+                    context.SaveChanges();
+                    shipmentDataResponse.Shipments = context.shipmentDataRequests;
+                }
+                shipmentDataResponse.Success = true;
+                return shipmentDataResponse;
+                //}
             }
             catch (Exception ex)
             {
