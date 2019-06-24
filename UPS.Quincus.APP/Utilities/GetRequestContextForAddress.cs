@@ -25,13 +25,18 @@ namespace UPS.Quincus.APP.Utilities
                 {
                     quincusAddressRequestData.addresses.Add((new QuincusAddressRequestDataObject()
                     {
-                        address = shipmentCollection.shP_ADR_TE,
+                        id = shipmentCollection.id.ToString(),
+                        recipient = string.Empty,
+                        address = shipmentCollection.rcV_ADR_TE,
+                        addressline1 = string.Empty,
+                        addressline2 = string.Empty,
+                        addressline3 = string.Empty,
+                        addressline4 = string.Empty,
                         address_type_flag = bool.TrueString,
-                        city = string.Empty,
-                        country = string.Empty,
-                        id = shipmentCollection.id,
-                        lang = "CN",
-                        region = string.Empty
+                        city = shipmentCollection.dsT_CTY_TE,
+                        region = string.Empty,
+                        country = "China",
+                        lang = "CN"
                     }));
                 }
 
