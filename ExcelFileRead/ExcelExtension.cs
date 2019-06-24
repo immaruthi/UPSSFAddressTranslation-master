@@ -72,7 +72,7 @@ namespace ExcelFileRead
 
                 if(fileName.Contains("xlsx"))
                 {
-                    excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                    excelReader = ExcelReaderFactory.CreateReader(stream);
                 }
                 else
                 {

@@ -61,7 +61,10 @@ namespace AtService.Controllers
                     {
                         //string paths = hostingEnvironment.WebRootPath;
 
-                        var filePath = Path.Combine(hostingEnvironment.WebRootPath, file.FileName);
+                        string strFileName = file.FileName.Split('.')[0] + "_" + DateTime.Now.ToShortTimeString().Replace(' ', '_').Replace(':', '_');
+                        string strFileExtension = file.FileName.Split('.')[1];
+                        
+                        var filePath = Path.Combine(hostingEnvironment.WebRootPath, strFileName + '.' + strFileExtension);
 
                         //var filePath = Path.Combine(@"D:\UserExcels", file.FileName);
                         using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -281,6 +284,8 @@ namespace AtService.Controllers
                     //return Ok(quincusTranslatedAddressResponse.ResponseData);
 
                     var getAddressTranslation = quincusTranslatedAddressResponse.ResponseData;
+
+                    await Task.Delay(20000);
 
                     var QuincusResponse = QuincusService.GetGeoCodeReponseFromQuincus(new UPS.Quincus.APP.Request.QuincusGeoCodeDataRequest()
                     {

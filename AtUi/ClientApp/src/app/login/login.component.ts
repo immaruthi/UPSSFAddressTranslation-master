@@ -73,7 +73,7 @@ export class LoginComponent {
       //    this.userIsExists = data;
 
       //    if (data) {
-            this.userService.ValidateUser(name, password)
+      this.userService.ValidateUser(name, password)
               .subscribe((data: boolean) => {
                 this.isExists = data;
 
