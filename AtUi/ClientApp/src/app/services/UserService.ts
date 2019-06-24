@@ -66,7 +66,7 @@ export class UserService {
     headers.append('Accept', 'application/json');
     //let options = new RequestOptions({ headers: headers });
     
-    formData.append('Emp_ID', user);
+    formData.append('Emp_ID', '1');
     formData.append('excelFileName', fileToUpload, fileToUpload.name);
     let fileList = new List<File>([fileToUpload]);
     var body = 'excelFileName=' + formData + '&Emp_Id= 8';

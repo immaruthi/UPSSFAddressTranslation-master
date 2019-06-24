@@ -31,7 +31,7 @@ namespace AtService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[EnableCors("SiteCorsPolicy")]
+    [EnableCors("SiteCorsPolicy")]
     public class ShipmentController : ControllerBase
     {
 

@@ -34,17 +34,15 @@ namespace AtUi
             corsBuilder.AllowAnyHeader();
             corsBuilder.AllowAnyMethod();
             corsBuilder.AllowAnyOrigin(); // For anyone access.
+            corsBuilder.WithOrigins("https://localhost:82"); // for a specific url. Don't add a forward slash on the end!
             corsBuilder.WithOrigins("http://localhost:65182"); // for a specific url. Don't add a forward slash on the end!
-            corsBuilder.WithOrigins("http://localhost:65182/shipment"); // for a specific url. Don't add a forward slash on the end!
-            corsBuilder.WithOrigins("http://localhost:65182/workflow"); // for a specific url. Don't add a forward slash on the end!
             corsBuilder.WithOrigins("https://addresstranslation.azurewebsites.net"); // for a specific url. Don't add a forward slash on the end!
-            //corsBuilder.WithOrigins("https://atservicetest.azurewebsites.net"); // for a specific url. Don't add a forward slash on the end!
             corsBuilder.AllowCredentials();
 
-            //services.AddCors(options =>
-            //{
-            //    options.AddPolicy("SiteCorsPolicy", corsBuilder.Build());
-            //});
+            services.AddCors(options =>
+            {
+                options.AddPolicy("SiteCorsPolicy", corsBuilder.Build());
+            });
 
             //services.AddCors( options => { options.AddPolicy(MyAllowSpecificOrigins, builder => { builder.WithOrigins("https://atservicetest.azurewebsites.net", "https://addresstranslation.azurewebsites.net"); }); });
 
@@ -101,10 +99,7 @@ namespace AtUi
 
             });
 
-            
-
-            //app.UseCors(MyAllowSpecificOrigins);
-            //app.UseCors("SiteCorsPolicy");
+            app.UseCors("SiteCorsPolicy");
         }
     }
 }
