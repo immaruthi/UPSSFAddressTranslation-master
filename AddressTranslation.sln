@@ -1,0 +1,81 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.438
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AtUi", "AtUi\AtUi.csproj", "{12B08146-87A4-4BBD-9C3E-3677C806E446}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UPS.APIServices", "UPS.APIServices", "{D00FE9D8-E624-4A03-9C8B-159344E3C3C6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AtService", "UPS.ApiService\AtService.csproj", "{6528DB59-A14B-454F-A2E7-22CED561BA2E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UPS.DataModels", "UPS.DataModels", "{F91F56E5-6160-4A93-9F48-0396A4F9A25B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UPS.DataObjects", "UPS.DataObjects\UPS.DataObjects.csproj", "{3CB9A713-3C41-43D9-A05B-EE0F4DA77DA6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UPS.ServiceActions", "UPS.ServiceActions", "{EECE8BC4-404F-49A1-ACBE-BA532B3051D9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UPS.ServicesAsyncActions", "UPS.ServicesAsyncActions\UPS.ServicesAsyncActions.csproj", "{4F66CBB4-36D5-4E2C-9AF9-FD181EF58405}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UPS.ServicesRepository", "UPS.ServicesRepository", "{32932C83-0B98-433D-B62D-4824566CA0BD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UPS.ServicesDataRepository", "UPS.ServicesDataRepository\UPS.ServicesDataRepository.csproj", "{654EA825-562C-45A1-A1A2-CBC6E26521F6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UPS.AddOns", "UPS.AddOns", "{70305DCC-0619-43D2-9549-F273D15DE758}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExcelFileRead", "ExcelFileRead\ExcelFileRead.csproj", "{5AB6BB06-5498-4C8C-998C-C33551396024}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QuincusApplication", "QuincusApplication", "{928B122F-65F2-424F-8002-FD079327D4B7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UPS.Quincus.APP", "UPS.Quincus.APP\UPS.Quincus.APP.csproj", "{5E00665E-0924-44D6-AC64-995CB14A2B17}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{12B08146-87A4-4BBD-9C3E-3677C806E446}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12B08146-87A4-4BBD-9C3E-3677C806E446}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12B08146-87A4-4BBD-9C3E-3677C806E446}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12B08146-87A4-4BBD-9C3E-3677C806E446}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6528DB59-A14B-454F-A2E7-22CED561BA2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6528DB59-A14B-454F-A2E7-22CED561BA2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6528DB59-A14B-454F-A2E7-22CED561BA2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6528DB59-A14B-454F-A2E7-22CED561BA2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CB9A713-3C41-43D9-A05B-EE0F4DA77DA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CB9A713-3C41-43D9-A05B-EE0F4DA77DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CB9A713-3C41-43D9-A05B-EE0F4DA77DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CB9A713-3C41-43D9-A05B-EE0F4DA77DA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F66CBB4-36D5-4E2C-9AF9-FD181EF58405}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F66CBB4-36D5-4E2C-9AF9-FD181EF58405}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F66CBB4-36D5-4E2C-9AF9-FD181EF58405}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F66CBB4-36D5-4E2C-9AF9-FD181EF58405}.Release|Any CPU.Build.0 = Release|Any CPU
+		{654EA825-562C-45A1-A1A2-CBC6E26521F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{654EA825-562C-45A1-A1A2-CBC6E26521F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{654EA825-562C-45A1-A1A2-CBC6E26521F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{654EA825-562C-45A1-A1A2-CBC6E26521F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AB6BB06-5498-4C8C-998C-C33551396024}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AB6BB06-5498-4C8C-998C-C33551396024}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AB6BB06-5498-4C8C-998C-C33551396024}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AB6BB06-5498-4C8C-998C-C33551396024}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E00665E-0924-44D6-AC64-995CB14A2B17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E00665E-0924-44D6-AC64-995CB14A2B17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E00665E-0924-44D6-AC64-995CB14A2B17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E00665E-0924-44D6-AC64-995CB14A2B17}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6528DB59-A14B-454F-A2E7-22CED561BA2E} = {D00FE9D8-E624-4A03-9C8B-159344E3C3C6}
+		{3CB9A713-3C41-43D9-A05B-EE0F4DA77DA6} = {F91F56E5-6160-4A93-9F48-0396A4F9A25B}
+		{4F66CBB4-36D5-4E2C-9AF9-FD181EF58405} = {EECE8BC4-404F-49A1-ACBE-BA532B3051D9}
+		{654EA825-562C-45A1-A1A2-CBC6E26521F6} = {32932C83-0B98-433D-B62D-4824566CA0BD}
+		{5AB6BB06-5498-4C8C-998C-C33551396024} = {70305DCC-0619-43D2-9549-F273D15DE758}
+		{5E00665E-0924-44D6-AC64-995CB14A2B17} = {928B122F-65F2-424F-8002-FD079327D4B7}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C9A70C0A-3C7D-4AEE-A95E-60847BDA9D7B}
+	EndGlobalSection
+EndGlobal

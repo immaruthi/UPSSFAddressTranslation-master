@@ -1,0 +1,219 @@
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+/* You can add global styles to this file, and also import other style files */
+
+img.img-fluid.flex-center {
+  max-height: 84px !important;
+  padding: 3% !important;
+}
+
+
+.d-inline-block {
+  display: inline-block;
+}
+
+.readonly {
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  opacity: 0.5 !important;
+}
+
+.form-check-input[type="checkbox"] + label, label.btn input[type="checkbox"] + label {
+  padding-left: 25px !important;
+}
+
+
+@media (min-width: 1200px) {
+
+  .fixed-sn main, .fixed-sn .page-footer .container-fluid {
+    margin: 1%;
+  }
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+
+.content-section {
+  background: #fff;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  padding: 25px 10px;
+  border-radius: 4px;
+
+}
+
+a, .a {
+  color: steelblue !important;
+  cursor: pointer !important;
+}
+
+  a:hover, .a:hover {
+    color: $blue-bright-text !important;
+    text-decoration: none !important;
+  }
+
+.confirm-dialog-container .mat-dialog-container {
+  border-radius: .25em .25em .4em .4em;
+  padding: 0px;
+}
+
+.confirm-dialog-container .content-container {
+  margin: 5px 5px 15px 5px;
+  color: #8f9cb5;
+  display: flex;
+}
+
+.confirm-dialog-container #close-icon {
+  margin-left: auto;
+  order: 2;
+  font-weight: bolder;
+}
+
+  .confirm-dialog-container #close-icon:hover {
+    cursor: pointer;
+  }
+
+.confirm-dialog-container #no-button {
+  height: 50px;
+  width: 50%;
+  background-color: #fc7169;
+  color: white;
+  border-radius: 0px;
+}
+
+.confirm-dialog-container #yes-button {
+  height: 50px;
+  width: 50%;
+  background-color: #b6bece;
+  color: white;
+  border-radius: 40px;
+  position: relative;
+  float: right;
+}
+
+.confirm-dialog-container #okay-button {
+  height: 50px;
+  width: 50%;
+  background-color: #004280;
+  color: white;
+  border-radius: 0px;
+  position: relative;
+  float: right;
+}
+
+mat-flat-button {
+  padding-right: 20px;
+  padding-bottom: 20px;
+}
+
+.confirm-dialog-container span.content-span {
+  padding: 35px 16px;
+  text-align: center;
+  font-size: 20px;
+}
+
+/*.mat-header-row {
+  background: #f2f2f2;
+
+  font: segoeui-bold, 14px, #212121;
+
+  height: 3px;
+  background: #cccccc;
+}
+
+
+.mat-header-cell, .mat-sort-header {
+  color:black;
+  font-weight:bold;
+}
+.mat-row {
+
+  font: segoeui, 14px, #212121;
+}*/
+
+/*.mat-row:nth-child(odd) {
+  background: #f2f2f2;
+}
+.example-container {
+  overflow-x: scroll;
+}
+mat-cell:nth-child(1),
+mat-header-cell:nth-child(1) {
+  flex: 0 0 30%;
+}
+
+mat-cell:nth-child(5),
+mat-header-cell:nth-child(5) {
+  flex: 0 0 10%;
+}*/
+
+
+
+.table {
+  width: 100vw;
+  max-width: 100%;
+  overflow: auto;
+  margin-bottom: 10px;
+  display: table;
+  border-collapse: collapse;
+  margin: 0px;
+}
+
+.row,
+.header-row {
+  display: table-row;
+  min-height: 36px !important;
+}
+
+.cell,
+.header-cell {
+  word-wrap: initial;
+  display: table-cell;
+  padding: 0px 5px;
+  line-break: unset;
+  width: fit-content;
+  white-space: nowrap;
+  overflow: hidden;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.header-row,
+.header-cell {
+  margin: 0 auto;
+  text-align: left;
+  vertical-align: middle;
+  align-self: left;
+  background: #ccc;
+  border-bottom: 1px;
+}
+
+.sort-header {
+  display: flex;
+  align-content: center;
+  text-align: center;
+  justify-content: center;
+  font-size: 12pt;
+}
+
+.header-cell {
+  font-weight: bold;
+}
+
+
+
+.mat-card {
+  min-width: max-content;
+  max-width: max-content;
+}
+.mat-row:nth-child(odd) {
+  background: #f2f2f2;
+}
+.overflow-x-none .mat-table {
+  overflow: hidden !important;
+}

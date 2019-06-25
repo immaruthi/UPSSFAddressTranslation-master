@@ -1,0 +1,80 @@
+@import "colors";
+
+.side-nav-section {
+
+  padding-left: 5px !important;
+  position: relative;
+
+  .mat-expansion-panel-body {
+    padding: 0;
+    background: $primary;
+  }
+
+  .mat-expansion-panel-header {
+    height: 100%;
+  }
+
+  .mat-button-wrapper, .mat-expansion-panel-header {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-size: 13px !important;
+    font-weight: 300 !important;
+  }
+
+  .mat-expansion-panel {
+    background: $primary;
+  }
+
+  .mat-content, .mat-button-wrapper {
+    color: $sidenav-text-color;
+  }
+
+  .active .mat-button-wrapper,
+  .games-link.games .mat-button-wrapper,
+  .users-link.users .mat-button-wrapper {
+    text-decoration: none;
+    pointer-events: none;
+    color: $success !important;
+    font-weight: bolder !important;
+  }
+
+  width: 240px;
+
+  .main-nav-link {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 4px 24px;
+    border-radius: inherit;
+    box-shadow: none;
+    padding-left: 5px !important;
+  }
+
+  ul {
+    padding: 0;
+    margin-bottom: 5px;
+    list-style: none;
+
+  }
+
+  .mat-accordion .mat-expansion-panel {
+    border-radius: 0 !important;
+    box-shadow: none;
+
+  }
+
+  .side-nav-link-level1 {
+    border-bottom: 1px solid #63abbba1;
+  }
+
+  .app-logo {
+    width: 150px;
+  }
+
+  .brand-logo {
+    height: 40px;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+  }
+
+}

@@ -1,0 +1,110 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <IsPackable>false</IsPackable>
+    <SpaRoot>ClientApp\</SpaRoot>
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+
+    <!-- Set this to true if you enable server-side prerendering -->
+    <BuildServerSideRenderer>false</BuildServerSideRenderer>
+    <UserSecretsId>f4a1d2cf-7aee-48af-ad4f-ab6aa3857948</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EntityFramework.SqlServerCompact" Version="6.2.0" />
+    <PackageReference Include="EntityFrameworkCore.SqlServerCompact40.Core" Version="2.2.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.SqlServer.Compact" Version="4.0.8876.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
+    <PackageReference Include="MySql.Data" Version="8.0.16" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Content Remove="$(SpaRoot)**" />
+    <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\src\app\models\AssignProject.ts" />
+    <None Remove="ClientApp\src\app\models\BaseLocation.ts" />
+    <None Remove="ClientApp\src\app\models\CoeDescription.ts" />
+    <None Remove="ClientApp\src\app\models\Customer.ts" />
+    <None Remove="ClientApp\src\app\models\Department.ts" />
+    <None Remove="ClientApp\src\app\models\Designation.ts" />
+    <None Remove="ClientApp\src\app\models\EdgePractice.ts" />
+    <None Remove="ClientApp\src\app\models\LoginData.ts" />
+    <None Remove="ClientApp\src\app\models\Workflow.ts" />
+    <None Remove="ClientApp\src\app\services\AssignProjectService.ts" />
+    <None Remove="ClientApp\src\app\services\dialog.service.spec.ts" />
+    <None Remove="ClientApp\src\app\services\dialog.service.spec.ts" />
+    <None Remove="ClientApp\src\app\services\ExcelExport.ts" />
+    <None Remove="ClientApp\src\app\services\file.ts" />
+    <None Remove="ClientApp\src\app\services\HomeService.ts" />
+    <None Remove="ClientApp\src\app\services\LoginGuard.ts" />
+    <None Remove="ClientApp\src\app\services\shipping.service.ts" />
+    <None Remove="ClientApp\src\app\services\WorkflowService.ts" />
+    <None Remove="ClientApp\src\app\shared\Constants.ts" />
+    <None Remove="ClientApp\src\app\shared\enums.service.ts" />
+    <None Remove="ClientApp\src\app\shared\MaterialModule.ts" />
+    <None Remove="ClientApp\src\app\workflow\workflow.component.spec.ts" />
+    <None Remove="ClientApp\src\app\workflow\workflow.component.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\models\AssignProject.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\BaseLocation.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\CoeDescription.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\Customer.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\Department.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\Designation.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\EdgePractice.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\LoginData.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\Workflow.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\AssignProjectService.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\ExcelExport.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\HomeService.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\LoginGuard.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\shipping.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\WorkflowService.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\Constants.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\enums.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\MaterialModule.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\workflow\workflow.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\workflow\workflow.component.spec.ts" />
+  </ItemGroup>
+
+  <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
+    <!-- Ensure Node.js is installed -->
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+  </Target>
+
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build --prod" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr --prod" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
+
+    <!-- Include the newly-built files in the publish output -->
+    <ItemGroup>
+      <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
+      <DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+
+</Project>

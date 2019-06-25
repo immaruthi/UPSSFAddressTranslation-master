@@ -1,0 +1,71 @@
+@import "variables";
+
+.mat-tab-group.mat-background-primary .mat-tab-header, .mat-tab-group.mat-background-primary .mat-tab-links, .mat-tab-nav-bar.mat-background-primary .mat-tab-header, .mat-tab-nav-bar.mat-background-primary .mat-tab-links {
+  background-color: $blue-base;
+}
+
+
+.mat-expansion-indicator::after {
+  color: #fff !important;
+}
+
+.card {
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.19), 0 0px 0px rgba(0, 0, 0, 0.23);
+}
+
+
+.mat-tab-body-content {
+  overflow-y: hidden !important;
+}
+
+.md-form {
+  label, mdb-select + label {
+    top: -1.5rem;
+    font-size: 0.9rem !important;
+  }
+
+  mdb-select + label {
+    top: -0.2rem
+  }
+}
+
+
+.mat-tab-label-active {
+  opacity: 1 !important;
+}
+
+mat-drawer-container {
+  height: 100%;
+}
+
+.cdk-overlay-container {
+  z-index: 1100 !important;
+}
+
+.mat-opening-card {
+    height: 150px;
+    margin: 10px;
+    text-align: center;
+    font-size: 20px;
+    color: white; 
+    width: 100%;
+    position: relative;
+}
+.mat-opening-card-green {
+    background-color: green
+}
+.mat-opening-card-blue {
+    background-color: darkblue
+}
+
+.mat-opening-card-red {
+    background-color:red
+}
+.mat-opening-card-yellow {
+    background-color: $blue-bright-text
+}
+.mat-dasboard-content {
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+}

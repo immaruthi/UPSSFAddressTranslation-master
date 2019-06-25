@@ -1,0 +1,51 @@
+<div class="col-md-10">
+  <div class="routepage">
+    <h5 class="section-title card"></h5>
+    <!--<button mat-raised-button (click)="isLinear = true" id="toggle-linear">Enable linear mode</button>-->
+
+    <mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper">
+      <mat-step [stepControl]="firstFormGroup">
+        <form [formGroup]="firstFormGroup">
+          <ng-template matStepLabel>Uploaded Shipment Details</ng-template>
+          <!--<app-translate></app-translate>-->
+          <app-uploaded-data></app-uploaded-data>
+          <div>
+            <button mat-stroked-button color="primary" matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="secondFormGroup">
+        <form [formGroup]="secondFormGroup">
+          <ng-template matStepLabel>Translate</ng-template>
+          <app-translate></app-translate>
+
+          <div>
+            <button mat-stroked-button color="primary" matStepperPrevious>Back</button>
+            <button mat-stroked-button color="primary" matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="thirdFormGroup">
+        <form [formGroup]="secondFormGroup">
+          <ng-template matStepLabel>Sent To SF</ng-template>
+          <app-sent-to-sf></app-sent-to-sf>
+          <div>
+            <button mat-stroked-button color="primary" matStepperPrevious>Back</button>
+            <button mat-stroked-button color="primary" matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="fourthFormGroup">
+        <form [formGroup]="secondFormGroup">
+          <ng-template matStepLabel>Done</ng-template>
+          You are now done.
+          <div>
+            <button mat-stroked-button color="primary" matStepperPrevious>Back</button>
+            <!--<button mat-stroked-button (click)="stepper.reset()">Reset</button>-->
+          </div>
+        </form>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </div>
+</div>

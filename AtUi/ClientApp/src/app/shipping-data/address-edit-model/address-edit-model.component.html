@@ -1,0 +1,32 @@
+<div class="container">
+  <form class="mat-dialog-content" (ngSubmit)="submit" #formControl="ngForm">
+    <!--<div class="form">
+      <mat-form-field color="accent">
+        <input matInput #input class="form-control" placeholder="Id" [(ngModel)]="shP_ADR_TE" name="id" required>
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div>-->
+    <div class="form">
+      <mat-form-field >
+        <input matInput  class="form-control"  placeholder="Shipping address" value="{{data.shP_ADR_TE}}" [(ngModel)]="data.shP_ADR_TE" name="shP_ADR_TE" required>
+        
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="form">
+      <mat-form-field >
+        <input matInput  class="form-control" placeholder="Shipping translated address" value="{{data.shP_ADR_TR_TE}}" [(ngModel)]="data.shP_ADR_TR_TE" name="shP_ADR_TR_TE" >
+      </mat-form-field>
+    </div>
+    <div class="form">
+      <mat-form-field >
+        <input matInput  class="form-control" placeholder="COD" value="{{data.coD_TE}}" [(ngModel)]="data.coD_TE" name="coD_TE">
+      </mat-form-field>
+    </div>
+
+    <div mat-dialog-actions>
+      <button  mat-raised-button [type]="submit" [disabled]="!formControl.valid" [mat-dialog-close]="1" (click)="stopEdit()" color="primary">Save</button>
+      <button  mat-raised-button (click)="onNoClick()"  color="warn">Cancel</button>
+    </div>
+  </form>
+</div>

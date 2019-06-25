@@ -1,0 +1,25 @@
+.col-md-2 {
+  margin: 0;
+  padding: 0;
+  padding-top: 55px;
+  height: 100vh;
+  background-color: #004280;
+  overflow-x: hidden;
+}
+
+.col-md-10 {
+  margin: 0;
+  padding: 0;
+  padding-top: 70px;
+  padding-left: 10px;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.row {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow: hidden;
+}
