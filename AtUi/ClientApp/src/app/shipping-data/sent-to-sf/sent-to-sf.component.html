@@ -5,13 +5,21 @@
     </mat-form-field>
   </div><br />
   <div class="col-md-6 text-right">
-    <button class="btn btn-primary" (click)="sendToSF()"> Send To SF </button>
+    <button mat-raised-button color="primary" (click)="sendToSF()"> Send To SF </button>  
   </div>
 </div>
 <br />
 <div class="table-div">
   <div class="row">
     <mat-table class="table" [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="actions" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Action </mat-header-cell>
+        <mat-cell *matCellDef="let row; let i=index;" class="cell">
+          <button mat-icon-button (click)="startEdit(i,row)">
+            <span><i class="material-icons">edit</i></span>
+          </button>
+        </mat-cell>
+      </ng-container>
       <ng-container matColumnDef="smT_STA_NR" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell"> SHP Status </mat-header-cell>
         <mat-cell *matCellDef="let element" class="cell"> {{shipmentStatusList[element.smT_STA_NR].value}} </mat-cell>
@@ -65,15 +73,15 @@
         <mat-cell *matCellDef="let element" class="cell"> {{element.rcV_CPY_TE}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="rcV_ADR_TE" class="container">
-        <mat-header-cell *matHeaderCellDef class="header-cell"> Receive Address </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Receiving Address </mat-header-cell>
         <mat-cell *matCellDef="let element" class="cell"> {{element.rcV_ADR_TE}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="dsT_CTY_TE" class="container">
-        <mat-header-cell *matHeaderCellDef class="header-cell"> DST City </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Destination City </mat-header-cell>
         <mat-cell *matCellDef="let element" class="cell"> {{element.dsT_CTY_TE}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="dsT_PSL_TE" class="container">
-        <mat-header-cell *matHeaderCellDef class="header-cell"> DST Postal Code </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Destination Postal Code </mat-header-cell>
         <mat-cell *matCellDef="let element" class="cell"> {{element.dsT_PSL_TE}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="coD_TE" class="container">

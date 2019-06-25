@@ -1,11 +1,13 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { ShipmentDetails } from '../../models/shipmentdetails';
-import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatDialog, MatSnackBarConfig, MatSnackBar } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
 import { ShippingService } from '../../services/shipping.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Constants } from '../../shared/Constants';
+import { AddressEditModelComponent } from '../address-edit-model/address-edit-model.component';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-sent-to-sf',
@@ -14,9 +16,9 @@ import { Constants } from '../../shared/Constants';
 })
 export class SentToSfComponent implements OnInit {
   displayedColumns =
-    ['smT_STA_NR', 'smT_NR_TE', 'shP_DT', 'shP_CPY_NA', 'fsT_INV_LN_DES_TE', 'shP_ADR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE',
-      'shP_ADR_TR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD', 'imP_SLC_TE',
-      'dsT_CTY_TE', 'dsT_PSL_TE', 'coD_TE'
+    ['actions', 'smT_STA_NR', 'smT_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'shP_DT',
+      'shP_CPY_NA', 'fsT_INV_LN_DES_TE', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD',
+      'imP_SLC_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'coD_TE' 
     ];
 
   public ResponseData: any[] = [];
@@ -27,7 +29,7 @@ export class SentToSfComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
-    private router: Router) {
+    private router: Router, public dialog: MatDialog, public dataService: DataService, private snackBar: MatSnackBar) {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -69,5 +71,55 @@ export class SentToSfComponent implements OnInit {
       this.getDataForSendToSF(this.WorkflowID);
     }, error => (this.errorMessage = <any>error));
     console.log(dataForSendToSF);
+  }
+
+  startEdit(i: number, shipmentDetailToUpdate: any) {
+    let shipmentDetails = shipmentDetailToUpdate;
+    const dialogRef = this.dialog.open(AddressEditModelComponent, {
+      data: {
+        Id: shipmentDetailToUpdate.id,
+        //shP_ADR_TE: shipmentDetailToUpdate.shP_ADR_TE,
+        rcV_ADR_TE: shipmentDetailToUpdate.rcV_ADR_TE,
+        shP_ADR_TR_TE: shipmentDetailToUpdate.shP_ADR_TR_TE,
+        coD_TE: shipmentDetailToUpdate.coD_TE
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        let updatedDetails = this.dataService.getDialogData();
+
+        //shipmentDetails.shP_ADR_TE = updatedDetails.shP_ADR_TE;
+        shipmentDetails.rcV_ADR_TE = updatedDetails.rcV_ADR_TE;
+        shipmentDetails.shP_ADR_TR_TE = updatedDetails.shP_ADR_TR_TE;
+        shipmentDetails.coD_TE = updatedDetails.coD_TE;
+        this.shippingService.UpdateShippingAddress(shipmentDetails).subscribe(response => {
+          console.log(response)
+          this.openSuccessMessageNotification("Data Updated Succesfully");
+        },
+          error => this.openErrorMessageNotification("Error while updating data"))
+      }
+    });
+  }
+
+  openSuccessMessageNotification(message: string) {
+    let config = new MatSnackBarConfig();
+    this.snackBar.open(message, '',
+      {
+        duration: Constants.SNAKBAR_SHOW_DURATION,
+        verticalPosition: "top",
+        horizontalPosition: "right",
+        extraClasses: 'custom-class-success'
+      });
+  }
+  openErrorMessageNotification(message: string) {
+    let config = new MatSnackBarConfig();
+    this.snackBar.open(message, '',
+      {
+        duration: Constants.SNAKBAR_SHOW_DURATION,
+        verticalPosition: "top",
+        horizontalPosition: "right",
+        extraClasses: 'custom-class-error'
+      });
   }
 }
