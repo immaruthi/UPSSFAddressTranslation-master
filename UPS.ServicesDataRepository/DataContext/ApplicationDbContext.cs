@@ -29,7 +29,6 @@ namespace UPS.ServicesDataRepository.DataContext
                 new { Id = "2", Name = "Customer", NormalizedName = "Customer" }
                 );
             builder.Entity<ShipmentDataRequest>().ToTable("SMT-DTL-FRM-XL");
-            builder.Entity<ShipperListRequest>().ToTable("SPC-LST");
             builder.Entity<USR>().ToTable("USR");
             builder.Entity<WorkflowDataRequest>().ToTable("WR-FLW");
         }
@@ -61,11 +60,6 @@ namespace UPS.ServicesDataRepository.DataContext
             get; set;
         }
         public DbSet<WorkflowDataRequest> workflowDataRequests
-        {
-            get; set;
-        }
-
-        public DbSet<ShipperListRequest> ShipperListRequests
         {
             get; set;
         }
