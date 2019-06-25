@@ -16,7 +16,7 @@ namespace UPS.DataObjects.Shipment
         public object pkG_NR_TE { get; set; }
         public int pkG_WGT_DE { get; set; }
         public int smT_WGT_DE { get; set; }
-        public int diM_WGT_DE { get; set; }
+        public int? diM_WGT_DE { get; set; }
         public object wgT_UNT_TE { get; set; }
         public object svL_NR { get; set; }
         public object pY_MT_TE { get; set; }
