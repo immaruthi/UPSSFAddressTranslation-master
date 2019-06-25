@@ -210,6 +210,16 @@ namespace AtService.Controllers
             return shipmentDataRequests;
         }
 
+
+        [Route("GetShipmentListData")]
+        [HttpGet]
+        public List<ShipperListRequest> GetShipmentListData(int wid)
+        {
+            ShipmentListService shipmentListService = new ShipmentListService();
+            List<ShipperListRequest> shipmentDataRequests = shipmentListService.GetShipmentWithPostalCode(wid);
+            return shipmentDataRequests;
+        }
+
         [Route("CreateOrderShipment")]
         [HttpPost]
         public async Task<ActionResult> CreateOrderShipment([FromBody] SFOrderXMLRequest sFOrderXMLRequest)

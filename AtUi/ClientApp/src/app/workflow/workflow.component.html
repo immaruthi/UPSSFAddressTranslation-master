@@ -34,38 +34,45 @@
         <ng-container matColumnDef="id" class="container">
           <mat-header-cell *matHeaderCellDef class="header-cell"> Workflow Id </mat-header-cell>
           <mat-cell *matCellDef="let element">
-            
-              <a fxFlexFill [routerLink]="['/shipment',element.id]" class="mat-row-link cell">
-               {{element.id}}
-              </a>
-              
+
+            <a fxFlexFill [routerLink]="['/shipment',element.id]" class="mat-row-link cell">
+              {{element.id}}
+            </a>
+
           </mat-cell>
         </ng-container>
         <!-- Name Column -->
         <ng-container matColumnDef="usR_FST_NA" class="container">
           <mat-header-cell *matHeaderCellDef class="header-cell"> Owner </mat-header-cell>
           <mat-cell *matCellDef="let element" class="cell">
-            <span  class="sort-header">{{element.usR_FST_NA}}</span>
+            <span class="sort-header">{{element.usR_FST_NA}}</span>
           </mat-cell>
         </ng-container>
         <!-- Weight Column -->
         <ng-container matColumnDef="flE_NA" class="container">
           <mat-header-cell *matHeaderCellDef class="header-cell"> File Name </mat-header-cell>
           <mat-cell *matCellDef="let element" class="cell">
-            <span  class="sort-header">{{element.flE_NA}}</span>
+            <span class="sort-header">{{element.flE_NA}}</span>
           </mat-cell>
         </ng-container>
         <!-- Symbol Column -->
-        <ng-container matColumnDef="wfL_STA_TE" class="container">
-          <mat-header-cell *matHeaderCellDef class="header-cell"> Status </mat-header-cell>
+        <!--<ng-container matColumnDef="wfL_STA_TE" class="container">
+    <mat-header-cell *matHeaderCellDef class="header-cell"> Status </mat-header-cell>
+    <mat-cell *matCellDef="let element" class="cell">
+      <span  class="sort-header">{{workFlowStatus[element.wfL_STA_TE].value}}</span>
+    </mat-cell>
+  </ng-container>-->
+
+        <ng-container matColumnDef="wfL_STA_TE_TEXT" class="container">
+          <mat-header-cell *matHeaderCellDef class="header-cell"> Status Text</mat-header-cell>
           <mat-cell *matCellDef="let element" class="cell">
-            <span  class="sort-header">{{workFlowStatus[element.wfL_STA_TE].value}}</span>
+            <span class="sort-header">{{element.wfL_STA_TE_TEXT}}</span>
           </mat-cell>
         </ng-container>
         <ng-container matColumnDef="crD_DT" class="container">
           <mat-header-cell *matHeaderCellDef class="header-cell"> Created Date </mat-header-cell>
           <mat-cell *matCellDef="let element" class="cell">
-            <span  class="sort-header">{{element.crD_DT}}</span>
+            <span class="sort-header">{{element.crD_DT}}</span>
           </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
