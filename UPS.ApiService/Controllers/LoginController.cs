@@ -5,6 +5,8 @@ using AtService.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UPS.DataObjects.UserData;
+using UPS.ServicesDataRepository;
 
 namespace AtService.Controllers
 {
@@ -14,14 +16,16 @@ namespace AtService.Controllers
     public class LoginController : ControllerBase
     {
         public LoginContext loginContext = null;
+        public UserServices userServices = null;
         public LoginController()
         {
-            loginContext = new LoginContext(GetConnectionString.connectionString);
+            userServices = new UserServices();
+            loginContext = new LoginContext(GetConnectionString.connectionString, userServices);
         }
         [HttpPost("[action]")]
-        public bool ValidateUser([FromBody] LoginContextData loginContextData)
+        public ActionResult<UserDataResponse> ValidateUser([FromBody] LoginContextData loginContextData)
         {
-            return loginContext.ValidateUser(loginContextData.Username, loginContextData.Password);
+            return loginContext.ValidateUser(loginContextData.USR_ID_TE, loginContextData.USR_PWD_TE);
         }
 
         [HttpGet("[action]")]

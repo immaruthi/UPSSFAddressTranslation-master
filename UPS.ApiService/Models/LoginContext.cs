@@ -5,6 +5,8 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using AtService.Controllers;
+using UPS.DataObjects.UserData;
+using UPS.ServicesDataRepository;
 
 namespace AtService.Models
 {
@@ -12,37 +14,22 @@ namespace AtService.Models
     public class LoginContext
     {
         public string ConnectionString { get; set; }
-
-        public LoginContext(string connectionString)
+        private UserServices _userServices { get; set; }
+        public LoginContext(string connectionString, UserServices userServices)
         {
             this.ConnectionString = connectionString;
+            _userServices = userServices;
         }
 
         private MySqlConnection GetConnection()
         {
             return new MySqlConnection(ConnectionString);
         }
-        public bool ValidateUser(String Emp_Id, String pwd)
+        public UserDataResponse ValidateUser(String USR_ID_TE, String USR_PWD_TE)
         {
-            bool isUserExists = false;
-            using (SqlConnection connection = new SqlConnection(GetConnectionString.connectionString))
-            {
-                connection.Open();
+            UserDataResponse userDataResponse = _userServices.SelectUserByUserIdAndPassword(USR_ID_TE, USR_PWD_TE);
+            return userDataResponse;
 
-                SqlCommand cmd = new SqlCommand("select * from [USR] where [USR-EML-TE]='" + Emp_Id + "' and [USR-PWD-TE]='" + pwd + "'", connection);
-
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-
-                DataSet ds = new DataSet();
-
-                da.Fill(ds);
-
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    return true;
-                }
-            }
-            return isUserExists;
         }
 
         public bool ValidateUserId(String Emp_Id)

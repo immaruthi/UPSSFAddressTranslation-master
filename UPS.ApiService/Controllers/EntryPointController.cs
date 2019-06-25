@@ -84,9 +84,9 @@ namespace AtService.Controllers
             [HttpPost]
             public async Task<ActionResult> Login([FromBody] LoginContextData loginContextData)
             {
-                var user = await userManager.FindByNameAsync(loginContextData.Username);
+                var user = await userManager.FindByNameAsync(loginContextData.USR_ID_TE);
 
-                if (user != null && await userManager.CheckPasswordAsync(user, loginContextData.Password))
+                if (user != null && await userManager.CheckPasswordAsync(user, loginContextData.USR_PWD_TE))
                 {
                     var claim = new[] { new Claim(JwtRegisteredClaimNames.Sub, user.UserName) };
 

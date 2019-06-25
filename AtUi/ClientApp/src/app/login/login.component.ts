@@ -48,7 +48,7 @@ export class LoginComponent {
   }
   get f() { return this.registerForm.controls; }
 
-  onSubmit(name, password) {
+  onSubmit(userid, password) {
     this.submitted = true;
 
     // stop here if form is invalid
@@ -57,8 +57,8 @@ export class LoginComponent {
     //}
 
 
-    if (name == "") {
-      this.dialogService.openAlertDialog('Please Enter Username');
+    if (userid == "") {
+      this.dialogService.openAlertDialog('Please Enter User Id');
     }
     else if (password == "") {
       this.dialogService.openAlertDialog('Please Enter Your Password');
@@ -73,14 +73,14 @@ export class LoginComponent {
       //    this.userIsExists = data;
 
       //    if (data) {
-      this.userService.ValidateUser(name, password)
-              .subscribe((data: boolean) => {
-                this.isExists = data;
+      this.userService.ValidateUser(userid, password)
+        .subscribe((data: any) => {
+                this.isExists = data.success;
 
                 if (this.isExists) {
                   //this.router.navigate(['/counter', name]);
                   this.router.navigate(['/workflow']);
-                  this.setSession(name, password);
+                  this.setSession(userid, password, data.user);
 
 
                 }
@@ -132,9 +132,10 @@ else{
 
 
   //adding data to localstorage
-  private setSession(name, password) {
-    localStorage.setItem('Emp_Id', name);
+  private setSession(userid, password, user) {
+    localStorage.setItem('Emp_Id', userid);
     localStorage.setItem("pwd", password);
+    localStorage.setItem("user", user);
     console.log("in Setsession");
     console.log(localStorage.getItem("Emp_Id"));
 

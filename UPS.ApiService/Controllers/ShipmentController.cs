@@ -305,6 +305,7 @@ namespace AtService.Controllers
                             shipmentDataRequest.ID = Convert.ToInt32(geocodes[i].id);
                             shipmentDataRequest.WFL_ID = wid;
                             shipmentDataRequest.SHP_ADR_TR_TE = geocodes[i].translated_adddress;
+                            shipmentDataRequest.SMT_STA_NR = 1;
                             shipmentsDataRequest.Add(shipmentDataRequest);
                         }
                         ShipmentService shipmentService = new ShipmentService();
