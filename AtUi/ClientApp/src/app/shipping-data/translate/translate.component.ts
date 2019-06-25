@@ -118,8 +118,8 @@ export class TranslateComponent implements OnInit {
       const dataForTranslate = this.selection.selected; // Any changes can do here for sending array
       this.shippingService.sendDataForTranslate(dataForTranslate).subscribe((response: any) => {
         this.getTranslateData(this.WorkflowID); // Can change this according to the response
-        this.openSuccessMessageNotification("Data Updated Succesfully");
-      }, error => this.openErrorMessageNotification("Error while updating data"));
+        this.openSuccessMessageNotification("Data Translated Succesfully");
+      }, error => this.openErrorMessageNotification("Error while translating data"));
       console.log(dataForTranslate);
       this.selection.clear();
     }
