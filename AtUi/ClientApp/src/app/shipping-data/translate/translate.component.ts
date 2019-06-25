@@ -141,12 +141,15 @@ export class TranslateComponent implements OnInit {
       if (result === 1) {
         let updatedDetails = this.dataService.getDialogData();
 
-        //shipmentDetails.shP_ADR_TE = updatedDetails.shP_ADR_TE;
-        shipmentDetails.rcV_ADR_TE = updatedDetails.rcV_ADR_TE;
-        shipmentDetails.shP_ADR_TR_TE = updatedDetails.shP_ADR_TR_TE;
-        shipmentDetails.coD_TE = updatedDetails.coD_TE;
-        this.shippingService.UpdateShippingAddress(shipmentDetails).subscribe(response => {
+        const details = { RCV_ADR_TE: updatedDetails.rcV_ADR_TE, SHP_ADR_TR_TE: updatedDetails.shP_ADR_TR_TE, COD_TE: updatedDetails.coD_TE, WFL_ID: updatedDetails.wfL_ID, ID: updatedDetails.iD }
+        
+        this.shippingService.UpdateShippingAddress(details).subscribe(response => {
           console.log(response)
+          shipmentDetails.rcV_ADR_TE = updatedDetails.rcV_ADR_TE;
+          shipmentDetails.shP_ADR_TR_TE = updatedDetails.shP_ADR_TR_TE;
+          shipmentDetails.coD_TE = updatedDetails.coD_TE;
+          shipmentDetails.wfL_ID = updatedDetails.wfL_ID;
+          shipmentDetails.iD = updatedDetails.iD;
           this.openSuccessMessageNotification("Data Updated Succesfully");
         },
           error => this.openErrorMessageNotification("Error while updating data"))

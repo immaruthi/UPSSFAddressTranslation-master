@@ -171,7 +171,7 @@ namespace AtService.Controllers
         }
 
         [Route("UpdateShipmentAddressById")]
-        [HttpGet]
+        [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
         public async Task<ActionResult> UpdateShipmentAddressById([FromBody] ShipmentDataRequest shipmentDataRequest)
