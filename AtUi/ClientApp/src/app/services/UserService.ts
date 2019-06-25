@@ -13,7 +13,7 @@ export class UserService {
               private httpService: HttpService) { }
 
   ValidateUser(userId: any, password: any) {
-    const data = { Username: userId, Password: password };
+    const data = { USR_ID_TE: userId, USR_PWD_TE: password };
     return this.httpService.makePostRequest(`api/Login/ValidateUser`, data)
     //return this.httpClient.get(`https://localhost:44330/api/values/ValidateUser`, { params })
   }

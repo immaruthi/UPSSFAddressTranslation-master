@@ -7,7 +7,7 @@ namespace AtService.Models
 {
     public class LoginContextData
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public string USR_ID_TE { get; set; }
+        public string USR_PWD_TE { get; set; }
     }
 }

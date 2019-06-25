@@ -29,6 +29,8 @@ namespace UPS.ServicesDataRepository.DataContext
                 new { Id = "2", Name = "Customer", NormalizedName = "Customer" }
                 );
             builder.Entity<ShipmentDataRequest>().ToTable("SMT-DTL-FRM-XL");
+            builder.Entity<USR>().ToTable("USR");
+            builder.Entity<WorkflowDataRequest>().ToTable("WR-FLW");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

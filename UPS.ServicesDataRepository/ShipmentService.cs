@@ -225,17 +225,13 @@ namespace UPS.ServicesDataRepository
 
                 var context = new ApplicationDbContext(optionsBuilder.Options);
 
-                //using (var context = new ApplicationDbContext(optionsBuilder.Options))
-                //{
                 foreach (ShipmentDataRequest request in shipmentDataRequest)
                 {
                     ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == request.ID).FirstOrDefault();
-                    //ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == request.ID).FirstOrDefault();
                     data.ID = request.ID;
                     data.WFL_ID = request.WFL_ID;
-                    //data.RCV_ADR_TE = request.RCV_ADR_TE;
                     data.SHP_ADR_TR_TE = request.SHP_ADR_TR_TE;
-                    //data.COD_TE = request.COD_TE;
+                    data.SMT_STA_NR = request.SMT_STA_NR;
                     context.shipmentDataRequests.Update(data);
                     context.Entry(request).State = EntityState.Detached;
                     context.SaveChanges();
@@ -243,7 +239,6 @@ namespace UPS.ServicesDataRepository
                 }
                 shipmentDataResponse.Success = true;
                 return shipmentDataResponse;
-                //}
             }
             catch (Exception ex)
             {
