@@ -128,11 +128,27 @@ namespace AtService.Controllers
             {
                 WorkflowDataRequest exflow = new WorkflowDataRequest();
                 exflow.ID = Convert.ToInt32(reader[0]);
-                //exflow.USR_FST_NA = reader["USR-FST-NA"].ToString();
+                exflow.USR_FST_NA = reader["USR-FST-NA"].ToString();
                 exflow.FLE_NA = reader["FLE-NA"].ToString();
                 exflow.WFL_STA_TE = Convert.ToInt32(reader["WFL-STA-TE"]);
-                exflow.CRD_DT = reader["CRD-DT"] != null && reader["CRD-DT"].ToString() != string.Empty ? Convert.ToDateTime(reader["CRD-DT"].ToString()): DateTime.Now;
-                exflow.UDT_DT = reader["UDT-DT"] != null && reader["UDT-DT"].ToString() != string.Empty ? Convert.ToDateTime(reader["UDT-DT"].ToString()): DateTime.Now;
+                if (exflow.WFL_STA_TE == 1)
+                {
+                    exflow.WFL_STA_TE_TEXT = "Created";
+                }
+                else if (exflow.WFL_STA_TE == 2)
+                {
+                    exflow.WFL_STA_TE_TEXT = "InProgress";
+                }
+                else if (exflow.WFL_STA_TE == 3)
+                {
+                    exflow.WFL_STA_TE_TEXT = "InActive";
+                }
+                else
+                {
+                    exflow.WFL_STA_TE_TEXT = "Done";
+                }
+                exflow.CRD_DT = reader["CRD-DT"] != null && reader["CRD-DT"].ToString() != string.Empty ? Convert.ToDateTime(reader["CRD-DT"].ToString()) : DateTime.Now;
+                exflow.UDT_DT = reader["UDT-DT"] != null && reader["UDT-DT"].ToString() != string.Empty ? Convert.ToDateTime(reader["UDT-DT"].ToString()) : DateTime.Now;
 
                 excelWorkflowsLst.Add(exflow);
             }
