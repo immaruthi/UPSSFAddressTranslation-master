@@ -45,9 +45,9 @@ namespace AtService.Controllers
         }
 
         private int _workflowID = 0;
-        [Route("ExcelFileUpload")]
+        [Route("ExcelFileUpload/{Emp_Id}")]
         [HttpPost]
-        public async Task<ActionResult> ExcelFile(IList<IFormFile> excelFileName, int Emp_Id=1)
+        public async Task<ActionResult> ExcelFile(IList<IFormFile> excelFileName, int Emp_Id)
         {
             ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
             try
