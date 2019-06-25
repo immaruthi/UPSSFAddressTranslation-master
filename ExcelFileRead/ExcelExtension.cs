@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace ExcelFileRead
@@ -99,8 +100,6 @@ namespace ExcelFileRead
                     {
                         result.Tables[0].Columns[i].ColumnName = "S_" + Regex.Replace(result.Tables[0].Columns[i].ColumnName, @"[^0-9a-zA-Z]+", "");
                     }
-
-                    
                 }
 
                 result.AcceptChanges();
@@ -122,7 +121,7 @@ namespace ExcelFileRead
             }
             catch (Exception ex)
             {
-                return ex.Message.ToString();
+                throw ex;
             }
         }
 

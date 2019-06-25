@@ -7,7 +7,7 @@ namespace UPS.DataObjects.Shipment
     public class ShipmentDataResponse
     {
         public IEnumerable<ShipmentDataRequest> Shipments { get; set; }
-        public ShipmentDataRequest Shipment { get; set; }
+        public ShipmentDataRequest ShipmentDataRequest { get; set; }
         public bool Success { get; set; }
         public Exception OperationException { get; set; }
     }

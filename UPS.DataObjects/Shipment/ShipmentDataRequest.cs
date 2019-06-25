@@ -31,7 +31,7 @@ namespace UPS.DataObjects.Shipment
         [Column("SMT-WGT-DE")]
         public decimal SMT_WGT_DE { get; set; }
         [Column("DIM-WGT-DE")]
-        public decimal DIM_WGT_DE { get; set; }
+        public decimal? DIM_WGT_DE { get; set; }
         [Column("WGT-UNT-TE")]
         public string WGT_UNT_TE { get; set; }
         [Column("SVL-NR")]
