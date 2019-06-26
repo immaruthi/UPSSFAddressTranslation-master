@@ -24,5 +24,9 @@ namespace UPS.DataObjects.WR_FLW
         public int? CRD_BY_NR { get; set; }
         [Column("UDT-BY-NR")]
         public int? UDT_BY_NR { get; set; }
+        [NotMapped]
+        public string WFL_STA_TE_TEXT { get; set; }
+        [NotMapped]
+        public string USR_FST_NA { get; set; }
     }
 }

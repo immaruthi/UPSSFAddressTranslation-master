@@ -21,7 +21,7 @@ export class ShippingService {
   }
 
   public getDataForSendToSF(WorkflowID: any): Observable<any> {
-    return this.httpService.makeGetRequest('api/Shipment/GetShipmentData?wid=' + WorkflowID);
+    return this.httpService.makeGetRequest('api/Shipment/GetMatchedShipmentsWithShipperCompanies?wid=' + WorkflowID);
   }
 
   public sendDataForTranslate(data: any): Observable<any> {
