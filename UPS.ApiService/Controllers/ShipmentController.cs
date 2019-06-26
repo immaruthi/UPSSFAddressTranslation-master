@@ -54,7 +54,7 @@ namespace AtService.Controllers
             ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
             try
             {
-                IEnumerable<ShipmentDataRequest> result = null;
+                ShipmentDataResponse result = null;
                 //string response = string.Empty;
                 if (excelFileName != null)
                 {
@@ -81,20 +81,27 @@ namespace AtService.Controllers
                             WorkflowController workflowController = new WorkflowController();
                             WorkflowDataResponse response = ((WorkflowDataResponse)((ObjectResult)(workflowController.CreateWorkflow(file, Emp_Id)).Result).Value);
                             _workflowID = response.Workflow.ID;
-                            result = this.CreateShipments(excelDataObject2, _workflowID).Shipments;
-                            //shipmentDataResponse.Shipments = result;
-                            shipmentDataResponse.Success = true;
+                            result = this.CreateShipments(excelDataObject2, _workflowID);
+                            if(result.Success)
+                            {
+                                shipmentDataResponse.Success = true;
+                                shipmentDataResponse.Shipments = result.Shipments;
+                            }
+                            else
+                            {
+                                shipmentDataResponse.Success = false;
+                                shipmentDataResponse.OperationExceptionMsg = result.OperationExceptionMsg;
+                                WorkflowService workflowService = new WorkflowService();
+                                workflowService.DeleteWorkflowById(_workflowID);
+                            }
                         }
                     }
-
-                    //return Ok(excelFileName.FileName);
                 }
 
                 return Ok(shipmentDataResponse);
             }
             catch(Exception ex)
             {
-                
                 return Ok(shipmentDataResponse.OperationExceptionMsg = ex.Message);
             }
         }
@@ -173,9 +180,10 @@ namespace AtService.Controllers
             }
             catch(Exception exception)
             {
-                
-                throw exception;
+                shipmentDataResponse.OperationExceptionMsg = exception.Message;
+                shipmentDataResponse.Success = true;
             }
+            return shipmentDataResponse;
         }
 
         //private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
