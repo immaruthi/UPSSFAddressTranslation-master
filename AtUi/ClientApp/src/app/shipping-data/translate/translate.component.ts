@@ -119,7 +119,7 @@ export class TranslateComponent implements OnInit {
       this.shippingService.sendDataForTranslate(dataForTranslate).subscribe((response: any) => {
         this.getTranslateData(this.WorkflowID); // Can change this according to the response
         this.openSuccessMessageNotification("Data Translated Succesfully");
-      }, error => this.openErrorMessageNotification("Error while translating data"));
+      }, error => this.openErrorMessageNotification("Error while Translating data"));
       console.log(dataForTranslate);
       this.selection.clear();
     }
@@ -163,9 +163,9 @@ export class TranslateComponent implements OnInit {
    
         console.log(response)
         //shipmentWorkFlowRequest.shP_ADR_TR_TE = response.Shipments[0].address;
-        this.openSuccessMessageNotification("Data Updated Succesfully");
+        this.openSuccessMessageNotification("Data Translated Succesfully");
         this.getTranslateData(this.WorkflowID);
     },
-      error => this.openErrorMessageNotification("Error while updating data"));
+      error => this.openErrorMessageNotification("Error while Translating data"));
   };
 }
