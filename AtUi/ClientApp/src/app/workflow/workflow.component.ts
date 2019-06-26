@@ -137,10 +137,19 @@ export class WorkflowComponent {
       var user = localStorage.getItem("userid");
   
       this.userService.postFile(this.fileToUpload, user)
-        .subscribe((data: any) => {
+        .subscribe((response: any) => {
           this.getWorkflowDetails();
           this.openSuccessMessageNotification("File Uploaded successfully");
           this.fileNameControl.setValue('');
+
+          //if (response.success === true) {
+          //  this.getWorkflowDetails();
+          //  this.openSuccessMessageNotification("File Uploaded successfully");
+          //  this.fileNameControl.setValue('');
+          //} else {
+          //  this.openErrorMessageNotification(response.);
+          //  this.fileNameControl.setValue('');
+          //}
         },
         error =>
         {

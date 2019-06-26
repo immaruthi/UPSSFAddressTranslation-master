@@ -88,6 +88,14 @@
         <mat-header-cell *matHeaderCellDef class="header-cell"> COD </mat-header-cell>
         <mat-cell *matCellDef="let element" class="cell"> {{element.coD_TE}} </mat-cell>
       </ng-container>
+      <ng-container matColumnDef="PaymentMethod" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Payment Method </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> 寄付月结 </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="ExpressType" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Express Type </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> 顺丰即日 </mat-cell>
+      </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
     </mat-table>
