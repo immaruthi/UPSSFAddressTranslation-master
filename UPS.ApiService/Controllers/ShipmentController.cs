@@ -215,31 +215,59 @@ namespace AtService.Controllers
 
         [Route("CreateOrderShipment")]
         [HttpPost]
-        public async Task<ActionResult> CreateOrderShipment([FromBody] SFOrderXMLRequest sFOrderXMLRequest)
+        public async Task<ActionResult> CreateOrderShipment([FromBody] List<UIOrderRequestBodyData> uIOrderRequestBodyDatas)
         {
             //sFOrderXMLRequest.XMLMessage = "<Request lang=\"zh-CN\" service=\"OrderService\"><Head>LJ_T6NVV</Head><Body><Order orderid=\"19066630501176234\" custid=\"7551234567\" j_company=\"顺丰速运\" j_contact=\"李XXX\" j_tel=\"13865659879\" j_mobile=\"13865659879\" j_province=\"北京\" j_city=\"北京市\" j_county=\"福田区\" j_address=\"广东省深圳市广东省深圳市福田区新洲十一街万基商务大厦10楼\" d_company=\"京东\" d_contact=\"刘XX\" d_tel=\"13965874855\" d_mobile=\"13965874855\" d_county=\"北京经济技术开发区\" d_address=\"北京北京市北京亦庄经济技术开发区科创十一街18号院\" cargo_total_weight=\"5.0\" remark=\"KC客户,深圳市-北京市\" pay_method=\"1\" is_docall=\"1\" need_return_tracking_no=\"1\" express_type=\"154\" parcel_quantity=\"6\" cargo_length=\"10.0\" cargo_width=\"10.0\" cargo_height=\"10.0\" sendstarttime=\"2019-05-21 16:35:50\"><Cargo name=\"电子产品,\" count=\"2\" unit=\"件\"/></Order></Body></Request>"; 
 
-            SFCreateOrderServiceRequest sFCreateOrderServiceRequest = new SFCreateOrderServiceRequest()
-            {
-                AccessNumber = configuration["SFExpress:Access Number"],
-                BaseURI = configuration["SFExpress:Base URI"],
-                Checkword = configuration["SFExpress:Checkword"],
-                RequestURI = configuration["SFExpress:Place Order URI"],
-                RequestOrderXMLMessage = sFOrderXMLRequest.XMLMessage,
-                
-            };
+            bool shipmentStatus = true;
 
-            GetSFCreateOrderServiceResponse getSFCreateOrderServiceResponse = QuincusService.SFExpressCreateOrder(sFCreateOrderServiceRequest);
-             
-            if(getSFCreateOrderServiceResponse.Response)
+            //List<UIOrderRequestBodyData> uIOrderRequestBodyDatas = new List<UIOrderRequestBodyData>();
+
+            foreach (var orderRequest in uIOrderRequestBodyDatas)
             {
-                return Ok(getSFCreateOrderServiceResponse.OrderResponse);
-            }
-            else
-            {
-                return Ok(getSFCreateOrderServiceResponse.exception);
+                string XMLMessage = string.Empty;
+                XMLMessage = "<Request lang=\"zh-CN\" service=\"OrderService\">";
+                XMLMessage += "<Head>LJ_T6NVV</Head>";
+                XMLMessage += "<Body>";
+                XMLMessage += "<Order orderid=\"'" + orderRequest.pkG_NR_TE + "'\" custid=\"'" + 7551234567 + "'\" j_company=\"'" + orderRequest.shP_CPY_NA + "'\"";
+                XMLMessage += "j_contact=\"'" + orderRequest.shP_CTC_TE + "'\" j_tel=\"'" + orderRequest.shP_PH_TE + "'\" j_mobile=\"'" + orderRequest.shP_PH_TE + "'\" j_province=\"'" + 7551234567 + "'\" j_city=\"'" + orderRequest.orG_CTY_TE + "'\"";
+                XMLMessage += "j_county=\"中国\" j_address=\"'" + orderRequest.shP_ADR_TE + "'\"";
+                XMLMessage += "d_company=\"'" + orderRequest.rcV_CPY_TE + "'\" d_contact=\"'" + orderRequest.csG_CTC_TE + "'\" d_tel=\"'" + orderRequest.pH_NR + "'\" d_mobile=\"'" + orderRequest.pH_NR + "'\" d_county=\"中国\"";
+                XMLMessage += "d_address=\"'" + orderRequest.shP_ADR_TR_TE + "'\" cargo_total_weight=\"'" + orderRequest.pkG_WGT_DE + "'\"";
+                XMLMessage += "remark=\"没有备注\" pay_method=\"寄付月结\" is_docall=\"'" + 1 + "'\" need_return_tracking_no=\"'" + 1 + "'\" express_type=\"顺丰即日\"";
+                XMLMessage += "parcel_quantity=\"'" + orderRequest.pcS_QTY_NR + "'\" cargo_length=\"10.0\" cargo_width=\"'" + orderRequest.smT_WGT_DE + "'\" cargo_height=\"10.0\" sendstarttime=\"2019-05-21 16:35:50\">";
+                XMLMessage += "<Cargo name=\"电子产品,\" count=\"2\" unit=\"件\"/></Order></Body></Request>";
+
+
+                SFCreateOrderServiceRequest sFCreateOrderServiceRequest = new SFCreateOrderServiceRequest()
+                {
+                    AccessNumber = configuration["SFExpress:Access Number"],
+                    BaseURI = configuration["SFExpress:Base URI"],
+                    Checkword = configuration["SFExpress:Checkword"],
+                    RequestURI = configuration["SFExpress:Place Order URI"],
+                    RequestOrderXMLMessage = XMLMessage,
+
+                };
+
+                GetSFCreateOrderServiceResponse getSFCreateOrderServiceResponse = QuincusService.SFExpressCreateOrder(sFCreateOrderServiceRequest);
+
+                if (getSFCreateOrderServiceResponse.Response)
+                {
+                    shipmentStatus = true;
+                }
+                else
+                {
+                    shipmentStatus = false;
+                }
             }
 
+            if (!shipmentStatus)
+            {
+
+                return Ok("Oops! Some Shipments are Failed - Check Status Immediately ");
+            }
+
+            return Ok("Shipments Completed! Check Status Later");
         }
 
         [Route("CancelOrderShipment")]
@@ -305,7 +333,7 @@ namespace AtService.Controllers
 
                     var getAddressTranslation = quincusTranslatedAddressResponse.ResponseData;
 
-                    await Task.Delay(20000);
+                    //await Task.Delay(20000);
 
                     var QuincusResponse = QuincusService.GetGeoCodeReponseFromQuincus(new UPS.Quincus.APP.Request.QuincusGeoCodeDataRequest()
                     {
