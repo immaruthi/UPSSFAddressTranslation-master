@@ -19,7 +19,7 @@ import { DialogService } from '../../services/dialog.service';
 
 export class TranslateComponent implements OnInit {
   displayedColumns =
-    ['select', 'actions', 'smT_STA_NR', 'smT_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'shP_DT',
+    ['select', 'actions', 'smT_STA_NR', 'pkG_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'shP_DT',
       'shP_CPY_NA', 'fsT_INV_LN_DES_TE', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD',
       'imP_SLC_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'coD_TE'
     ];
@@ -118,8 +118,8 @@ export class TranslateComponent implements OnInit {
       const dataForTranslate = this.selection.selected; // Any changes can do here for sending array
       this.shippingService.sendDataForTranslate(dataForTranslate).subscribe((response: any) => {
         this.getTranslateData(this.WorkflowID); // Can change this according to the response
-        this.openSuccessMessageNotification("Data Translated Succesfully");
-      }, error => this.openErrorMessageNotification("Error while Translating data"));
+        this.openSuccessMessageNotification("Data Translated Successfully");
+      }, error => this.openErrorMessageNotification("Error while translating data"));
       console.log(dataForTranslate);
       this.selection.clear();
     }
@@ -130,27 +130,32 @@ export class TranslateComponent implements OnInit {
     const dialogRef = this.dialog.open(AddressEditModelComponent, {
       data: {
         Id: shipmentDetailToUpdate.id,
-        //shP_ADR_TE: shipmentDetailToUpdate.shP_ADR_TE,
         rcV_ADR_TE: shipmentDetailToUpdate.rcV_ADR_TE,
         shP_ADR_TR_TE: shipmentDetailToUpdate.shP_ADR_TR_TE,
-        coD_TE: shipmentDetailToUpdate.coD_TE
+        coD_TE: shipmentDetailToUpdate.coD_TE,
+        pkG_NR_TE: shipmentDetailToUpdate.pkG_NR_TE,
+        shP_CPY_NA: shipmentDetailToUpdate.shP_CPY_NA
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
         let updatedDetails = this.dataService.getDialogData();
+        debugger
+        const details = {
+          SHP_ADR_TR_TE: updatedDetails.shP_ADR_TR_TE,
+          COD_TE: updatedDetails.coD_TE,
+          WFL_ID: shipmentDetails.wfL_ID,
+          ID: shipmentDetails.id,
+        }
 
-        const details = { RCV_ADR_TE: updatedDetails.rcV_ADR_TE, SHP_ADR_TR_TE: updatedDetails.shP_ADR_TR_TE, COD_TE: updatedDetails.coD_TE, WFL_ID: updatedDetails.wfL_ID, ID: updatedDetails.iD }
-        
-        this.shippingService.UpdateShippingAddress(details).subscribe(response => {
+        this.shippingService.UpdateShippingAddress(details).subscribe((response: any) => {
+          debugger;
           console.log(response)
-          shipmentDetails.rcV_ADR_TE = updatedDetails.rcV_ADR_TE;
-          shipmentDetails.shP_ADR_TR_TE = updatedDetails.shP_ADR_TR_TE;
-          shipmentDetails.coD_TE = updatedDetails.coD_TE;
-          shipmentDetails.wfL_ID = updatedDetails.wfL_ID;
-          shipmentDetails.iD = updatedDetails.iD;
-          this.openSuccessMessageNotification("Data Updated Succesfully");
+          shipmentDetailToUpdate.shP_ADR_TR_TE = response.shipmentDataRequest.shP_ADR_TR_TE;
+          shipmentDetailToUpdate.coD_TE = response.shipmentDataRequest.coD_TE;
+          shipmentDetailToUpdate.smT_STA_NR = response.shipmentDataRequest.smT_STA_NR;
+          this.openSuccessMessageNotification("Data Updated Successfully");
         },
           error => this.openErrorMessageNotification("Error while updating data"))
       }
@@ -162,8 +167,7 @@ export class TranslateComponent implements OnInit {
       (response:any) => {
    
         console.log(response)
-        //shipmentWorkFlowRequest.shP_ADR_TR_TE = response.Shipments[0].address;
-        this.openSuccessMessageNotification("Data Translated Succesfully");
+        this.openSuccessMessageNotification("Address Translated Successfully");
         this.getTranslateData(this.WorkflowID);
     },
       error => this.openErrorMessageNotification("Error while Translating data"));

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using UPS.DataObjects.Shipment;
 using UPS.DataObjects.UserData;
 using UPS.ServicesAsyncActions;
+using UPS.ServicesDataRepository.Common;
 using UPS.ServicesDataRepository.DataContext;
 
 namespace UPS.ServicesDataRepository
@@ -197,11 +198,9 @@ namespace UPS.ServicesDataRepository
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
                 {
                     ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == shipmentDataRequest.ID).FirstOrDefault();
-                    data.ID = shipmentDataRequest.ID;
-                    data.WFL_ID = shipmentDataRequest.WFL_ID;
-                    data.RCV_ADR_TE = shipmentDataRequest.RCV_ADR_TE;
                     data.SHP_ADR_TR_TE = shipmentDataRequest.SHP_ADR_TR_TE;
                     data.COD_TE = shipmentDataRequest.COD_TE;
+                    data.SMT_STA_NR = ((int)Enums.ShipmentStatus.Curated);
                     context.shipmentDataRequests.Update(data);
                     context.Entry(shipmentDataRequest).State = EntityState.Detached;
                     context.SaveChanges();
@@ -252,5 +251,6 @@ namespace UPS.ServicesDataRepository
             }
             return shipmentDataResponse;
         }
+
     }
 }
