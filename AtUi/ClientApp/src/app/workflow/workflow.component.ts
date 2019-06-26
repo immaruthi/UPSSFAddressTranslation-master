@@ -139,7 +139,7 @@ export class WorkflowComponent {
       this.userService.postFile(this.fileToUpload, user)
         .subscribe((data: any) => {
           this.getWorkflowDetails();
-          this.openSuccessMessageNotification("File Uploaded succesfully");
+          this.openSuccessMessageNotification("File Uploaded successfully");
           this.fileNameControl.setValue('');
         },
         error =>
