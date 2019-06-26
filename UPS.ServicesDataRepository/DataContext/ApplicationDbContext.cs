@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UPS.DataObjects.Shipment;
+using UPS.DataObjects.SPC_LST;
 using UPS.DataObjects.UserData;
 using UPS.DataObjects.WR_FLW;
 
@@ -31,6 +32,7 @@ namespace UPS.ServicesDataRepository.DataContext
             builder.Entity<ShipmentDataRequest>().ToTable("SMT-DTL-FRM-XL");
             builder.Entity<USR>().ToTable("USR");
             builder.Entity<WorkflowDataRequest>().ToTable("WR-FLW");
+            builder.Entity<ShipperCompanyRequest>().ToTable("SPC-LST");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -55,11 +57,18 @@ namespace UPS.ServicesDataRepository.DataContext
             get;
             set;
         }
+
         public DbSet<ShipmentDataRequest> shipmentDataRequests
         {
             get; set;
         }
+
         public DbSet<WorkflowDataRequest> workflowDataRequests
+        {
+            get; set;
+        }
+
+        public DbSet<ShipperCompanyRequest> shipperCompanyRequests
         {
             get; set;
         }

@@ -8,6 +8,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Constants } from '../../shared/Constants';
 import { AddressEditModelComponent } from '../address-edit-model/address-edit-model.component';
 import { DataService } from '../../services/data.service';
+import { DialogService } from '../../services/dialog.service';
 
 @Component({
   selector: 'app-sent-to-sf',
@@ -18,7 +19,7 @@ export class SentToSfComponent implements OnInit {
   displayedColumns =
     ['actions', 'smT_STA_NR', 'pkG_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'shP_DT',
       'shP_CPY_NA', 'fsT_INV_LN_DES_TE', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD',
-      'imP_SLC_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'coD_TE' 
+          'imP_SLC_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'coD_TE', 'pyM_MTD', 'exP_TYP', 'spC_SLIC_NR'
     ];
 
   public ResponseData: any[] = [];
@@ -29,7 +30,8 @@ export class SentToSfComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
-    private router: Router, public dialog: MatDialog, public dataService: DataService, private snackBar: MatSnackBar) {
+    private router: Router, public dialog: MatDialog, public dataService: DataService,
+    private snackBar: MatSnackBar, private dialogService: DialogService) {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -52,9 +54,14 @@ export class SentToSfComponent implements OnInit {
   getDataForSendToSF(WorkflowID: any) {
     this.ResponseData = [];
     this.shippingService.getDataForSendToSF(WorkflowID).subscribe((response: any) => {
-      this.ResponseData = response;
+      if (response.success === true) {
+        this.ResponseData = response.shipments;
+      } else {
+        this.ResponseData = [];
+      }
       this.dataSource.data = this.ResponseData;
       this.dataSource.paginator = this.paginator;
+
     }, error => (this.errorMessage = <any>error));
   }
 
@@ -65,12 +72,19 @@ export class SentToSfComponent implements OnInit {
   }
 
   sendToSF() {
-    // alert('Working In Progress !!');
-    const dataForSendToSF = this.dataSource.data; // Any changes can do here for sending array
-    this.shippingService.sendDataToSF(dataForSendToSF).subscribe((response: any) => {
-      this.getDataForSendToSF(this.WorkflowID);
-    }, error => (this.errorMessage = <any>error));
-    console.log(dataForSendToSF);
+    if (this.dataSource.data.length > 0) {
+      const dataForSendToSF = this.dataSource.data; // Any changes can do here for sending array
+      this.shippingService.sendDataToSF(dataForSendToSF).subscribe((response: any) => {
+        if (response) {
+          this.openSuccessMessageNotification(response);
+        } else {
+          this.openErrorMessageNotification("Something went wrong !!");
+        }
+        this.getDataForSendToSF(this.WorkflowID);
+      }, error => (this.errorMessage = <any>error));
+    } else {
+      this.dialogService.openAlertDialog('No data to send to SF');
+    }
   }
 
   startEdit(i: number, shipmentDetailToUpdate: any) {

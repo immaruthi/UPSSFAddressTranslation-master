@@ -27,7 +27,7 @@ export class WorkflowComponent {
   file: File;
   fileToUpload: File = null;
   //displayedColumns = ['position', 'name', 'weight', 'symbol'];
-  displayedColumns = ['id', 'usR_FST_NA', 'flE_NA', 'wfL_STA_TE', 'crD_DT'];
+  displayedColumns = ['id', 'usR_FST_NA', 'flE_NA', 'wfL_STA_TE_TEXT', 'crD_DT'];
   dataSource = new MatTableDataSource<Element>();
 
   fileNameControl = new FormControl('');
@@ -137,10 +137,19 @@ export class WorkflowComponent {
       var user = localStorage.getItem("userid");
   
       this.userService.postFile(this.fileToUpload, user)
-        .subscribe((data: any) => {
+        .subscribe((response: any) => {
           this.getWorkflowDetails();
-          this.openSuccessMessageNotification("File Uploaded succesfully");
+          this.openSuccessMessageNotification("File Uploaded successfully");
           this.fileNameControl.setValue('');
+
+          //if (response.success === true) {
+          //  this.getWorkflowDetails();
+          //  this.openSuccessMessageNotification("File Uploaded successfully");
+          //  this.fileNameControl.setValue('');
+          //} else {
+          //  this.openErrorMessageNotification(response.);
+          //  this.fileNameControl.setValue('');
+          //}
         },
         error =>
         {
@@ -168,7 +177,7 @@ export interface Element {
   
   //udT_DT: string;
   flE_NA: string;
-  wfL_STA_TE: string;
+  wfL_STA_TE_TEXT: string;
   crD_DT: string;
  
 }

@@ -99,5 +99,31 @@ namespace UPS.ServicesDataRepository
             }
             return workflowDataResponse;
         }
+
+        public WorkflowDataResponse DeleteWorkflowById(int wid)
+        {
+            WorkflowDataResponse workflowDataResponse = new WorkflowDataResponse();
+            try
+            {
+                optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+                optionsBuilder.EnableSensitiveDataLogging(true);
+
+                using (var context = new ApplicationDbContext(optionsBuilder.Options))
+                {
+                    WorkflowDataRequest data = context.workflowDataRequests.Where(s => s.ID == wid).FirstOrDefault();
+                    context.workflowDataRequests.Remove(data);
+                    context.Entry(data).State = EntityState.Deleted;
+                    context.SaveChanges();
+                    workflowDataResponse.Success = true;
+                    return workflowDataResponse;
+                }
+            }
+            catch (Exception ex)
+            {
+                workflowDataResponse.Success = false;
+                workflowDataResponse.OperationException = ex;
+            }
+            return workflowDataResponse;
+        }
     }
 }

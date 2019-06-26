@@ -21,15 +21,15 @@ export class ShippingService {
   }
 
   public getDataForSendToSF(WorkflowID: any): Observable<any> {
-    return this.httpService.makeGetRequest('api/Shipment/GetShipmentData?wid=' + WorkflowID);
+    return this.httpService.makeGetRequest('api/Shipment/GetMatchedShipmentsWithShipperCompanies?wid=' + WorkflowID);
   }
 
   public sendDataForTranslate(data: any): Observable<any> {
     return this.httpService.makePostRequest('api/Shipment/GetTranslationAddress', data);  // Add URL here for send for translate
   }
 
-  public sendDataToSF(data: any[]): Observable<any[]> {
-    return this.httpService.makePostRequestXML('api/Shipment/CreateOrderShipment', data);
+  public sendDataToSF(data: any): Observable<any[]> {
+    return this.httpService.makePostRequest('api/Shipment/CreateOrderShipment', data);
   }
 
   public UpdateShippingAddress(data: ShipmentDetails): Observable<ShipmentDetails> {

@@ -9,6 +9,6 @@ namespace UPS.DataObjects.Shipment
         public IEnumerable<ShipmentDataRequest> Shipments { get; set; }
         public ShipmentDataRequest ShipmentDataRequest { get; set; }
         public bool Success { get; set; }
-        public Exception OperationException { get; set; }
+        public string OperationExceptionMsg { get; set; }
     }
 }
