@@ -78,7 +78,7 @@ export class SentToSfComponent implements OnInit {
         if (response) {
           this.openSuccessMessageNotification(response);
         } else {
-          this.openErrorMessageNotification("Something went wrong !!");
+          this.openErrorMessageNotification("Process failed !!");
         }
         this.getDataForSendToSF(this.WorkflowID);
       }, error => (this.errorMessage = <any>error));
