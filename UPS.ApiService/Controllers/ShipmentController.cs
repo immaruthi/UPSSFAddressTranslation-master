@@ -237,13 +237,13 @@ namespace AtService.Controllers
                 XMLMessage = "<Request lang=\"zh-CN\" service=\"OrderService\">";
                 XMLMessage += "<Head>LJ_T6NVV</Head>";
                 XMLMessage += "<Body>";
-                XMLMessage += "<Order orderid=\"'" + orderRequest.pkG_NR_TE + "'\" custid=\"'" + 7551234567 + "'\" j_company=\"'" + orderRequest.shP_CPY_NA + "'\"";
-                XMLMessage += "j_contact=\"'" + orderRequest.shP_CTC_TE + "'\" j_tel=\"'" + orderRequest.shP_PH_TE + "'\" j_mobile=\"'" + orderRequest.shP_PH_TE + "'\" j_province=\"'" + 7551234567 + "'\" j_city=\"'" + orderRequest.orG_CTY_TE + "'\"";
-                XMLMessage += "j_county=\"中国\" j_address=\"'" + orderRequest.shP_ADR_TE + "'\"";
-                XMLMessage += "d_company=\"'" + orderRequest.rcV_CPY_TE + "'\" d_contact=\"'" + orderRequest.csG_CTC_TE + "'\" d_tel=\"'" + orderRequest.pH_NR + "'\" d_mobile=\"'" + orderRequest.pH_NR + "'\" d_county=\"中国\"";
-                XMLMessage += "d_address=\"'" + orderRequest.shP_ADR_TR_TE + "'\" cargo_total_weight=\"'" + orderRequest.pkG_WGT_DE + "'\"";
-                XMLMessage += "remark=\"没有备注\" pay_method=\"寄付月结\" is_docall=\"'" + 1 + "'\" need_return_tracking_no=\"'" + 1 + "'\" express_type=\"顺丰即日\"";
-                XMLMessage += "parcel_quantity=\"'" + orderRequest.pcS_QTY_NR + "'\" cargo_length=\"10.0\" cargo_width=\"'" + orderRequest.smT_WGT_DE + "'\" cargo_height=\"10.0\" sendstarttime=\"2019-05-21 16:35:50\">";
+                XMLMessage += "<Order orderid=\"" + 19066630501176254 + "\" custid=\"" + 7551234567 + "\" j_company=\"" + orderRequest.shP_CPY_NA + "\"";
+                XMLMessage += " j_contact=\"" + orderRequest.shP_CTC_TE + "\" j_tel=\"" + orderRequest.shP_PH_TE + "\" j_mobile=\"" + orderRequest.shP_PH_TE + "\" j_province=\"" + 7551234567 + "\" j_city=\"" + orderRequest.orG_CTY_TE + "\"";
+                XMLMessage += " j_county=\"中国\" j_address=\"" + orderRequest.shP_ADR_TE + "\"";
+                XMLMessage += " d_company=\"" + orderRequest.rcV_CPY_TE + "\" d_contact=\"" + orderRequest.csG_CTC_TE + "\" d_tel=\"" + orderRequest.pH_NR + "\" d_mobile=\"" + orderRequest.pH_NR + "\" d_county=\"中国\"";
+                XMLMessage += " d_address=\"" + orderRequest.shP_ADR_TR_TE + "\" cargo_total_weight=\"" + orderRequest.pkG_WGT_DE + "\"";
+                XMLMessage += " remark=\"没有备注\" pay_method=\"寄付月结\" is_docall=\"" + 1 + "\" need_return_tracking_no=\"" + 1 + "\" express_type=\"顺丰即日\"";
+                XMLMessage += " parcel_quantity=\"" + orderRequest.pcS_QTY_NR + "\" cargo_length=\"10.0\" cargo_width=\"" + orderRequest.smT_WGT_DE + "\" cargo_height=\"10.0\" sendstarttime=\"2019-05-21 16:35:50\">";
                 XMLMessage += "<Cargo name=\"电子产品,\" count=\"2\" unit=\"件\"/></Order></Body></Request>";
 
 
