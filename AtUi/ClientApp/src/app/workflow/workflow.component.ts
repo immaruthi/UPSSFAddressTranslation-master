@@ -134,7 +134,7 @@ export class WorkflowComponent {
     }
     else {
       this.isValidFile = true;
-      var user = localStorage.getItem("Emp_Id");
+      var user = localStorage.getItem("userid");
   
       this.userService.postFile(this.fileToUpload, user)
         .subscribe((data: any) => {

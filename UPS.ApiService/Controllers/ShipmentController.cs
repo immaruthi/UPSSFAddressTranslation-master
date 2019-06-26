@@ -45,117 +45,134 @@ namespace AtService.Controllers
         }
 
         private int _workflowID = 0;
-        [Route("ExcelFileUpload")]
+        [Route("ExcelFileUpload/{Emp_Id}")]
         [HttpPost]
-        public IEnumerable<ShipmentDataRequest> ExcelFile(IList<IFormFile> excelFileName, int Emp_Id=1)
+        public async Task<ActionResult> ExcelFile(IList<IFormFile> excelFileName, int Emp_Id)
         {
-            IEnumerable<ShipmentDataRequest> result = null;
-            //string response = string.Empty;
-            if (excelFileName != null)
+            ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
+            try
             {
-
-                //var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
-                foreach (var file in excelFileName)
+                IEnumerable<ShipmentDataRequest> result = null;
+                //string response = string.Empty;
+                if (excelFileName != null)
                 {
-                    if (file.Length > 0)
+
+                    //var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
+                    foreach (var file in excelFileName)
                     {
-                        //string paths = hostingEnvironment.WebRootPath;
-
-                        string strFileName = file.FileName.Split('.')[0] + "_" + DateTime.Now.ToShortTimeString().Replace(' ', '_').Replace(':', '_');
-                        string strFileExtension = file.FileName.Split('.')[1];
-                        
-                        var filePath = Path.Combine(hostingEnvironment.WebRootPath, strFileName + '.' + strFileExtension);
-
-                        //var filePath = Path.Combine(@"D:\UserExcels", file.FileName);
-                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        if (file.Length > 0)
                         {
-                            //FileStream stream = File.Open(fileName, FileMode.Open, FileAccess.Read);
-                            //response = new ExcelExtension().Test(filePath);
-                            file.CopyToAsync(fileStream);
-                        }
+                            //string paths = hostingEnvironment.WebRootPath;
 
-                        string JSONString = new ExcelExtension().Test(filePath);
-                        var excelDataObject2 = JsonConvert.DeserializeObject<List<ExcelDataObject>>(JSONString);
-                        WorkflowController workflowController = new WorkflowController();
-                        WorkflowDataResponse response = ((WorkflowDataResponse)((ObjectResult)(workflowController.CreateWorkflow(file, Emp_Id)).Result).Value);
-                        _workflowID = response.Workflow.ID;
-                        result = ((ShipmentDataResponse)((ObjectResult)this.CreateShipments(excelDataObject2, _workflowID).Result).Value).Shipments;
+                            var filePath = Path.Combine(hostingEnvironment.WebRootPath, file.FileName);
+
+                            //var filePath = Path.Combine(@"D:\UserExcels", file.FileName);
+                            using (var fileStream = new FileStream(filePath, FileMode.Create))
+                            {
+                                //FileStream stream = File.Open(fileName, FileMode.Open, FileAccess.Read);
+                                //response = new ExcelExtension().Test(filePath);
+                                await file.CopyToAsync(fileStream);
+                            }
+
+                            string JSONString = new ExcelExtension().Test(filePath);
+                            var excelDataObject2 = JsonConvert.DeserializeObject<List<ExcelDataObject>>(JSONString);
+                            WorkflowController workflowController = new WorkflowController();
+                            WorkflowDataResponse response = ((WorkflowDataResponse)((ObjectResult)(workflowController.CreateWorkflow(file, Emp_Id)).Result).Value);
+                            _workflowID = response.Workflow.ID;
+                            result = this.CreateShipments(excelDataObject2, _workflowID).Shipments;
+                            //shipmentDataResponse.Shipments = result;
+                            shipmentDataResponse.Success = true;
+                        }
                     }
+
+                    //return Ok(excelFileName.FileName);
                 }
 
-                //return Ok(excelFileName.FileName);
+                return Ok(shipmentDataResponse);
             }
-
-            return result;
+            catch(Exception exception)
+            {
+                
+                return Ok(shipmentDataResponse.OperationException = exception);
+            }
         }
 
         private ShipmentService shipmentService { get; set; }
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpPost]
-        public ActionResult<ShipmentDataResponse> CreateShipments(List<ExcelDataObject> excelDataObjects, int workflowID)
+        //[HttpPost]
+        public ShipmentDataResponse CreateShipments(List<ExcelDataObject> excelDataObjects, int workflowID)
         {
+            //int i = 0;
             ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
             try
             {
                 List<ShipmentDataRequest> shipmentData = new List<ShipmentDataRequest>();
                 foreach (ExcelDataObject excelDataObject in excelDataObjects)
                 {
-                    ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest()
+                    bool allPropertiesNull = !excelDataObject.GetType().GetProperties().Any(prop => prop == null);
+                    if (allPropertiesNull)
                     {
-                        BIL_TYP_TE = excelDataObject.S_billtype,
-                        CCY_VAL_TE = string.Empty,
-                        COD_TE = string.Empty,
-                        CSG_CTC_TE = excelDataObject.S_cneectc,
-                        DIM_WGT_DE = Convert.ToDecimal(excelDataObject.S_dimwei),
-                        DST_CTY_TE = excelDataObject.S_dstcity,
-                        DST_PSL_TE = excelDataObject.S_dstpsl,
-                        EXP_SLC_CD = excelDataObject.S_expslic,
-                        IMP_NR = excelDataObject.S_impr,
-                        IMP_SLC_TE = excelDataObject.S_impslic,
-                        IN_FLG_TE = excelDataObject.S_inflight,
-                        ORG_CTY_TE = excelDataObject.S_orgcity,
-                        ORG_PSL_CD = Convert.ToString(excelDataObject.S_orgpsl),
-                        OU_FLG_TE = Convert.ToString(excelDataObject.S_outflight),
-                        PCS_QTY_NR = Convert.ToInt32(excelDataObject.pcs),
-                        PH_NR = excelDataObject.S_ph,
-                        PKG_NR_TE = excelDataObject.S_packageno,
-                        PKG_WGT_DE = Convert.ToDecimal(excelDataObject.S_pkgwei),
-                        PK_UP_TM = null,//Convert.ToString(excelDataObject.S_pkuptime),
-                        PYM_MTD = excelDataObject.pymt,
-                        RCV_ADR_TE = excelDataObject.address,
-                        RCV_CPY_TE = excelDataObject.S_receivercompany,
-                        SHP_ADR_TE = excelDataObject.S_address1,
-                        SHP_ADR_TR_TE = string.Empty,
-                        SHP_CPY_NA = excelDataObject.S_shippercompany,
-                        SHP_CTC_TE = excelDataObject.S_shptctc,
-                        SHP_DT = null,//Convert.ToString(excelDataObject.S_shipdate),
-                        SHP_NR = excelDataObject.S_shpr,
-                        SHP_PH_TE = excelDataObject.S_shptph,
-                        SMT_NR_TE = excelDataObject.S_shipmentno,
-                        SMT_STA_NR = 0,
-                        SMT_VAL_DE = 0,
-                        SMT_WGT_DE = Convert.ToDecimal(excelDataObject.S_shptwei),
-                        SVL_NR = Convert.ToString(excelDataObject.svl),
-                        WGT_UNT_TE = excelDataObject.S_weiunit,
-                        WFL_ID = workflowID,
-                        SF_TRA_LG_ID = null,
-                        QQS_TRA_LG_ID = null,
+                        
+                        ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
 
-                    };
-                    shipmentData.Add(shipmentDataRequest);
+                        if (!string.IsNullOrWhiteSpace(excelDataObject.S_shipmentno))
+                        {
+
+                            shipmentDataRequest.BIL_TYP_TE = excelDataObject.S_billtype;
+                            shipmentDataRequest.CCY_VAL_TE = string.Empty;
+                            shipmentDataRequest.COD_TE = string.Empty;
+                            shipmentDataRequest.CSG_CTC_TE = excelDataObject.S_cneectc;
+                            shipmentDataRequest.DIM_WGT_DE = null; //Convert.ToDecimal(excelDataObject.S_dimwei);
+                            shipmentDataRequest.DST_CTY_TE = excelDataObject.S_dstcity;
+                            shipmentDataRequest.DST_PSL_TE = excelDataObject.S_dstpsl;
+                            shipmentDataRequest.EXP_SLC_CD = excelDataObject.S_expslic;
+                            shipmentDataRequest.IMP_NR = excelDataObject.S_impr;
+                            shipmentDataRequest.IMP_SLC_TE = excelDataObject.S_impslic;
+                            shipmentDataRequest.IN_FLG_TE = excelDataObject.S_inflight;
+                            shipmentDataRequest.ORG_CTY_TE = excelDataObject.S_orgcity;
+                            shipmentDataRequest.ORG_PSL_CD = Convert.ToString(excelDataObject.S_orgpsl);
+                            // OU_FLG_TE = Convert.ToString(excelDataObject.S_outflight),
+                            shipmentDataRequest.PCS_QTY_NR = null;//Convert.ToInt32(Convert.ToDouble(excelDataObject.pcs));
+                            shipmentDataRequest.PH_NR = excelDataObject.S_ph;
+                            shipmentDataRequest.PKG_NR_TE = excelDataObject.S_packageno;
+                            shipmentDataRequest.PKG_WGT_DE = Convert.ToDecimal(excelDataObject.S_pkgwei);
+                            shipmentDataRequest.PK_UP_TM = null;//Convert.ToString(excelDataObject.S_pkuptime),
+                            shipmentDataRequest.PYM_MTD = excelDataObject.pymt;
+                            shipmentDataRequest.RCV_ADR_TE = excelDataObject.address;
+                            shipmentDataRequest.RCV_CPY_TE = excelDataObject.S_receivercompany;
+                            shipmentDataRequest.SHP_ADR_TE = excelDataObject.S_address1;
+                            shipmentDataRequest.SHP_ADR_TR_TE = string.Empty;
+                            shipmentDataRequest.SHP_CPY_NA = excelDataObject.S_shippercompany;
+                            shipmentDataRequest.SHP_CTC_TE = excelDataObject.S_shptctc;
+                            shipmentDataRequest.SHP_DT = null;//Convert.ToString(excelDataObject.S_shipdate),
+                            shipmentDataRequest.SHP_NR = excelDataObject.S_shpr;
+                            shipmentDataRequest.SHP_PH_TE = excelDataObject.S_shptph;
+                            shipmentDataRequest.SMT_NR_TE = excelDataObject.S_shipmentno;
+                            shipmentDataRequest.SMT_STA_NR = 0;
+                            shipmentDataRequest.SMT_VAL_DE = 0;
+                            shipmentDataRequest.SMT_WGT_DE = Convert.ToDecimal(excelDataObject.S_shptwei);
+                            shipmentDataRequest.SVL_NR = Convert.ToString(excelDataObject.svl);
+                            shipmentDataRequest.WGT_UNT_TE = excelDataObject.S_weiunit;
+                            shipmentDataRequest.WFL_ID = workflowID;
+                            shipmentDataRequest.SF_TRA_LG_ID = null;
+                            shipmentDataRequest.QQS_TRA_LG_ID = null;
+
+
+                            shipmentData.Add(shipmentDataRequest);
+                        }
+                    }
+                    
                 }
                 shipmentService = new ShipmentService();
                 shipmentDataResponse  = shipmentService.CreateShipments(shipmentData);
                 shipmentDataResponse.Success = true;
-                return Ok(shipmentDataResponse);
+                return shipmentDataResponse;
             }
-            catch(Exception ex)
+            catch(Exception exception)
             {
-                shipmentDataResponse.Success = false;
-                shipmentDataResponse.OperationException = ex;
-
+                
+                throw exception;
             }
-            return Ok(shipmentDataResponse);
         }
 
         //private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
@@ -171,7 +188,7 @@ namespace AtService.Controllers
         }
 
         [Route("UpdateShipmentAddressById")]
-        [HttpGet]
+        [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
         public async Task<ActionResult> UpdateShipmentAddressById([FromBody] ShipmentDataRequest shipmentDataRequest)
