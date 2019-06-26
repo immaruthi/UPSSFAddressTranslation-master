@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Cors;
 using UPS.DataObjects.Shipment;
 using UPS.DataObjects.WR_FLW;
 using UPS.Quincus.APP.Request;
+using UPS.DataObjects.SPC_LST;
 
 namespace AtService.Controllers
 {
@@ -37,6 +38,7 @@ namespace AtService.Controllers
 
         private readonly IConfiguration configuration;
         private readonly IHostingEnvironment hostingEnvironment;
+        private ShipmentDataResponse shipmentDataResponse;
 
         public ShipmentController(IConfiguration Configuration, IHostingEnvironment HostingEnvironment)
         {
@@ -90,10 +92,10 @@ namespace AtService.Controllers
 
                 return Ok(shipmentDataResponse);
             }
-            catch(Exception exception)
+            catch(Exception ex)
             {
                 
-                return Ok(shipmentDataResponse.OperationException = exception);
+                return Ok(shipmentDataResponse.OperationExceptionMsg = ex.Message);
             }
         }
 
@@ -126,6 +128,7 @@ namespace AtService.Controllers
                             shipmentDataRequest.DST_CTY_TE = excelDataObject.S_dstcity;
                             shipmentDataRequest.DST_PSL_TE = excelDataObject.S_dstpsl;
                             shipmentDataRequest.EXP_SLC_CD = excelDataObject.S_expslic;
+                            shipmentDataRequest.EXP_TYP = "顺丰即日";//excelDataObject.S_expslic;
                             shipmentDataRequest.IMP_NR = excelDataObject.S_impr;
                             shipmentDataRequest.IMP_SLC_TE = excelDataObject.S_impslic;
                             shipmentDataRequest.IN_FLG_TE = excelDataObject.S_inflight;
@@ -137,10 +140,10 @@ namespace AtService.Controllers
                             shipmentDataRequest.PKG_NR_TE = excelDataObject.S_packageno;
                             shipmentDataRequest.PKG_WGT_DE = Convert.ToDecimal(excelDataObject.S_pkgwei);
                             shipmentDataRequest.PK_UP_TM = null;//Convert.ToString(excelDataObject.S_pkuptime),
-                            shipmentDataRequest.PYM_MTD = excelDataObject.pymt;
-                            shipmentDataRequest.RCV_ADR_TE = excelDataObject.address;
+                            shipmentDataRequest.PYM_MTD = "寄付月结";//excelDataObject.pymt;
+                            shipmentDataRequest.RCV_ADR_TE = excelDataObject.S_address1;
                             shipmentDataRequest.RCV_CPY_TE = excelDataObject.S_receivercompany;
-                            shipmentDataRequest.SHP_ADR_TE = excelDataObject.S_address1;
+                            shipmentDataRequest.SHP_ADR_TE = excelDataObject.address;
                             shipmentDataRequest.SHP_ADR_TR_TE = string.Empty;
                             shipmentDataRequest.SHP_CPY_NA = excelDataObject.S_shippercompany;
                             shipmentDataRequest.SHP_CTC_TE = excelDataObject.S_shptctc;
@@ -390,6 +393,15 @@ namespace AtService.Controllers
             }
 
             return Ok("Error");
+        }
+
+        [Route("GetMatchedShipmentsWithShipperCompanies")]
+        [HttpGet]
+        public ShipmentDataResponse GetMatchedShipmentsWithShipperCompanies(int wid)
+        {
+            ShipperCompnayService shipperCompanyService = new ShipperCompnayService();
+            shipmentDataResponse = shipperCompanyService.SelectMatchedShipmentsWithShipperCompanies(wid);
+            return shipmentDataResponse;
         }
     }
 }

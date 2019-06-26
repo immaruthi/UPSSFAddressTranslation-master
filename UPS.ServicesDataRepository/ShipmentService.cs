@@ -72,6 +72,9 @@ namespace UPS.ServicesDataRepository
                 shipmentDataRequest.SVL_NR = shipmentData.SVL_NR;
                 shipmentDataRequest.WFL_ID = shipmentData.WFL_ID;
                 shipmentDataRequest.WGT_UNT_TE = shipmentData.WGT_UNT_TE;
+                shipmentDataRequest.ACY_TE = shipmentData.ACY_TE;
+                shipmentDataRequest.CON_NR = shipmentData.CON_NR;
+                shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
                 context.shipmentDataRequests.Add(shipmentDataRequest);
                 context.Entry(shipmentDataRequest).State = EntityState.Added;
                 context.SaveChanges();
@@ -179,7 +182,7 @@ namespace UPS.ServicesDataRepository
             catch (Exception ex)
             {
                 shipmentDataResponse.Success = false;
-                shipmentDataResponse.OperationException = ex;
+                shipmentDataResponse.OperationExceptionMsg = ex.Message;
             }
             return shipmentDataResponse;
         }
@@ -210,7 +213,7 @@ namespace UPS.ServicesDataRepository
             catch (Exception ex)
             {
                 shipmentDataResponse.Success = false;
-                shipmentDataResponse.OperationException = ex;
+                shipmentDataResponse.OperationExceptionMsg = ex.Message;
             }
             return shipmentDataResponse;
         }
@@ -245,7 +248,7 @@ namespace UPS.ServicesDataRepository
             catch (Exception ex)
             {
                 shipmentDataResponse.Success = false;
-                shipmentDataResponse.OperationException = ex;
+                shipmentDataResponse.OperationExceptionMsg = ex.Message;
             }
             return shipmentDataResponse;
         }

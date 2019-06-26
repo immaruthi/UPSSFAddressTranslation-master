@@ -18,7 +18,7 @@ export class SentToSfComponent implements OnInit {
   displayedColumns =
     ['actions', 'smT_STA_NR', 'smT_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'shP_DT',
       'shP_CPY_NA', 'fsT_INV_LN_DES_TE', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD',
-      'imP_SLC_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'coD_TE' 
+      'imP_SLC_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'coD_TE', 'spC_SLIC_NR' 
     ];
 
   public ResponseData: any[] = [];

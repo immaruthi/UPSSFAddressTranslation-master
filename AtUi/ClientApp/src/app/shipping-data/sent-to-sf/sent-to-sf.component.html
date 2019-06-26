@@ -88,6 +88,26 @@
         <mat-header-cell *matHeaderCellDef class="header-cell"> COD </mat-header-cell>
         <mat-cell *matCellDef="let element" class="cell"> {{element.coD_TE}} </mat-cell>
       </ng-container>
+      <!--<ng-container matColumnDef="spC_CPY_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Shipping Company </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_CPY_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_ADR_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Address </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_ADR_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_CTC_PH" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Contact </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_CTC_PH}} </mat-cell>
+      </ng-container>-->
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Slic </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <!--<ng-container matColumnDef="spC_CTY_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> City </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_CTY_TE}} </mat-cell>
+      </ng-container>-->
       <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
     </mat-table>
