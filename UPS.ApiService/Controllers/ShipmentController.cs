@@ -345,7 +345,7 @@ namespace AtService.Controllers
 
                     var getAddressTranslation = quincusTranslatedAddressResponse.ResponseData;
 
-                    //await Task.Delay(20000);
+                    await Task.Delay(5000);
 
                     var QuincusResponse = QuincusService.GetGeoCodeReponseFromQuincus(new UPS.Quincus.APP.Request.QuincusGeoCodeDataRequest()
                     {
