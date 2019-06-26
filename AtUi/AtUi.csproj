@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\Proxy.conf.ts" />
     <None Remove="ClientApp\src\app\models\AssignProject.ts" />
     <None Remove="ClientApp\src\app\models\BaseLocation.ts" />
     <None Remove="ClientApp\src\app\models\CoeDescription.ts" />

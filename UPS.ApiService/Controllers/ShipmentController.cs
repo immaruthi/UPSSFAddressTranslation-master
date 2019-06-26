@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Cors;
 using UPS.DataObjects.Shipment;
 using UPS.DataObjects.WR_FLW;
 using UPS.Quincus.APP.Request;
+using UPS.ServicesDataRepository.Common;
 
 namespace AtService.Controllers
 {
@@ -37,11 +38,12 @@ namespace AtService.Controllers
 
         private readonly IConfiguration configuration;
         private readonly IHostingEnvironment hostingEnvironment;
-
+        private ShipmentService shipmentService { get; set; }
         public ShipmentController(IConfiguration Configuration, IHostingEnvironment HostingEnvironment)
         {
             this.configuration = Configuration;
             this.hostingEnvironment = HostingEnvironment;
+            shipmentService = new ShipmentService();
         }
 
         private int _workflowID = 0;
@@ -90,14 +92,14 @@ namespace AtService.Controllers
 
                 return Ok(shipmentDataResponse);
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
-                
+
                 return Ok(shipmentDataResponse.OperationException = exception);
             }
         }
 
-        private ShipmentService shipmentService { get; set; }
+
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         //[HttpPost]
         public ShipmentDataResponse CreateShipments(List<ExcelDataObject> excelDataObjects, int workflowID)
@@ -112,7 +114,7 @@ namespace AtService.Controllers
                     bool allPropertiesNull = !excelDataObject.GetType().GetProperties().Any(prop => prop == null);
                     if (allPropertiesNull)
                     {
-                        
+
                         ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
 
                         if (!string.IsNullOrWhiteSpace(excelDataObject.S_shipmentno))
@@ -161,16 +163,16 @@ namespace AtService.Controllers
                             shipmentData.Add(shipmentDataRequest);
                         }
                     }
-                    
+
                 }
                 shipmentService = new ShipmentService();
-                shipmentDataResponse  = shipmentService.CreateShipments(shipmentData);
+                shipmentDataResponse = shipmentService.CreateShipments(shipmentData);
                 shipmentDataResponse.Success = true;
                 return shipmentDataResponse;
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
-                
+
                 throw exception;
             }
         }
@@ -223,12 +225,12 @@ namespace AtService.Controllers
                 Checkword = configuration["SFExpress:Checkword"],
                 RequestURI = configuration["SFExpress:Place Order URI"],
                 RequestOrderXMLMessage = sFOrderXMLRequest.XMLMessage,
-                
+
             };
 
             GetSFCreateOrderServiceResponse getSFCreateOrderServiceResponse = QuincusService.SFExpressCreateOrder(sFCreateOrderServiceRequest);
-             
-            if(getSFCreateOrderServiceResponse.Response)
+
+            if (getSFCreateOrderServiceResponse.Response)
             {
                 return Ok(getSFCreateOrderServiceResponse.OrderResponse);
             }
@@ -272,8 +274,9 @@ namespace AtService.Controllers
         [HttpPost]
         public async Task<ActionResult> GetTranslationAddress([FromBody] List<ShipmentWorkFlowRequest> shipmentWorkFlowRequest)
         {
+            
             int wid = 0;
-            if(shipmentWorkFlowRequest.Any())
+            if (shipmentWorkFlowRequest.Any())
             {
                 wid = shipmentWorkFlowRequest.FirstOrDefault().wfL_ID;
             }
@@ -291,12 +294,12 @@ namespace AtService.Controllers
             {
                 quincusTranslatedAddressResponse = QuincusService.GetTranslationAddress(new UPS.Quincus.APP.Request.QuincusAddressTranslationRequest()
                 {
-                    endpoint= configuration["Quincus:GeoCodeEndPoint"],
-                    shipmentWorkFlowRequests= shipmentWorkFlowRequest,
+                    endpoint = configuration["Quincus:GeoCodeEndPoint"],
+                    shipmentWorkFlowRequests = shipmentWorkFlowRequest,
                     token = quincusTokenDataResponse.quincusTokenData.token
                 });
 
-                if(quincusTranslatedAddressResponse.Response)
+                if (quincusTranslatedAddressResponse.Response)
                 {
                     //return Ok(quincusTranslatedAddressResponse.ResponseData);
 
@@ -316,13 +319,16 @@ namespace AtService.Controllers
                         ShipmentDataRequest shipment = new ShipmentDataRequest();
                         List<Geocode> geocodes = (List<Geocode>)((QuincusReponseData)QuincusResponse.QuincusReponseData).geocode;
                         List<ShipmentDataRequest> shipmentsDataRequest = new List<ShipmentDataRequest>(geocodes.Count);
-                        for(int i =0; i < geocodes.Count; i++)
+                        for (int i = 0; i < geocodes.Count; i++)
                         {
                             ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
                             shipmentDataRequest.ID = Convert.ToInt32(geocodes[i].id);
                             shipmentDataRequest.WFL_ID = wid;
                             shipmentDataRequest.SHP_ADR_TR_TE = geocodes[i].translated_adddress;
-                            shipmentDataRequest.SMT_STA_NR = 1;
+                            if (geocodes[i].translated_adddress != "NA") 
+                            {
+                                shipmentDataRequest.SMT_STA_NR = ((int)Enums.ShipmentStatus.Translated);
+                            }
                             shipmentsDataRequest.Add(shipmentDataRequest);
                         }
                         ShipmentService shipmentService = new ShipmentService();
@@ -356,8 +362,8 @@ namespace AtService.Controllers
             QuincusTokenDataResponse quincusTokenDataResponse = QuincusService.GetToken(new UPS.Quincus.APP.Configuration.QuincusParams()
             {
                 endpoint = configuration["Quincus:TokenEndPoint"],
-                password= configuration["Quincus:Password"],
-                username= configuration["Quincus:UserName"],
+                password = configuration["Quincus:Password"],
+                username = configuration["Quincus:UserName"],
 
             });
 
@@ -371,7 +377,7 @@ namespace AtService.Controllers
                     quincusTokenData = quincusTokenDataResponse.quincusTokenData
                 });
 
-                if(quincusResponse.ResponseStatus)
+                if (quincusResponse.ResponseStatus)
                 {
                     if (quincusResponse.QuincusReponseData != null)
                     {

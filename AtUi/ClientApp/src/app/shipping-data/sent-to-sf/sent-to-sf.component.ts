@@ -16,7 +16,7 @@ import { DataService } from '../../services/data.service';
 })
 export class SentToSfComponent implements OnInit {
   displayedColumns =
-    ['actions', 'smT_STA_NR', 'smT_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'shP_DT',
+    ['actions', 'smT_STA_NR', 'pkG_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'shP_DT',
       'shP_CPY_NA', 'fsT_INV_LN_DES_TE', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD',
       'imP_SLC_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'coD_TE' 
     ];
@@ -78,10 +78,11 @@ export class SentToSfComponent implements OnInit {
     const dialogRef = this.dialog.open(AddressEditModelComponent, {
       data: {
         Id: shipmentDetailToUpdate.id,
-        //shP_ADR_TE: shipmentDetailToUpdate.shP_ADR_TE,
         rcV_ADR_TE: shipmentDetailToUpdate.rcV_ADR_TE,
         shP_ADR_TR_TE: shipmentDetailToUpdate.shP_ADR_TR_TE,
-        coD_TE: shipmentDetailToUpdate.coD_TE
+        coD_TE: shipmentDetailToUpdate.coD_TE,
+        pkG_NR_TE: shipmentDetailToUpdate.pkG_NR_TE,
+        shP_CPY_NA: shipmentDetailToUpdate.shP_CPY_NA
       }
     });
 
@@ -89,16 +90,20 @@ export class SentToSfComponent implements OnInit {
       if (result === 1) {
         let updatedDetails = this.dataService.getDialogData();
 
-        const details = { RCV_ADR_TE: updatedDetails.rcV_ADR_TE, SHP_ADR_TR_TE: updatedDetails.shP_ADR_TR_TE, COD_TE: updatedDetails.coD_TE, WFL_ID: updatedDetails.wfL_ID, ID: updatedDetails.id }
+        const details = {
+          SHP_ADR_TR_TE: updatedDetails.shP_ADR_TR_TE,
+          COD_TE: updatedDetails.coD_TE,
+          WFL_ID: shipmentDetails.wfL_ID,
+          ID: shipmentDetails.id,
+        }
 
-        this.shippingService.UpdateShippingAddress(details).subscribe(response => {
+        this.shippingService.UpdateShippingAddress(details).subscribe((response:any) => {
           console.log(response)
-          shipmentDetails.rcV_ADR_TE = updatedDetails.rcV_ADR_TE;
-          shipmentDetails.shP_ADR_TR_TE = updatedDetails.shP_ADR_TR_TE;
-          shipmentDetails.coD_TE = updatedDetails.coD_TE;
-          shipmentDetails.wfL_ID = updatedDetails.wfL_ID;
-          shipmentDetails.id = updatedDetails.id;
-          this.openSuccessMessageNotification("Data Updated Succesfully");
+
+          shipmentDetails.shP_ADR_TR_TE = response.shipmentDataRequest.shP_ADR_TR_TE;;
+          shipmentDetails.coD_TE = response.shipmentDataRequest.coD_TE;
+          shipmentDetails.smT_STA_NR = response.shipmentDataRequest.smT_STA_NR;
+          this.openSuccessMessageNotification("Data Updated Successfully");
         },
           error => this.openErrorMessageNotification("Error while updating data"))
       }

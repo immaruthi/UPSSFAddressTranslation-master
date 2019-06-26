@@ -1,18 +1,25 @@
 <mat-dialog-content class="container">
   <form (ngSubmit)="submit" #formControl="ngForm" class="example-form">
     <!--<mat-form-field color="accent">
-      <input matInput #input class="form-control" placeholder="Id" [(ngModel)]="rcV_ADR_TE" name="id" required>
-      <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
-    </mat-form-field>-->
+    <input matInput #input class="form-control" placeholder="Id" [(ngModel)]="rcV_ADR_TE" name="id" required>
+    <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>-->
+
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="Receiving address" value="{{data.rcV_ADR_TE}}" [(ngModel)]="data.rcV_ADR_TE" name="rcV_ADR_TE" required>
-      <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      <input matInput placeholder="Package Number" value="{{data.pkG_NR_TE}}" [(ngModel)]="data.pkG_NR_TE" name="pkG_NR_TE" readonly>
+    </mat-form-field><br />
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Receiving Company" value="{{data.shP_CPY_NA}}" [(ngModel)]="data.shP_CPY_NA" name="shP_CPY_NA" readonly>
+    </mat-form-field><br />
+
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Receiving address" value="{{data.rcV_ADR_TE}}" [(ngModel)]="data.rcV_ADR_TE" name="rcV_ADR_TE" readonly>
     </mat-form-field><br />
     <mat-form-field class="example-full-width">
       <input matInput placeholder="Translated address" value="{{data.shP_ADR_TR_TE}}" [(ngModel)]="data.shP_ADR_TR_TE" name="shP_ADR_TR_TE">
     </mat-form-field><br />
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="COD" value="{{data.coD_TE}}" [(ngModel)]="data.coD_TE" name="coD_TE">
+      <input matInput placeholder="COD(CN¥)" value="{{data.coD_TE}}" [(ngModel)]="data.coD_TE" name="coD_TE" >
     </mat-form-field>
   </form>
 </mat-dialog-content>
