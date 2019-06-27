@@ -85,7 +85,7 @@ namespace UPS.ServicesDataRepository
                     data.ID = WorkflowDataRequest.ID;
                     data.WFL_STA_TE = WorkflowDataRequest.WFL_STA_TE;
                     context.workflowDataRequests.Update(data);
-                    context.Entry(WorkflowDataRequest).State = EntityState.Modified;
+                    context.Entry(WorkflowDataRequest).State = EntityState.Detached;
                     context.SaveChanges();
                     workflowDataResponse.Workflow = data;
                     workflowDataResponse.Success = true;

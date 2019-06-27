@@ -157,7 +157,7 @@ namespace AtService.Controllers
                             shipmentDataRequest.ORG_CTY_TE = excelDataObject.S_orgcity;
 
                             string pststring = Convert.ToString(excelDataObject.S_orgpsl);
-                            if(InputValidations.IsDecimalFormat(pststring))
+                            if (InputValidations.IsDecimalFormat(pststring))
                             {
                                 shipmentDataRequest.ORG_PSL_CD = Decimal.ToInt32(Decimal.Parse(pststring)).ToString();
                             }
@@ -165,7 +165,7 @@ namespace AtService.Controllers
                             {
                                 shipmentDataRequest.ORG_PSL_CD = pststring;
                             }
-                            
+
                             // OU_FLG_TE = Convert.ToString(excelDataObject.S_outflight),
 
                             int intvalue = 0;
@@ -286,7 +286,7 @@ namespace AtService.Controllers
             CreateOrderShipmentResponse createOrderShipmentResponse = new CreateOrderShipmentResponse();
             createOrderShipmentResponse.FailedToProcessShipments = new List<string>();
             createOrderShipmentResponse.ProcessedShipments = new List<string>();
-            bool shipmentStatus = true;
+            bool workflowStatus = false;
 
             //List<UIOrderRequestBodyData> uIOrderRequestBodyDatas = new List<UIOrderRequestBodyData>();
 
@@ -318,13 +318,6 @@ namespace AtService.Controllers
                 };
 
                 GetSFCreateOrderServiceResponse getSFCreateOrderServiceResponse = QuincusService.SFExpressCreateOrder(sFCreateOrderServiceRequest);
-                ShipmentService shipmentService = new ShipmentService();
-                ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
-                shipmentDataRequest.ID = orderRequest.id;
-                shipmentDataRequest.WFL_ID = orderRequest.wfL_ID;
-                shipmentDataRequest.SMT_STA_NR = ((int)Enums.ShipmentStatus.Completed);
-
-                shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
 
                 if (getSFCreateOrderServiceResponse.Response)
                 {
@@ -333,13 +326,28 @@ namespace AtService.Controllers
 
                     string xmlDocumentShipmentResponseParser = xmlDocumentShipmentResponse.InnerXml;
 
-                    if(xmlDocumentShipmentResponseParser.Contains("<ERROR"))
+                    if (xmlDocumentShipmentResponseParser.Contains("<ERROR"))
                     {
                         createOrderShipmentResponse.FailedToProcessShipments.Add(orderRequest.pkG_NR_TE);
+                        workflowStatus = true;
                     }
                     else
                     {
                         createOrderShipmentResponse.ProcessedShipments.Add(orderRequest.pkG_NR_TE);
+
+                        ShipmentService shipmentService = new ShipmentService();
+                        ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
+                        shipmentDataRequest.ID = orderRequest.id;
+                        shipmentDataRequest.WFL_ID = orderRequest.wfL_ID;
+                        shipmentDataRequest.SMT_STA_NR = ((int)Enums.ShipmentStatus.Completed);
+                        _workflowID = orderRequest.wfL_ID;
+
+                        shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
+
+                        if (!workflowStatus)
+                        {
+                            workflowStatus = false;
+                        }
                     }
 
                     createOrderShipmentResponse.Response = true;
@@ -347,9 +355,18 @@ namespace AtService.Controllers
                 else
                 {
                     createOrderShipmentResponse.Response = false;
+                    workflowStatus = false;
                 }
             }
 
+            if(_workflowID != 0 && !workflowStatus)
+            {
+                WorkflowService workflowService = new WorkflowService();
+                WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
+                workflowDataRequest.ID = _workflowID;
+                workflowDataRequest.WFL_STA_TE = ((int)Enums.ShipmentStatus.Completed);
+                workflowService.UpdateWorkflowStatusById(workflowDataRequest);
+            }
             return Ok(createOrderShipmentResponse);
         }
 
