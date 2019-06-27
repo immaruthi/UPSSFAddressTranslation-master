@@ -26,51 +26,27 @@ namespace UPS.AddressTranslationService
         {
             Configuration = configuration;
         }
-        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-        //public IConfiguration Configuration { get; }
 
         public IConfiguration Configuration { get; }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-
+            // ********************
+            // Setup CORS
+            // ********************
             services.AddCors(c =>
             {
-                c.AddPolicy("AllowOrigin", options => options.WithOrigins("http://localhost:52406"));
+                c.AddPolicy("AllowAtUIOrigin", options => options.WithOrigins(Configuration["CorsEnableDomain:Domain"]));
             });
 
             new GetConnectionString().getconnection(Configuration);
 
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
-            // ********************
-            // Setup CORS
-            // ********************
-            //var corsBuilder = new CorsPolicyBuilder();
-            //corsBuilder.AllowAnyHeader();
-            //corsBuilder.AllowAnyMethod();
-            //corsBuilder.AllowAnyOrigin(); // For anyone access.
-            //corsBuilder.WithOrigins("https://localhost:81"); // for a specific url. Don't add a forward slash on the end!
-            //corsBuilder.WithOrigins("https://localhost:44330"); // for a specific url. Don't add a forward slash on the end!
-            //corsBuilder.WithOrigins("http://localhost:52406/api");
-            //corsBuilder.WithOrigins("https://atservicetest.azurewebsites.net"); // for a specific url. Don't add a forward slash on the end!
-            //corsBuilder.AllowCredentials();
-
-            //services.AddCors(options =>
-            //{
-            //    options.AddPolicy("SiteCorsPolicy", corsBuilder.Build());
-            //});
-            //services.AddCors(options => { options.AddPolicy(MyAllowSpecificOrigins, builder => { builder.WithOrigins("https://atservicetest.azurewebsites.net", "https://addresstranslation.azurewebsites.net"); }); });
-            //services.AddDbContext<UPSDataContext>(
-            //    option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            //new AtServicesContext().AddContextConfiguration(Configuration);
 
             services.AddDbContext<ApplicationDbContext>(
                 option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-
 
             services.AddIdentity<IdentityUser, IdentityRole>(
                 option =>
@@ -101,11 +77,7 @@ namespace UPS.AddressTranslationService
                 };
             });
 
-            //services.AddIdentityServerAuthentication();
-
-
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -119,19 +91,13 @@ namespace UPS.AddressTranslationService
             {
                 app.UseHsts();
             }
-            app.UseCors(options => options.WithOrigins("http://localhost:52406"));
-            //app.UseCors(builder => builder.AllowAnyOrigin());
-
+            app.UseCors(
+                options => options.WithOrigins(Configuration["CorsEnableDomain:Domain"]).AllowAnyHeader()
+                           .AllowAnyMethod()
+                           .AllowCredentials());
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();
-            //app.UseCors(MyAllowSpecificOrigins);
-
-            //app.Run(async (context) =>
-            //{
-            //    await context.Response.WriteAsync("Hello World!");
-            //});
-            //app.UseCors("SiteCorsPolicy");
          
         }
 

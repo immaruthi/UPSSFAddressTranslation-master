@@ -12,7 +12,7 @@ namespace AtService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("AllowOrigin")]
+    [EnableCors("AllowAtUIOrigin")]
     public class LoginController : ControllerBase
     {
         public LoginContext loginContext = null;

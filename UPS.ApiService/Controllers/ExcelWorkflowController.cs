@@ -25,7 +25,7 @@ namespace AtService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("SiteCorsPolicy")]
+    [EnableCors("AllowAtUIOrigin")]
     public class ExcelWorkflowController : Controller
     {
         private IHostingEnvironment _hostingEnvironment;

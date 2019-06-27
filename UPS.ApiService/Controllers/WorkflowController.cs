@@ -18,7 +18,7 @@ namespace UPS.AddressTranslationService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("SiteCorsPolicy")]
+    [EnableCors("AllowAtUIOrigin")]
     public class WorkflowController : ControllerBase
     {
         private WorkflowService workflowService {get; set; }
