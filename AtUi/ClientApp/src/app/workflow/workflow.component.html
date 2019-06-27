@@ -29,57 +29,59 @@
       </div>
     </div>
     <div>
-      <mat-table class="table" [dataSource]="dataSource" matSort>
-        <!-- Position Column -->
-        <ng-container matColumnDef="id" class="container">
-          <mat-header-cell *matHeaderCellDef class="header-cell"> Workflow Id </mat-header-cell>
-          <mat-cell *matCellDef="let element">
+      <div class="table-div">
+        <mat-table class="table" [dataSource]="dataSource" matSort>
+          <!-- Position Column -->
+          <ng-container matColumnDef="id" class="container">
+            <mat-header-cell *matHeaderCellDef class="header-cell"> Workflow Id </mat-header-cell>
+            <mat-cell *matCellDef="let element">
 
-            <a fxFlexFill [routerLink]="['/shipment',element.id]" class="mat-row-link cell">
-              {{element.id}}
-            </a>
+              <a fxFlexFill [routerLink]="['/shipment',element.id]" class="mat-row-link cell">
+                {{element.id}}
+              </a>
 
-          </mat-cell>
-        </ng-container>
-        <!-- Name Column -->
-        <ng-container matColumnDef="usR_FST_NA" class="container">
-          <mat-header-cell *matHeaderCellDef class="header-cell"> Owner </mat-header-cell>
-          <mat-cell *matCellDef="let element" class="cell">
-            <span class="sort-header">{{element.usR_FST_NA}}</span>
-          </mat-cell>
-        </ng-container>
-        <!-- Weight Column -->
-        <ng-container matColumnDef="flE_NA" class="container">
-          <mat-header-cell *matHeaderCellDef class="header-cell"> File Name </mat-header-cell>
-          <mat-cell *matCellDef="let element" class="cell">
-            <span class="sort-header">{{element.flE_NA}}</span>
-          </mat-cell>
-        </ng-container>
-        <!-- Symbol Column -->
-        <!--<ng-container matColumnDef="wfL_STA_TE" class="container">
-          <mat-header-cell *matHeaderCellDef class="header-cell"> Status </mat-header-cell>
-          <mat-cell *matCellDef="let element" class="cell">
-            <span  class="sort-header">{{workFlowStatus[element.wfL_STA_TE].value}}</span>
-          </mat-cell>
-        </ng-container>-->
-        <ng-container matColumnDef="wfL_STA_TE_TEXT" class="container">
-          <mat-header-cell *matHeaderCellDef class="header-cell"> Status Text</mat-header-cell>
-          <mat-cell *matCellDef="let element" class="cell">
-            <span class="sort-header">{{element.wfL_STA_TE_TEXT}}</span>
-          </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="crD_DT" class="container">
-          <mat-header-cell *matHeaderCellDef class="header-cell"> Created Date </mat-header-cell>
-          <mat-cell *matCellDef="let element" class="cell">
-            <span class="sort-header">{{element.crD_DT | date: 'MMMM dd, yyyy hh:mm a'}}</span>
-          </mat-cell>
-        </ng-container>
-        <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
-      </mat-table>
-      <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
-      </mat-paginator>
+            </mat-cell>
+          </ng-container>
+          <!-- Name Column -->
+          <ng-container matColumnDef="usR_FST_NA" class="container">
+            <mat-header-cell *matHeaderCellDef class="header-cell"> Owner </mat-header-cell>
+            <mat-cell *matCellDef="let element" class="cell">
+              <span class="sort-header">{{element.usR_FST_NA}}</span>
+            </mat-cell>
+          </ng-container>
+          <!-- Weight Column -->
+          <ng-container matColumnDef="flE_NA" class="container">
+            <mat-header-cell *matHeaderCellDef class="header-cell"> File Name </mat-header-cell>
+            <mat-cell *matCellDef="let element" class="cell">
+              <span class="sort-header">{{element.flE_NA}}</span>
+            </mat-cell>
+          </ng-container>
+          <!-- Symbol Column -->
+          <!--<ng-container matColumnDef="wfL_STA_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Status </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell">
+          <span  class="sort-header">{{workFlowStatus[element.wfL_STA_TE].value}}</span>
+        </mat-cell>
+      </ng-container>-->
+          <ng-container matColumnDef="wfL_STA_TE_TEXT" class="container">
+            <mat-header-cell *matHeaderCellDef class="header-cell"> Status Text</mat-header-cell>
+            <mat-cell *matCellDef="let element" class="cell">
+              <span class="sort-header">{{element.wfL_STA_TE_TEXT}}</span>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="crD_DT" class="container">
+            <mat-header-cell *matHeaderCellDef class="header-cell"> Created Date </mat-header-cell>
+            <mat-cell *matCellDef="let element" class="cell">
+              <span class="sort-header">{{element.crD_DT | date: 'MMMM dd, yyyy hh:mm a'}}</span>
+            </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
+        </mat-table>
+        </div>
+        <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+        </mat-paginator>
+      </div>
+      <app-loader></app-loader>
     </div>
-    <app-loader></app-loader>
-  </div>
 </div>

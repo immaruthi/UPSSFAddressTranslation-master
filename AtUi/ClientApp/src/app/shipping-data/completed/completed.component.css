@@ -6,7 +6,7 @@
 
 mat-table {
   width: 100%;
-  min-width: 3600px;
+  min-width: 3400px;
   padding: 0;
 }
 
@@ -149,3 +149,9 @@ mat-row:nth-child(odd) {
 mat-header-row {
   background: #F2F2F2;
 }
+
+.mat-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+} 

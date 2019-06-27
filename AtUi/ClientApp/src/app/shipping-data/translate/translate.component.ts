@@ -62,7 +62,6 @@ export class TranslateComponent implements OnInit {
 
     this.eventsSubscription = this.events.subscribe(() =>
     {
-      debugger;
       this.getTranslateData(this.WorkflowID)
     });
   }
