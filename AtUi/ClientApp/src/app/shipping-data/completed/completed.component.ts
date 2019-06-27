@@ -1,27 +1,28 @@
 import { Component, ViewChild, OnInit, Input } from '@angular/core';
 import { ShipmentDetails } from '../../models/shipmentdetails';
-import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatDialog, MatSnackBarConfig, MatSnackBar } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
 import { ShippingService } from '../../services/shipping.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Constants } from '../../shared/Constants';
+import { AddressEditModelComponent } from '../address-edit-model/address-edit-model.component';
+import { DataService } from '../../services/data.service';
+import { DialogService } from '../../services/dialog.service';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-uploaded-data',
-  templateUrl: './uploaded-data.component.html',
-  styleUrls: ['./uploaded-data.component.css']
+  selector: 'app-completed',
+  templateUrl: './completed.component.html',
+  styleUrls: ['./completed.component.css']
 })
-export class UploadedDataComponent implements OnInit {
-
+export class CompletedComponent implements OnInit {
   displayedColumns =
-    ['smT_STA_NR', 'smT_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'fsT_INV_LN_DES_TE',
-      'shP_CPY_NA', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD', 'imP_SLC_TE',
-      'coD_TE'
+    ['smT_STA_NR', 'pkG_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE',
+      'fsT_INV_LN_DES_TE', 'shP_CPY_NA', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD',
+          'imP_SLC_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'coD_TE', 'pyM_MTD', 'exP_TYP', 'spC_SLIC_NR'
     ];
-
-  private eventsSubscription: any
+  private eventsSubscription: any;
   @Input() events: Observable<void>;
 
   public ResponseData: any[] = [];
@@ -30,9 +31,12 @@ export class UploadedDataComponent implements OnInit {
   dataSource = new MatTableDataSource<Element>();
   public errorMessage: string;
   selection = new SelectionModel<any>(true, []);
+  public mainData: any[] = [];
+  public checkedData: any[] = [];
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
-    private router: Router) {
+    private router: Router, public dialog: MatDialog, public dataService: DataService,
+    private snackBar: MatSnackBar, private dialogService: DialogService) {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -48,10 +52,11 @@ export class UploadedDataComponent implements OnInit {
   ngOnInit() {
     this.WorkflowID = this.activatedRoute.snapshot.params.WorkflowID;
     if (this.WorkflowID) {
-      this.getUploadedData(this.WorkflowID);
+      this.getCompletedShipments(this.WorkflowID);
     }
+
     this.eventsSubscription = this.events.subscribe(() => {
-      this.getUploadedData(this.WorkflowID)
+      this.getCompletedShipments(this.WorkflowID)
     });
   }
 
@@ -59,12 +64,17 @@ export class UploadedDataComponent implements OnInit {
     this.eventsSubscription.unsubscribe()
   }
 
-  getUploadedData(WorkflowID: any) {
+  getCompletedShipments(WorkflowID: any) {
     this.ResponseData = [];
-    this.shippingService.getUploadedData(WorkflowID).subscribe((response: any) => {
-      this.ResponseData = response;
+    this.shippingService.getCompletedShipments(WorkflowID).subscribe((response: any) => {
+      if (response.success === true) {
+        this.ResponseData = response.shipments;
+      } else {
+        this.ResponseData = [];
+      }
       this.dataSource.data = this.ResponseData;
       this.dataSource.paginator = this.paginator;
+
     }, error => (this.errorMessage = <any>error));
   }
 

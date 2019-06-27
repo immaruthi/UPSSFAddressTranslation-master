@@ -28,6 +28,7 @@ using UPS.DataObjects.WR_FLW;
 using UPS.Quincus.APP.Request;
 using UPS.DataObjects.SPC_LST;
 using UPS.ServicesDataRepository.Common;
+using System.Xml;
 
 namespace AtService.Controllers
 {
@@ -136,15 +137,12 @@ namespace AtService.Controllers
                             shipmentDataRequest.CSG_CTC_TE = excelDataObject.S_cneectc;
 
                             decimal decimalvalue = 0;
+                            shipmentDataRequest.DIM_WGT_DE = 0;
                             if (!string.IsNullOrEmpty(excelDataObject.S_dimwei))
                             {
                                 if (decimal.TryParse(excelDataObject.S_dimwei, out decimalvalue))
                                 {
                                     shipmentDataRequest.DIM_WGT_DE = decimalvalue;
-                                }
-                                else 
-                                {
-                                    shipmentDataRequest.DIM_WGT_DE = 0;
                                 }
                             }
 
@@ -157,19 +155,26 @@ namespace AtService.Controllers
                             shipmentDataRequest.IMP_SLC_TE = excelDataObject.S_impslic;
                             shipmentDataRequest.IN_FLG_TE = excelDataObject.S_inflight;
                             shipmentDataRequest.ORG_CTY_TE = excelDataObject.S_orgcity;
-                            shipmentDataRequest.ORG_PSL_CD = Convert.ToString(excelDataObject.S_orgpsl);
+
+                            string pststring = Convert.ToString(excelDataObject.S_orgpsl);
+                            if(InputValidations.IsDecimalFormat(pststring))
+                            {
+                                shipmentDataRequest.ORG_PSL_CD = Decimal.ToInt32(Decimal.Parse(pststring)).ToString();
+                            }
+                            else
+                            {
+                                shipmentDataRequest.ORG_PSL_CD = pststring;
+                            }
+                            
                             // OU_FLG_TE = Convert.ToString(excelDataObject.S_outflight),
 
                             int intvalue = 0;
+                            shipmentDataRequest.PCS_QTY_NR = 0;
                             if (!string.IsNullOrEmpty(excelDataObject.pcs))
                             {
                                 if (int.TryParse(excelDataObject.pcs, out intvalue))
                                 {
                                     shipmentDataRequest.PCS_QTY_NR = intvalue;
-                                }
-                                else
-                                {
-                                    shipmentDataRequest.PCS_QTY_NR = 0;
                                 }
                             }
 
@@ -278,15 +283,9 @@ namespace AtService.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateOrderShipment([FromBody] List<UIOrderRequestBodyData> uIOrderRequestBodyDatas)
         {
-            //sFOrderXMLRequest.XMLMessage = "<Request lang=\"zh-CN\" service=\"OrderService\"><Head>LJ_T6NVV</Head><Body>
-            //<Order orderid=\"19066630501176234\" custid=\"7551234567\" j_company=\"顺丰速运\" 
-//j_contact=\"李XXX\" j_tel=\"13865659879\" j_mobile=\"13865659879\" j_province=\"北京\" j_city=\"北京市\" 
-//j_county=\"福田区\" j_address=\"广东省深圳市广东省深圳市福田区新洲十一街万基商务大厦10楼\" d_company=\"京东\" 
-//d_contact=\"刘XX\" d_tel=\"13965874855\" d_mobile=\"13965874855\" d_county=\"北京经济技术开发区\" d_address=\"北京北京市北京亦庄经济技术开发区科创十一街18号院\" 
-//cargo_total_weight=\"5.0\" remark=\"KC客户,深圳市-北京市\" pay_method=\"1\" is_docall=\"1\" need_return_tracking_no=\"1\" express_type=\"154\" parcel_quantity=\"6\" 
-//cargo_length=\"10.0\" cargo_width=\"10.0\" cargo_height=\"10.0\" sendstarttime=\"2019-05-21 16:35:50\"><Cargo name=\"电子产品,\" count=\"2\" unit=\"件\"/></Order>
-//</Body></Request>"; 
-
+            CreateOrderShipmentResponse createOrderShipmentResponse = new CreateOrderShipmentResponse();
+            createOrderShipmentResponse.FailedToProcessShipments = new List<string>();
+            createOrderShipmentResponse.ProcessedShipments = new List<string>();
             bool shipmentStatus = true;
 
             //List<UIOrderRequestBodyData> uIOrderRequestBodyDatas = new List<UIOrderRequestBodyData>();
@@ -294,6 +293,7 @@ namespace AtService.Controllers
             foreach (var orderRequest in uIOrderRequestBodyDatas)
             {
                 string XMLMessage = string.Empty;
+
                 XMLMessage = "<Request lang=\"zh-CN\" service=\"OrderService\">";
                 XMLMessage += "<Head>LJ_T6NVV</Head>";
                 XMLMessage += "<Body>";
@@ -318,24 +318,39 @@ namespace AtService.Controllers
                 };
 
                 GetSFCreateOrderServiceResponse getSFCreateOrderServiceResponse = QuincusService.SFExpressCreateOrder(sFCreateOrderServiceRequest);
+                ShipmentService shipmentService = new ShipmentService();
+                ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
+                shipmentDataRequest.ID = orderRequest.id;
+                shipmentDataRequest.WFL_ID = orderRequest.wfL_ID;
+                shipmentDataRequest.SMT_STA_NR = ((int)Enums.ShipmentStatus.Completed);
+
+                shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
 
                 if (getSFCreateOrderServiceResponse.Response)
                 {
-                    shipmentStatus = true;
+                    XmlDocument xmlDocumentShipmentResponse = new XmlDocument();
+                    xmlDocumentShipmentResponse.LoadXml(getSFCreateOrderServiceResponse.OrderResponse);
+
+                    string xmlDocumentShipmentResponseParser = xmlDocumentShipmentResponse.InnerXml;
+
+                    if(xmlDocumentShipmentResponseParser.Contains("<ERROR"))
+                    {
+                        createOrderShipmentResponse.FailedToProcessShipments.Add(orderRequest.pkG_NR_TE);
+                    }
+                    else
+                    {
+                        createOrderShipmentResponse.ProcessedShipments.Add(orderRequest.pkG_NR_TE);
+                    }
+
+                    createOrderShipmentResponse.Response = true;
                 }
                 else
                 {
-                    shipmentStatus = false;
+                    createOrderShipmentResponse.Response = false;
                 }
             }
 
-            if (!shipmentStatus)
-            {
-
-                return Ok("Oops! Some Shipments are Failed - Check Status Immediately ");
-            }
-
-            return Ok("Shipments Completed! Check Status Later");
+            return Ok(createOrderShipmentResponse);
         }
 
         [Route("CancelOrderShipment")]
@@ -504,6 +519,15 @@ namespace AtService.Controllers
         {
             ShipperCompnayService shipperCompanyService = new ShipperCompnayService();
             shipmentDataResponse = shipperCompanyService.SelectMatchedShipmentsWithShipperCompanies(wid);
+            return shipmentDataResponse;
+        }
+
+        [Route("GetCompletedShipments")]
+        [HttpGet]
+        public ShipmentDataResponse GetCompletedShipments(int wid)
+        {
+            ShipperCompnayService shipperCompanyService = new ShipperCompnayService();
+            shipmentDataResponse = shipperCompanyService.SelectCompletedShipments(wid);
             return shipmentDataResponse;
         }
     }

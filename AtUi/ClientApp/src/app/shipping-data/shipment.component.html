@@ -38,8 +38,9 @@
       </mat-step>
       <mat-step [stepControl]="fourthFormGroup">
         <form [formGroup]="secondFormGroup">
-          <ng-template matStepLabel>Done</ng-template>
-          You are now done.
+          <ng-template matStepLabel>Completed</ng-template>
+          <!--You are now done.-->
+          <app-completed [events]="eventsSubject.asObservable()"></app-completed>
           <div>
             <button mat-stroked-button color="primary" matStepperPrevious>Back</button>
             <!--<button mat-stroked-button (click)="stepper.reset()">Reset</button>-->

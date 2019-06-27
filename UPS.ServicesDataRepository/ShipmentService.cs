@@ -170,8 +170,7 @@ namespace UPS.ServicesDataRepository
                     ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == shipmentDataRequest.ID).FirstOrDefault();
                     data.ID = shipmentDataRequest.ID;
                     data.WFL_ID = shipmentDataRequest.WFL_ID;
-                    data.SMT_STA_NR = 0; //shipmentDataRequest.SMT_STA_NR;
-                    data.RCV_ADR_TE = shipmentDataRequest.RCV_ADR_TE;
+                    data.SMT_STA_NR = shipmentDataRequest.SMT_STA_NR;
                     context.shipmentDataRequests.Update(data);
                     context.Entry(shipmentDataRequest).State = EntityState.Detached;
                     context.SaveChanges();
@@ -236,6 +235,8 @@ namespace UPS.ServicesDataRepository
                     data.WFL_ID = request.WFL_ID;
                     data.SHP_ADR_TR_TE = request.SHP_ADR_TR_TE;
                     data.SMT_STA_NR = request.SMT_STA_NR;
+                    data.ACY_TE = request.ACY_TE;
+                    data.CON_NR = request.CON_NR;
                     context.shipmentDataRequests.Update(data);
                     context.Entry(request).State = EntityState.Detached;
                     context.SaveChanges();
