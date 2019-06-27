@@ -9,6 +9,7 @@ using System.Data;
 using AtService.Models;
 using UPS.ServicesDataRepository;
 using UPS.Application.CustomLogs;
+using Microsoft.AspNetCore.Cors;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,6 +17,7 @@ namespace UPS.AddressTranslationService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowAtUIOrigin")]
     public class ValuesController : Controller
     {
         // GET: api/<controller>
