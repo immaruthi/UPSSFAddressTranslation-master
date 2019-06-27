@@ -26,6 +26,7 @@ import { HomeService } from './services/HomeService';
 import { MaterialModule } from './shared/MaterialModule'
 import { AdminconfigComponent } from './adminconfig/adminconfig.component';
 import { AlertDialogComponent } from './dialogs/alert-dialog/alert-dialog.component';
+import { SummaryDialogComponent } from './dialogs/summary-dialog/summary-dialog.component';
 import { DialogService } from './services/dialog.service';
 import { ExcelService } from './services/ExcelExport';
 import { ShippingService } from './services/shipping.service';
@@ -68,6 +69,7 @@ import { AddressEditModelComponent } from './shipping-data/address-edit-model/ad
     LoginComponent,
     AdminconfigComponent,
     AlertDialogComponent,
+    SummaryDialogComponent,
     WorkflowComponent,
     ShipmentComponent,
     UploadedDataComponent,
@@ -112,7 +114,7 @@ import { AddressEditModelComponent } from './shipping-data/address-edit-model/ad
     }
     ],
   bootstrap: [AppComponent],
-  entryComponents: [LoginComponent, AlertDialogComponent, AddressEditModelComponent]
+  entryComponents: [LoginComponent, AlertDialogComponent, SummaryDialogComponent, AddressEditModelComponent]
 
 })
 export class AppModule { }
