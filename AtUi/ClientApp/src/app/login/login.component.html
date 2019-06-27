@@ -5,15 +5,39 @@
     </div>
     <div class="col-md-6 flr">
       <img class="logo" src="assets/images/logo.png" alt="Ups-Logo"><span class="app-txt">UPS Address Translation</span>
+      <!--<form class="login-form" form id="loginbox" [formGroup]="registerForm" (ngSubmit)="onSubmit(ipUser.value,ipPwd.value)">
+    <div class="form-group">
+      <input #ipUser id="login-username" class="form-control usertxt" type="text" placeholder="User ID" formControlName="userId" name="userid" value="" autofocus>
+    </div>
+    <div class="form-group">
+      <input #ipPwd id="login-password" class="form-control pwdtxt" type="password" placeholder="Password" formControlName="password">
+    </div>
+    <div class="form-check">
+      <button type="submit" class="btn">Get Start</button>
+    </div>
+  </form>-->
       <form class="login-form" form id="loginbox" [formGroup]="registerForm" (ngSubmit)="onSubmit(ipUser.value,ipPwd.value)">
         <div class="form-group">
-          <input #ipUser id="login-username" class="form-control usertxt" type="text" placeholder="User ID" formControlName="userId" name="userid" value="" autofocus>
+          <input #ipUser id="login-username" class="form-control usertxt" minlength="10" maxlength="10" type="text" placeholder="User ID" formControlName="userId" name="userId" value="" autofocus required>
+          <div class="div-alert" *ngIf="(registerForm.controls['userId'].touched || registerForm.controls['userId'].dirty || isFormSubmitted)">
+            <div *ngIf="registerForm.controls['userId']?.errors?.required" >
+              User ID is required.
+            </div>
+            <div *ngIf="(registerForm.controls['userId']?.errors?.minlength || registerForm.controls['userId']?.errors?.maxlength)">
+              User ID must be 10 characters long.
+            </div>
+          </div>
         </div>
+
         <div class="form-group">
-          <input #ipPwd id="login-password" class="form-control pwdtxt" type="password" placeholder="Password" formControlName="password">
+          <input #ipPwd id="login-password" class="form-control pwdtxt" type="password" placeholder="Password" formControlName="password" required>
+          <div class="div-alert" *ngIf="registerForm.controls['password']?.errors && (registerForm.controls['password'].touched ||
+              registerForm.controls['password'].dirty || isFormSubmitted)">
+            Password is required.
+          </div>
         </div>
         <div class="form-check">
-          <button type="submit" class="btn">Get Start</button>
+          <button [disabled]="!registerForm.valid" type="submit" class="btn">Get Start</button>
         </div>
       </form>
     </div>
