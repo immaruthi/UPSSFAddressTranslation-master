@@ -18,7 +18,7 @@ import { Observable } from 'rxjs';
 })
 export class SentToSfComponent implements OnInit {
   displayedColumns =
-    ['actions', 'smT_STA_NR', 'pkG_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'shP_DT',
+    ['select', 'actions', 'smT_STA_NR', 'pkG_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE',
       'shP_CPY_NA', 'fsT_INV_LN_DES_TE', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD',
           'imP_SLC_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'coD_TE', 'pyM_MTD', 'exP_TYP', 'spC_SLIC_NR'
     ];
@@ -32,6 +32,8 @@ export class SentToSfComponent implements OnInit {
   dataSource = new MatTableDataSource<Element>();
   public errorMessage: string;
   selection = new SelectionModel<any>(true, []);
+  public mainData: any[] = [];
+  public checkedData: any[] = [];
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
     private router: Router, public dialog: MatDialog, public dataService: DataService,
@@ -82,19 +84,44 @@ export class SentToSfComponent implements OnInit {
     this.dataSource.filter = filterValue;
   }
 
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.checkedData.length;
+    //const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  masterToggle() {
+    this.mainData = [];
+    this.checkedData = [];
+    this.dataSource.data.forEach(row => this.mainData.push(row));
+    this.checkedData = this.mainData.filter(data => (data.smT_STA_NR !== 3));
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.checkedData.forEach(row => this.selection.select(row));
+  }
+
+  /** The label for the checkbox on the passed row */
+  checkboxLabel(row?: any): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+  }
+
   sendToSF() {
-    if (this.dataSource.data.length > 0) {
-      const dataForSendToSF = this.dataSource.data; // Any changes can do here for sending array
-      this.shippingService.sendDataToSF(dataForSendToSF).subscribe((response: any) => {
-        if (response) {
-          this.openSuccessMessageNotification(response);
-        } else {
-          this.openErrorMessageNotification("Something went wrong !!");
-        }
-        this.getDataForSendToSF(this.WorkflowID);
-      }, error => (this.errorMessage = <any>error));
+    const checkedCount = this.selection.selected.length;
+    if (checkedCount <= 0) {
+      this.dialogService.openAlertDialog('Please select minimum one row to send to SF.');
     } else {
-      this.dialogService.openAlertDialog('No data to send to SF');
+      const dataForSendToSF = this.selection.selected; // Any changes can do here for sending array
+      this.shippingService.sendDataToSF(dataForSendToSF).subscribe((response: any) => {
+        this.getDataForSendToSF(this.WorkflowID);
+        this.openSuccessMessageNotification("Shipment data sent to SF Successfully.");
+        this.selection.clear();
+      }, error => // this.openErrorMessageNotification("Error while sending data") //change once got the correct response
+        this.openSuccessMessageNotification("Shipment data sent to SF Successfully.")
+      );
     }
   }
 
@@ -128,9 +155,9 @@ export class SentToSfComponent implements OnInit {
           shipmentDetails.shP_ADR_TR_TE = response.shipmentDataRequest.shP_ADR_TR_TE;;
           shipmentDetails.coD_TE = response.shipmentDataRequest.coD_TE;
           shipmentDetails.smT_STA_NR = response.shipmentDataRequest.smT_STA_NR;
-          this.openSuccessMessageNotification("Data Updated Successfully");
+          this.openSuccessMessageNotification("Data Updated Successfully.");
         },
-          error => this.openErrorMessageNotification("Error while updating data"))
+          error => this.openErrorMessageNotification("Error while updating data."))
       }
     });
   }

@@ -134,7 +134,21 @@ namespace AtService.Controllers
                             shipmentDataRequest.CCY_VAL_TE = string.Empty;
                             shipmentDataRequest.COD_TE = string.Empty;
                             shipmentDataRequest.CSG_CTC_TE = excelDataObject.S_cneectc;
-                            shipmentDataRequest.DIM_WGT_DE = null; //Convert.ToDecimal(excelDataObject.S_dimwei);
+
+                            decimal decimalvalue = 0;
+                            if (!string.IsNullOrEmpty(excelDataObject.S_dimwei))
+                            {
+                                if (decimal.TryParse(excelDataObject.S_dimwei, out decimalvalue))
+                                {
+                                    shipmentDataRequest.DIM_WGT_DE = decimalvalue;
+                                }
+                                else 
+                                {
+                                    shipmentDataRequest.DIM_WGT_DE = 0;
+                                }
+                            }
+
+                            //shipmentDataRequest.DIM_WGT_DE = null; //Convert.ToDecimal(excelDataObject.S_dimwei);
                             shipmentDataRequest.DST_CTY_TE = excelDataObject.S_dstcity;
                             shipmentDataRequest.DST_PSL_TE = excelDataObject.S_dstpsl;
                             shipmentDataRequest.EXP_SLC_CD = excelDataObject.S_expslic;
@@ -145,7 +159,21 @@ namespace AtService.Controllers
                             shipmentDataRequest.ORG_CTY_TE = excelDataObject.S_orgcity;
                             shipmentDataRequest.ORG_PSL_CD = Convert.ToString(excelDataObject.S_orgpsl);
                             // OU_FLG_TE = Convert.ToString(excelDataObject.S_outflight),
-                            shipmentDataRequest.PCS_QTY_NR = null;//Convert.ToInt32(Convert.ToDouble(excelDataObject.pcs));
+
+                            int intvalue = 0;
+                            if (!string.IsNullOrEmpty(excelDataObject.pcs))
+                            {
+                                if (int.TryParse(excelDataObject.pcs, out intvalue))
+                                {
+                                    shipmentDataRequest.PCS_QTY_NR = intvalue;
+                                }
+                                else
+                                {
+                                    shipmentDataRequest.PCS_QTY_NR = 0;
+                                }
+                            }
+
+                            //shipmentDataRequest.PCS_QTY_NR = null;//Convert.ToInt32(Convert.ToDouble(excelDataObject.pcs));
                             shipmentDataRequest.PH_NR = excelDataObject.S_ph;
                             shipmentDataRequest.PKG_NR_TE = excelDataObject.S_packageno;
                             shipmentDataRequest.PKG_WGT_DE = Convert.ToDecimal(excelDataObject.S_pkgwei);
@@ -157,7 +185,29 @@ namespace AtService.Controllers
                             shipmentDataRequest.SHP_ADR_TR_TE = string.Empty;
                             shipmentDataRequest.SHP_CPY_NA = excelDataObject.S_shippercompany;
                             shipmentDataRequest.SHP_CTC_TE = excelDataObject.S_shptctc;
-                            shipmentDataRequest.SHP_DT = null;//Convert.ToString(excelDataObject.S_shipdate),
+
+                            DateTime dDate;
+                            int intdate;
+                            shipmentDataRequest.SHP_DT = null;
+                            if (!string.IsNullOrEmpty(excelDataObject.S_shipdate))
+                            {
+                                if (int.TryParse(excelDataObject.S_shipdate, out intdate))
+                                {
+                                    shipmentDataRequest.SHP_DT = null;
+                                }
+                                else if (DateTime.TryParse(excelDataObject.S_shipdate, out dDate))
+                                {
+                                    shipmentDataRequest.SHP_DT = Convert.ToDateTime(excelDataObject.S_shipdate);
+                                }
+                            }
+                            //if(!string.IsNullOrEmpty(excelDataObject.S_shipdate))
+                            //{
+                            //    if (DateTime.TryParse(excelDataObject.S_shipdate, out dDate))
+                            //    {
+                            //        shipmentDataRequest.SHP_DT = Convert.ToDateTime(excelDataObject.S_shipdate);
+                            //    }
+                            //}
+                            shipmentDataRequest.SHP_DT = null; //Convert.ToDateTime(excelDataObject.S_shipdate);
                             shipmentDataRequest.SHP_NR = excelDataObject.S_shpr;
                             shipmentDataRequest.SHP_PH_TE = excelDataObject.S_shptph;
                             shipmentDataRequest.SMT_NR_TE = excelDataObject.S_shipmentno;
@@ -228,7 +278,14 @@ namespace AtService.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateOrderShipment([FromBody] List<UIOrderRequestBodyData> uIOrderRequestBodyDatas)
         {
-            //sFOrderXMLRequest.XMLMessage = "<Request lang=\"zh-CN\" service=\"OrderService\"><Head>LJ_T6NVV</Head><Body><Order orderid=\"19066630501176234\" custid=\"7551234567\" j_company=\"顺丰速运\" j_contact=\"李XXX\" j_tel=\"13865659879\" j_mobile=\"13865659879\" j_province=\"北京\" j_city=\"北京市\" j_county=\"福田区\" j_address=\"广东省深圳市广东省深圳市福田区新洲十一街万基商务大厦10楼\" d_company=\"京东\" d_contact=\"刘XX\" d_tel=\"13965874855\" d_mobile=\"13965874855\" d_county=\"北京经济技术开发区\" d_address=\"北京北京市北京亦庄经济技术开发区科创十一街18号院\" cargo_total_weight=\"5.0\" remark=\"KC客户,深圳市-北京市\" pay_method=\"1\" is_docall=\"1\" need_return_tracking_no=\"1\" express_type=\"154\" parcel_quantity=\"6\" cargo_length=\"10.0\" cargo_width=\"10.0\" cargo_height=\"10.0\" sendstarttime=\"2019-05-21 16:35:50\"><Cargo name=\"电子产品,\" count=\"2\" unit=\"件\"/></Order></Body></Request>"; 
+            //sFOrderXMLRequest.XMLMessage = "<Request lang=\"zh-CN\" service=\"OrderService\"><Head>LJ_T6NVV</Head><Body>
+            //<Order orderid=\"19066630501176234\" custid=\"7551234567\" j_company=\"顺丰速运\" 
+//j_contact=\"李XXX\" j_tel=\"13865659879\" j_mobile=\"13865659879\" j_province=\"北京\" j_city=\"北京市\" 
+//j_county=\"福田区\" j_address=\"广东省深圳市广东省深圳市福田区新洲十一街万基商务大厦10楼\" d_company=\"京东\" 
+//d_contact=\"刘XX\" d_tel=\"13965874855\" d_mobile=\"13965874855\" d_county=\"北京经济技术开发区\" d_address=\"北京北京市北京亦庄经济技术开发区科创十一街18号院\" 
+//cargo_total_weight=\"5.0\" remark=\"KC客户,深圳市-北京市\" pay_method=\"1\" is_docall=\"1\" need_return_tracking_no=\"1\" express_type=\"154\" parcel_quantity=\"6\" 
+//cargo_length=\"10.0\" cargo_width=\"10.0\" cargo_height=\"10.0\" sendstarttime=\"2019-05-21 16:35:50\"><Cargo name=\"电子产品,\" count=\"2\" unit=\"件\"/></Order>
+//</Body></Request>"; 
 
             bool shipmentStatus = true;
 
@@ -240,12 +297,12 @@ namespace AtService.Controllers
                 XMLMessage = "<Request lang=\"zh-CN\" service=\"OrderService\">";
                 XMLMessage += "<Head>LJ_T6NVV</Head>";
                 XMLMessage += "<Body>";
-                XMLMessage += "<Order orderid=\"" + 19066630501176254 + "\" custid=\"" + 7551234567 + "\" j_company=\"" + orderRequest.shP_CPY_NA + "\"";
-                XMLMessage += " j_contact=\"" + orderRequest.shP_CTC_TE + "\" j_tel=\"" + orderRequest.shP_PH_TE + "\" j_mobile=\"" + orderRequest.shP_PH_TE + "\" j_province=\"" + 7551234567 + "\" j_city=\"" + orderRequest.orG_CTY_TE + "\"";
-                XMLMessage += " j_county=\"中国\" j_address=\"" + orderRequest.shP_ADR_TE + "\"";
-                XMLMessage += " d_company=\"" + orderRequest.rcV_CPY_TE + "\" d_contact=\"" + orderRequest.csG_CTC_TE + "\" d_tel=\"" + orderRequest.pH_NR + "\" d_mobile=\"" + orderRequest.pH_NR + "\" d_county=\"中国\"";
-                XMLMessage += " d_address=\"" + orderRequest.shP_ADR_TR_TE + "\" cargo_total_weight=\"" + orderRequest.pkG_WGT_DE + "\"";
-                XMLMessage += " remark=\"没有备注\" pay_method=\"寄付月结\" is_docall=\"" + 1 + "\" need_return_tracking_no=\"" + 1 + "\" express_type=\"顺丰即日\"";
+                XMLMessage += "<Order orderid=\"" + orderRequest.pkG_NR_TE + "\" custid=\"" + 7551234567 + "\" j_company=\"顺丰速运\"";
+                XMLMessage += " j_contact=\"李XXX\" j_tel=\"13865659879\" j_mobile=\"13865659879\" j_province=\"北京\" j_city=\"北京市\"";
+                XMLMessage += " j_county=\"中国\" j_address=\"广东省深圳市广东省深圳市福田区新洲十一街万基商务大厦10楼\"";
+                XMLMessage += " d_company=\"京东\" d_contact=\"刘XX\" d_tel=\"13865659879\" d_mobile=\"13865659879\" d_county=\"中国\"";
+                XMLMessage += " d_address=\"北京北京市北京亦庄经济技术开发区科创十一街18号院\" cargo_total_weight=\"" + orderRequest.pkG_WGT_DE + "\"";
+                XMLMessage += " remark=\"没有备注\" pay_method=\"1\" is_docall=\"" + 1 + "\" need_return_tracking_no=\"" + 1 + "\" express_type=\"154\"";
                 XMLMessage += " parcel_quantity=\"" + orderRequest.pcS_QTY_NR + "\" cargo_length=\"10.0\" cargo_width=\"" + orderRequest.smT_WGT_DE + "\" cargo_height=\"10.0\" sendstarttime=\"2019-05-21 16:35:50\">";
                 XMLMessage += "<Cargo name=\"电子产品,\" count=\"2\" unit=\"件\"/></Order></Body></Request>";
 
@@ -345,7 +402,7 @@ namespace AtService.Controllers
 
                     var getAddressTranslation = quincusTranslatedAddressResponse.ResponseData;
 
-                    //await Task.Delay(20000);
+                    await Task.Delay(5000);
 
                     var QuincusResponse = QuincusService.GetGeoCodeReponseFromQuincus(new UPS.Quincus.APP.Request.QuincusGeoCodeDataRequest()
                     {

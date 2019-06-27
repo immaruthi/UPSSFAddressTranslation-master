@@ -40,7 +40,7 @@ export class LoginComponent {
   submitted = false;
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
-      userId: ['', Validators.required],
+      userId: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
       password: ['', Validators.required],
 
 

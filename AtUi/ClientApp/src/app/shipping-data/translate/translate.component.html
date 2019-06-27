@@ -26,17 +26,17 @@
                         (change)="$event ? selection.toggle(row) : null"
                         [checked]="selection.isSelected(row)"
                         [aria-label]="checkboxLabel(row)"
-                        [disabled]="row.smT_STA_NR === 1">
+                        [disabled]="(row.smT_STA_NR === 2 || row.smT_STA_NR === 3)">
           </mat-checkbox>
         </mat-cell>
       </ng-container>
       <ng-container matColumnDef="actions" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell"> Action </mat-header-cell>
         <mat-cell *matCellDef="let row; let i=index;" class="cell">
-          <button mat-icon-button [disabled]="row.smT_STA_NR === 2" mat-icon-button (click)="startEdit(i,row)">
+          <button mat-icon-button (click)="startEdit(i,row)">
             <span><i class="material-icons">edit</i></span>
           </button>
-          <button [disabled]="row.smT_STA_NR === 2" mat-icon-button (click)="rowTranslate(i,row)">
+          <button [disabled]="(row.smT_STA_NR === 2 || row.smT_STA_NR === 3)" mat-icon-button (click)="rowTranslate(i,row)">
             <span><i class="material-icons">translate</i></span>
           </button>
         </mat-cell>
@@ -103,16 +103,24 @@
         <mat-cell *matCellDef="let element" class="cell"> {{element.rcV_ADR_TE}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="dsT_CTY_TE" class="container">
-        <mat-header-cell *matHeaderCellDef class="header-cell"> Destination City </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Receiving City </mat-header-cell>
         <mat-cell *matCellDef="let element" class="cell"> {{element.dsT_CTY_TE}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="dsT_PSL_TE" class="container">
-        <mat-header-cell *matHeaderCellDef class="header-cell"> Destination Postal Code </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Receiving Postal Code </mat-header-cell>
         <mat-cell *matCellDef="let element" class="cell"> {{element.dsT_PSL_TE}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="coD_TE" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell"> COD </mat-header-cell>
         <mat-cell *matCellDef="let element" class="cell"> {{element.coD_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="coN_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Confidence </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.coN_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="acY_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Accuracy </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.acY_TE}} </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
