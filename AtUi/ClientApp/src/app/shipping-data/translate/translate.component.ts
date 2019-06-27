@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, Input } from '@angular/core';
 import { MatPaginator, MatTableDataSource, MatDialog, MatSnackBar, MatSnackBarConfig, MatProgressSpinner } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
@@ -9,6 +9,7 @@ import { AddressEditModelComponent } from '../address-edit-model/address-edit-mo
 import { ShipmentDetails } from '../../models/shipmentDetails';
 import { Constants } from '../../shared/Constants';
 import { DialogService } from '../../services/dialog.service';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -23,6 +24,9 @@ export class TranslateComponent implements OnInit {
       'dsT_CTY_TE', 'dsT_PSL_TE', 'shP_CPY_NA', 'fsT_INV_LN_DES_TE', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE',
       'orG_CTY_TE', 'orG_PSL_CD', 'imP_SLC_TE', 'coD_TE'
     ];
+  private eventsSubscription: any
+
+  @Input() events: Observable<void>;
 
   public ResponseData: any[] = [];
   public WorkflowID: any;
@@ -55,6 +59,16 @@ export class TranslateComponent implements OnInit {
     if (this.WorkflowID) {
       this.getTranslateData(this.WorkflowID);
     }
+
+    this.eventsSubscription = this.events.subscribe(() =>
+    {
+      debugger;
+      this.getTranslateData(this.WorkflowID)
+    });
+  }
+
+  ngOnDestroy() {
+    this.eventsSubscription.unsubscribe()
   }
 
   openSuccessMessageNotification(message: string) {
@@ -141,7 +155,7 @@ export class TranslateComponent implements OnInit {
         shP_ADR_TR_TE: shipmentDetailToUpdate.shP_ADR_TR_TE,
         coD_TE: shipmentDetailToUpdate.coD_TE,
         pkG_NR_TE: shipmentDetailToUpdate.pkG_NR_TE,
-        shP_CPY_NA: shipmentDetailToUpdate.shP_CPY_NA
+        rcV_CPY_TE: shipmentDetailToUpdate.rcV_CPY_TE
       }
     });
 
