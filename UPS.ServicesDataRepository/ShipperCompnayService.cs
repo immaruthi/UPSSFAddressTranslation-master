@@ -83,7 +83,7 @@ namespace UPS.ServicesDataRepository
                                 s.SMT_STA_NR,
                                 s.SMT_VAL_DE,
                                 s.SMT_WGT_DE,
-                                s.SPC_SLIC_NR,
+                                SPC_SLIC_NR = c.SPC_SLIC_NR,
                                 s.SVL_NR,
                                 s.WGT_UNT_TE
                             }).ToList();

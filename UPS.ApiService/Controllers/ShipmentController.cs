@@ -134,7 +134,21 @@ namespace AtService.Controllers
                             shipmentDataRequest.CCY_VAL_TE = string.Empty;
                             shipmentDataRequest.COD_TE = string.Empty;
                             shipmentDataRequest.CSG_CTC_TE = excelDataObject.S_cneectc;
-                            shipmentDataRequest.DIM_WGT_DE = null; //Convert.ToDecimal(excelDataObject.S_dimwei);
+
+                            decimal decimalvalue = 0;
+                            if (!string.IsNullOrEmpty(excelDataObject.S_dimwei))
+                            {
+                                if (decimal.TryParse(excelDataObject.S_dimwei, out decimalvalue))
+                                {
+                                    shipmentDataRequest.DIM_WGT_DE = decimalvalue;
+                                }
+                                else 
+                                {
+                                    shipmentDataRequest.DIM_WGT_DE = 0;
+                                }
+                            }
+
+                            //shipmentDataRequest.DIM_WGT_DE = null; //Convert.ToDecimal(excelDataObject.S_dimwei);
                             shipmentDataRequest.DST_CTY_TE = excelDataObject.S_dstcity;
                             shipmentDataRequest.DST_PSL_TE = excelDataObject.S_dstpsl;
                             shipmentDataRequest.EXP_SLC_CD = excelDataObject.S_expslic;
@@ -145,7 +159,21 @@ namespace AtService.Controllers
                             shipmentDataRequest.ORG_CTY_TE = excelDataObject.S_orgcity;
                             shipmentDataRequest.ORG_PSL_CD = Convert.ToString(excelDataObject.S_orgpsl);
                             // OU_FLG_TE = Convert.ToString(excelDataObject.S_outflight),
-                            shipmentDataRequest.PCS_QTY_NR = null;//Convert.ToInt32(Convert.ToDouble(excelDataObject.pcs));
+
+                            int intvalue = 0;
+                            if (!string.IsNullOrEmpty(excelDataObject.pcs))
+                            {
+                                if (int.TryParse(excelDataObject.pcs, out intvalue))
+                                {
+                                    shipmentDataRequest.PCS_QTY_NR = intvalue;
+                                }
+                                else
+                                {
+                                    shipmentDataRequest.PCS_QTY_NR = 0;
+                                }
+                            }
+
+                            //shipmentDataRequest.PCS_QTY_NR = null;//Convert.ToInt32(Convert.ToDouble(excelDataObject.pcs));
                             shipmentDataRequest.PH_NR = excelDataObject.S_ph;
                             shipmentDataRequest.PKG_NR_TE = excelDataObject.S_packageno;
                             shipmentDataRequest.PKG_WGT_DE = Convert.ToDecimal(excelDataObject.S_pkgwei);
@@ -157,7 +185,29 @@ namespace AtService.Controllers
                             shipmentDataRequest.SHP_ADR_TR_TE = string.Empty;
                             shipmentDataRequest.SHP_CPY_NA = excelDataObject.S_shippercompany;
                             shipmentDataRequest.SHP_CTC_TE = excelDataObject.S_shptctc;
-                            shipmentDataRequest.SHP_DT = null;//Convert.ToString(excelDataObject.S_shipdate),
+
+                            DateTime dDate;
+                            int intdate;
+                            shipmentDataRequest.SHP_DT = null;
+                            if (!string.IsNullOrEmpty(excelDataObject.S_shipdate))
+                            {
+                                if (int.TryParse(excelDataObject.S_shipdate, out intdate))
+                                {
+                                    shipmentDataRequest.SHP_DT = null;
+                                }
+                                else if (DateTime.TryParse(excelDataObject.S_shipdate, out dDate))
+                                {
+                                    shipmentDataRequest.SHP_DT = Convert.ToDateTime(excelDataObject.S_shipdate);
+                                }
+                            }
+                            //if(!string.IsNullOrEmpty(excelDataObject.S_shipdate))
+                            //{
+                            //    if (DateTime.TryParse(excelDataObject.S_shipdate, out dDate))
+                            //    {
+                            //        shipmentDataRequest.SHP_DT = Convert.ToDateTime(excelDataObject.S_shipdate);
+                            //    }
+                            //}
+                            shipmentDataRequest.SHP_DT = null; //Convert.ToDateTime(excelDataObject.S_shipdate);
                             shipmentDataRequest.SHP_NR = excelDataObject.S_shpr;
                             shipmentDataRequest.SHP_PH_TE = excelDataObject.S_shptph;
                             shipmentDataRequest.SMT_NR_TE = excelDataObject.S_shipmentno;
@@ -352,7 +402,7 @@ namespace AtService.Controllers
 
                     var getAddressTranslation = quincusTranslatedAddressResponse.ResponseData;
 
-                    //await Task.Delay(20000);
+                    await Task.Delay(5000);
 
                     var QuincusResponse = QuincusService.GetGeoCodeReponseFromQuincus(new UPS.Quincus.APP.Request.QuincusGeoCodeDataRequest()
                     {

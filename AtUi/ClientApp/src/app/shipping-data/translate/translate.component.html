@@ -33,7 +33,7 @@
       <ng-container matColumnDef="actions" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell"> Action </mat-header-cell>
         <mat-cell *matCellDef="let row; let i=index;" class="cell">
-          <button mat-icon-button [disabled]="row.smT_STA_NR === 2" mat-icon-button (click)="startEdit(i,row)">
+          <button mat-icon-button   mat-icon-button (click)="startEdit(i,row)">
             <span><i class="material-icons">edit</i></span>
           </button>
           <button [disabled]="row.smT_STA_NR === 2" mat-icon-button (click)="rowTranslate(i,row)">
