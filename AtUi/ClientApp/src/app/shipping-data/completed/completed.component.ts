@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, Input } from '@angular/core';
 import { ShipmentDetails } from '../../models/shipmentdetails';
 import { MatPaginator, MatTableDataSource, MatDialog, MatSnackBarConfig, MatSnackBar } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -9,6 +9,7 @@ import { Constants } from '../../shared/Constants';
 import { AddressEditModelComponent } from '../address-edit-model/address-edit-model.component';
 import { DataService } from '../../services/data.service';
 import { DialogService } from '../../services/dialog.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-completed',
@@ -21,6 +22,8 @@ export class CompletedComponent implements OnInit {
       'shP_CPY_NA', 'fsT_INV_LN_DES_TE', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD',
           'imP_SLC_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'coD_TE', 'pyM_MTD', 'exP_TYP', 'spC_SLIC_NR'
     ];
+  private eventsSubscription: any;
+  @Input() events: Observable<void>;
 
   public ResponseData: any[] = [];
   public WorkflowID: any;
@@ -49,11 +52,19 @@ export class CompletedComponent implements OnInit {
   ngOnInit() {
     this.WorkflowID = this.activatedRoute.snapshot.params.WorkflowID;
     if (this.WorkflowID) {
-      this.getDataForCompleteComponent(this.WorkflowID);
+      this.getCompletedShipments(this.WorkflowID);
     }
+
+    this.eventsSubscription = this.events.subscribe(() => {
+      this.getCompletedShipments(this.WorkflowID)
+    });
   }
 
-  getDataForCompleteComponent(WorkflowID: any) {
+  ngOnDestroy() {
+    this.eventsSubscription.unsubscribe()
+  }
+
+  getCompletedShipments(WorkflowID: any) {
     this.ResponseData = [];
     this.shippingService.getCompletedShipments(WorkflowID).subscribe((response: any) => {
       if (response.success === true) {
