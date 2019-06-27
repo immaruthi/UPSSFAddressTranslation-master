@@ -47,6 +47,7 @@ import { LoaderService } from './shared/loader/loader.service';
 /* External Modules */
 import { AgGridModule } from 'ag-grid-angular';
 import { SentToSfComponent } from './shipping-data/sent-to-sf/sent-to-sf.component';
+import { CompletedComponent } from './shipping-data/completed/completed.component';
 import { TranslateComponent } from './shipping-data/translate/translate.component';
 import { EditableComponent } from './shared/editable/editable.component';
 import { EditModeDirective } from './shared/editable/edit-mode.directive';
@@ -71,6 +72,7 @@ import { AddressEditModelComponent } from './shipping-data/address-edit-model/ad
     ShipmentComponent,
     UploadedDataComponent,
     SentToSfComponent,
+    CompletedComponent,
     TranslateComponent,
     EditableComponent,
     EditModeDirective,
