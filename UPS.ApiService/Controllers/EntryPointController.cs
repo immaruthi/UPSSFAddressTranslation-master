@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AtService.Models;
 using ExcelFileRead;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace AtService.Controllers
 {
+    [EnableCors("AllowAtUIOrigin")]
     public class EntryPointController : Controller
     {
         

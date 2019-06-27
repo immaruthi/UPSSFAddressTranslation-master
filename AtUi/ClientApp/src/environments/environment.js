@@ -6,7 +6,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.environment = {
     production: false,
-    LOCAL_API_URL: 'https://atservicetest.azurewebsites.net/'
-    //LOCAL_API_URL: 'https://localhost:44330/'
+    //LOCAL_API_URL: 'https://atservicetest.azurewebsites.net/'
+    LOCAL_API_URL: 'https://192.168.31.47:8081/'
 };
 //# sourceMappingURL=environment.js.map
