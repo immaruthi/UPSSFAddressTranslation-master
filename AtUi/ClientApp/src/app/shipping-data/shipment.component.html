@@ -3,12 +3,12 @@
     <h5 class="section-title card"></h5>
     <!--<button mat-raised-button (click)="isLinear = true" id="toggle-linear">Enable linear mode</button>-->
 
-    <mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper">
+    <mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper" (selectionChange)="selectionChanged($event)">
       <mat-step [stepControl]="firstFormGroup">
         <form [formGroup]="firstFormGroup">
           <ng-template matStepLabel>Uploaded Shipment Details</ng-template>
-          <!--<app-translate></app-translate>-->
-          <app-uploaded-data></app-uploaded-data>
+         
+          <app-uploaded-data [events]="eventsSubject.asObservable()"></app-uploaded-data>
           <div>
             <button mat-stroked-button color="primary" matStepperNext>Next</button>
           </div>
@@ -17,7 +17,7 @@
       <mat-step [stepControl]="secondFormGroup">
         <form [formGroup]="secondFormGroup">
           <ng-template matStepLabel>Translate</ng-template>
-          <app-translate></app-translate>
+          <app-translate [events]="eventsSubject.asObservable()"></app-translate>
 
           <div>
             <button mat-stroked-button color="primary" matStepperPrevious>Back</button>
@@ -29,7 +29,7 @@
       <mat-step [stepControl]="thirdFormGroup">
         <form [formGroup]="secondFormGroup">
           <ng-template matStepLabel>Sent To SF</ng-template>
-          <app-sent-to-sf></app-sent-to-sf>
+          <app-sent-to-sf [events]="eventsSubject.asObservable()"></app-sent-to-sf>
           <div>
             <button mat-stroked-button color="primary" matStepperPrevious>Back</button>
             <button mat-stroked-button color="primary" matStepperNext>Next</button>

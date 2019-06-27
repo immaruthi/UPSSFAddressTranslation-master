@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, Input } from '@angular/core';
 import { ShipmentDetails } from '../../models/shipmentdetails';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -6,6 +6,7 @@ import { FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
 import { ShippingService } from '../../services/shipping.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Constants } from '../../shared/Constants';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-uploaded-data',
@@ -19,6 +20,9 @@ export class UploadedDataComponent implements OnInit {
       'fsT_INV_LN_DES_TE', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD', 'imP_SLC_TE',
       'coD_TE'
     ];
+
+  private eventsSubscription: any
+  @Input() events: Observable<void>;
 
   public ResponseData: any[] = [];
   public WorkflowID: any;
@@ -46,6 +50,13 @@ export class UploadedDataComponent implements OnInit {
     if (this.WorkflowID) {
       this.getUploadedData(this.WorkflowID);
     }
+    this.eventsSubscription = this.events.subscribe(() => {
+      this.getUploadedData(this.WorkflowID)
+    });
+  }
+
+  ngOnDestroy() {
+    this.eventsSubscription.unsubscribe()
   }
 
   getUploadedData(WorkflowID: any) {

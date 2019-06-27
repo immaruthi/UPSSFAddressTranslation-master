@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, Input } from '@angular/core';
 import { ShipmentDetails } from '../../models/shipmentdetails';
 import { MatPaginator, MatTableDataSource, MatDialog, MatSnackBarConfig, MatSnackBar } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -9,6 +9,7 @@ import { Constants } from '../../shared/Constants';
 import { AddressEditModelComponent } from '../address-edit-model/address-edit-model.component';
 import { DataService } from '../../services/data.service';
 import { DialogService } from '../../services/dialog.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-sent-to-sf',
@@ -21,6 +22,9 @@ export class SentToSfComponent implements OnInit {
       'shP_CPY_NA', 'fsT_INV_LN_DES_TE', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD',
           'imP_SLC_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'coD_TE', 'pyM_MTD', 'exP_TYP', 'spC_SLIC_NR'
     ];
+
+  private eventsSubscription: any
+  @Input() events: Observable<void>;
 
   public ResponseData: any[] = [];
   public WorkflowID: any;
@@ -51,12 +55,19 @@ export class SentToSfComponent implements OnInit {
     if (this.WorkflowID) {
       this.getDataForSendToSF(this.WorkflowID);
     }
+    this.eventsSubscription = this.events.subscribe(() => {
+      this.getDataForSendToSF(this.WorkflowID)
+    });
+  }
+
+  ngOnDestroy() {
+    this.eventsSubscription.unsubscribe()
   }
 
   getDataForSendToSF(WorkflowID: any) {
     this.ResponseData = [];
     this.shippingService.getDataForSendToSF(WorkflowID).subscribe((response: any) => {
-      if (response.success === true) {
+      if (response!= null &&  response.success === true) {
         this.ResponseData = response.shipments;
       } else {
         this.ResponseData = [];
@@ -123,7 +134,7 @@ export class SentToSfComponent implements OnInit {
         shP_ADR_TR_TE: shipmentDetailToUpdate.shP_ADR_TR_TE,
         coD_TE: shipmentDetailToUpdate.coD_TE,
         pkG_NR_TE: shipmentDetailToUpdate.pkG_NR_TE,
-        shP_CPY_NA: shipmentDetailToUpdate.shP_CPY_NA
+        rcV_CPY_TE: shipmentDetailToUpdate.rcV_CPY_TE
       }
     });
 

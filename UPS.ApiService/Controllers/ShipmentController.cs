@@ -85,7 +85,7 @@ namespace AtService.Controllers
                             WorkflowDataResponse response = ((WorkflowDataResponse)((ObjectResult)(workflowController.CreateWorkflow(file, Emp_Id)).Result).Value);
                             _workflowID = response.Workflow.ID;
                             result = this.CreateShipments(excelDataObject2, _workflowID);
-                            if(result.Success)
+                            if (result.Success)
                             {
                                 shipmentDataResponse.Success = true;
                                 shipmentDataResponse.Shipments = result.Shipments;
@@ -103,7 +103,7 @@ namespace AtService.Controllers
 
                 return Ok(shipmentDataResponse);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return Ok(shipmentDataResponse.OperationExceptionMsg = ex.Message);
             }
@@ -219,7 +219,7 @@ namespace AtService.Controllers
                             shipmentDataRequest.WFL_ID = workflowID;
                             shipmentDataRequest.SF_TRA_LG_ID = null;
                             shipmentDataRequest.QQS_TRA_LG_ID = null;
-
+                            shipmentDataRequest.FST_INV_LN_DES_TE = excelDataObject.S_1stinvoicelinedesc;
 
                             shipmentData.Add(shipmentDataRequest);
                         }
@@ -371,7 +371,7 @@ namespace AtService.Controllers
         [HttpPost]
         public async Task<ActionResult> GetTranslationAddress([FromBody] List<ShipmentWorkFlowRequest> shipmentWorkFlowRequest)
         {
-            
+
             int wid = 0;
             if (shipmentWorkFlowRequest.Any())
             {
@@ -422,7 +422,10 @@ namespace AtService.Controllers
                             shipmentDataRequest.ID = Convert.ToInt32(geocodes[i].id);
                             shipmentDataRequest.WFL_ID = wid;
                             shipmentDataRequest.SHP_ADR_TR_TE = geocodes[i].translated_adddress;
-                            if (geocodes[i].translated_adddress != "NA") 
+                            shipmentDataRequest.ACY_TE = geocodes[i].accuracy;
+                            shipmentDataRequest.CON_NR = geocodes[i].confidence;
+
+                            if (geocodes[i].translated_adddress != "NA")
                             {
                                 shipmentDataRequest.SMT_STA_NR = ((int)Enums.ShipmentStatus.Translated);
                             }
