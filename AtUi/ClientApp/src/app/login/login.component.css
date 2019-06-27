@@ -102,3 +102,11 @@ input:focus {
 input {
   width: 67%;
 }
+
+.div-alert {
+  font-size: 0.8vw;
+  font-family: helvetica;
+  margin: 0% 0% 0px 18%;
+  font-weight: 600;
+  color: #CC0000;
+}
