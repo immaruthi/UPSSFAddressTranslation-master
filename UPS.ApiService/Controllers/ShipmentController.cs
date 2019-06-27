@@ -137,15 +137,12 @@ namespace AtService.Controllers
                             shipmentDataRequest.CSG_CTC_TE = excelDataObject.S_cneectc;
 
                             decimal decimalvalue = 0;
+                            shipmentDataRequest.DIM_WGT_DE = 0;
                             if (!string.IsNullOrEmpty(excelDataObject.S_dimwei))
                             {
                                 if (decimal.TryParse(excelDataObject.S_dimwei, out decimalvalue))
                                 {
                                     shipmentDataRequest.DIM_WGT_DE = decimalvalue;
-                                }
-                                else 
-                                {
-                                    shipmentDataRequest.DIM_WGT_DE = 0;
                                 }
                             }
 
@@ -158,19 +155,21 @@ namespace AtService.Controllers
                             shipmentDataRequest.IMP_SLC_TE = excelDataObject.S_impslic;
                             shipmentDataRequest.IN_FLG_TE = excelDataObject.S_inflight;
                             shipmentDataRequest.ORG_CTY_TE = excelDataObject.S_orgcity;
-                            shipmentDataRequest.ORG_PSL_CD = Convert.ToString(excelDataObject.S_orgpsl);
+
+                            int pstint = 0;
+                            string pststring = Convert.ToString(excelDataObject.S_orgpsl);
+                            Int32.TryParse(Convert.ToString(excelDataObject.S_orgpsl),out pstint);
+                            shipmentDataRequest.ORG_PSL_CD = pstint == 0 ? pststring : pstint.ToString();
+                            
                             // OU_FLG_TE = Convert.ToString(excelDataObject.S_outflight),
 
                             int intvalue = 0;
+                            shipmentDataRequest.PCS_QTY_NR = 0;
                             if (!string.IsNullOrEmpty(excelDataObject.pcs))
                             {
                                 if (int.TryParse(excelDataObject.pcs, out intvalue))
                                 {
                                     shipmentDataRequest.PCS_QTY_NR = intvalue;
-                                }
-                                else
-                                {
-                                    shipmentDataRequest.PCS_QTY_NR = 0;
                                 }
                             }
 
@@ -314,6 +313,13 @@ namespace AtService.Controllers
                 };
 
                 GetSFCreateOrderServiceResponse getSFCreateOrderServiceResponse = QuincusService.SFExpressCreateOrder(sFCreateOrderServiceRequest);
+                ShipmentService shipmentService = new ShipmentService();
+                ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
+                shipmentDataRequest.ID = orderRequest.id;
+                shipmentDataRequest.WFL_ID = orderRequest.wfL_ID;
+                shipmentDataRequest.SMT_STA_NR = ((int)Enums.ShipmentStatus.Completed);
+
+                shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
 
                 if (getSFCreateOrderServiceResponse.Response)
                 {
@@ -508,6 +514,15 @@ namespace AtService.Controllers
         {
             ShipperCompnayService shipperCompanyService = new ShipperCompnayService();
             shipmentDataResponse = shipperCompanyService.SelectMatchedShipmentsWithShipperCompanies(wid);
+            return shipmentDataResponse;
+        }
+
+        [Route("GetCompletedShipments")]
+        [HttpGet]
+        public ShipmentDataResponse GetCompletedShipments(int wid)
+        {
+            ShipperCompnayService shipperCompanyService = new ShipperCompnayService();
+            shipmentDataResponse = shipperCompanyService.SelectCompletedShipments(wid);
             return shipmentDataResponse;
         }
     }
