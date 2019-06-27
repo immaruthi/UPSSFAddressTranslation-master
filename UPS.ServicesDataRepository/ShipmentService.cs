@@ -235,6 +235,8 @@ namespace UPS.ServicesDataRepository
                     data.WFL_ID = request.WFL_ID;
                     data.SHP_ADR_TR_TE = request.SHP_ADR_TR_TE;
                     data.SMT_STA_NR = request.SMT_STA_NR;
+                    data.ACY_TE = request.ACY_TE;
+                    data.CON_NR = request.CON_NR;
                     context.shipmentDataRequests.Update(data);
                     context.Entry(request).State = EntityState.Detached;
                     context.SaveChanges();
