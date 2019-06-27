@@ -40,7 +40,7 @@
         <form [formGroup]="secondFormGroup">
           <ng-template matStepLabel>Completed</ng-template>
           <!--You are now done.-->
-          <app-completed></app-completed>
+          <app-completed [events]="eventsSubject.asObservable()"></app-completed>
           <div>
             <button mat-stroked-button color="primary" matStepperPrevious>Back</button>
             <!--<button mat-stroked-button (click)="stepper.reset()">Reset</button>-->
