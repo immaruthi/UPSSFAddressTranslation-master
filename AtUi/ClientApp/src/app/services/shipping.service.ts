@@ -24,6 +24,10 @@ export class ShippingService {
     return this.httpService.makeGetRequest('api/Shipment/GetMatchedShipmentsWithShipperCompanies?wid=' + WorkflowID);
   }
 
+  public getDataForCompleteComponent(WorkflowID: any): Observable<any> {
+    return this.httpService.makeGetRequest('api/Shipment/GetMatchedShipmentsWithShipperCompanies?wid=' + WorkflowID);
+  }
+
   public sendDataForTranslate(data: any): Observable<any> {
     return this.httpService.makePostRequest('api/Shipment/GetTranslationAddress', data);  // Add URL here for send for translate
   }

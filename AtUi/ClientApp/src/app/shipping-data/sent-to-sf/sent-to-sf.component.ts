@@ -105,11 +105,19 @@ export class SentToSfComponent implements OnInit {
     } else {
       const dataForSendToSF = this.selection.selected; // Any changes can do here for sending array
       this.shippingService.sendDataToSF(dataForSendToSF).subscribe((response: any) => {
-        this.getDataForSendToSF(this.WorkflowID);
-        this.openSuccessMessageNotification("Shipment data sent to SF Successfully.");
-        this.selection.clear();
-      }, error => // this.openErrorMessageNotification("Error while sending data") //change once got the correct response
-        this.openSuccessMessageNotification("Shipment data sent to SF Successfully.")
+        if (response.response === true) {
+          const FailedCount = response.failedToProcessShipments.length;
+          const SuccessCount = response.processedShipments.length;
+          if (response.processedShipments.length > 0) {
+            this.getDataForSendToSF(this.WorkflowID);
+          }
+          this.selection.clear();
+          this.dialogService.openAlertDialog('---------- Summary ----------- ' +
+            ' Processed Shipments to SF : ' + SuccessCount +
+            '  Failed Shipments to SF: ' + FailedCount + '.');
+        }
+      }, error =>
+        this.openErrorMessageNotification("Error while sending data to SF.")
       );
     }
   }
