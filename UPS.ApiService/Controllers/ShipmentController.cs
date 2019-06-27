@@ -156,10 +156,15 @@ namespace AtService.Controllers
                             shipmentDataRequest.IN_FLG_TE = excelDataObject.S_inflight;
                             shipmentDataRequest.ORG_CTY_TE = excelDataObject.S_orgcity;
 
-                            int pstint = 0;
                             string pststring = Convert.ToString(excelDataObject.S_orgpsl);
-                            Int32.TryParse(Convert.ToString(excelDataObject.S_orgpsl),out pstint);
-                            shipmentDataRequest.ORG_PSL_CD = pstint == 0 ? pststring : pstint.ToString();
+                            if(InputValidations.IsDecimalFormat(pststring))
+                            {
+                                shipmentDataRequest.ORG_PSL_CD = Decimal.ToInt32(Decimal.Parse(pststring)).ToString();
+                            }
+                            else
+                            {
+                                shipmentDataRequest.ORG_PSL_CD = pststring;
+                            }
                             
                             // OU_FLG_TE = Convert.ToString(excelDataObject.S_outflight),
 
