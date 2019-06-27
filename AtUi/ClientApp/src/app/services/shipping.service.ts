@@ -24,8 +24,8 @@ export class ShippingService {
     return this.httpService.makeGetRequest('api/Shipment/GetMatchedShipmentsWithShipperCompanies?wid=' + WorkflowID);
   }
 
-  public getDataForCompleteComponent(WorkflowID: any): Observable<any> {
-    return this.httpService.makeGetRequest('api/Shipment/GetMatchedShipmentsWithShipperCompanies?wid=' + WorkflowID);
+  public getCompletedShipments(WorkflowID: any): Observable<any> {
+    return this.httpService.makeGetRequest('api/Shipment/GetCompletedShipments?wid=' + WorkflowID);
   }
 
   public sendDataForTranslate(data: any): Observable<any> {

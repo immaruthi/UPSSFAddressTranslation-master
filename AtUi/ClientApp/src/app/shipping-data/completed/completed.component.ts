@@ -55,7 +55,7 @@ export class CompletedComponent implements OnInit {
 
   getDataForCompleteComponent(WorkflowID: any) {
     this.ResponseData = [];
-    this.shippingService.getDataForCompleteComponent(WorkflowID).subscribe((response: any) => {
+    this.shippingService.getCompletedShipments(WorkflowID).subscribe((response: any) => {
       if (response.success === true) {
         this.ResponseData = response.shipments;
       } else {
