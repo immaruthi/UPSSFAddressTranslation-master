@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ShipmentDetails } from '../models/shipmentDetails';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Subject } from 'rxjs';
 
 /**
  * @title Basic table
@@ -11,6 +12,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   templateUrl: 'shipment.component.html',
 })
 export class ShipmentComponent {
+
+private eventsSubject: Subject<void> = new Subject<void>();
   isLinear = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
@@ -32,6 +35,9 @@ export class ShipmentComponent {
     this.fourthFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required]
     });
+  }
+  selectionChanged(event: any) {
+    this.eventsSubject.next();
   }
 }
 
