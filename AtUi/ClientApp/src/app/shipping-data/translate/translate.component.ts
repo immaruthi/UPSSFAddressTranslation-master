@@ -19,9 +19,9 @@ import { DialogService } from '../../services/dialog.service';
 
 export class TranslateComponent implements OnInit {
   displayedColumns =
-    ['select', 'actions', 'smT_STA_NR', 'pkG_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'shP_DT',
-      'shP_CPY_NA', 'fsT_INV_LN_DES_TE', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD',
-      'imP_SLC_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'coD_TE'
+    ['select', 'actions', 'smT_STA_NR', 'pkG_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'coN_NR', 'acY_TE',
+      'dsT_CTY_TE', 'dsT_PSL_TE', 'shP_CPY_NA', 'fsT_INV_LN_DES_TE', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE',
+      'orG_CTY_TE', 'orG_PSL_CD', 'imP_SLC_TE', 'coD_TE'
     ];
 
   public ResponseData: any[] = [];
@@ -30,6 +30,8 @@ export class TranslateComponent implements OnInit {
   dataSource = new MatTableDataSource<Element>();
   public errorMessage: string;
   selection = new SelectionModel<any>(true, []);
+  public mainData: any[] = [];
+  public checkedData: any[] = [];
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
     private router: Router, public dialog: MatDialog,
@@ -91,14 +93,19 @@ export class TranslateComponent implements OnInit {
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
+    const numRows = this.checkedData.length;
+    //const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
 
   masterToggle() {
-  this.isAllSelected() ?
-    this.selection.clear() :
-    this.dataSource.data.forEach(row => this.selection.select(row));
+    this.mainData = [];
+    this.checkedData = [];
+    this.dataSource.data.forEach(row => this.mainData.push(row));
+    this.checkedData = this.mainData.filter(data => (data.smT_STA_NR !== 2 && data.smT_STA_NR !== 3));
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.checkedData.forEach(row => this.selection.select(row));
   }
 
   /** The label for the checkbox on the passed row */
@@ -113,15 +120,15 @@ export class TranslateComponent implements OnInit {
   public sendForTranslate() {
     const checkedCount = this.selection.selected.length;
     if (checkedCount <= 0) {
-      this.dialogService.openAlertDialog('Please select atleast one row to Translate');
+      this.dialogService.openAlertDialog('Please select minimum one row to Translate.');
     } else {
       const dataForTranslate = this.selection.selected; // Any changes can do here for sending array
       this.shippingService.sendDataForTranslate(dataForTranslate).subscribe((response: any) => {
         this.getTranslateData(this.WorkflowID); // Can change this according to the response
-        this.openSuccessMessageNotification("Data Translated Successfully");
-      }, error => this.openErrorMessageNotification("Error while translating data"));
+        this.openSuccessMessageNotification("Shipment Address Translated Successfully.");
+        this.selection.clear();
+      }, error => this.openErrorMessageNotification("Error while Translating data."));
       console.log(dataForTranslate);
-      this.selection.clear();
     }
   }
 
@@ -155,9 +162,9 @@ export class TranslateComponent implements OnInit {
           shipmentDetailToUpdate.shP_ADR_TR_TE = response.shipmentDataRequest.shP_ADR_TR_TE;
           shipmentDetailToUpdate.coD_TE = response.shipmentDataRequest.coD_TE;
           shipmentDetailToUpdate.smT_STA_NR = response.shipmentDataRequest.smT_STA_NR;
-          this.openSuccessMessageNotification("Data Updated Successfully");
+          this.openSuccessMessageNotification("Data Updated Successfully.");
         },
-          error => this.openErrorMessageNotification("Error while updating data"))
+          error => this.openErrorMessageNotification("Error while updating data."))
       }
     });
   }
@@ -167,9 +174,9 @@ export class TranslateComponent implements OnInit {
       (response:any) => {
    
         console.log(response)
-        this.openSuccessMessageNotification("Address Translated Successfully");
+        this.openSuccessMessageNotification("Address Translated Successfully..");
         this.getTranslateData(this.WorkflowID);
     },
-      error => this.openErrorMessageNotification("Error while Translating data"));
+      error => this.openErrorMessageNotification("Error while Translating data."));
   };
 }
