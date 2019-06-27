@@ -26,6 +26,6 @@ namespace UPS.DataObjects.WR_FLW
         public int? UDT_BY_NR { get; set; }
 
         public string WFL_STA_TE_TEXT { get; set; }
-        public string USR_FST_NA { get; set; }
+        public string OWNER { get; set; }
     }
 }

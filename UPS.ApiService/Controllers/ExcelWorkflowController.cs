@@ -128,7 +128,7 @@ namespace AtService.Controllers
             {
                 WorkflowDataRequest exflow = new WorkflowDataRequest();
                 exflow.ID = Convert.ToInt32(reader[0]);
-                exflow.USR_FST_NA = reader["USR-FST-NA"].ToString();
+                exflow.OWNER = reader["USR-FST-NA"].ToString() + " "+ reader["USR-LST-NA"].ToString();
                 exflow.FLE_NA = reader["FLE-NA"].ToString();
                 exflow.WFL_STA_TE = Convert.ToInt32(reader["WFL-STA-TE"]);
                 if(exflow.WFL_STA_TE == 1)

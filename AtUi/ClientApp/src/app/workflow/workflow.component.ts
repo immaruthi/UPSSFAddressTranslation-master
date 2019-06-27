@@ -27,7 +27,7 @@ export class WorkflowComponent {
   file: File;
   fileToUpload: File = null;
   //displayedColumns = ['position', 'name', 'weight', 'symbol'];
-  displayedColumns = ['id', 'usR_FST_NA', 'flE_NA', /*'wfL_STA_TE',*/'wfL_STA_TE_TEXT', 'crD_DT'];
+  displayedColumns = ['id', 'owner', 'flE_NA', /*'wfL_STA_TE',*/'wfL_STA_TE_TEXT', 'crD_DT'];
   dataSource = new MatTableDataSource<Element>();
 
   fileNameControl = new FormControl('');
@@ -162,7 +162,7 @@ export class WorkflowComponent {
 
 export interface Element {
   id: number;
-  usR_FST_NA: string;
+  owner: string;
   
   //udT_DT: string;
   flE_NA: string;
