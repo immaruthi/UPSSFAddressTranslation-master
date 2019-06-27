@@ -35,7 +35,10 @@ namespace UPS.AddressTranslationService
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddCors();
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", options => options.WithOrigins("http://localhost:52406"));
+            });
 
             new GetConnectionString().getconnection(Configuration);
 
@@ -43,20 +46,20 @@ namespace UPS.AddressTranslationService
             // ********************
             // Setup CORS
             // ********************
-            var corsBuilder = new CorsPolicyBuilder();
-            corsBuilder.AllowAnyHeader();
-            corsBuilder.AllowAnyMethod();
-            corsBuilder.AllowAnyOrigin(); // For anyone access.
-            corsBuilder.WithOrigins("https://localhost:81"); // for a specific url. Don't add a forward slash on the end!
-            corsBuilder.WithOrigins("https://localhost:44330"); // for a specific url. Don't add a forward slash on the end!
+            //var corsBuilder = new CorsPolicyBuilder();
+            //corsBuilder.AllowAnyHeader();
+            //corsBuilder.AllowAnyMethod();
+            //corsBuilder.AllowAnyOrigin(); // For anyone access.
+            //corsBuilder.WithOrigins("https://localhost:81"); // for a specific url. Don't add a forward slash on the end!
+            //corsBuilder.WithOrigins("https://localhost:44330"); // for a specific url. Don't add a forward slash on the end!
+            //corsBuilder.WithOrigins("http://localhost:52406/api");
+            //corsBuilder.WithOrigins("https://atservicetest.azurewebsites.net"); // for a specific url. Don't add a forward slash on the end!
+            //corsBuilder.AllowCredentials();
 
-            corsBuilder.WithOrigins("https://atservicetest.azurewebsites.net"); // for a specific url. Don't add a forward slash on the end!
-            corsBuilder.AllowCredentials();
-
-            services.AddCors(options =>
-            {
-                options.AddPolicy("SiteCorsPolicy", corsBuilder.Build());
-            });
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy("SiteCorsPolicy", corsBuilder.Build());
+            //});
             //services.AddCors(options => { options.AddPolicy(MyAllowSpecificOrigins, builder => { builder.WithOrigins("https://atservicetest.azurewebsites.net", "https://addresstranslation.azurewebsites.net"); }); });
             //services.AddDbContext<UPSDataContext>(
             //    option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -116,8 +119,8 @@ namespace UPS.AddressTranslationService
             {
                 app.UseHsts();
             }
-
-            app.UseCors(builder => builder.AllowAnyOrigin());
+            app.UseCors(options => options.WithOrigins("http://localhost:52406"));
+            //app.UseCors(builder => builder.AllowAnyOrigin());
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
@@ -128,7 +131,8 @@ namespace UPS.AddressTranslationService
             //{
             //    await context.Response.WriteAsync("Hello World!");
             //});
-            app.UseCors("SiteCorsPolicy");
+            //app.UseCors("SiteCorsPolicy");
+         
         }
 
     }
