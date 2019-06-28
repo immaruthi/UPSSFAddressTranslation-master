@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using UPS.ServicesDataRepository;
 using UPS.ServicesDataRepository.DataContext;
+using UPS.ServicesDataRepository.OverrideDbContext;
 
 namespace UPS.AddressTranslationService
 {
@@ -40,7 +41,7 @@ namespace UPS.AddressTranslationService
                 c.AddPolicy("AllowAtUIOrigin", options => options.WithOrigins(Configuration["CorsEnableDomain:Domain"]));
             });
 
-            new GetConnectionString().getconnection(Configuration);
+            DBConnectionContext.getconnection(Configuration);
 
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

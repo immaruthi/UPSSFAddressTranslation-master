@@ -20,6 +20,7 @@ using AtService.Models;
 using System;
 using System.Net.Http.Headers;
 using System.Collections.Generic;
+using UPS.ServicesDataRepository.OverrideDbContext;
 
 namespace AtService.Controllers
 {
@@ -72,7 +73,7 @@ namespace AtService.Controllers
         public string SaveExcelFileInformation1(string excelFile,string EmpName)
         {
             int EMP_ID = GetEmpID(EmpName);
-            SqlConnection con = new SqlConnection(GetConnectionString.connectionString);
+            SqlConnection con = new SqlConnection(DBConnectionContext.connectionString);
             string query = "INSERT INTO dbo.[WR-FLW]([FLE-NA], [WFL-STA-TE],[CRD-DT],[UDT-DT],[CRD-BY-NR]) VALUES('" + excelFile + "', 1 ,'" + DateTime.Now.ToString("dd-MMM-yyyy") + "','" + DateTime.Now.ToString("dd-MMM-yyyy") + "', "+ EMP_ID+")";
             SqlCommand cmd = new SqlCommand(query, con);
             try
@@ -90,7 +91,7 @@ namespace AtService.Controllers
 
         public int GetEmpID(string Empname)
         {
-            SqlConnection conn = new SqlConnection(GetConnectionString.connectionString);
+            SqlConnection conn = new SqlConnection(DBConnectionContext.connectionString);
             conn.Open();
             //string query = "select * from [WR-FLW] inner join [USR] on USR.ID = [WR-FLW].[CRD-BY-NR] ";
             string query = "select ID from [USR] where [USR].[USR-EML-TE] ='"+Empname+"'";
@@ -111,7 +112,7 @@ namespace AtService.Controllers
             List<WorkflowDataRequest> excelWorkflowsLst = new List<WorkflowDataRequest>();
 
 
-            SqlConnection conn = new SqlConnection(GetConnectionString.connectionString);
+            SqlConnection conn = new SqlConnection(DBConnectionContext.connectionString);
             conn.Open();
             //string query = "select * from [WR-FLW] inner join [USR] on USR.ID = [WR-FLW].[CRD-BY-NR] ";
             string query = "select * from [WR-FLW] " +
@@ -168,7 +169,7 @@ namespace AtService.Controllers
             List<WorkflowDataRequest> excelWorkflowsLst = new List<WorkflowDataRequest>();
 
 
-            SqlConnection conn = new SqlConnection(GetConnectionString.connectionString);
+            SqlConnection conn = new SqlConnection(DBConnectionContext.connectionString);
             conn.Open();
             string query = "select * from [WR-FLW] inner join [USR] on USR.ID = [WR-FLW].[CRD-BY-NR] ";
             //string query = "select * from [WR-FLW] inner join [USR] on USR.ID = [WR-FLW].[CRD-BY-NR] where USR.ID = (select [ID] from [USR] where [USR].[USR-EML-TE]= '" + EmpID + "')";

@@ -25,7 +25,7 @@ namespace UPS.AddressTranslationService.Controllers
         public IEnumerable<string> Get()
         {
             //AuditEventEntry.WriteEntry(new Exception("This is test Message"));
-            //SqlConnection connection = new SqlConnection(GetConnectionString.connectionString);
+            //SqlConnection connection = new SqlConnection(DBConnectionContext.connectionString);
 
             //connection.Open();
 
