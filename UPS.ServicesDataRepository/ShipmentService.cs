@@ -197,7 +197,7 @@ namespace UPS.ServicesDataRepository
 
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
                 {
-                    i = context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid).Max(s => s.SMT_STA_NR);
+                    i = context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid).Min(s => s.SMT_STA_NR);
                     return i;
                 }
             }
