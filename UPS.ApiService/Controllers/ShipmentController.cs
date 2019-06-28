@@ -328,7 +328,19 @@ namespace AtService.Controllers
 
                     if (xmlDocumentShipmentResponseParser.Contains("<ERROR"))
                     {
-                        createOrderShipmentResponse.FailedToProcessShipments.Add(orderRequest.pkG_NR_TE);
+                        if (xmlDocumentShipmentResponseParser.Contains("8019"))
+                        {
+                            createOrderShipmentResponse.FailedToProcessShipments.Add("Customer order number(" + orderRequest.pkG_NR_TE + ") is already confirmed");
+                        }
+                        else if (xmlDocumentShipmentResponseParser.Contains("8016"))
+                        {
+
+                            createOrderShipmentResponse.FailedToProcessShipments.Add("Repeat order numbers ( " + orderRequest.pkG_NR_TE + " )");
+                        }
+                        else
+                        {
+                            createOrderShipmentResponse.FailedToProcessShipments.Add(orderRequest.pkG_NR_TE);
+                        }
                         workflowStatus = true;
                     }
                     else
