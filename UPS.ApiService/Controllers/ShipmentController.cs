@@ -472,7 +472,7 @@ namespace AtService.Controllers
                             if (
                                         !string.IsNullOrEmpty(geocodes[i].translated_adddress) 
                                     &&  geocodes[i].translated_adddress != "NA"
-                                    &&  string.Equals(shipmentWorkFlowRequest.Where(s => s.id == shipmentDataRequest.ID).FirstOrDefault().rcV_ADR_TE.Trim(),
+                                    &&  !string.Equals(shipmentWorkFlowRequest.Where(s => s.id == shipmentDataRequest.ID).FirstOrDefault().rcV_ADR_TE.Trim(),
                                         geocodes[i].translated_adddress.Trim())
                                )
                             {
