@@ -44,7 +44,7 @@
 
       <ng-container matColumnDef="smT_STA_NR" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell"> SHP Status </mat-header-cell>
-        <mat-cell *matCellDef="let element" class="cell"> {{shipmentStatusList[element.smT_STA_NR].value}} </mat-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{shipmentStatusList[element?.smT_STA_NR!=null ?element.smT_STA_NR:4].value}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="wfL_ID" class="container" hidden>
         <mat-header-cell *matHeaderCellDef class="header-cell" hidden> WFL Number </mat-header-cell>
