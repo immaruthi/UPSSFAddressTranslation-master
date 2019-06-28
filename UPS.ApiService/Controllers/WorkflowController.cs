@@ -33,7 +33,7 @@ namespace UPS.AddressTranslationService.Controllers
             workflowDataRequest.FLE_NA = fromFile.FileName;
             workflowDataRequest.CRD_BY_NR = Emp_Id;
             workflowDataRequest.CRD_DT = DateTime.Parse(DateTime.Now.ToString()).ToLocalTime();
-            workflowDataRequest.WFL_STA_TE = 1;
+            workflowDataRequest.WFL_STA_TE = 0;
             workflowService = new WorkflowService();
             workflowDataResponse = workflowService.InsertWorkflow(workflowDataRequest);
             return Ok(workflowDataResponse);

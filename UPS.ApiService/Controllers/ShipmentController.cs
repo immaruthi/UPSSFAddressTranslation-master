@@ -43,14 +43,16 @@ namespace AtService.Controllers
         private ShipmentDataResponse shipmentDataResponse;
 
         private ShipmentService shipmentService { get; set; }
+        private WorkflowService workflowService { get; set; }
         public ShipmentController(IConfiguration Configuration, IHostingEnvironment HostingEnvironment)
         {
             this.configuration = Configuration;
             this.hostingEnvironment = HostingEnvironment;
             shipmentService = new ShipmentService();
+            workflowService = new WorkflowService();
         }
 
-        private int _workflowID = 0;
+        private static int _workflowID = 0;
         [Route("ExcelFileUpload/{Emp_Id}")]
         [HttpPost]
         public async Task<ActionResult> ExcelFile(IList<IFormFile> excelFileName, int Emp_Id)
@@ -264,6 +266,14 @@ namespace AtService.Controllers
         {
             shipmentService = new ShipmentService();
             ShipmentDataResponse shipmentDataResponse = shipmentService.UpdateShipmentAddressById(shipmentDataRequest);
+
+            //we need to update the workflow status
+            int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);
+            WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
+            workflowDataRequest.ID = _workflowID;
+            workflowDataRequest.WFL_STA_TE = workflowstatus;
+            workflowService.UpdateWorkflowStatusById(workflowDataRequest);
+
             return Ok(shipmentDataResponse);
         }
 
@@ -286,7 +296,7 @@ namespace AtService.Controllers
             CreateOrderShipmentResponse createOrderShipmentResponse = new CreateOrderShipmentResponse();
             createOrderShipmentResponse.FailedToProcessShipments = new List<string>();
             createOrderShipmentResponse.ProcessedShipments = new List<string>();
-            bool workflowStatus = false;
+            ShipmentService shipmentService = new ShipmentService();
 
             //List<UIOrderRequestBodyData> uIOrderRequestBodyDatas = new List<UIOrderRequestBodyData>();
 
@@ -341,13 +351,11 @@ namespace AtService.Controllers
                         {
                             createOrderShipmentResponse.FailedToProcessShipments.Add(orderRequest.pkG_NR_TE);
                         }
-                        workflowStatus = true;
                     }
                     else
                     {
                         createOrderShipmentResponse.ProcessedShipments.Add(orderRequest.pkG_NR_TE);
 
-                        ShipmentService shipmentService = new ShipmentService();
                         ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
                         shipmentDataRequest.ID = orderRequest.id;
                         shipmentDataRequest.WFL_ID = orderRequest.wfL_ID;
@@ -355,11 +363,6 @@ namespace AtService.Controllers
                         _workflowID = orderRequest.wfL_ID;
 
                         shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
-
-                        if (!workflowStatus)
-                        {
-                            workflowStatus = false;
-                        }
                     }
 
                     createOrderShipmentResponse.Response = true;
@@ -367,18 +370,15 @@ namespace AtService.Controllers
                 else
                 {
                     createOrderShipmentResponse.Response = false;
-                    workflowStatus = false;
                 }
             }
-
-            if(_workflowID != 0 && !workflowStatus)
-            {
-                WorkflowService workflowService = new WorkflowService();
-                WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
-                workflowDataRequest.ID = _workflowID;
-                workflowDataRequest.WFL_STA_TE = ((int)Enums.ShipmentStatus.Completed);
-                workflowService.UpdateWorkflowStatusById(workflowDataRequest);
-            }
+            //we need to update the workflow status
+            int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);
+            WorkflowService workflowService = new WorkflowService();
+            WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
+            workflowDataRequest.ID = _workflowID;
+            workflowDataRequest.WFL_STA_TE = workflowstatus;
+            workflowService.UpdateWorkflowStatusById(workflowDataRequest);
             return Ok(createOrderShipmentResponse);
         }
 
@@ -477,6 +477,14 @@ namespace AtService.Controllers
                         }
                         ShipmentService shipmentService = new ShipmentService();
                         shipmentService.UpdateShipmentAddressByIds(shipmentsDataRequest);
+
+                        //we need to update the workflow status
+                        int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);
+                        WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
+                        workflowDataRequest.ID = _workflowID;
+                        workflowDataRequest.WFL_STA_TE = workflowstatus;
+                        workflowService.UpdateWorkflowStatusById(workflowDataRequest);
+
                         return Ok(QuincusResponse.QuincusReponseData);
                     }
                     else
