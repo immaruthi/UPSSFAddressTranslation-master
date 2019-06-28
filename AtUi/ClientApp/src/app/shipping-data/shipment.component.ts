@@ -13,7 +13,7 @@ import { Subject } from 'rxjs';
 })
 export class ShipmentComponent {
 
-private eventsSubject: Subject<void> = new Subject<void>();
+public eventsSubject: Subject<void> = new Subject<void>();
   isLinear = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;

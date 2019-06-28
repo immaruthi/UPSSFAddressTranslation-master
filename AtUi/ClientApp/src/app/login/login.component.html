@@ -19,7 +19,7 @@
       <form class="login-form" form id="loginbox" [formGroup]="registerForm" (ngSubmit)="onSubmit(ipUser.value,ipPwd.value)">
         <div class="form-group">
           <input #ipUser id="login-username" class="form-control usertxt" minlength="6" maxlength="10" type="text" placeholder="User ID" formControlName="userId" name="userId" value="" autofocus required>
-          <div class="div-alert" *ngIf="(registerForm.controls['userId'].touched || registerForm.controls['userId'].dirty || isFormSubmitted)">
+          <div class="div-alert" *ngIf="(registerForm.controls['userId'].touched || registerForm.controls['userId'].dirty)">
             <div *ngIf="registerForm.controls['userId']?.errors?.required" >
               User ID is required.
             </div>
@@ -32,7 +32,7 @@
         <div class="form-group">
           <input #ipPwd id="login-password" class="form-control pwdtxt" type="password" placeholder="Password" formControlName="password" required>
           <div class="div-alert" *ngIf="registerForm.controls['password']?.errors && (registerForm.controls['password'].touched ||
-              registerForm.controls['password'].dirty || isFormSubmitted)">
+              registerForm.controls['password'].dirty)">
             Password is required.
           </div>
         </div>
