@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using UPS.Quincus.APP.Common;
 using UPS.ServicesDataRepository;
 using UPS.ServicesDataRepository.DataContext;
 using UPS.ServicesDataRepository.OverrideDbContext;
@@ -42,6 +43,10 @@ namespace UPS.AddressTranslationService
             });
 
             DBConnectionContext.getconnection(Configuration);
+            MapProxy.webProxyURI = Configuration["webProxy:URL"];
+            MapProxy.webProxyUsername = Configuration["webProxy:Username"];
+            MapProxy.webProxyPassword = Configuration["webProxy:Password"];
+            MapProxy.WebProxyEnable = Configuration["webProxy:Enable"];
 
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

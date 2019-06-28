@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using UPS.Quincus.APP.Common;
 using UPS.Quincus.APP.Request;
 using UPS.Quincus.APP.Response;
 
@@ -10,6 +12,16 @@ namespace UPS.Quincus.APP.ProxyConnections
 {
     public class SFExpressProxy
     {
+
+        private HttpClientHandler GetHttpClientHandler()
+        {
+            WebProxy myProxy = new WebProxy(MapProxy.webProxyURI, false, null, new NetworkCredential(MapProxy.webProxyUsername, MapProxy.webProxyPassword));
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            httpClientHandler.Proxy = myProxy;
+
+            return httpClientHandler;
+        }
+
         public async Task<GetSFCreateOrderServiceResponse> getSFCreateOrderServiceResponse(SFCreateOrderServiceRequest sFCreateOrderServiceRequest)
         {
             GetSFCreateOrderServiceResponse getSFCreateOrderServiceResponse = new GetSFCreateOrderServiceResponse();
@@ -33,8 +45,18 @@ namespace UPS.Quincus.APP.ProxyConnections
                 keyValuePairs = map;
 
                 string resultContent = string.Empty;
+                HttpClient httpClient = null;
 
-                using (var client = new HttpClient())
+                if (string.Equals(MapProxy.WebProxyEnable, false.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    httpClient = new HttpClient();
+                }
+                else
+                {
+                    httpClient = new HttpClient(GetHttpClientHandler());
+                }
+
+                using (var client = httpClient)
                 {
                     client.BaseAddress = new Uri(sFCreateOrderServiceRequest.BaseURI);
                     var content = new FormUrlEncodedContent(keyValuePairs);
@@ -81,7 +103,18 @@ namespace UPS.Quincus.APP.ProxyConnections
 
                 string resultContent = string.Empty;
 
-                using (var client = new HttpClient())
+                HttpClient httpClient = null;
+
+                if (string.Equals(MapProxy.WebProxyEnable, false.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    httpClient = new HttpClient();
+                }
+                else
+                {
+                    httpClient = new HttpClient(GetHttpClientHandler());
+                }
+
+                using (var client = httpClient) 
                 {
                     client.BaseAddress = new Uri(sFCancelOrderServiceRequest.BaseURI);
                     var content = new FormUrlEncodedContent(keyValuePairs);

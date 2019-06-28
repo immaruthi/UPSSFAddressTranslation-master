@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using UPS.DataObjects.Shipment;
+using UPS.Quincus.APP.Common;
 using UPS.Quincus.APP.Configuration;
 using UPS.Quincus.APP.Request;
 using UPS.Quincus.APP.Response;
@@ -21,6 +22,11 @@ namespace UPS.Quincus.APP.ProxyConnections
             try
             {
                 var httpWebRequest = (HttpWebRequest)WebRequest.Create(quincusParams.endpoint);
+                if (string.Equals(MapProxy.WebProxyEnable, true.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    WebProxy myProxy = new WebProxy(MapProxy.webProxyURI, false, null, new NetworkCredential(MapProxy.webProxyUsername, MapProxy.webProxyPassword));
+                    httpWebRequest.Proxy = myProxy;
+                }
                 httpWebRequest.ContentType = "application/json";
                 httpWebRequest.Method = "POST";
                 using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
@@ -72,6 +78,12 @@ namespace UPS.Quincus.APP.ProxyConnections
 
                     var httpWebRequest = (HttpWebRequest)WebRequest.Create(
                         quincusAddressTranslationRequest.endpoint);
+                    if (string.Equals(MapProxy.WebProxyEnable,true.ToString(),StringComparison.OrdinalIgnoreCase))
+                    {
+                        WebProxy myProxy = new WebProxy(MapProxy.webProxyURI, false, null, new NetworkCredential(MapProxy.webProxyUsername, MapProxy.webProxyPassword));
+
+                        httpWebRequest.Proxy = myProxy;
+                    }
                     httpWebRequest.ContentType = "application/json";
                     httpWebRequest.Headers.Add("AUTHORIZATION", "JWT " + quincusAddressTranslationRequest.token);
                     httpWebRequest.Method = "POST";
@@ -115,6 +127,11 @@ namespace UPS.Quincus.APP.ProxyConnections
             {
                 var httpWebRequest = (HttpWebRequest)WebRequest.Create(
                     quincusGeoCodeDataRequest.endpoint + quincusGeoCodeDataRequest.id + "/");
+                if (string.Equals(MapProxy.WebProxyEnable, true.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    WebProxy myProxy = new WebProxy(MapProxy.webProxyURI, false, null, new NetworkCredential(MapProxy.webProxyUsername, MapProxy.webProxyPassword));
+                    httpWebRequest.Proxy = myProxy;
+                }
                 httpWebRequest.ContentType = "application/json";
                 httpWebRequest.Headers.Add("AUTHORIZATION", "JWT " + quincusGeoCodeDataRequest.quincusTokenData.token);
                 httpWebRequest.Method = "GET";
