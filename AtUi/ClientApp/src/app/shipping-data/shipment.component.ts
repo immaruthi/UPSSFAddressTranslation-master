@@ -37,36 +37,6 @@ public eventsSubject: Subject<void> = new Subject<void>();
     });
   }
   selectionChanged(event: any) {
-    this.eventsSubject.next();
+    this.eventsSubject.next(event);
   }
 }
-
-
-const ELEMENT_DATA: ShipmentDetails[] = [
-  {
-    WFL_ID: 1, SMT_NR_TE: '', SHP_DT: '', SHP_CPY_NA: '', SHP_ADR_TE: '', ORG_CTY_TE: '',
-    ORG_PSL_CD: '', RCV_CPY_TE: '', RCV_ADR_TE: '', DST_CTY_TE: '', DST_PSL_TE:''
-  },
-  {
-    WFL_ID: 2, SMT_NR_TE: '', SHP_DT: '', SHP_CPY_NA: '', SHP_ADR_TE: '', ORG_CTY_TE: '',
-    ORG_PSL_CD: '', RCV_CPY_TE: '', RCV_ADR_TE: '', DST_CTY_TE: '', DST_PSL_TE: ''
-  },
-  {
-    WFL_ID: 3, SMT_NR_TE: '', SHP_DT: '', SHP_CPY_NA: '', SHP_ADR_TE: '', ORG_CTY_TE: '',
-    ORG_PSL_CD: '', RCV_CPY_TE: '', RCV_ADR_TE: '', DST_CTY_TE: '', DST_PSL_TE: ''
-  },
-  {
-    WFL_ID: 4, SMT_NR_TE: '', SHP_DT: '', SHP_CPY_NA: '', SHP_ADR_TE: '', ORG_CTY_TE: '',
-    ORG_PSL_CD: '', RCV_CPY_TE: '', RCV_ADR_TE: '', DST_CTY_TE: '', DST_PSL_TE: ''
-  },
-  {
-    WFL_ID: 5, SMT_NR_TE: '', SHP_DT: '', SHP_CPY_NA: '', SHP_ADR_TE: '', ORG_CTY_TE: '',
-    ORG_PSL_CD: '', RCV_CPY_TE: '', RCV_ADR_TE: '', DST_CTY_TE: '', DST_PSL_TE: ''
-  },
-  {
-    WFL_ID: 6, SMT_NR_TE: '', SHP_DT: '', SHP_CPY_NA: '', SHP_ADR_TE: '', ORG_CTY_TE: '',
-    ORG_PSL_CD: '', RCV_CPY_TE: '', RCV_ADR_TE: '', DST_CTY_TE: '', DST_PSL_TE: ''
-  },
-
-  
-];

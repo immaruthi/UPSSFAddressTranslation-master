@@ -11,6 +11,7 @@ import { DataService } from '../../services/data.service';
 import { DialogService } from '../../services/dialog.service';
 import { Observable } from 'rxjs';
 import { ExcelService } from '../../services/ExcelExport';
+import { MatStepperTab } from '../../shared/enums.service';
 
 @Component({
   selector: 'app-completed',
@@ -55,12 +56,12 @@ export class CompletedComponent implements OnInit {
 
   ngOnInit() {
     this.WorkflowID = this.activatedRoute.snapshot.params.WorkflowID;
-    if (this.WorkflowID) {
-      this.getCompletedShipments(this.WorkflowID);
-    }
-
-    this.eventsSubscription = this.events.subscribe(() => {
-      this.getCompletedShipments(this.WorkflowID)
+    this.eventsSubscription = this.events.subscribe((event:any) => {
+      let selectedTabIndex = event.selectedIndex;
+      if (this.WorkflowID && selectedTabIndex == MatStepperTab.CompletedTab) {
+        this.getCompletedShipments(this.WorkflowID);
+      }
+      
     });
   }
 

@@ -10,6 +10,7 @@ import { ShipmentDetails } from '../../models/shipmentDetails';
 import { Constants } from '../../shared/Constants';
 import { DialogService } from '../../services/dialog.service';
 import { Observable } from 'rxjs';
+import { MatStepperTab } from '../../shared/enums.service';
 
 
 @Component({
@@ -46,23 +47,18 @@ export class TranslateComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  /**
-  * Set the paginator after the view init since this component will
-  * be able to query its view for the initialized paginator.
-  */
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
 
   ngOnInit() {   
     this.WorkflowID = this.activatedRoute.snapshot.params.WorkflowID;
-    if (this.WorkflowID) {
-      this.getTranslateData(this.WorkflowID);
-    }
-
-    this.eventsSubscription = this.events.subscribe(() =>
+    this.eventsSubscription = this.events.subscribe((event:any) =>
     {
-      this.getTranslateData(this.WorkflowID)
+      let selectedTabIndex = event.selectedIndex;
+      if (this.WorkflowID && selectedTabIndex == MatStepperTab.TranslatedTab ) {
+        this.getTranslateData(this.WorkflowID)
+      }
     });
   }
 
@@ -107,7 +103,6 @@ export class TranslateComponent implements OnInit {
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.checkedData.length;
-    //const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
 
@@ -161,7 +156,6 @@ export class TranslateComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
         let updatedDetails = this.dataService.getDialogData();
-        debugger
         const details = {
           SHP_ADR_TR_TE: updatedDetails.shP_ADR_TR_TE,
           COD_TE: updatedDetails.coD_TE,
@@ -170,7 +164,6 @@ export class TranslateComponent implements OnInit {
         }
 
         this.shippingService.UpdateShippingAddress(details).subscribe((response: any) => {
-          debugger;
           console.log(response)
           shipmentDetailToUpdate.shP_ADR_TR_TE = response.shipmentDataRequest.shP_ADR_TR_TE;
           shipmentDetailToUpdate.coD_TE = response.shipmentDataRequest.coD_TE;

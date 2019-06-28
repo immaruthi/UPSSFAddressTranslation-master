@@ -11,6 +11,7 @@ import { DataService } from '../../services/data.service';
 import { DialogService } from '../../services/dialog.service';
 import { Observable } from 'rxjs';
 import { ExcelService } from '../../services/ExcelExport';
+import { MatStepperTab } from '../../shared/enums.service';
 
 @Component({
   selector: 'app-sent-to-sf',
@@ -56,11 +57,12 @@ export class SentToSfComponent implements OnInit {
 
   ngOnInit() {
     this.WorkflowID = this.activatedRoute.snapshot.params.WorkflowID;
-    if (this.WorkflowID) {
-      this.getDataForSendToSF(this.WorkflowID);
-    }
-    this.eventsSubscription = this.events.subscribe(() => {
-      this.getDataForSendToSF(this.WorkflowID)
+    this.eventsSubscription = this.events.subscribe((event: any) => {
+      let selectedTabIndex = event.selectedIndex;
+      if (this.WorkflowID && selectedTabIndex == MatStepperTab.SendToSFTab) {
+        this.getDataForSendToSF(this.WorkflowID);
+      }
+     
     });
   }
 

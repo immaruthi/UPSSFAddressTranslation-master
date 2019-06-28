@@ -45,7 +45,6 @@ export class HttpService {
  * @returns {Observable<any>}
  */
   makePostRequestWithList(url: string, shipmentWorkFlowRequest?: any[]): Observable<any> {
-    debugger;
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     return this._http.post(this.LOCAL_API_URL + url, shipmentWorkFlowRequest)
       .map((response) => {
