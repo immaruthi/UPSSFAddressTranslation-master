@@ -15,7 +15,7 @@ namespace UPS.DataObjects.WR_FLW
         [Column("FLE-NA")]
         public string FLE_NA { get; set; }
         [Column("WFL-STA-TE")]
-        public int WFL_STA_TE { get; set; }
+        public int? WFL_STA_TE { get; set; }
         [Column("CRD-DT")]
         public DateTime? CRD_DT { get; set; }
         [Column("UDT-DT")]

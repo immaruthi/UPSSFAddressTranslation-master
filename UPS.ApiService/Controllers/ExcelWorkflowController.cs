@@ -135,21 +135,21 @@ namespace AtService.Controllers
                 exflow.CRD_DT = reader["CRD-DT"] != null && reader["CRD-DT"].ToString() != string.Empty ? Convert.ToDateTime(reader["CRD-DT"].ToString()): DateTime.Now;
                 exflow.UDT_DT = reader["UDT-DT"] != null && reader["UDT-DT"].ToString() != string.Empty ? Convert.ToDateTime(reader["UDT-DT"].ToString()): DateTime.Now;
 
-                if (exflow.WFL_STA_TE == 1)
+                if (exflow.WFL_STA_TE == 0)
                 {
-                    exflow.WFL_STA_TE_TEXT = "Created";
+                    exflow.WFL_STA_TE_TEXT = "Created"; //Uploaded
+                }
+                else if (exflow.WFL_STA_TE == 1)
+                {
+                    exflow.WFL_STA_TE_TEXT = "InProgress"; //Curated 
                 }
                 else if (exflow.WFL_STA_TE == 2)
                 {
-                    exflow.WFL_STA_TE_TEXT = "InProgress";
+                    exflow.WFL_STA_TE_TEXT = "InActive"; //Translated
                 }
-                else if (exflow.WFL_STA_TE == 3)
+                else if(exflow.WFL_STA_TE == 3)
                 {
-                    exflow.WFL_STA_TE_TEXT = "InActive";
-                }
-                else
-                {
-                    exflow.WFL_STA_TE_TEXT = "Done";
+                    exflow.WFL_STA_TE_TEXT = "Done"; //Done
                 }
 
                 excelWorkflowsLst.Add(exflow);

@@ -187,6 +187,26 @@ namespace UPS.ServicesDataRepository
             return shipmentDataResponse;
         }
 
+        public int? SelectShipmentTotalStatusByWorkflowId(int wid)
+        {
+            int? i = 0;
+            try
+            {
+                optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+                optionsBuilder.EnableSensitiveDataLogging(true);
+
+                using (var context = new ApplicationDbContext(optionsBuilder.Options))
+                {
+                    i = context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid).Max(s => s.SMT_STA_NR);
+                    return i;
+                }
+            }
+            catch
+            {
+                return i;
+            }
+        }
+
         public ShipmentDataResponse UpdateShipmentAddressById(ShipmentDataRequest shipmentDataRequest)
         {
             ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
