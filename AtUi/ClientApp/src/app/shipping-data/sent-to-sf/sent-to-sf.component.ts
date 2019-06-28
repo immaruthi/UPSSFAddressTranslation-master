@@ -10,6 +10,7 @@ import { AddressEditModelComponent } from '../address-edit-model/address-edit-mo
 import { DataService } from '../../services/data.service';
 import { DialogService } from '../../services/dialog.service';
 import { Observable } from 'rxjs';
+import { ExcelService } from '../../services/ExcelExport';
 
 @Component({
   selector: 'app-sent-to-sf',
@@ -34,10 +35,13 @@ export class SentToSfComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
   public mainData: any[] = [];
   public checkedData: any[] = [];
+  public tableData: any[] = [];
+  public excelMainData: any[] = [];
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
     private router: Router, public dialog: MatDialog, public dataService: DataService,
-    private snackBar: MatSnackBar, private dialogService: DialogService) {
+    private snackBar: MatSnackBar, private dialogService: DialogService,
+    private excelService: ExcelService) {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -196,5 +200,40 @@ export class SentToSfComponent implements OnInit {
         horizontalPosition: "right",
         extraClasses: 'custom-class-error'
       });
+  }
+
+  SFexportToExcel() {
+    this.tableData = [];
+    this.excelMainData = [];
+    this.tableData = this.dataSource.data;
+    if (this.tableData.length > 0) {
+      for (let data of this.tableData) {
+        this.excelMainData.push(
+          {
+            'SHP Status': this.shipmentStatusList[data.smT_STA_NR].value,
+            'Package Number': data.pkG_NR_TE,
+            'Receiving Company': data.rcV_CPY_TE,
+            'Receiving Address': data.rcV_ADR_TE,
+            'Translated Address': data.shP_ADR_TR_TE,
+            'Receiving City': data.dsT_CTY_TE,
+            'Receiving Postal Code': data.dsT_PSL_TE,
+            'Specification': data.fsT_INV_LN_DES_TE,
+            'SHP Company Name': data.shP_CPY_NA,
+            'SHP Address': data.shP_ADR_TE,
+            'SHP Contact': data.shP_CTC_TE,
+            'SHP Phone': data.shP_PH_TE,
+            'Origin City': data.orG_CTY_TE,
+            'Origin Postal code': data.orG_PSL_CD,
+            'IMP SLC': data.imP_SLC_TE,
+            'COD': data.coD_TE,
+            'Payment Method': data.pyM_MTD,
+            'Express Type': data.exP_TYP,
+            'Slic': data.spC_SLIC_NR
+          })
+      }
+    } else {
+      this.dialogService.openAlertDialog('No data for export.');
+    }    
+    this.excelService.exportAsExcelFile(this.excelMainData, 'SendToSF');
   }
 }

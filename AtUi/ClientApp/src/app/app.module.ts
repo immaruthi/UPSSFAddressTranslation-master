@@ -55,6 +55,7 @@ import { EditModeDirective } from './shared/editable/edit-mode.directive';
 import { ViewModeDirective } from './shared/editable/view-mode.directive';
 import { EditOnEnterDirective } from './shared/editable/edit-on-enter.directive';
 import { AddressEditModelComponent } from './shipping-data/address-edit-model/address-edit-model.component';
+import { DatePipe } from '@angular/common'
 
 @NgModule({
   declarations: [
@@ -106,6 +107,7 @@ import { AddressEditModelComponent } from './shipping-data/address-edit-model/ad
       ShippingService,
       HttpService,
     LoaderService,
+    DatePipe,
     DataService,
     {
       provide: HTTP_INTERCEPTORS,
