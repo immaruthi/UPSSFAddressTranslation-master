@@ -139,17 +139,13 @@ namespace AtService.Controllers
                 {
                     exflow.WFL_STA_TE_TEXT = "Created"; //Uploaded
                 }
-                else if (exflow.WFL_STA_TE == 1)
+                else if (exflow.WFL_STA_TE == 1 || exflow.WFL_STA_TE == 2)
                 {
-                    exflow.WFL_STA_TE_TEXT = "InProgress"; //Curated 
-                }
-                else if (exflow.WFL_STA_TE == 2)
-                {
-                    exflow.WFL_STA_TE_TEXT = "InActive"; //Translated
+                    exflow.WFL_STA_TE_TEXT = "InProgress"; //Curated || Translated
                 }
                 else if(exflow.WFL_STA_TE == 3)
                 {
-                    exflow.WFL_STA_TE_TEXT = "Done"; //Done
+                    exflow.WFL_STA_TE_TEXT = "Completed"; //Done
                 }
 
                 excelWorkflowsLst.Add(exflow);

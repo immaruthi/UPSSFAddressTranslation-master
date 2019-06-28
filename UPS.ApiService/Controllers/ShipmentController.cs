@@ -268,9 +268,9 @@ namespace AtService.Controllers
             ShipmentDataResponse shipmentDataResponse = shipmentService.UpdateShipmentAddressById(shipmentDataRequest);
 
             //we need to update the workflow status
-            int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);
+            int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(shipmentDataRequest.WFL_ID);
             WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
-            workflowDataRequest.ID = _workflowID;
+            workflowDataRequest.ID = shipmentDataRequest.WFL_ID;
             workflowDataRequest.WFL_STA_TE = workflowstatus;
             workflowService.UpdateWorkflowStatusById(workflowDataRequest);
 
@@ -469,7 +469,12 @@ namespace AtService.Controllers
                             shipmentDataRequest.ACY_TE = geocodes[i].accuracy;
                             shipmentDataRequest.CON_NR = geocodes[i].confidence;
 
-                            if (geocodes[i].translated_adddress != "NA")
+                            if (
+                                        !string.IsNullOrEmpty(geocodes[i].translated_adddress) 
+                                    &&  geocodes[i].translated_adddress != "NA"
+                                    &&  string.Equals(shipmentWorkFlowRequest.Where(s => s.id == shipmentDataRequest.ID).FirstOrDefault().rcV_ADR_TE.Trim(),
+                                        geocodes[i].translated_adddress.Trim())
+                               )
                             {
                                 shipmentDataRequest.SMT_STA_NR = ((int)Enums.ShipmentStatus.Translated);
                             }
