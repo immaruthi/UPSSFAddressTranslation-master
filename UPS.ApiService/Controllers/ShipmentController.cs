@@ -478,6 +478,10 @@ namespace AtService.Controllers
                             {
                                 shipmentDataRequest.SMT_STA_NR = ((int)Enums.ShipmentStatus.Translated);
                             }
+                            else
+                            {
+                                shipmentDataRequest.SMT_STA_NR = Convert.ToInt32(shipmentWorkFlowRequest.Where(s => s.id == shipmentDataRequest.ID).FirstOrDefault().smT_STA_NR);
+                            }
                             shipmentsDataRequest.Add(shipmentDataRequest);
                         }
                         ShipmentService shipmentService = new ShipmentService();
