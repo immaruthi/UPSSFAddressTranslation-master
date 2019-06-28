@@ -7,6 +7,7 @@ import { ShippingService } from '../../services/shipping.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Constants } from '../../shared/Constants';
 import { Observable } from 'rxjs';
+import { MatStepperTab } from '../../shared/enums.service';
 
 @Component({
   selector: 'app-uploaded-data',
@@ -50,8 +51,12 @@ export class UploadedDataComponent implements OnInit {
     if (this.WorkflowID) {
       this.getUploadedData(this.WorkflowID);
     }
-    this.eventsSubscription = this.events.subscribe(() => {
-      this.getUploadedData(this.WorkflowID)
+    this.eventsSubscription = this.events.subscribe((event :any) => {
+      let selectedTabIndex = event.selectedIndex;
+      if (this.WorkflowID && selectedTabIndex == MatStepperTab.UploadedTab) {
+        this.getUploadedData(this.WorkflowID);
+      }
+      
     });
   }
 
