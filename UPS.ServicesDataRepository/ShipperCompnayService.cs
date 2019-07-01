@@ -27,14 +27,6 @@ namespace UPS.ServicesDataRepository
 
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
                 {
-                    int scount = context.shipmentDataRequests.Count();
-                    int ccount = context.shipperCompanyRequests.Count();
-
-                    List<ShipmentDataRequest> sRequest = new List<ShipmentDataRequest>();
-                    sRequest = context.shipmentDataRequests.ToList();
-                    List<ShipperCompanyRequest> cRequest = new List<ShipperCompanyRequest>();
-                    cRequest = context.shipperCompanyRequests.ToList();
-
                     shipmentDataRequests = new List<ShipmentDataRequest>();
                     var anonymousList =
                         (
@@ -43,6 +35,7 @@ namespace UPS.ServicesDataRepository
                             s.WFL_ID == workflowID 
                             && (s.SMT_STA_NR == (int)Enums.ATStatus.Translated
                             || s.SMT_STA_NR == (int)Enums.ATStatus.Curated)
+                            orderby s.ID
                             select new
                             {
                                 s.ID,
@@ -63,7 +56,7 @@ namespace UPS.ServicesDataRepository
                                 s.IMP_SLC_TE,
                                 s.IN_FLG_TE,
                                 ORG_CTY_TE = c.SPC_CTY_TE,
-                                s.ORG_PSL_CD,
+                                ORG_PSL_CD = c.SPC_PSL_CD_TE,
                                 s.OU_FLG_TE,
                                 s.PCS_QTY_NR,
                                 s.PH_NR,
@@ -79,7 +72,7 @@ namespace UPS.ServicesDataRepository
                                 SHP_ADR_TE = c.SPC_ADR_TE,
                                 s.SHP_ADR_TR_TE,
                                 SHP_CPY_NA = c.SPC_CPY_TE,
-                                SHP_CTC_TE = c.SPC_SND_PTY_CTC_TE,
+                                SHP_CTC_TE = c.SPC_NA,
                                 s.SHP_DT,
                                 s.SHP_NR,
                                 SHP_PH_TE = c.SPC_CTC_PH,
@@ -167,14 +160,6 @@ namespace UPS.ServicesDataRepository
 
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
                 {
-                    int scount = context.shipmentDataRequests.Count();
-                    int ccount = context.shipperCompanyRequests.Count();
-
-                    List<ShipmentDataRequest> sRequest = new List<ShipmentDataRequest>();
-                    sRequest = context.shipmentDataRequests.ToList();
-                    List<ShipperCompanyRequest> cRequest = new List<ShipperCompanyRequest>();
-                    cRequest = context.shipperCompanyRequests.ToList();
-
                     shipmentDataRequests = new List<ShipmentDataRequest>();
                     var anonymousList =
                         (
@@ -183,6 +168,7 @@ namespace UPS.ServicesDataRepository
                             where s.WFL_ID == workflowID
                             && s.SMT_STA_NR == ((int)Enums.ATStatus.Completed)
                             && s.SMT_STA_NR != ((int)Enums.ATStatus.Inactive)
+                            orderby s.ID
                             select new
                             {
                                 s.ID,
@@ -203,7 +189,7 @@ namespace UPS.ServicesDataRepository
                                 s.IMP_SLC_TE,
                                 s.IN_FLG_TE,
                                 ORG_CTY_TE = c.SPC_CTY_TE,
-                                s.ORG_PSL_CD,
+                                ORG_PSL_CD = c.SPC_PSL_CD_TE,
                                 s.OU_FLG_TE,
                                 s.PCS_QTY_NR,
                                 s.PH_NR,
@@ -219,7 +205,7 @@ namespace UPS.ServicesDataRepository
                                 SHP_ADR_TE = c.SPC_ADR_TE,
                                 s.SHP_ADR_TR_TE,
                                 SHP_CPY_NA = c.SPC_CPY_TE,
-                                SHP_CTC_TE = c.SPC_SND_PTY_CTC_TE,
+                                SHP_CTC_TE = c.SPC_NA,
                                 s.SHP_DT,
                                 s.SHP_NR,
                                 SHP_PH_TE = c.SPC_CTC_PH,
