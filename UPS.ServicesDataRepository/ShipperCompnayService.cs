@@ -188,7 +188,6 @@
                             join c in context.shipperCompanyRequests on s.DST_PSL_TE equals c.SPC_PSL_CD_TE where s.WFL_ID == workflowID
                             where s.WFL_ID == workflowID
                             && s.SMT_STA_NR == ((int)Enums.ATStatus.Completed)
-                            && s.SMT_STA_NR != ((int)Enums.ATStatus.Inactive)
                             orderby s.ID
                             select new
                             {

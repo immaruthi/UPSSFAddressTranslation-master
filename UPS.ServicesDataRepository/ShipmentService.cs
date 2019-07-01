@@ -32,6 +32,8 @@ namespace UPS.ServicesDataRepository
                         (
                             from s in context.shipmentDataRequests
                             where s.WFL_ID == workflowID 
+                            && s.SMT_STA_NR != (int)Enums.ATStatus.Completed
+                            && s.SMT_STA_NR != (int)Enums.ATStatus.Inactive
                             orderby s.ID
                             select new
                             {
