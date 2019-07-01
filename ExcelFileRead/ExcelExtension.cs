@@ -15,7 +15,7 @@ namespace ExcelFileRead
     {
         public string ExcelExtensionReponseData { get; set; }
 
-        public bool Response { get; set; }
+        public bool success { get; set; }
 
         public Exception exception { get; set; }
     }
@@ -127,7 +127,7 @@ namespace ExcelFileRead
                     result.AcceptChanges();
                     JSONString = JsonConvert.SerializeObject(result.Tables[0]);
                     excelExtensionReponse.ExcelExtensionReponseData = JSONString;
-                    excelExtensionReponse.Response = true;
+                    excelExtensionReponse.success = true;
                 }
                 else
                 {

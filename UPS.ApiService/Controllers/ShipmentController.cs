@@ -89,7 +89,7 @@ namespace AtService.Controllers
 
 
                             ExcelExtensionReponse excelExtensionReponse = new ExcelExtension().Test(filePath);
-                            if (excelExtensionReponse.Response)
+                            if (excelExtensionReponse.success)
                             {
                                 var excelDataObject2 = JsonConvert.DeserializeObject<List<ExcelDataObject>>(excelExtensionReponse.ExcelExtensionReponseData);
                                 WorkflowController workflowController = new WorkflowController();
@@ -111,7 +111,7 @@ namespace AtService.Controllers
                             }
                             else
                             {
-                                return Ok(excelExtensionReponse.exception);
+                                return Ok(excelExtensionReponse);
                             }
                         }
                     }
