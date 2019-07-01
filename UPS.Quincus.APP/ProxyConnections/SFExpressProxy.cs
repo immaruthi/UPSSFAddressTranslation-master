@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using UPS.Quincus.APP.Common;
-using UPS.Quincus.APP.Request;
-using UPS.Quincus.APP.Response;
-
-namespace UPS.Quincus.APP.ProxyConnections
+﻿namespace UPS.Quincus.APP.ProxyConnections
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading.Tasks;
+    using UPS.Quincus.APP.Common;
+    using UPS.Quincus.APP.Request;
+    using UPS.Quincus.APP.Response;
+
     public class SFExpressProxy
     {
 
@@ -82,7 +81,7 @@ namespace UPS.Quincus.APP.ProxyConnections
         public async Task<GetSFCancelOrderServiceResponse> getSFCancelOrderServiceResponse(SFCancelOrderServiceRequest sFCancelOrderServiceRequest)
         {
             GetSFCancelOrderServiceResponse getSFCancelOrderServiceResponse = new GetSFCancelOrderServiceResponse();
-            //string verifyText = sFCreateOrderServiceRequest.Checkword;
+
             try
             {
                 string toVerifyText = sFCancelOrderServiceRequest.RequestOrderXMLMessage + sFCancelOrderServiceRequest.AccessNumber;
@@ -136,9 +135,5 @@ namespace UPS.Quincus.APP.ProxyConnections
 
             return getSFCancelOrderServiceResponse;
         }
-
-
-
-
     }
 }

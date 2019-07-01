@@ -6,7 +6,7 @@
 
 mat-table {
   width: 100%;
-  min-width: 2900px;
+  min-width: 3100px;
   padding: 0;
 }
 
@@ -37,7 +37,7 @@ mat-header-cell {
 }
 
 /*SHP Company Name*/
-mat-cell:nth-child(9) {
+mat-cell:nth-child(10) {
   padding: 0px 15px 0px 15px;
   width: 200px;
   flex: none;
@@ -46,7 +46,7 @@ mat-cell:nth-child(9) {
 }
 
 /*SHP Company Name*/
-mat-header-cell:nth-child(9) {
+mat-header-cell:nth-child(10) {
   padding: 0px 15px 0px 15px;
   width: 200px;
   flex: none;
@@ -54,7 +54,7 @@ mat-header-cell:nth-child(9) {
   font-weight: bold;
 }
 /*package Number*/
-mat-cell:nth-child(2) {
+mat-cell:nth-child(3) {
   padding: 0px 15px 0px 15px;
   width: 180px;
   flex: none;
@@ -63,7 +63,7 @@ mat-cell:nth-child(2) {
 }
 
 /*package Number*/
-mat-header-cell:nth-child(2) {
+mat-header-cell:nth-child(3) {
   padding: 0px 15px 0px 15px;
   width: 180px;
   flex: none;
@@ -72,7 +72,7 @@ mat-header-cell:nth-child(2) {
 }
 
 /*SHP Address*/
-mat-cell:nth-child(10) {
+mat-cell:nth-child(11) {
   padding: 0px 15px 0px 15px;
   width: 250px;
   flex: none;
@@ -81,7 +81,7 @@ mat-cell:nth-child(10) {
 }
 
 /*SHP Address*/
-mat-header-cell:nth-child(10) {
+mat-header-cell:nth-child(11) {
   padding: 0px 15px 0px 15px;
   width: 250px;
   flex: none;
@@ -90,24 +90,6 @@ mat-header-cell:nth-child(10) {
 }
 
 /*Receiving Company*/
-mat-cell:nth-child(3) {
-  padding: 0px 15px 0px 15px;
-  width: 250px;
-  flex: none;
-  float: left;
-  font-size: 12px;
-}
-
-/*Receiving Company*/
-mat-header-cell:nth-child(3) {
-  padding: 0px 15px 0px 15px;
-  width: 250px;
-  flex: none;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-/*Receive Address*/
 mat-cell:nth-child(4) {
   padding: 0px 15px 0px 15px;
   width: 250px;
@@ -116,7 +98,7 @@ mat-cell:nth-child(4) {
   font-size: 12px;
 }
 
-/*Receive Address*/
+/*Receiving Company*/
 mat-header-cell:nth-child(4) {
   padding: 0px 15px 0px 15px;
   width: 250px;
@@ -125,7 +107,7 @@ mat-header-cell:nth-child(4) {
   font-weight: bold;
 }
 
-/*SHP Translated Address*/
+/*Receive Address*/
 mat-cell:nth-child(5) {
   padding: 0px 15px 0px 15px;
   width: 250px;
@@ -134,8 +116,26 @@ mat-cell:nth-child(5) {
   font-size: 12px;
 }
 
-/*SHP Translated Address*/
+/*Receive Address*/
 mat-header-cell:nth-child(5) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*SHP Translated Address*/
+mat-cell:nth-child(6) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*SHP Translated Address*/
+mat-header-cell:nth-child(6) {
   padding: 0px 15px 0px 15px;
   width: 250px;
   flex: none;

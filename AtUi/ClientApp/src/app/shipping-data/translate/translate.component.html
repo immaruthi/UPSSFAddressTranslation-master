@@ -26,7 +26,7 @@
                         (change)="$event ? selection.toggle(row) : null"
                         [checked]="selection.isSelected(row)"
                         [aria-label]="checkboxLabel(row)"
-                        [disabled]="(row.smT_STA_NR === 2 || row.smT_STA_NR === 3)">
+                        [disabled]="(row.smT_STA_NR === 2 || row.smT_STA_NR === 3 || (row.smT_STA_NR === 1 && row.coN_NR!= null && row.acY_TE !=null ) )">
           </mat-checkbox>
         </mat-cell>
       </ng-container>
@@ -36,19 +36,18 @@
           <button mat-icon-button (click)="startEdit(i,row)">
             <span><i class="material-icons">edit</i></span>
           </button>
-          <button [disabled]="(row.smT_STA_NR === 2 || row.smT_STA_NR === 3)" mat-icon-button (click)="rowTranslate(i,row)">
+          <button [disabled]="(row.smT_STA_NR === 2 || row.smT_STA_NR === 3 ||(row.smT_STA_NR === 1 && row.coN_NR!= null && row.acY_TE !=null ))" mat-icon-button (click)="rowTranslate(i,row)">
             <span><i class="material-icons">translate</i></span>
           </button>
         </mat-cell>
       </ng-container>
-
       <ng-container matColumnDef="smT_STA_NR" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell"> SHP Status </mat-header-cell>
         <mat-cell *matCellDef="let element" class="cell"> {{shipmentStatusList[element?.smT_STA_NR!=null ?element.smT_STA_NR:4].value}} </mat-cell>
       </ng-container>
-      <ng-container matColumnDef="wfL_ID" class="container" hidden>
-        <mat-header-cell *matHeaderCellDef class="header-cell" hidden> WFL Number </mat-header-cell>
-        <mat-cell *matCellDef="let element" class="cell" hidden> {{element.wfL_ID}} </mat-cell>
+      <ng-container matColumnDef="wfL_ID" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Workflow ID </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.wfL_ID}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="pkG_NR_TE" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell"> Package Number </mat-header-cell>

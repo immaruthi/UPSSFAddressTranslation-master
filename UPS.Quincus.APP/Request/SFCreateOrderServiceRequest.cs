@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace UPS.Quincus.APP.Request
+﻿namespace UPS.Quincus.APP.Request
 {
     public class SFOrderXMLRequest
     {

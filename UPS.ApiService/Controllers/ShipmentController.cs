@@ -44,12 +44,17 @@ namespace AtService.Controllers
 
         private ShipmentService shipmentService { get; set; }
         private WorkflowService workflowService { get; set; }
-        public ShipmentController(IConfiguration Configuration, IHostingEnvironment HostingEnvironment)
+
+        private IQuincusAddressTranslationRequest  _quincusAddressTranslationRequest{ get; set; }
+
+        public ShipmentController(IConfiguration Configuration, IHostingEnvironment HostingEnvironment, IQuincusAddressTranslationRequest QuincusAddressTranslationRequest)
         {
             this.configuration = Configuration;
             this.hostingEnvironment = HostingEnvironment;
             shipmentService = new ShipmentService();
             workflowService = new WorkflowService();
+            _quincusAddressTranslationRequest = QuincusAddressTranslationRequest;
+
         }
 
         private static int _workflowID = 0;
@@ -367,7 +372,7 @@ namespace AtService.Controllers
                         ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
                         shipmentDataRequest.ID = orderRequest.id;
                         shipmentDataRequest.WFL_ID = orderRequest.wfL_ID;
-                        shipmentDataRequest.SMT_STA_NR = ((int)Enums.ShipmentStatus.Completed);
+                        shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Completed);
                         _workflowID = orderRequest.wfL_ID;
 
                         shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
@@ -441,12 +446,16 @@ namespace AtService.Controllers
 
             if (quincusTokenDataResponse.ResponseStatus)
             {
-                quincusTranslatedAddressResponse = QuincusService.GetTranslationAddress(new UPS.Quincus.APP.Request.QuincusAddressTranslationRequest()
-                {
-                    endpoint = configuration["Quincus:GeoCodeEndPoint"],
-                    shipmentWorkFlowRequests = shipmentWorkFlowRequest,
-                    token = quincusTokenDataResponse.quincusTokenData.token
-                });
+                //quincusTranslatedAddressResponse = QuincusService.GetTranslationAddress(new UPS.Quincus.APP.Request.QuincusAddressTranslationRequest()
+                //{
+                //    endpoint = configuration["Quincus:GeoCodeEndPoint"],
+                //    shipmentWorkFlowRequests = shipmentWorkFlowRequest,
+                //    token = quincusTokenDataResponse.quincusTokenData.token
+                //});
+                this._quincusAddressTranslationRequest.shipmentWorkFlowRequests = shipmentWorkFlowRequest;
+                this._quincusAddressTranslationRequest.token = quincusTokenDataResponse.quincusTokenData.token;
+
+                quincusTranslatedAddressResponse = QuincusService.GetTranslationAddress(this._quincusAddressTranslationRequest);
 
                 if (quincusTranslatedAddressResponse.Response)
                 {
@@ -484,7 +493,7 @@ namespace AtService.Controllers
                                         geocodes[i].translated_adddress.Trim())
                                )
                             {
-                                shipmentDataRequest.SMT_STA_NR = ((int)Enums.ShipmentStatus.Translated);
+                                shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Translated);
                             }
                             else
                             {

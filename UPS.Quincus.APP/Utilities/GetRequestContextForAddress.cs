@@ -15,32 +15,27 @@ namespace UPS.Quincus.APP.Utilities
             
             if (shipmentWorkFlowRequests.Count > 0)
             {
-
-
-
                 QuincusAddressRequestData.ListQuincusAddressRequestData quincusAddressRequestData = new QuincusAddressRequestData.ListQuincusAddressRequestData();
                 quincusAddressRequestData.addresses = new List<QuincusAddressRequestData.QuincusAddressRequestDataObject>();
 
                 foreach (var shipmentCollection in shipmentWorkFlowRequests)
                 {
-                    quincusAddressRequestData.addresses.Add((new QuincusAddressRequestDataObject()
-                    {
-                        id = shipmentCollection.id.ToString(),
-                        recipient = string.Empty,
-                        address = shipmentCollection.rcV_ADR_TE,
-                        addressline1 = string.Empty,
-                        addressline2 = string.Empty,
-                        addressline3 = string.Empty,
-                        addressline4 = string.Empty,
-                        address_type_flag = bool.TrueString,
-                        city = shipmentCollection.dsT_CTY_TE,
-                        region = string.Empty,
-                        country = "China",
-                        lang = "CN"
-                    }));
-                }
+                    QuincusAddressRequestDataObject quincusAddressRequestDataObject = new QuincusAddressRequestDataObject();
+                    quincusAddressRequestDataObject.id = shipmentCollection.id.ToString();
+                    quincusAddressRequestDataObject.recipient = string.Empty;
+                    quincusAddressRequestDataObject.address = shipmentCollection.rcV_ADR_TE;
+                    quincusAddressRequestDataObject.addressline1 = string.Empty;
+                    quincusAddressRequestDataObject.addressline2 = string.Empty;
+                    quincusAddressRequestDataObject.addressline3 = string.Empty;
+                    quincusAddressRequestDataObject.addressline4 = string.Empty;
+                    quincusAddressRequestDataObject.address_type_flag = bool.TrueString;
+                    quincusAddressRequestDataObject.city = shipmentCollection.dsT_CTY_TE;
+                    quincusAddressRequestDataObject.region = string.Empty;
+                    quincusAddressRequestDataObject.country = "China";
+                    quincusAddressRequestDataObject.lang = "CN";
 
-                
+                    quincusAddressRequestData.addresses.Add(quincusAddressRequestDataObject);
+                }
 
                 return Newtonsoft.Json.JsonConvert.SerializeObject(quincusAddressRequestData);
             }

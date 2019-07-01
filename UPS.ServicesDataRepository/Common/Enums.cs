@@ -2,13 +2,15 @@
 {
     public static class Enums
     {
-       public enum ShipmentStatus
+       public enum ATStatus
         {
             Uploaded = 0,
             Curated = 1,
             Translated = 2,
-            Completed = 3
+            Completed = 3,
+            Inactive =4
         }
+        
     }
 
 }
