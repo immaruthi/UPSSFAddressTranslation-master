@@ -39,7 +39,10 @@ namespace UPS.ServicesDataRepository
                     var anonymousList =
                         (
                             from s in context.shipmentDataRequests
-                            join c in context.shipperCompanyRequests on s.DST_PSL_TE equals c.SPC_PSL_CD_TE where s.WFL_ID == workflowID
+                            join c in context.shipperCompanyRequests on s.DST_PSL_TE equals c.SPC_PSL_CD_TE where 
+                            s.WFL_ID == workflowID 
+                            && (s.SMT_STA_NR == (int)Enums.ATStatus.Translated
+                            || s.SMT_STA_NR == (int)Enums.ATStatus.Curated)
                             select new
                             {
                                 s.ID,
@@ -177,7 +180,9 @@ namespace UPS.ServicesDataRepository
                         (
                             from s in context.shipmentDataRequests
                             join c in context.shipperCompanyRequests on s.DST_PSL_TE equals c.SPC_PSL_CD_TE where s.WFL_ID == workflowID
-                            where s.WFL_ID == workflowID && s.SMT_STA_NR == ((int)Enums.ShipmentStatus.Completed)
+                            where s.WFL_ID == workflowID
+                            && s.SMT_STA_NR == ((int)Enums.ATStatus.Completed)
+                            && s.SMT_STA_NR != ((int)Enums.ATStatus.Inactive)
                             select new
                             {
                                 s.ID,
