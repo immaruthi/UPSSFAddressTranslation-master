@@ -26,7 +26,7 @@
                         (change)="$event ? selection.toggle(row) : null"
                         [checked]="selection.isSelected(row)"
                         [aria-label]="checkboxLabel(row)"
-                        [disabled]="(row.smT_STA_NR === 2 || row.smT_STA_NR === 3)">
+                        [disabled]="(row.smT_STA_NR === 2 || row.smT_STA_NR === 3 || (row.smT_STA_NR === 1 && row.coN_NR!= null && row.acY_TE !=null ) )">
           </mat-checkbox>
         </mat-cell>
       </ng-container>
@@ -36,7 +36,7 @@
           <button mat-icon-button (click)="startEdit(i,row)">
             <span><i class="material-icons">edit</i></span>
           </button>
-          <button [disabled]="(row.smT_STA_NR === 2 || row.smT_STA_NR === 3)" mat-icon-button (click)="rowTranslate(i,row)">
+          <button [disabled]="(row.smT_STA_NR === 2 || row.smT_STA_NR === 3 ||(row.smT_STA_NR === 1 && row.coN_NR!= null && row.acY_TE !=null ))" mat-icon-button (click)="rowTranslate(i,row)">
             <span><i class="material-icons">translate</i></span>
           </button>
         </mat-cell>
