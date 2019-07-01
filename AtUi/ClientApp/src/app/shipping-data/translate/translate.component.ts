@@ -21,7 +21,7 @@ import { MatStepperTab } from '../../shared/enums.service';
 
 export class TranslateComponent implements OnInit {
   displayedColumns =
-    ['select', 'actions', 'smT_STA_NR', 'pkG_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'coN_NR', 'acY_TE',
+    ['select', 'actions', 'wfL_ID', 'smT_STA_NR', 'pkG_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'coN_NR', 'acY_TE',
       'dsT_CTY_TE', 'dsT_PSL_TE', 'fsT_INV_LN_DES_TE', 'shP_CPY_NA', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE',
       'orG_CTY_TE', 'orG_PSL_CD', 'imP_SLC_TE', 'coD_TE'
     ];
@@ -37,6 +37,7 @@ export class TranslateComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
   public mainData: any[] = [];
   public checkedData: any[] = [];
+  public dataForTranslate: any[] = [];
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
     private router: Router, public dialog: MatDialog,
@@ -130,13 +131,8 @@ export class TranslateComponent implements OnInit {
     if (checkedCount <= 0) {
       this.dialogService.openAlertDialog('Please select minimum one row to Translate.');
     } else {
-      const dataForTranslate = this.selection.selected; // Any changes can do here for sending array
-      this.shippingService.sendDataForTranslate(dataForTranslate).subscribe((response: any) => {
-        this.getTranslateData(this.WorkflowID); // Can change this according to the response
-        this.openSuccessMessageNotification("Shipment Address Translated Successfully.");
-        this.selection.clear();
-      }, error => this.openErrorMessageNotification("Error while Translating data."));
-      console.log(dataForTranslate);
+      const data = this.selection.selected;
+      this.dataTranslate(data);
     }
   }
 
@@ -176,13 +172,31 @@ export class TranslateComponent implements OnInit {
   }
 
   rowTranslate(i, shipmentWorkFlowRequest) {
-    this.shippingService.sendDataForTranslate([shipmentWorkFlowRequest]).subscribe(
-      (response:any) => {
-   
-        console.log(response)
-        this.openSuccessMessageNotification("Address Translated Successfully..");
-        this.getTranslateData(this.WorkflowID);
-    },
-      error => this.openErrorMessageNotification("Error while Translating data."));
+    this.dataTranslate([shipmentWorkFlowRequest]);
   };
+
+  dataTranslate(data: any) {
+    this.dataForTranslate = [];
+    const dataTranslate = data;
+
+    for (let mainData of dataTranslate) {
+      if (mainData.dsT_CTY_TE === null) { mainData.dsT_CTY_TE = '' };
+      if (mainData.rcV_ADR_TE === null) { mainData.rcV_ADR_TE = '' };
+      this.dataForTranslate.push(mainData);
+    }
+
+    this.shippingService.sendDataForTranslate(this.dataForTranslate).subscribe(
+      (response: any) => {
+        if (response) {
+          this.openSuccessMessageNotification("Shipment Address(es) Translated Successfully.");
+          this.getTranslateData(this.WorkflowID);
+          this.selection.clear();
+        } else {
+          this.openErrorMessageNotification("Error while Translating data.");
+        }
+      }
+      ,
+      error => this.openErrorMessageNotification("Error while Translating data.")
+    );
+  }
 }
