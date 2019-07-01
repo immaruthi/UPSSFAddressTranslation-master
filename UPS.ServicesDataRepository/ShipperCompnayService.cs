@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using UPS.DataObjects.Shipment;
-using UPS.DataObjects.SPC_LST;
-using UPS.ServicesAsyncActions;
-using UPS.ServicesDataRepository.Common;
-using UPS.ServicesDataRepository.DataContext;
-
-namespace UPS.ServicesDataRepository
+﻿namespace UPS.ServicesDataRepository
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Microsoft.EntityFrameworkCore;
+    using UPS.DataObjects.Shipment;
+    using UPS.DataObjects.SPC_LST;
+    using UPS.ServicesAsyncActions;
+    using UPS.ServicesDataRepository.Common;
+    using UPS.ServicesDataRepository.DataContext;
+
     public class ShipperCompnayService : IShipperCompanyAsync
     {
         private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
