@@ -364,7 +364,7 @@ namespace AtService.Controllers
                         ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
                         shipmentDataRequest.ID = orderRequest.id;
                         shipmentDataRequest.WFL_ID = orderRequest.wfL_ID;
-                        shipmentDataRequest.SMT_STA_NR = ((int)Enums.ShipmentStatus.Completed);
+                        shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Completed);
                         _workflowID = orderRequest.wfL_ID;
 
                         shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
@@ -485,7 +485,7 @@ namespace AtService.Controllers
                                         geocodes[i].translated_adddress.Trim())
                                )
                             {
-                                shipmentDataRequest.SMT_STA_NR = ((int)Enums.ShipmentStatus.Translated);
+                                shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Translated);
                             }
                             else
                             {

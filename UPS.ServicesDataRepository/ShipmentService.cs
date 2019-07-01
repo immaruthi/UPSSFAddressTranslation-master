@@ -20,8 +20,18 @@ namespace UPS.ServicesDataRepository
 
             optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
-            var context = new ApplicationDbContext(optionsBuilder.Options);
-            var shipments = context.shipmentDataRequests.Where(w => w.WFL_ID == workflowID).ToList();
+            ApplicationDbContext context = new ApplicationDbContext(optionsBuilder.Options);
+            List<ShipmentDataRequest> shipments = 
+                context.shipmentDataRequests
+                .Where(
+                    (ShipmentDataRequest w) =>
+                        w.WFL_ID == workflowID &&
+                        w.SMT_STA_NR != (int)Enums.ATStatus.Completed
+                        && w.SMT_STA_NR != (int)Enums.ATStatus.Inactive
+                        )
+                .OrderBy((ShipmentDataRequest s )=> s.SHP_ADR_TE)
+                .ToList();
+
             return shipments;
         }
 
@@ -217,9 +227,14 @@ namespace UPS.ServicesDataRepository
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
                 {
                     ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == shipmentDataRequest.ID).FirstOrDefault();
+                    int? shipmentStaus =
+                       data.SHP_ADR_TR_TE.ToLower() != shipmentDataRequest.SHP_ADR_TR_TE.ToLower()
+                       ? ((int)Enums.ATStatus.Curated)
+                       : (data.SMT_STA_NR);
+
                     data.SHP_ADR_TR_TE = shipmentDataRequest.SHP_ADR_TR_TE;
                     data.COD_TE = shipmentDataRequest.COD_TE;
-                    data.SMT_STA_NR = ((int)Enums.ShipmentStatus.Curated);
+                    data.SMT_STA_NR = shipmentStaus;
                     context.shipmentDataRequests.Update(data);
                     context.Entry(shipmentDataRequest).State = EntityState.Detached;
                     context.SaveChanges();
