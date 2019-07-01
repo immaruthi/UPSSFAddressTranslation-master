@@ -140,18 +140,16 @@ export class WorkflowComponent {
   
       this.userService.postFile(this.fileToUpload, user)
         .subscribe((response: any) => {
-          this.getWorkflowDetails();
-          this.openSuccessMessageNotification("File Uploaded successfully");
-          this.fileNameControl.setValue('');
-
-          //if (response.success === true) {
-          //  this.getWorkflowDetails();
-          //  this.openSuccessMessageNotification("File Uploaded successfully");
-          //  this.fileNameControl.setValue('');
-          //} else {
-          //  this.openErrorMessageNotification(response.);
-          //  this.fileNameControl.setValue('');
-          //}
+          if (response.success === true) {
+            this.getWorkflowDetails();
+            this.openSuccessMessageNotification("File Uploaded successfully");
+            this.fileNameControl.setValue('');
+          } else if (response.success === false) {
+            if (response.exception) {
+              this.openErrorMessageNotification(response.exception.Message);
+              this.fileNameControl.setValue('');
+            }
+          }
         },
         error =>
         {
