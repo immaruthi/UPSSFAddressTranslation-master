@@ -123,6 +123,29 @@
                         shipmentDataRequest.SHP_PH_TE = shipmentData.SHP_PH_TE;
                         shipmentDataRequest.SMT_NR_TE = shipmentData.SMT_NR_TE;
                         shipmentDataRequest.SMT_STA_NR = shipmentData.SMT_STA_NR;
+                            
+                        switch (shipmentDataRequest.SMT_STA_NR)
+                        {
+                            case 0:
+                                shipmentDataRequest.SMT_STA_TE = "Uploaded";
+                                break;
+                            case 1:
+                                shipmentDataRequest.SMT_STA_TE = "Curated";
+                                break;
+                            case 2:
+                                shipmentDataRequest.SMT_STA_TE = "Translated";
+                                break;
+                            case 3:
+                                shipmentDataRequest.SMT_STA_TE = "Completed";
+                                break;
+                            case 4:
+                                shipmentDataRequest.SMT_STA_TE = "Inactive";
+                                break;
+                            default:
+                                shipmentDataRequest.SMT_STA_TE = "Uploaded";
+                                break;
+                        }
+
                         shipmentDataRequest.SMT_VAL_DE = shipmentData.SMT_VAL_DE;
                         shipmentDataRequest.SMT_WGT_DE = shipmentData.SMT_WGT_DE;
                         shipmentDataRequest.SVL_NR = shipmentData.SVL_NR;
@@ -256,6 +279,29 @@
                         shipmentDataRequest.SHP_PH_TE = shipmentData.SHP_PH_TE;
                         shipmentDataRequest.SMT_NR_TE = shipmentData.SMT_NR_TE;
                         shipmentDataRequest.SMT_STA_NR = shipmentData.SMT_STA_NR;
+
+                        switch (shipmentDataRequest.SMT_STA_NR)
+                        {
+                            case 0:
+                                shipmentDataRequest.SMT_STA_TE = "Uploaded";
+                                break;
+                            case 1:
+                                shipmentDataRequest.SMT_STA_TE = "Curated";
+                                break;
+                            case 2:
+                                shipmentDataRequest.SMT_STA_TE = "Translated";
+                                break;
+                            case 3:
+                                shipmentDataRequest.SMT_STA_TE = "Completed";
+                                break;
+                            case 4:
+                                shipmentDataRequest.SMT_STA_TE = "Inactive";
+                                break;
+                            default:
+                                shipmentDataRequest.SMT_STA_TE = "Uploaded";
+                                break;
+                        }
+
                         shipmentDataRequest.SMT_VAL_DE = shipmentData.SMT_VAL_DE;
                         shipmentDataRequest.SMT_WGT_DE = shipmentData.SMT_WGT_DE;
                         shipmentDataRequest.SVL_NR = shipmentData.SVL_NR;

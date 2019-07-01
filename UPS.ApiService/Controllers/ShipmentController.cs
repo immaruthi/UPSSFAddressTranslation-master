@@ -224,6 +224,7 @@ namespace AtService.Controllers
                             shipmentDataRequest.SHP_PH_TE = excelDataObject.S_shptph;
                             shipmentDataRequest.SMT_NR_TE = excelDataObject.S_shipmentno;
                             shipmentDataRequest.SMT_STA_NR = 0;
+                            shipmentDataRequest.SMT_STA_TE = "Uploaded";
                             shipmentDataRequest.SMT_VAL_DE = 0;
                             shipmentDataRequest.SMT_WGT_DE = Convert.ToDecimal(excelDataObject.S_shptwei);
                             shipmentDataRequest.SVL_NR = Convert.ToString(excelDataObject.svl);
@@ -365,6 +366,7 @@ namespace AtService.Controllers
                         shipmentDataRequest.ID = orderRequest.id;
                         shipmentDataRequest.WFL_ID = orderRequest.wfL_ID;
                         shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Completed);
+                        shipmentDataRequest.SMT_STA_TE = "Completed";
                         _workflowID = orderRequest.wfL_ID;
 
                         shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
@@ -486,10 +488,12 @@ namespace AtService.Controllers
                                )
                             {
                                 shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Translated);
+                                shipmentDataRequest.SMT_STA_TE = "Translated";
                             }
                             else
                             {
                                 shipmentDataRequest.SMT_STA_NR = Convert.ToInt32(shipmentWorkFlowRequest.Where(s => s.id == shipmentDataRequest.ID).FirstOrDefault().smT_STA_NR);
+                                shipmentDataRequest.SMT_STA_TE = Convert.ToString(shipmentWorkFlowRequest.Where(s => s.id == shipmentDataRequest.ID).FirstOrDefault().smT_STA_TE);
                             }
                             shipmentsDataRequest.Add(shipmentDataRequest);
                         }
