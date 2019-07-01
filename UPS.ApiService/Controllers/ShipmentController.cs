@@ -111,7 +111,7 @@ namespace AtService.Controllers
                             }
                             else
                             {
-                                return Ok(excelExtensionReponse.exception);
+                                return Ok(excelExtensionReponse);
                             }
                         }
                     }
