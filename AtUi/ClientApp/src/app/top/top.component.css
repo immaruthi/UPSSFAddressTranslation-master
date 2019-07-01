@@ -1,58 +1,69 @@
-nav {
-  width: 100%;
-  border-radius: 0;
-  border: none;
-  background: #282829;
-  height: 63px;
-  padding: 0;
-  margin: 0;
-}
-.navbar{
-  height:63px;
-  margin:0;
-  padding:0;
-}
-.container-fluid{
-  padding:0;
+mat-sidenav {
+  background-color: #351C15;
 }
 
-.navbar-header {
-  padding: 0;
-  margin: 0;
+.sidenav-container {
+  height: 100%;
+  overflow: hidden;
+}
+
+.sidenav {
+  width: 250px;
+}
+
+  .sidenav .mat-toolbar {
+    background: inherit;
+  }
+
+mat-nav-list ul li {
+  width: 250px;
+  height: 63px;
+  margin: 9px 0px 0px 0px;
+  padding: 22.5px 0px 14px 0px;
+}
+
+  mat-nav-list ul li a {
+    color: #FFFFFF !important;
+    padding-left: 10px;
+  }
+
+    mat-nav-list ul li a:focus, a:hover {
+      text-decoration: none;
+    }
+
+.active {
+  background: #795A47;
+}
+
+mat-toolbar span a, a:hover {
+  color: #FFB500 !important;
+  font-size: 28px;
+}
+
+.mat-toolbar {
+  background: #351C15;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+mat-toolbar a, a:hover {
+  display: inline-block;
+  margin: 0 10px;
+  color: white !important;
+  text-decoration: none;
+  font-size: 16px;
 }
 
 .logo {
   width: 40px;
   height: 40px;
-  margin: 10px 40px 7px 105px;
+  margin: 0px 20px 0px 10px;
 }
-.collapse {
-  margin: 10px 0px 0px 0px;
-  height:63px;
-}
-.apptxt {
-  font-family: Helvetica;
-  font-size: 28px;
-  color: #FFB500;
-}
-.navbar-right{
-  margin-top: 10px; 
-}
-
-.user {
-  color: #FFFFFF;
-  font-size: 17px;
-  width: 125px;
-  margin: 0px 40px 0px 0px;
-}
-
-.logout {
-  color: #FFFFFF;
-  margin-right: 100px;
-  font-size: 17px;
-  width: 125px;
-}
-
-a:hover, a:after {
-  text-decoration: none;
+mat-sidenav-content{
+  overflow:auto;
 }

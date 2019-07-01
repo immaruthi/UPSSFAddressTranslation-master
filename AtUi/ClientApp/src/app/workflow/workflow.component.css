@@ -1,23 +1,11 @@
-.col-md-10{
-  padding:0;
-  margin:0;
-  margin-top:63px;
-  position:relative;
-}
 .routepage {
-  padding: 5px;
+  width: 100%;
   overflow-x: auto;
   overflow-y: auto;
-  height: calc(100vh - 63px);
 }
 .map-image {
   width: 400px;
   height: 330px;
-}
-
-table {
-  width: 100%;
-  height: 100vh;
 }
 
 a {
@@ -62,11 +50,26 @@ mat-row:nth-child(odd) {
 }
 
 mat-header-row {
-  background: #F2F2F2;
+  background-color: gray;
 }
 
 .mat-header-row {
   position: sticky;
   top: 0;
   z-index: 1;
+  color: white;
+}
+
+mat-header-cell {
+  color: white;
+}
+
+mat-cell {
+  font-size: 12px;
+}
+
+mat-header-cell {
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
 } 
