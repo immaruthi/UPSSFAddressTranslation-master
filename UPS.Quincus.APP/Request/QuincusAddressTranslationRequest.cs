@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UPS.DataObjects.Shipment;
-
-namespace UPS.Quincus.APP.Request
+﻿namespace UPS.Quincus.APP.Request
 {
-    public class QuincusAddressTranslationRequest
+    using System.Collections.Generic;
+    using UPS.DataObjects.Shipment;
+
+    public class QuincusAddressTranslationRequest : IQuincusAddressTranslationRequest
     {
-        public List<ShipmentWorkFlowRequest>  shipmentWorkFlowRequests { get; set; }
-
+        public List<ShipmentWorkFlowRequest> shipmentWorkFlowRequests { get; set; }
         public string token { get; set; }
-
         public string endpoint { get; set; }
-
     }
 }

@@ -1,18 +1,15 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Text;
-using UPS.DataObjects.Shipment;
-using UPS.Quincus.APP.Common;
-using UPS.Quincus.APP.Configuration;
-using UPS.Quincus.APP.Request;
-using UPS.Quincus.APP.Response;
-using UPS.Quincus.APP.Utilities;
-
-namespace UPS.Quincus.APP.ProxyConnections
+﻿namespace UPS.Quincus.APP.ProxyConnections
 {
+    using System;
+    using System.IO;
+    using System.Net;
+    using Newtonsoft.Json;
+    using UPS.Quincus.APP.Common;
+    using UPS.Quincus.APP.Configuration;
+    using UPS.Quincus.APP.Request;
+    using UPS.Quincus.APP.Response;
+    using UPS.Quincus.APP.Utilities;
+
     public class QuincusProxy
     {
         public static QuincusTokenDataResponse GetToken(QuincusParams quincusParams)
@@ -63,14 +60,13 @@ namespace UPS.Quincus.APP.ProxyConnections
         }
 
 
-        public static QuincusTranslatedAddressResponse GetTranslatedAddressResponse(QuincusAddressTranslationRequest quincusAddressTranslationRequest)
+        public static QuincusTranslatedAddressResponse GetTranslatedAddressResponse(IQuincusAddressTranslationRequest quincusAddressTranslationRequest)
         {
             string response = string.Empty;
             QuincusTranslatedAddressResponse quincusTranslatedAddressResponse = new QuincusTranslatedAddressResponse();
 
             try
             {
-                
                 string content = GetRequestContextForAddress.GetAddressStringFromRequest(quincusAddressTranslationRequest.shipmentWorkFlowRequests);
 
                 if (!string.IsNullOrWhiteSpace(content))
@@ -84,9 +80,11 @@ namespace UPS.Quincus.APP.ProxyConnections
 
                         httpWebRequest.Proxy = myProxy;
                     }
+
                     httpWebRequest.ContentType = "application/json";
                     httpWebRequest.Headers.Add("AUTHORIZATION", "JWT " + quincusAddressTranslationRequest.token);
                     httpWebRequest.Method = "POST";
+
                     using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                     {
                         var input = content;
@@ -132,6 +130,7 @@ namespace UPS.Quincus.APP.ProxyConnections
                     WebProxy myProxy = new WebProxy(MapProxy.webProxyURI, false, null, new NetworkCredential(MapProxy.webProxyUsername, MapProxy.webProxyPassword));
                     httpWebRequest.Proxy = myProxy;
                 }
+
                 httpWebRequest.ContentType = "application/json";
                 httpWebRequest.Headers.Add("AUTHORIZATION", "JWT " + quincusGeoCodeDataRequest.quincusTokenData.token);
                 httpWebRequest.Method = "GET";
@@ -156,6 +155,5 @@ namespace UPS.Quincus.APP.ProxyConnections
 
             return quincusResponse;
         }
-
     }
 }

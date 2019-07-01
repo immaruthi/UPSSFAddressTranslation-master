@@ -16,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using UPS.Quincus.APP.Common;
+using UPS.Quincus.APP.Request;
 using UPS.ServicesDataRepository;
 using UPS.ServicesDataRepository.DataContext;
 using UPS.ServicesDataRepository.OverrideDbContext;
@@ -48,6 +49,7 @@ namespace UPS.AddressTranslationService
             MapProxy.webProxyPassword = Configuration["webProxy:Password"];
             MapProxy.WebProxyEnable = Configuration["webProxy:Enable"];
 
+            services.AddSingleton<IQuincusAddressTranslationRequest>(new QuincusAddressTranslationRequest() { endpoint = Configuration["Quincus:GeoCodeEndPoint"] });
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -89,7 +91,6 @@ namespace UPS.AddressTranslationService
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
