@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using UPS.DataObjects.UserData;
 using UPS.DataObjects.WR_FLW;
 using UPS.ServicesDataRepository;
+using UPS.ServicesDataRepository.Common;
 using UPS.ServicesDataRepository.DataContext;
 
 namespace UPS.AddressTranslationService.Controllers
@@ -48,7 +49,10 @@ namespace UPS.AddressTranslationService.Controllers
             optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
             var context = new ApplicationDbContext(optionsBuilder.Options);
-            WorkflowDataRequest workflow = context.workflowDataRequests.Where(w => w.CRD_BY_NR == user.ID).FirstOrDefault();
+            WorkflowDataRequest workflow = 
+                context.workflowDataRequests.Where(
+                    w => w.CRD_BY_NR == user.ID 
+                         && w.WFL_STA_TE != (int)Enums.ATStatus.Inactive).FirstOrDefault();
             return Ok(workflow);
         }
 

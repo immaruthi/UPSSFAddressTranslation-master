@@ -3,8 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var shipmentStatus;
 (function (shipmentStatus) {
     shipmentStatus[shipmentStatus["Uploaded"] = 0] = "Uploaded";
-    shipmentStatus[shipmentStatus["Translated"] = 1] = "Translated";
-    shipmentStatus[shipmentStatus["Done"] = 2] = "Done";
+    shipmentStatus[shipmentStatus["Curated"] = 1] = "Curated";
+    shipmentStatus[shipmentStatus["Translated"] = 2] = "Translated";
+    shipmentStatus[shipmentStatus["Completed"] = 3] = "Completed";
+    shipmentStatus[shipmentStatus["Inactive"] = 4] = "Inactive";
 })(shipmentStatus = exports.shipmentStatus || (exports.shipmentStatus = {}));
 var MatStepperTab;
 (function (MatStepperTab) {

@@ -156,6 +156,13 @@ export class TranslateComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
         let updatedDetails = this.dataService.getDialogData();
+        if (updatedDetails.coD_TE == shipmentDetailToUpdate.coD_TE
+          && updatedDetails.shP_ADR_TR_TE.toLowerCase() == shipmentDetailToUpdate.shP_ADR_TR_TE.toLowerCase()) {
+
+          this.openSuccessMessageNotification("No changes found to update");
+          return;
+        }
+
         const details = {
           SHP_ADR_TR_TE: updatedDetails.shP_ADR_TR_TE,
           COD_TE: updatedDetails.coD_TE,
