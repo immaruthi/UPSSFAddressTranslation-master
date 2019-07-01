@@ -23,6 +23,7 @@ namespace AtService.Controllers
             userServices = new UserServices();
             loginContext = new LoginContext(DBConnectionContext.connectionString, userServices);
         }
+
         [HttpPost("[action]")]
         public ActionResult<UserDataResponse> ValidateUser([FromBody] LoginContextData loginContextData)
         {

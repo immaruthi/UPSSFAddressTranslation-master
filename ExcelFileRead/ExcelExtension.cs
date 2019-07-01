@@ -10,6 +10,16 @@ using System.Text.RegularExpressions;
 
 namespace ExcelFileRead
 {
+
+    public class ExcelExtensionReponse
+    {
+        public string ExcelExtensionReponseData { get; set; }
+
+        public bool Response { get; set; }
+
+        public Exception exception { get; set; }
+    }
+
     public class ExcelExtension
     {
 
@@ -62,8 +72,11 @@ namespace ExcelFileRead
         //    return excelSheetNames;
         //}
 
-        public string Test(string fileName)
+
+        public ExcelExtensionReponse Test(string fileName)
         {
+            ExcelExtensionReponse excelExtensionReponse = new ExcelExtensionReponse();
+
             string JSONString = string.Empty;
             IExcelDataReader excelReader;
             try
@@ -90,39 +103,45 @@ namespace ExcelFileRead
                     }
                 });
 
-
-                var regexItem = new Regex("[^0-9a-zA-Z]+");
-
-                for (int i = 0; i < result.Tables[0].Columns.Count; i++)
-                {
-                    
-                    if (regexItem.IsMatch(result.Tables[0].Columns[i].ColumnName.ToString()))
-                    {
-                        result.Tables[0].Columns[i].ColumnName = "S_" + Regex.Replace(result.Tables[0].Columns[i].ColumnName, @"[^0-9a-zA-Z]+", "");
-                    }
-                }
-
-                result.AcceptChanges();
-
-                
                 excelReader.Close();
+                bool getDesiredColumnExistence = result.Tables[0].Columns.Contains("package no");
+
+                if (getDesiredColumnExistence)
+                {
 
 
+
+                    var regexItem = new Regex("[^0-9a-zA-Z]+");
+
+
+
+                    for (int i = 0; i < result.Tables[0].Columns.Count; i++)
+                    {
+
+                        if (regexItem.IsMatch(result.Tables[0].Columns[i].ColumnName.ToString()))
+                        {
+                            result.Tables[0].Columns[i].ColumnName = "S_" + Regex.Replace(result.Tables[0].Columns[i].ColumnName, @"[^0-9a-zA-Z]+", "");
+                        }
+                    }
+
+                    result.AcceptChanges();
+                    JSONString = JsonConvert.SerializeObject(result.Tables[0]);
+                    excelExtensionReponse.ExcelExtensionReponseData = JSONString;
+                    excelExtensionReponse.Response = true;
+                }
+                else
+                {
+                    excelExtensionReponse.exception= new ArgumentException("Required Column 'package no' is not found");
+                }
                 
-                
-                JSONString = JsonConvert.SerializeObject(result.Tables[0]);
-
-               
-
-              // var excelDataObject2 = JsonConvert.DeserializeObject<List<ExcelDataObject>>(JSONString);
-
-
-                return JSONString;
             }
             catch (Exception ex)
             {
-                throw ex;
+                excelExtensionReponse.exception = ex;
             }
+
+            return excelExtensionReponse;
+
         }
 
     }

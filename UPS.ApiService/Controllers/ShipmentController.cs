@@ -82,23 +82,31 @@ namespace AtService.Controllers
                                 await file.CopyToAsync(fileStream);
                             }
 
-                            string JSONString = new ExcelExtension().Test(filePath);
-                            var excelDataObject2 = JsonConvert.DeserializeObject<List<ExcelDataObject>>(JSONString);
-                            WorkflowController workflowController = new WorkflowController();
-                            WorkflowDataResponse response = ((WorkflowDataResponse)((ObjectResult)(workflowController.CreateWorkflow(file, Emp_Id)).Result).Value);
-                            _workflowID = response.Workflow.ID;
-                            result = this.CreateShipments(excelDataObject2, _workflowID);
-                            if (result.Success)
+
+                            ExcelExtensionReponse excelExtensionReponse = new ExcelExtension().Test(filePath);
+                            if (excelExtensionReponse.Response)
                             {
-                                shipmentDataResponse.Success = true;
-                                shipmentDataResponse.Shipments = result.Shipments;
+                                var excelDataObject2 = JsonConvert.DeserializeObject<List<ExcelDataObject>>(excelExtensionReponse.ExcelExtensionReponseData);
+                                WorkflowController workflowController = new WorkflowController();
+                                WorkflowDataResponse response = ((WorkflowDataResponse)((ObjectResult)(workflowController.CreateWorkflow(file, Emp_Id)).Result).Value);
+                                _workflowID = response.Workflow.ID;
+                                result = this.CreateShipments(excelDataObject2, _workflowID);
+                                if (result.Success)
+                                {
+                                    shipmentDataResponse.Success = true;
+                                    shipmentDataResponse.Shipments = result.Shipments;
+                                }
+                                else
+                                {
+                                    shipmentDataResponse.Success = false;
+                                    shipmentDataResponse.OperationExceptionMsg = result.OperationExceptionMsg;
+                                    WorkflowService workflowService = new WorkflowService();
+                                    workflowService.DeleteWorkflowById(_workflowID);
+                                }
                             }
                             else
                             {
-                                shipmentDataResponse.Success = false;
-                                shipmentDataResponse.OperationExceptionMsg = result.OperationExceptionMsg;
-                                WorkflowService workflowService = new WorkflowService();
-                                workflowService.DeleteWorkflowById(_workflowID);
+                                return Ok(excelExtensionReponse.exception);
                             }
                         }
                     }

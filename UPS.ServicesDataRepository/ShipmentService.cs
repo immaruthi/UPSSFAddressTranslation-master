@@ -142,7 +142,7 @@ namespace UPS.ServicesDataRepository
                     }
 
                     context.SaveChanges();
-                    shipmentDataResponse.Shipments = context.shipmentDataRequests.ToList();
+                    shipmentDataResponse.Shipments = shipmentData; //context.shipmentDataRequests.ToList();
                     shipmentDataResponse.Success = true;
                     return shipmentDataResponse;
 
