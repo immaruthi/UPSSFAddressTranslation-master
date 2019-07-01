@@ -29,6 +29,7 @@ export class WorkflowComponent {
   //displayedColumns = ['position', 'name', 'weight', 'symbol'];
   displayedColumns = ['id', 'usR_FST_NA', 'flE_NA', 'wfL_STA_TE_TEXT', 'crD_DT'];
   dataSource = new MatTableDataSource<Element>();
+  filterText: string;
 
   fileNameControl = new FormControl('');
   isValidFile: boolean = true;
@@ -99,6 +100,7 @@ export class WorkflowComponent {
   }
 
   applyFilter(filterValue: string) {
+    this.filterText = filterValue;
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
@@ -157,6 +159,8 @@ export class WorkflowComponent {
           this.fileNameControl.setValue('');
         }
       );
+      this.applyFilter('');
+      this.filterText = '';
     }
   }
   validateFile(name: String) {
