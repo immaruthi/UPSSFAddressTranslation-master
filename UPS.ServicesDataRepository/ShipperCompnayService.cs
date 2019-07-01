@@ -27,19 +27,11 @@ namespace UPS.ServicesDataRepository
 
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
                 {
-                    int scount = context.shipmentDataRequests.Count();
-                    int ccount = context.shipperCompanyRequests.Count();
-
-                    List<ShipmentDataRequest> sRequest = new List<ShipmentDataRequest>();
-                    sRequest = context.shipmentDataRequests.ToList();
-                    List<ShipperCompanyRequest> cRequest = new List<ShipperCompanyRequest>();
-                    cRequest = context.shipperCompanyRequests.ToList();
-
                     shipmentDataRequests = new List<ShipmentDataRequest>();
                     var anonymousList =
                         (
                             from s in context.shipmentDataRequests
-                            join c in context.shipperCompanyRequests on s.DST_PSL_TE equals c.SPC_PSL_CD_TE where s.WFL_ID == workflowID
+                            join c in context.shipperCompanyRequests on s.DST_PSL_TE equals c.SPC_PSL_CD_TE where s.WFL_ID == workflowID orderby s.ID 
                             select new
                             {
                                 s.ID,
@@ -164,19 +156,11 @@ namespace UPS.ServicesDataRepository
 
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
                 {
-                    int scount = context.shipmentDataRequests.Count();
-                    int ccount = context.shipperCompanyRequests.Count();
-
-                    List<ShipmentDataRequest> sRequest = new List<ShipmentDataRequest>();
-                    sRequest = context.shipmentDataRequests.ToList();
-                    List<ShipperCompanyRequest> cRequest = new List<ShipperCompanyRequest>();
-                    cRequest = context.shipperCompanyRequests.ToList();
-
                     shipmentDataRequests = new List<ShipmentDataRequest>();
                     var anonymousList =
                         (
                             from s in context.shipmentDataRequests
-                            join c in context.shipperCompanyRequests on s.DST_PSL_TE equals c.SPC_PSL_CD_TE where s.WFL_ID == workflowID
+                            join c in context.shipperCompanyRequests on s.DST_PSL_TE equals c.SPC_PSL_CD_TE where s.WFL_ID == workflowID orderby s.ID
                             where s.WFL_ID == workflowID && s.SMT_STA_NR == ((int)Enums.ShipmentStatus.Completed)
                             select new
                             {

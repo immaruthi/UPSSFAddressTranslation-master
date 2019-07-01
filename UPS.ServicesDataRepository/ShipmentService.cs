@@ -21,7 +21,7 @@ namespace UPS.ServicesDataRepository
             optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
             var context = new ApplicationDbContext(optionsBuilder.Options);
-            var shipments = context.shipmentDataRequests.Where(w => w.WFL_ID == workflowID).OrderBy(s => s.SHP_ADR_TE).ToList();
+            var shipments = context.shipmentDataRequests.Where(w => w.WFL_ID == workflowID).ToList();
             return shipments;
         }
 
