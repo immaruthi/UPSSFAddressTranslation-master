@@ -17,7 +17,6 @@
         public ShipmentDataResponse SelectMatchedShipmentsWithShipperCompanies(int workflowID)
 
         {
-            throw new Exception("Error in Page Log elmah");
             ShipmentDataResponse mappedShipAndShipperCompanyResponse = new ShipmentDataResponse();
             List<ShipmentDataRequest> shipmentDataRequests = null;
             try
