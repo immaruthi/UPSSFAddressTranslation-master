@@ -35,7 +35,7 @@ namespace AtService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("SiteCorsPolicy")]
+    [EnableCors("AllowAtUIOrigin")]
     public class ShipmentController : ControllerBase
     {
 
@@ -44,14 +44,21 @@ namespace AtService.Controllers
         private ShipmentDataResponse shipmentDataResponse;
 
         private ShipmentService shipmentService { get; set; }
-        public ShipmentController(IConfiguration Configuration, IHostingEnvironment HostingEnvironment)
+        private WorkflowService workflowService { get; set; }
+
+        private IQuincusAddressTranslationRequest  _quincusAddressTranslationRequest{ get; set; }
+
+        public ShipmentController(IConfiguration Configuration, IHostingEnvironment HostingEnvironment, IQuincusAddressTranslationRequest QuincusAddressTranslationRequest)
         {
             this.configuration = Configuration;
             this.hostingEnvironment = HostingEnvironment;
             shipmentService = new ShipmentService();
+            workflowService = new WorkflowService();
+            _quincusAddressTranslationRequest = QuincusAddressTranslationRequest;
+
         }
 
-        private int _workflowID = 0;
+        private static int _workflowID = 0;
         [Route("ExcelFileUpload/{Emp_Id}")]
         [HttpPost]
         public async Task<ActionResult> ExcelFile(IList<IFormFile> excelFileName, int Emp_Id)
@@ -81,23 +88,31 @@ namespace AtService.Controllers
                                 await file.CopyToAsync(fileStream);
                             }
 
-                            string JSONString = new ExcelExtension().Test(filePath);
-                            var excelDataObject2 = JsonConvert.DeserializeObject<List<ExcelDataObject>>(JSONString);
-                            WorkflowController workflowController = new WorkflowController();
-                            WorkflowDataResponse response = ((WorkflowDataResponse)((ObjectResult)(workflowController.CreateWorkflow(file, Emp_Id)).Result).Value);
-                            _workflowID = response.Workflow.ID;
-                            result = this.CreateShipments(excelDataObject2, _workflowID);
-                            if (result.Success)
+
+                            ExcelExtensionReponse excelExtensionReponse = new ExcelExtension().Test(filePath);
+                            if (excelExtensionReponse.success)
                             {
-                                shipmentDataResponse.Success = true;
-                                shipmentDataResponse.Shipments = result.Shipments;
+                                var excelDataObject2 = JsonConvert.DeserializeObject<List<ExcelDataObject>>(excelExtensionReponse.ExcelExtensionReponseData);
+                                WorkflowController workflowController = new WorkflowController();
+                                WorkflowDataResponse response = ((WorkflowDataResponse)((ObjectResult)(workflowController.CreateWorkflow(file, Emp_Id)).Result).Value);
+                                _workflowID = response.Workflow.ID;
+                                result = this.CreateShipments(excelDataObject2, _workflowID);
+                                if (result.Success)
+                                {
+                                    shipmentDataResponse.Success = true;
+                                    shipmentDataResponse.Shipments = result.Shipments;
+                                }
+                                else
+                                {
+                                    shipmentDataResponse.Success = false;
+                                    shipmentDataResponse.OperationExceptionMsg = result.OperationExceptionMsg;
+                                    WorkflowService workflowService = new WorkflowService();
+                                    workflowService.DeleteWorkflowById(_workflowID);
+                                }
                             }
                             else
                             {
-                                shipmentDataResponse.Success = false;
-                                shipmentDataResponse.OperationExceptionMsg = result.OperationExceptionMsg;
-                                WorkflowService workflowService = new WorkflowService();
-                                workflowService.DeleteWorkflowById(_workflowID);
+                                return Ok(excelExtensionReponse);
                             }
                         }
                     }
@@ -159,7 +174,7 @@ namespace AtService.Controllers
                             shipmentDataRequest.ORG_CTY_TE = excelDataObject.S_orgcity;
 
                             string pststring = Convert.ToString(excelDataObject.S_orgpsl);
-                            if(InputValidations.IsDecimalFormat(pststring))
+                            if (InputValidations.IsDecimalFormat(pststring))
                             {
                                 shipmentDataRequest.ORG_PSL_CD = Decimal.ToInt32(Decimal.Parse(pststring)).ToString();
                             }
@@ -167,7 +182,7 @@ namespace AtService.Controllers
                             {
                                 shipmentDataRequest.ORG_PSL_CD = pststring;
                             }
-                            
+
                             // OU_FLG_TE = Convert.ToString(excelDataObject.S_outflight),
 
                             int intvalue = 0;
@@ -219,6 +234,7 @@ namespace AtService.Controllers
                             shipmentDataRequest.SHP_PH_TE = excelDataObject.S_shptph;
                             shipmentDataRequest.SMT_NR_TE = excelDataObject.S_shipmentno;
                             shipmentDataRequest.SMT_STA_NR = 0;
+                            shipmentDataRequest.SMT_STA_TE = "Uploaded";
                             shipmentDataRequest.SMT_VAL_DE = 0;
                             shipmentDataRequest.SMT_WGT_DE = Convert.ToDecimal(excelDataObject.S_shptwei);
                             shipmentDataRequest.SVL_NR = Convert.ToString(excelDataObject.svl);
@@ -271,10 +287,14 @@ namespace AtService.Controllers
         {
             shipmentService = new ShipmentService();
             ShipmentDataResponse shipmentDataResponse = shipmentService.UpdateShipmentAddressById(shipmentDataRequest);
-            if (!shipmentDataResponse.Success)
-            {
-                AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
-            }
+
+            //we need to update the workflow status
+            int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(shipmentDataRequest.WFL_ID);
+            WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
+            workflowDataRequest.ID = shipmentDataRequest.WFL_ID;
+            workflowDataRequest.WFL_STA_TE = workflowstatus;
+            workflowService.UpdateWorkflowStatusById(workflowDataRequest);
+
             return Ok(shipmentDataResponse);
         }
 
@@ -297,7 +317,7 @@ namespace AtService.Controllers
             CreateOrderShipmentResponse createOrderShipmentResponse = new CreateOrderShipmentResponse();
             createOrderShipmentResponse.FailedToProcessShipments = new List<string>();
             createOrderShipmentResponse.ProcessedShipments = new List<string>();
-            bool shipmentStatus = true;
+            ShipmentService shipmentService = new ShipmentService();
 
             //List<UIOrderRequestBodyData> uIOrderRequestBodyDatas = new List<UIOrderRequestBodyData>();
 
@@ -329,19 +349,12 @@ namespace AtService.Controllers
                 };
 
                 GetSFCreateOrderServiceResponse getSFCreateOrderServiceResponse = QuincusService.SFExpressCreateOrder(sFCreateOrderServiceRequest);
-                ShipmentService shipmentService = new ShipmentService();
-                ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
-                shipmentDataRequest.ID = orderRequest.id;
-                shipmentDataRequest.WFL_ID = orderRequest.wfL_ID;
-                shipmentDataRequest.SMT_STA_NR = ((int)Enums.ShipmentStatus.Completed);
 
-                ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
-
-                shipmentDataResponse = shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
-                if (!shipmentDataResponse.Success)
-                {
-                    AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
-                }
+                //shipmentDataResponse = shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
+                //if (!shipmentDataResponse.Success)
+                //{
+                //    AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
+                //}
 
                 if (getSFCreateOrderServiceResponse.Response)
                 {
@@ -350,13 +363,34 @@ namespace AtService.Controllers
 
                     string xmlDocumentShipmentResponseParser = xmlDocumentShipmentResponse.InnerXml;
 
-                    if(xmlDocumentShipmentResponseParser.Contains("<ERROR"))
+                    if (xmlDocumentShipmentResponseParser.Contains("<ERROR"))
                     {
-                        createOrderShipmentResponse.FailedToProcessShipments.Add(orderRequest.pkG_NR_TE);
+                        if (xmlDocumentShipmentResponseParser.Contains("8019"))
+                        {
+                            createOrderShipmentResponse.FailedToProcessShipments.Add("Customer order number(" + orderRequest.pkG_NR_TE + ") is already confirmed");
+                        }
+                        else if (xmlDocumentShipmentResponseParser.Contains("8016"))
+                        {
+
+                            createOrderShipmentResponse.FailedToProcessShipments.Add("Repeat order numbers ( " + orderRequest.pkG_NR_TE + " )");
+                        }
+                        else
+                        {
+                            createOrderShipmentResponse.FailedToProcessShipments.Add(orderRequest.pkG_NR_TE);
+                        }
                     }
                     else
                     {
                         createOrderShipmentResponse.ProcessedShipments.Add(orderRequest.pkG_NR_TE);
+
+                        ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
+                        shipmentDataRequest.ID = orderRequest.id;
+                        shipmentDataRequest.WFL_ID = orderRequest.wfL_ID;
+                        shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Completed);
+                        shipmentDataRequest.SMT_STA_TE = "Completed";
+                        _workflowID = orderRequest.wfL_ID;
+
+                        shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
                     }
 
                     createOrderShipmentResponse.Response = true;
@@ -368,7 +402,13 @@ namespace AtService.Controllers
                     AuditEventEntry.WriteEntry(new Exception(getSFCreateOrderServiceResponse.exception.ToString()));
                 }
             }
-
+            //we need to update the workflow status
+            int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);
+            WorkflowService workflowService = new WorkflowService();
+            WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
+            workflowDataRequest.ID = _workflowID;
+            workflowDataRequest.WFL_STA_TE = workflowstatus;
+            workflowService.UpdateWorkflowStatusById(workflowDataRequest);
             return Ok(createOrderShipmentResponse);
         }
 
@@ -424,12 +464,16 @@ namespace AtService.Controllers
 
             if (quincusTokenDataResponse.ResponseStatus)
             {
-                quincusTranslatedAddressResponse = QuincusService.GetTranslationAddress(new UPS.Quincus.APP.Request.QuincusAddressTranslationRequest()
-                {
-                    endpoint = configuration["Quincus:GeoCodeEndPoint"],
-                    shipmentWorkFlowRequests = shipmentWorkFlowRequest,
-                    token = quincusTokenDataResponse.quincusTokenData.token
-                });
+                //quincusTranslatedAddressResponse = QuincusService.GetTranslationAddress(new UPS.Quincus.APP.Request.QuincusAddressTranslationRequest()
+                //{
+                //    endpoint = configuration["Quincus:GeoCodeEndPoint"],
+                //    shipmentWorkFlowRequests = shipmentWorkFlowRequest,
+                //    token = quincusTokenDataResponse.quincusTokenData.token
+                //});
+                this._quincusAddressTranslationRequest.shipmentWorkFlowRequests = shipmentWorkFlowRequest;
+                this._quincusAddressTranslationRequest.token = quincusTokenDataResponse.quincusTokenData.token;
+
+                quincusTranslatedAddressResponse = QuincusService.GetTranslationAddress(this._quincusAddressTranslationRequest);
 
                 if (quincusTranslatedAddressResponse.Response)
                 {
@@ -460,14 +504,33 @@ namespace AtService.Controllers
                             shipmentDataRequest.ACY_TE = geocodes[i].accuracy;
                             shipmentDataRequest.CON_NR = geocodes[i].confidence;
 
-                            if (geocodes[i].translated_adddress != "NA")
+                            if (
+                                        !string.IsNullOrEmpty(geocodes[i].translated_adddress) 
+                                    &&  geocodes[i].translated_adddress != "NA"
+                                    &&  !string.Equals(shipmentWorkFlowRequest.Where(s => s.id == shipmentDataRequest.ID).FirstOrDefault().rcV_ADR_TE.Trim(),
+                                        geocodes[i].translated_adddress.Trim())
+                               )
                             {
-                                shipmentDataRequest.SMT_STA_NR = ((int)Enums.ShipmentStatus.Translated);
+                                shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Translated);
+                                shipmentDataRequest.SMT_STA_TE = "Translated";
+                            }
+                            else
+                            {
+                                shipmentDataRequest.SMT_STA_NR = Convert.ToInt32(shipmentWorkFlowRequest.Where(s => s.id == shipmentDataRequest.ID).FirstOrDefault().smT_STA_NR);
+                                shipmentDataRequest.SMT_STA_TE = Convert.ToString(shipmentWorkFlowRequest.Where(s => s.id == shipmentDataRequest.ID).FirstOrDefault().smT_STA_TE);
                             }
                             shipmentsDataRequest.Add(shipmentDataRequest);
                         }
                         ShipmentService shipmentService = new ShipmentService();
                         shipmentService.UpdateShipmentAddressByIds(shipmentsDataRequest);
+
+                        //we need to update the workflow status
+                        int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);
+                        WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
+                        workflowDataRequest.ID = _workflowID;
+                        workflowDataRequest.WFL_STA_TE = workflowstatus;
+                        workflowService.UpdateWorkflowStatusById(workflowDataRequest);
+
                         return Ok(QuincusResponse.QuincusReponseData);
                     }
                     else

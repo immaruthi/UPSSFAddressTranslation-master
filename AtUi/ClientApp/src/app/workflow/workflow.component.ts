@@ -29,6 +29,7 @@ export class WorkflowComponent {
   //displayedColumns = ['position', 'name', 'weight', 'symbol'];
   displayedColumns = ['id', 'usR_FST_NA', 'flE_NA', 'wfL_STA_TE_TEXT', 'crD_DT'];
   dataSource = new MatTableDataSource<Element>();
+  filterText: string;
 
   fileNameControl = new FormControl('');
   isValidFile: boolean = true;
@@ -99,6 +100,7 @@ export class WorkflowComponent {
   }
 
   applyFilter(filterValue: string) {
+    this.filterText = filterValue;
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
@@ -138,25 +140,25 @@ export class WorkflowComponent {
   
       this.userService.postFile(this.fileToUpload, user)
         .subscribe((response: any) => {
-          this.getWorkflowDetails();
-          this.openSuccessMessageNotification("File Uploaded successfully");
-          this.fileNameControl.setValue('');
-
-          //if (response.success === true) {
-          //  this.getWorkflowDetails();
-          //  this.openSuccessMessageNotification("File Uploaded successfully");
-          //  this.fileNameControl.setValue('');
-          //} else {
-          //  this.openErrorMessageNotification(response.);
-          //  this.fileNameControl.setValue('');
-          //}
+          if (response.success === true) {
+            this.getWorkflowDetails();
+            this.openSuccessMessageNotification("File Uploaded successfully");
+            this.resetFileUpload();
+          } else if (response.success === false) {
+            if (response.exception) {
+              this.openErrorMessageNotification(response.exception.Message);
+              this.resetFileUpload();
+            }
+          }
         },
         error =>
         {
           this.openErrorMessageNotification("Error while uploading file");
-          this.fileNameControl.setValue('');
+          this.resetFileUpload();
         }
       );
+      this.applyFilter('');
+      this.filterText = '';
     }
   }
   validateFile(name: String) {
@@ -167,6 +169,11 @@ export class WorkflowComponent {
     else {
       return false;
     }
+  }
+
+  resetFileUpload() {
+    this.fileNameControl.setValue('');
+    (<HTMLInputElement>document.getElementById('file')).value = '';
   }
  
 }

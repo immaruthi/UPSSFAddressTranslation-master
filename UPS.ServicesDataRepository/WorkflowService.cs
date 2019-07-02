@@ -82,14 +82,18 @@ namespace UPS.ServicesDataRepository
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
                 {
                     WorkflowDataRequest data = context.workflowDataRequests.Where(s => s.ID == WorkflowDataRequest.ID).FirstOrDefault();
-                    data.ID = WorkflowDataRequest.ID;
-                    data.WFL_STA_TE = WorkflowDataRequest.WFL_STA_TE;
-                    context.workflowDataRequests.Update(data);
-                    context.Entry(WorkflowDataRequest).State = EntityState.Modified;
-                    context.SaveChanges();
-                    workflowDataResponse.Workflow = data;
-                    workflowDataResponse.Success = true;
-                    return workflowDataResponse;
+                    if(data != null)
+                    {
+                        data.ID = WorkflowDataRequest.ID;
+                        data.WFL_STA_TE = WorkflowDataRequest.WFL_STA_TE;
+                        context.workflowDataRequests.Update(data);
+                        context.Entry(WorkflowDataRequest).State = EntityState.Detached;
+                        context.SaveChanges();
+                        workflowDataResponse.Workflow = data;
+                        workflowDataResponse.Success = true;
+                        return workflowDataResponse;
+                    }
+                    workflowDataResponse.Success = false;
                 }
             }
             catch (Exception ex)

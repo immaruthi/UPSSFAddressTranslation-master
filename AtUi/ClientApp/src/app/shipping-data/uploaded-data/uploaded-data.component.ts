@@ -7,6 +7,7 @@ import { ShippingService } from '../../services/shipping.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Constants } from '../../shared/Constants';
 import { Observable } from 'rxjs';
+import { MatStepperTab } from '../../shared/enums.service';
 
 @Component({
   selector: 'app-uploaded-data',
@@ -16,7 +17,7 @@ import { Observable } from 'rxjs';
 export class UploadedDataComponent implements OnInit {
 
   displayedColumns =
-    ['smT_STA_NR', 'smT_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'fsT_INV_LN_DES_TE',
+    ['wfL_ID','smT_STA_NR', 'smT_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'fsT_INV_LN_DES_TE',
       'shP_CPY_NA', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD', 'imP_SLC_TE',
       'coD_TE'
     ];
@@ -50,8 +51,12 @@ export class UploadedDataComponent implements OnInit {
     if (this.WorkflowID) {
       this.getUploadedData(this.WorkflowID);
     }
-    this.eventsSubscription = this.events.subscribe(() => {
-      this.getUploadedData(this.WorkflowID)
+    this.eventsSubscription = this.events.subscribe((event :any) => {
+      let selectedTabIndex = event.selectedIndex;
+      if (this.WorkflowID && selectedTabIndex == MatStepperTab.UploadedTab) {
+        this.getUploadedData(this.WorkflowID);
+      }
+      
     });
   }
 

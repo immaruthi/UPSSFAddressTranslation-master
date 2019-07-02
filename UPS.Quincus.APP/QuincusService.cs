@@ -18,7 +18,7 @@ namespace UPS.Quincus.APP
 
         }
 
-        public static QuincusTranslatedAddressResponse GetTranslationAddress(QuincusAddressTranslationRequest quincusAddressTranslationRequest)
+        public static QuincusTranslatedAddressResponse GetTranslationAddress(IQuincusAddressTranslationRequest quincusAddressTranslationRequest)
         {
 
             QuincusTranslatedAddressResponse quincusTranslatedAddressResponse = QuincusProxy.GetTranslatedAddressResponse(quincusAddressTranslationRequest);

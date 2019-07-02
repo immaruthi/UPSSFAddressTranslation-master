@@ -8,9 +8,13 @@
 <br />
 <div class="table-div">
   <mat-table class="table" [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="wfL_ID" class="container">
+      <mat-header-cell *matHeaderCellDef class="header-cell"> Workflow ID </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="cell"> {{element.wfL_ID}} </mat-cell>
+    </ng-container>
     <ng-container matColumnDef="smT_STA_NR" class="container">
       <mat-header-cell *matHeaderCellDef class="header-cell"> SHP Status </mat-header-cell>
-      <mat-cell *matCellDef="let element" class="cell"> {{shipmentStatusList[element.smT_STA_NR].value}} </mat-cell>
+      <mat-cell *matCellDef="let element" class="cell"> {{shipmentStatusList[element?.smT_STA_NR!=null ?element.smT_STA_NR:4].value}} </mat-cell>
     </ng-container>
     <ng-container matColumnDef="smT_NR_TE" class="container">
       <mat-header-cell *matHeaderCellDef class="header-cell"> Package Number </mat-header-cell>

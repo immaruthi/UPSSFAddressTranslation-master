@@ -100,5 +100,7 @@ namespace UPS.DataObjects.Shipment
         public string CON_NR { get; set; }
         [Column("SPC-SLIC-NR")]
         public int? SPC_SLIC_NR { get; set; }
+        [NotMapped]
+        public string SMT_STA_TE { get; set; }
     }
 }

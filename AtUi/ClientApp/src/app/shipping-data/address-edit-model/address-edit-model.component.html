@@ -16,11 +16,15 @@
       <input matInput placeholder="Receiving address" value="{{data.rcV_ADR_TE}}" [(ngModel)]="data.rcV_ADR_TE" name="rcV_ADR_TE" readonly>
     </mat-form-field><br />
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="Translated address" value="{{data.shP_ADR_TR_TE}}" [(ngModel)]="data.shP_ADR_TR_TE" name="shP_ADR_TR_TE">
+      <input matInput class="form-control" placeholder="Translated address" value="{{data.shP_ADR_TR_TE}}" [(ngModel)]="data.shP_ADR_TR_TE" name="shP_ADR_TR_TE">
     </mat-form-field><br />
-    <mat-form-field class="example-full-width">
-      <input matInput type="number" placeholder="COD(CN¥)" value="{{data.coD_TE}}" [(ngModel)]="data.coD_TE" name="coD_TE"  >
-    </mat-form-field>
+    <div class="form">
+      <mat-form-field class="example-full-width">
+        <input matInput class="form-control" placeholder="COD(CN¥)" value="{{data.coD_TE}}" [(ngModel)]="data.coD_TE" name="coD_TE" pattern="^[0-9]{0,6}(\.[0-9]([0-9])?)?$">
+        <mat-error *ngIf="formControl.invalid">Please Enter valid COD </mat-error>
+        <mat-hint>Supported digit format: Max 6 digit with 2 decimal number (Ex. 999999.99)</mat-hint>
+      </mat-form-field>
+    </div>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>

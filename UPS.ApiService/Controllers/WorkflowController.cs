@@ -12,13 +12,14 @@ using Microsoft.EntityFrameworkCore;
 using UPS.DataObjects.UserData;
 using UPS.DataObjects.WR_FLW;
 using UPS.ServicesDataRepository;
+using UPS.ServicesDataRepository.Common;
 using UPS.ServicesDataRepository.DataContext;
 
 namespace UPS.AddressTranslationService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("SiteCorsPolicy")]
+    [EnableCors("AllowAtUIOrigin")]
     public class WorkflowController : ControllerBase
     {
         private WorkflowService workflowService {get; set; }
@@ -33,7 +34,7 @@ namespace UPS.AddressTranslationService.Controllers
             workflowDataRequest.FLE_NA = fromFile.FileName;
             workflowDataRequest.CRD_BY_NR = Emp_Id;
             workflowDataRequest.CRD_DT = DateTime.Parse(DateTime.Now.ToString()).ToLocalTime();
-            workflowDataRequest.WFL_STA_TE = 1;
+            workflowDataRequest.WFL_STA_TE = 0;
             workflowService = new WorkflowService();
             workflowDataResponse = workflowService.InsertWorkflow(workflowDataRequest);
             return Ok(workflowDataResponse);
@@ -48,7 +49,10 @@ namespace UPS.AddressTranslationService.Controllers
             optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
             var context = new ApplicationDbContext(optionsBuilder.Options);
-            WorkflowDataRequest workflow = context.workflowDataRequests.Where(w => w.CRD_BY_NR == user.ID).FirstOrDefault();
+            WorkflowDataRequest workflow = 
+                context.workflowDataRequests.Where(
+                    w => w.CRD_BY_NR == user.ID 
+                         && w.WFL_STA_TE != (int)Enums.ATStatus.Inactive).FirstOrDefault();
             return Ok(workflow);
         }
 

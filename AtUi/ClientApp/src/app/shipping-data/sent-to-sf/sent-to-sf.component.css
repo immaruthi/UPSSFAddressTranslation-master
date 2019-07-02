@@ -6,7 +6,7 @@
 
 mat-table {
   width: 100%;
-  min-width: 3800px;
+  min-width: 4000px;
   padding: 0;
 }
 
@@ -33,6 +33,7 @@ mat-header-cell {
   flex: none;
   font-size: 14px;
   font-weight: bold;
+  color:white;
 }
 /*Select*/
 mat-cell:nth-child(1) {
@@ -73,7 +74,7 @@ mat-header-cell:nth-child(2) {
   font-weight: bold;
 }
 /*package Number*/
-mat-cell:nth-child(4) {
+mat-cell:nth-child(5) {
   padding: 0px 15px 0px 15px;
   width: 180px;
   flex: none;
@@ -82,7 +83,7 @@ mat-cell:nth-child(4) {
 }
 
 /*package Number*/
-mat-header-cell:nth-child(4) {
+mat-header-cell:nth-child(5) {
   padding: 0px 15px 0px 15px;
   width: 180px;
   flex: none;
@@ -91,7 +92,7 @@ mat-header-cell:nth-child(4) {
 }
 
 /*SHP Company Name*/
-mat-cell:nth-child(11) {
+mat-cell:nth-child(14) {
   padding: 0px 15px 0px 15px;
   width: 200px;
   flex: none;
@@ -100,7 +101,7 @@ mat-cell:nth-child(11) {
 }
 
 /*SHP Company Name*/
-mat-header-cell:nth-child(11) {
+mat-header-cell:nth-child(14) {
   padding: 0px 15px 0px 15px;
   width: 200px;
   flex: none;
@@ -109,7 +110,7 @@ mat-header-cell:nth-child(11) {
 }
 
 /*SHP Address*/
-mat-cell:nth-child(12) {
+mat-cell:nth-child(15) {
   padding: 0px 15px 0px 15px;
   width: 250px;
   flex: none;
@@ -118,7 +119,7 @@ mat-cell:nth-child(12) {
 }
 
 /*SHP Address*/
-mat-header-cell:nth-child(12) {
+mat-header-cell:nth-child(15) {
   padding: 0px 15px 0px 15px;
   width: 250px;
   flex: none;
@@ -127,24 +128,6 @@ mat-header-cell:nth-child(12) {
 }
 
 /*Receiving Company*/
-mat-cell:nth-child(5) {
-  padding: 0px 15px 0px 15px;
-  width: 250px;
-  flex: none;
-  float: left;
-  font-size: 12px;
-}
-
-/*Receiving Company*/
-mat-header-cell:nth-child(5) {
-  padding: 0px 15px 0px 15px;
-  width: 250px;
-  flex: none;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-/*Receive Address*/
 mat-cell:nth-child(6) {
   padding: 0px 15px 0px 15px;
   width: 250px;
@@ -153,7 +136,7 @@ mat-cell:nth-child(6) {
   font-size: 12px;
 }
 
-/*Receive Address*/
+/*Receiving Company*/
 mat-header-cell:nth-child(6) {
   padding: 0px 15px 0px 15px;
   width: 250px;
@@ -162,7 +145,7 @@ mat-header-cell:nth-child(6) {
   font-weight: bold;
 }
 
-/*SHP Translated Address*/
+/*Receive Address*/
 mat-cell:nth-child(7) {
   padding: 0px 15px 0px 15px;
   width: 250px;
@@ -171,8 +154,26 @@ mat-cell:nth-child(7) {
   font-size: 12px;
 }
 
-/*SHP Translated Address*/
+/*Receive Address*/
 mat-header-cell:nth-child(7) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*SHP Translated Address*/
+mat-cell:nth-child(8) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*SHP Translated Address*/
+mat-header-cell:nth-child(8) {
   padding: 0px 15px 0px 15px;
   width: 250px;
   flex: none;
@@ -185,5 +186,16 @@ mat-row:nth-child(odd) {
 }
 
 mat-header-row {
-  background: #F2F2F2;
+  background-color: gray;
+}
+
+.mat-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  color: white;
+}
+
+mat-cell {
+  font-size: 12px;
 }

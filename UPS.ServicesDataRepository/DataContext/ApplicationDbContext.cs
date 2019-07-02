@@ -10,13 +10,12 @@ using UPS.DataObjects.Shipment;
 using UPS.DataObjects.SPC_LST;
 using UPS.DataObjects.UserData;
 using UPS.DataObjects.WR_FLW;
+using UPS.ServicesDataRepository.OverrideDbContext;
 
 namespace UPS.ServicesDataRepository.DataContext
 {
     public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
-
-        const string connectionString = "Server=tcp:upssf.database.windows.net,1433;Initial Catalog=AT;Persist Security Info=False;User ID=suresh;Password=123456Aa#;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         { }
@@ -37,7 +36,7 @@ namespace UPS.ServicesDataRepository.DataContext
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(connectionString);
+            optionsBuilder.UseSqlServer(DBConnectionContext.connectionString);
         }
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{

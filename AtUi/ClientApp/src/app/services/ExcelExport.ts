@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
+import { DatePipe } from '@angular/common'
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
@@ -8,7 +9,7 @@ const EXCEL_EXTENSION = '.xlsx';
 @Injectable()
 export class ExcelService {
 
-  constructor() { }
+  constructor(public datepipe: DatePipe) { }
 
   public exportAsExcelFile(json: any[], excelFileName: string): void {
 
@@ -24,7 +25,7 @@ export class ExcelService {
     const data: Blob = new Blob([buffer], {
       type: EXCEL_TYPE
     });
-    FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+    FileSaver.saveAs(data, fileName + '-' + this.datepipe.transform(new Date().getTime(), 'yyyy-MM-dd') + EXCEL_EXTENSION);
   }
 
 }

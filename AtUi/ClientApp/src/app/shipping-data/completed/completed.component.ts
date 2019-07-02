@@ -10,6 +10,8 @@ import { AddressEditModelComponent } from '../address-edit-model/address-edit-mo
 import { DataService } from '../../services/data.service';
 import { DialogService } from '../../services/dialog.service';
 import { Observable } from 'rxjs';
+import { ExcelService } from '../../services/ExcelExport';
+import { MatStepperTab } from '../../shared/enums.service';
 
 @Component({
   selector: 'app-completed',
@@ -18,9 +20,9 @@ import { Observable } from 'rxjs';
 })
 export class CompletedComponent implements OnInit {
   displayedColumns =
-    ['smT_STA_NR', 'pkG_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE',
-      'fsT_INV_LN_DES_TE', 'shP_CPY_NA', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD',
-          'imP_SLC_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'coD_TE', 'pyM_MTD', 'exP_TYP', 'spC_SLIC_NR'
+    ['wfL_ID', 'smT_STA_NR', 'pkG_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE',
+      'csG_CTC_TE', 'pH_NR', 'fsT_INV_LN_DES_TE', 'shP_CPY_NA', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE',  'orG_CTY_TE', 'orG_PSL_CD',
+     'imP_SLC_TE', 'coD_TE', 'pyM_MTD', 'exP_TYP', 'spC_SLIC_NR'
     ];
   private eventsSubscription: any;
   @Input() events: Observable<void>;
@@ -33,10 +35,13 @@ export class CompletedComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
   public mainData: any[] = [];
   public checkedData: any[] = [];
+  public tableData: any[] = [];
+  public excelMainData: any[] = [];
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
     private router: Router, public dialog: MatDialog, public dataService: DataService,
-    private snackBar: MatSnackBar, private dialogService: DialogService) {
+    private snackBar: MatSnackBar, private dialogService: DialogService,
+    private excelService: ExcelService) {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -51,12 +56,12 @@ export class CompletedComponent implements OnInit {
 
   ngOnInit() {
     this.WorkflowID = this.activatedRoute.snapshot.params.WorkflowID;
-    if (this.WorkflowID) {
-      this.getCompletedShipments(this.WorkflowID);
-    }
-
-    this.eventsSubscription = this.events.subscribe(() => {
-      this.getCompletedShipments(this.WorkflowID)
+    this.eventsSubscription = this.events.subscribe((event:any) => {
+      let selectedTabIndex = event.selectedIndex;
+      if (this.WorkflowID && selectedTabIndex == MatStepperTab.CompletedTab) {
+        this.getCompletedShipments(this.WorkflowID);
+      }
+      
     });
   }
 
@@ -83,4 +88,43 @@ export class CompletedComponent implements OnInit {
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
+
+  exportToExcel() {
+    this.tableData = [];
+    this.excelMainData = [];
+    this.tableData = this.dataSource.data;
+    if (this.tableData.length > 0) {
+      for (let data of this.tableData) {
+        this.excelMainData.push(
+          {
+            'Workflow ID': data.wfL_ID,
+            'SHP Status': this.shipmentStatusList[data.smT_STA_NR].value,
+            'Package Number': data.pkG_NR_TE,
+            'Receiving Company': data.rcV_CPY_TE,
+            'Receiving Address': data.rcV_ADR_TE,
+            'Translated Address': data.shP_ADR_TR_TE,
+            'Receiving City': data.dsT_CTY_TE,
+            'Receiving Postal Code': data.dsT_PSL_TE,
+            'Consignee Contact': data.csG_CTC_TE,
+            'Consignee Phone': data.pH_NR,
+            'Specification': data.fsT_INV_LN_DES_TE,
+            'SHP Company Name': data.shP_CPY_NA,
+            'SHP Address': data.shP_ADR_TE,
+            'SHP Contact': data.shP_CTC_TE,
+            'SHP Phone': data.shP_PH_TE,
+            'Origin City': data.orG_CTY_TE,
+            'Origin Postal code': data.orG_PSL_CD,
+            'IMP SLC': data.imP_SLC_TE,
+            'COD': data.coD_TE,
+            'Payment Method': data.pyM_MTD,
+            'Express Type': data.exP_TYP,
+            'Slic': data.spC_SLIC_NR
+          })
+      }
+      this.excelService.exportAsExcelFile(this.excelMainData, 'Completed');
+    } else {
+      this.dialogService.openAlertDialog('No data for export.');
+    }
+  }
+
 }

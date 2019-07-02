@@ -20,12 +20,13 @@ using AtService.Models;
 using System;
 using System.Net.Http.Headers;
 using System.Collections.Generic;
+using UPS.ServicesDataRepository.OverrideDbContext;
 
 namespace AtService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("SiteCorsPolicy")]
+    [EnableCors("AllowAtUIOrigin")]
     public class ExcelWorkflowController : Controller
     {
         private IHostingEnvironment _hostingEnvironment;
@@ -72,7 +73,7 @@ namespace AtService.Controllers
         public string SaveExcelFileInformation1(string excelFile,string EmpName)
         {
             int EMP_ID = GetEmpID(EmpName);
-            SqlConnection con = new SqlConnection(GetConnectionString.connectionString);
+            SqlConnection con = new SqlConnection(DBConnectionContext.connectionString);
             string query = "INSERT INTO dbo.[WR-FLW]([FLE-NA], [WFL-STA-TE],[CRD-DT],[UDT-DT],[CRD-BY-NR]) VALUES('" + excelFile + "', 1 ,'" + DateTime.Now.ToString("dd-MMM-yyyy") + "','" + DateTime.Now.ToString("dd-MMM-yyyy") + "', "+ EMP_ID+")";
             SqlCommand cmd = new SqlCommand(query, con);
             try
@@ -90,7 +91,7 @@ namespace AtService.Controllers
 
         public int GetEmpID(string Empname)
         {
-            SqlConnection conn = new SqlConnection(GetConnectionString.connectionString);
+            SqlConnection conn = new SqlConnection(DBConnectionContext.connectionString);
             conn.Open();
             //string query = "select * from [WR-FLW] inner join [USR] on USR.ID = [WR-FLW].[CRD-BY-NR] ";
             string query = "select ID from [USR] where [USR].[USR-EML-TE] ='"+Empname+"'";
@@ -111,7 +112,7 @@ namespace AtService.Controllers
             List<WorkflowDataRequest> excelWorkflowsLst = new List<WorkflowDataRequest>();
 
 
-            SqlConnection conn = new SqlConnection(GetConnectionString.connectionString);
+            SqlConnection conn = new SqlConnection(DBConnectionContext.connectionString);
             conn.Open();
             //string query = "select * from [WR-FLW] inner join [USR] on USR.ID = [WR-FLW].[CRD-BY-NR] ";
             string query = "select * from [WR-FLW] " +
@@ -130,25 +131,21 @@ namespace AtService.Controllers
                 exflow.ID = Convert.ToInt32(reader[0]);
                 exflow.USR_FST_NA = reader["USR-FST-NA"].ToString();
                 exflow.FLE_NA = reader["FLE-NA"].ToString();
-                exflow.WFL_STA_TE = Convert.ToInt32(reader["WFL-STA-TE"]);
+                exflow.WFL_STA_TE = reader["WFL-STA-TE"] != null ? Convert.ToInt32(reader["WFL-STA-TE"].ToString()) : 0;
                 exflow.CRD_DT = reader["CRD-DT"] != null && reader["CRD-DT"].ToString() != string.Empty ? Convert.ToDateTime(reader["CRD-DT"].ToString()): DateTime.Now;
                 exflow.UDT_DT = reader["UDT-DT"] != null && reader["UDT-DT"].ToString() != string.Empty ? Convert.ToDateTime(reader["UDT-DT"].ToString()): DateTime.Now;
 
-                if (exflow.WFL_STA_TE == 1)
+                if (exflow.WFL_STA_TE == 0)
                 {
-                    exflow.WFL_STA_TE_TEXT = "Created";
+                    exflow.WFL_STA_TE_TEXT = "Created"; //Uploaded
                 }
-                else if (exflow.WFL_STA_TE == 2)
+                else if (exflow.WFL_STA_TE == 1 || exflow.WFL_STA_TE == 2)
                 {
-                    exflow.WFL_STA_TE_TEXT = "InProgress";
+                    exflow.WFL_STA_TE_TEXT = "InProgress"; //Curated || Translated
                 }
-                else if (exflow.WFL_STA_TE == 3)
+                else if(exflow.WFL_STA_TE == 3)
                 {
-                    exflow.WFL_STA_TE_TEXT = "InActive";
-                }
-                else
-                {
-                    exflow.WFL_STA_TE_TEXT = "Done";
+                    exflow.WFL_STA_TE_TEXT = "Completed"; //Done
                 }
 
                 excelWorkflowsLst.Add(exflow);
@@ -168,7 +165,7 @@ namespace AtService.Controllers
             List<WorkflowDataRequest> excelWorkflowsLst = new List<WorkflowDataRequest>();
 
 
-            SqlConnection conn = new SqlConnection(GetConnectionString.connectionString);
+            SqlConnection conn = new SqlConnection(DBConnectionContext.connectionString);
             conn.Open();
             string query = "select * from [WR-FLW] inner join [USR] on USR.ID = [WR-FLW].[CRD-BY-NR] ";
             //string query = "select * from [WR-FLW] inner join [USR] on USR.ID = [WR-FLW].[CRD-BY-NR] where USR.ID = (select [ID] from [USR] where [USR].[USR-EML-TE]= '" + EmpID + "')";

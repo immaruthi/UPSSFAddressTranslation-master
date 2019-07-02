@@ -7,12 +7,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UPS.DataObjects.UserData;
 using UPS.ServicesDataRepository;
+using UPS.ServicesDataRepository.OverrideDbContext;
 
 namespace AtService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("SiteCorsPolicy")]
+    [EnableCors("AllowAtUIOrigin")]
     public class LoginController : ControllerBase
     {
         public LoginContext loginContext = null;
@@ -20,8 +21,9 @@ namespace AtService.Controllers
         public LoginController()
         {
             userServices = new UserServices();
-            loginContext = new LoginContext(GetConnectionString.connectionString, userServices);
+            loginContext = new LoginContext(DBConnectionContext.connectionString, userServices);
         }
+
         [HttpPost("[action]")]
         public ActionResult<UserDataResponse> ValidateUser([FromBody] LoginContextData loginContextData)
         {
@@ -45,7 +47,7 @@ namespace AtService.Controllers
         public bool InsertUser(String firstName, String lastName, String userName, String password)
         {
 
-            SqlConnection sqlConnection = new SqlConnection(GetConnectionString.connectionString);
+            SqlConnection sqlConnection = new SqlConnection(DBConnectionContext.connectionString);
 
             try
             {

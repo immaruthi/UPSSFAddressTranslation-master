@@ -4,6 +4,6 @@ import { Injectable } from "@angular/core";
 export class Constants {
   static SNAKBAR_SHOW_DURATION = 3000;
   static ShipmentStatusList = [{ key: 0, value: 'Uploaded' }, { key: 1, value: 'Curated' }, { key: 2, value: 'Translated' },
-    { key: 3, value: 'Done' }
+    { key: 3, value: 'Completed' },  { key: 4, value: 'NA' }
   ]
 }

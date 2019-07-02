@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UPS.Quincus.APP", "UPS.Quin
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UPS.Application.LogManagement", "UPS.Application.LogManagement", "{65788ABF-FE75-40E5-A8AF-75B4D53282DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UPS.Application.CustomLogs", "UPS.Application.CustomLogs\UPS.Application.CustomLogs.csproj", "{7A85E3C3-E30A-40FE-8D9A-575464EE7A4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UPS.Application.CustomLogs", "UPS.Application.CustomLogs\UPS.Application.CustomLogs.csproj", "{7A85E3C3-E30A-40FE-8D9A-575464EE7A4E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

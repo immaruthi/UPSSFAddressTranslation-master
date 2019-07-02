@@ -26,6 +26,7 @@ import { HomeService } from './services/HomeService';
 import { MaterialModule } from './shared/MaterialModule'
 import { AdminconfigComponent } from './adminconfig/adminconfig.component';
 import { AlertDialogComponent } from './dialogs/alert-dialog/alert-dialog.component';
+import { SummaryDialogComponent } from './dialogs/summary-dialog/summary-dialog.component';
 import { DialogService } from './services/dialog.service';
 import { ExcelService } from './services/ExcelExport';
 import { ShippingService } from './services/shipping.service';
@@ -54,6 +55,7 @@ import { EditModeDirective } from './shared/editable/edit-mode.directive';
 import { ViewModeDirective } from './shared/editable/view-mode.directive';
 import { EditOnEnterDirective } from './shared/editable/edit-on-enter.directive';
 import { AddressEditModelComponent } from './shipping-data/address-edit-model/address-edit-model.component';
+import { DatePipe } from '@angular/common'
 
 @NgModule({
   declarations: [
@@ -68,6 +70,7 @@ import { AddressEditModelComponent } from './shipping-data/address-edit-model/ad
     LoginComponent,
     AdminconfigComponent,
     AlertDialogComponent,
+    SummaryDialogComponent,
     WorkflowComponent,
     ShipmentComponent,
     UploadedDataComponent,
@@ -104,6 +107,7 @@ import { AddressEditModelComponent } from './shipping-data/address-edit-model/ad
       ShippingService,
       HttpService,
     LoaderService,
+    DatePipe,
     DataService,
     {
       provide: HTTP_INTERCEPTORS,
@@ -112,7 +116,7 @@ import { AddressEditModelComponent } from './shipping-data/address-edit-model/ad
     }
     ],
   bootstrap: [AppComponent],
-  entryComponents: [LoginComponent, AlertDialogComponent, AddressEditModelComponent]
+  entryComponents: [LoginComponent, AlertDialogComponent, SummaryDialogComponent, AddressEditModelComponent]
 
 })
 export class AppModule { }
