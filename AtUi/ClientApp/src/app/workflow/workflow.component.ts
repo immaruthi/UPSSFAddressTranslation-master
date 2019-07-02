@@ -143,18 +143,18 @@ export class WorkflowComponent {
           if (response.success === true) {
             this.getWorkflowDetails();
             this.openSuccessMessageNotification("File Uploaded successfully");
-            this.fileNameControl.setValue('');
+            this.resetFileUpload();
           } else if (response.success === false) {
             if (response.exception) {
               this.openErrorMessageNotification(response.exception.Message);
-              this.fileNameControl.setValue('');
+              this.resetFileUpload();
             }
           }
         },
         error =>
         {
           this.openErrorMessageNotification("Error while uploading file");
-          this.fileNameControl.setValue('');
+          this.resetFileUpload();
         }
       );
       this.applyFilter('');
@@ -169,6 +169,11 @@ export class WorkflowComponent {
     else {
       return false;
     }
+  }
+
+  resetFileUpload() {
+    this.fileNameControl.setValue('');
+    (<HTMLInputElement>document.getElementById('file')).value = '';
   }
  
 }

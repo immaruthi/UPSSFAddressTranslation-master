@@ -212,6 +212,7 @@ export class SentToSfComponent implements OnInit {
       for (let data of this.tableData) {
         this.excelMainData.push(
           {
+            'Workflow ID': data.wfL_ID,
             'SHP Status': this.shipmentStatusList[data.smT_STA_NR].value,
             'Package Number': data.pkG_NR_TE,
             'Receiving Company': data.rcV_CPY_TE,
@@ -219,6 +220,8 @@ export class SentToSfComponent implements OnInit {
             'Translated Address': data.shP_ADR_TR_TE,
             'Receiving City': data.dsT_CTY_TE,
             'Receiving Postal Code': data.dsT_PSL_TE,
+            'Consignee Contact': data.csG_CTC_TE,
+            'Consignee Phone': data.pH_NR,
             'Specification': data.fsT_INV_LN_DES_TE,
             'SHP Company Name': data.shP_CPY_NA,
             'SHP Address': data.shP_ADR_TE,
@@ -233,9 +236,9 @@ export class SentToSfComponent implements OnInit {
             'Slic': data.spC_SLIC_NR
           })
       }
+      this.excelService.exportAsExcelFile(this.excelMainData, 'SendToSF');
     } else {
       this.dialogService.openAlertDialog('No data for export.');
     }    
-    this.excelService.exportAsExcelFile(this.excelMainData, 'SendToSF');
   }
 }
