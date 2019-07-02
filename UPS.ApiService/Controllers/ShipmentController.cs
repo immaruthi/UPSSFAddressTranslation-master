@@ -29,6 +29,7 @@ using UPS.Quincus.APP.Request;
 using UPS.DataObjects.SPC_LST;
 using UPS.ServicesDataRepository.Common;
 using System.Xml;
+using UPS.Application.CustomLogs;
 
 namespace AtService.Controllers
 {
@@ -106,6 +107,7 @@ namespace AtService.Controllers
             }
             catch (Exception ex)
             {
+                AuditEventEntry.WriteEntry(new Exception(ex.Message));
                 return Ok(shipmentDataResponse.OperationExceptionMsg = ex.Message);
             }
         }
@@ -240,6 +242,7 @@ namespace AtService.Controllers
             {
                 shipmentDataResponse.OperationExceptionMsg = exception.Message;
                 shipmentDataResponse.Success = true;
+                AuditEventEntry.WriteEntry(new Exception(exception.Message));
             }
             return shipmentDataResponse;
         }
@@ -253,6 +256,10 @@ namespace AtService.Controllers
         {
             shipmentService = new ShipmentService();
             ShipmentDataResponse shipmentDataResponse = shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
+            if (!shipmentDataResponse.Success)
+            {
+                AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
+            }
             return Ok(shipmentDataResponse);
         }
 
@@ -264,6 +271,10 @@ namespace AtService.Controllers
         {
             shipmentService = new ShipmentService();
             ShipmentDataResponse shipmentDataResponse = shipmentService.UpdateShipmentAddressById(shipmentDataRequest);
+            if (!shipmentDataResponse.Success)
+            {
+                AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
+            }
             return Ok(shipmentDataResponse);
         }
 
@@ -324,7 +335,13 @@ namespace AtService.Controllers
                 shipmentDataRequest.WFL_ID = orderRequest.wfL_ID;
                 shipmentDataRequest.SMT_STA_NR = ((int)Enums.ShipmentStatus.Completed);
 
-                shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
+                ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
+
+                shipmentDataResponse = shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
+                if (!shipmentDataResponse.Success)
+                {
+                    AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
+                }
 
                 if (getSFCreateOrderServiceResponse.Response)
                 {
@@ -347,6 +364,8 @@ namespace AtService.Controllers
                 else
                 {
                     createOrderShipmentResponse.Response = false;
+                    if(getSFCreateOrderServiceResponse.exception != null)
+                    AuditEventEntry.WriteEntry(new Exception(getSFCreateOrderServiceResponse.exception.ToString()));
                 }
             }
 
@@ -377,6 +396,7 @@ namespace AtService.Controllers
             }
             else
             {
+                AuditEventEntry.WriteEntry(new Exception(getSFCancelOrderServiceResponse.exception.ToString()));
                 return Ok(getSFCancelOrderServiceResponse.exception);
             }
 
@@ -452,17 +472,20 @@ namespace AtService.Controllers
                     }
                     else
                     {
+                        AuditEventEntry.WriteEntry(new Exception(QuincusResponse.Exception.ToString()));
                         return Ok(QuincusResponse.Exception);
                     }
                 }
                 else
                 {
+                    AuditEventEntry.WriteEntry(new Exception(quincusTranslatedAddressResponse.exception.ToString()));
                     return Ok(quincusTranslatedAddressResponse.exception);
                 }
 
             }
             else
             {
+                AuditEventEntry.WriteEntry(new Exception(quincusTokenDataResponse.exception.ToString()));
                 return Ok(quincusTokenDataResponse.exception);
             }
         }
@@ -507,6 +530,7 @@ namespace AtService.Controllers
             }
             else
             {
+                AuditEventEntry.WriteEntry(new Exception(quincusTokenDataResponse.exception.ToString()));
                 return Ok(quincusTokenDataResponse.exception);
             }
 
@@ -519,6 +543,15 @@ namespace AtService.Controllers
         {
             ShipperCompnayService shipperCompanyService = new ShipperCompnayService();
             shipmentDataResponse = shipperCompanyService.SelectMatchedShipmentsWithShipperCompanies(wid);
+            if (!shipmentDataResponse.Success)
+            {
+                AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
+            }
+            //else
+            //{
+            //    var json = JsonConvert.SerializeObject(shipmentDataResponse.Shipments).ToString();
+            //    AuditEventEntry.WriteEntry(new Exception(json));
+            //}
             return shipmentDataResponse;
         }
 
@@ -528,6 +561,10 @@ namespace AtService.Controllers
         {
             ShipperCompnayService shipperCompanyService = new ShipperCompnayService();
             shipmentDataResponse = shipperCompanyService.SelectCompletedShipments(wid);
+            if(!shipmentDataResponse.Success)
+            {
+                AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
+            }
             return shipmentDataResponse;
         }
     }

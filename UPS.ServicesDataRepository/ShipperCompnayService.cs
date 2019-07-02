@@ -19,10 +19,12 @@ namespace UPS.ServicesDataRepository
         public ShipmentDataResponse SelectMatchedShipmentsWithShipperCompanies(int workflowID)
 
         {
+            throw new Exception("Error in Page Log elmah");
             ShipmentDataResponse mappedShipAndShipperCompanyResponse = new ShipmentDataResponse();
             List<ShipmentDataRequest> shipmentDataRequests = null;
             try
             {
+              
                 optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
