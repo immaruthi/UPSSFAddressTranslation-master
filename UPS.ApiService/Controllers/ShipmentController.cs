@@ -535,21 +535,42 @@ namespace AtService.Controllers
                     }
                     else
                     {
-                        AuditEventEntry.WriteEntry(new Exception(QuincusResponse.Exception.ToString()));
-                        return Ok(QuincusResponse.Exception);
+                        if(QuincusResponse.Exception == null)
+                        {
+                            AuditEventEntry.WriteEntry(new Exception("Translation failed..."));
+                        }
+                        else
+                        {
+                            AuditEventEntry.WriteEntry(new Exception(QuincusResponse.Exception.ToString()));
+                        }
+                        return Ok(QuincusResponse?.Exception);
                     }
                 }
                 else
                 {
-                    AuditEventEntry.WriteEntry(new Exception(quincusTranslatedAddressResponse.exception.ToString()));
-                    return Ok(quincusTranslatedAddressResponse.exception);
+                    if (quincusTranslatedAddressResponse.exception == null)
+                    {
+                        AuditEventEntry.WriteEntry(new Exception("Translation failed..."));
+                    }
+                    else
+                    {
+                        AuditEventEntry.WriteEntry(new Exception(quincusTranslatedAddressResponse.exception.ToString()));
+                    }
+                    return Ok(quincusTranslatedAddressResponse?.exception);
                 }
 
             }
             else
             {
-                AuditEventEntry.WriteEntry(new Exception(quincusTokenDataResponse.exception.ToString()));
-                return Ok(quincusTokenDataResponse.exception);
+                if (quincusTokenDataResponse.exception == null)
+                {
+                    AuditEventEntry.WriteEntry(new Exception("Translation failed..."));
+                }
+                else
+                {
+                    AuditEventEntry.WriteEntry(new Exception(quincusTokenDataResponse.exception.ToString()));
+                }
+                return Ok(quincusTokenDataResponse?.exception);
             }
         }
 
