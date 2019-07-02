@@ -80,6 +80,14 @@
       <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> COD </mat-header-cell>
       <mat-cell *matCellDef="let element" class="cell"> {{element.coD_TE}} </mat-cell>
     </ng-container>
+    <ng-container matColumnDef="csG_CTC_TE" class="container">
+      <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Consignee Contact </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="cell"> {{element.csG_CTC_TE}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="pH_NR" class="container">
+      <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Consignee Phone </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="cell"> {{element.pH_NR}} </mat-cell>
+    </ng-container>
     <mat-header-row *matHeaderRowDef="displayedColumns;" class="header-row"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
   </mat-table>

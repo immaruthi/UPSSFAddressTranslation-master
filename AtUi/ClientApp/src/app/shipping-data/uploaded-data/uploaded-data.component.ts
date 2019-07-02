@@ -17,7 +17,8 @@ import { MatStepperTab } from '../../shared/enums.service';
 export class UploadedDataComponent implements OnInit {
 
   displayedColumns =
-    ['wfL_ID','smT_STA_NR', 'smT_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'fsT_INV_LN_DES_TE',
+    ['wfL_ID', 'smT_STA_NR', 'smT_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE',
+      'csG_CTC_TE', 'pH_NR', 'fsT_INV_LN_DES_TE',
       'shP_CPY_NA', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD', 'imP_SLC_TE',
       'coD_TE'
     ];
