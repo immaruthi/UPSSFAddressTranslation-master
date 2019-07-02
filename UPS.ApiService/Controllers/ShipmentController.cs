@@ -481,8 +481,6 @@ namespace AtService.Controllers
 
                     var getAddressTranslation = quincusTranslatedAddressResponse.ResponseData;
 
-                    await Task.Delay(5000);
-
                     var QuincusResponse = QuincusService.GetGeoCodeReponseFromQuincus(new UPS.Quincus.APP.Request.QuincusGeoCodeDataRequest()
                     {
                         endpoint = configuration["Quincus:GeoCodeEndPoint"],
