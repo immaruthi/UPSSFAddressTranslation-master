@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { MatPaginator, MatTableDataSource, MatSnackBar, MatSnackBarConfig, MatProgressSpinner } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatSnackBar, MatSnackBarConfig, MatProgressSpinner, MatSort } from '@angular/material';
 import { UserService } from '../services/UserService';
 import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';  
@@ -48,6 +48,7 @@ export class WorkflowComponent {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   //set paginator(value: MatPaginator) {
   //  this.dataSource.paginator = value;
@@ -60,6 +61,7 @@ export class WorkflowComponent {
   */
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   ngOnInit() {
@@ -74,6 +76,7 @@ export class WorkflowComponent {
 
         this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
 
       },
         error => console.log(error));

@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit, Input } from '@angular/core';
 import { ShipmentDetails } from '../../models/shipmentdetails';
-import { MatPaginator, MatTableDataSource, MatDialog, MatSnackBarConfig, MatSnackBar } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatDialog, MatSnackBarConfig, MatSnackBar, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
 import { ShippingService } from '../../services/shipping.service';
@@ -46,6 +46,7 @@ export class SentToSfComponent implements OnInit {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   /**
   * Set the paginator after the view init since this component will
@@ -53,6 +54,7 @@ export class SentToSfComponent implements OnInit {
   */
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   ngOnInit() {
@@ -80,6 +82,7 @@ export class SentToSfComponent implements OnInit {
       }
       this.dataSource.data = this.ResponseData;
       this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
 
     }, error => (this.errorMessage = <any>error));
   }

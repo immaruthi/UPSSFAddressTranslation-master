@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit, Input } from '@angular/core';
 import { ShipmentDetails } from '../../models/shipmentdetails';
-import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
 import { ShippingService } from '../../services/shipping.service';
@@ -37,6 +37,7 @@ export class UploadedDataComponent implements OnInit {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   /**
   * Set the paginator after the view init since this component will
@@ -44,6 +45,7 @@ export class UploadedDataComponent implements OnInit {
   */
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   ngOnInit() {
@@ -70,6 +72,7 @@ export class UploadedDataComponent implements OnInit {
       this.ResponseData = response;
       this.dataSource.data = this.ResponseData;
       this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     }, error => (this.errorMessage = <any>error));
   }
 

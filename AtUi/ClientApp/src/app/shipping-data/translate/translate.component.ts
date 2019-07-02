@@ -1,5 +1,5 @@
 import { Component, ViewChild, OnInit, Input } from '@angular/core';
-import { MatPaginator, MatTableDataSource, MatDialog, MatSnackBar, MatSnackBarConfig, MatProgressSpinner } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatDialog, MatSnackBar, MatSnackBarConfig, MatProgressSpinner, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
 import { ShippingService } from '../../services/shipping.service';
@@ -47,9 +47,11 @@ export class TranslateComponent implements OnInit {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   ngOnInit() {   
@@ -92,6 +94,7 @@ export class TranslateComponent implements OnInit {
     this.shippingService.getTranslateData(WorkflowID).subscribe((response: any) => {
       this.dataSource.data = response;
       this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     }, error => (this.errorMessage = <any>error));
   }
 
