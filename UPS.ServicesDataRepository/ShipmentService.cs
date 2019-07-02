@@ -17,7 +17,7 @@ namespace UPS.ServicesDataRepository
 
         public List<ShipmentDataRequest> GetShipment(int workflowID)
         {
-
+            throw new Exception("dhfuidhfid");
             optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
             List<ShipmentDataRequest> shipmentDataRequests = null;

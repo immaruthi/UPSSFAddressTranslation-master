@@ -14,6 +14,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="elmah" Version="1.2.2" />
+    <PackageReference Include="ElmahCore.Sql" Version="1.2.5" />
     <PackageReference Include="EntityFramework.SqlServerCompact" Version="6.2.0" />
     <PackageReference Include="EntityFrameworkCore.SqlServerCompact40.Core" Version="2.2.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -23,6 +25,7 @@
     <PackageReference Include="Microsoft.SqlServer.Compact" Version="4.0.8876.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
     <PackageReference Include="MySql.Data" Version="8.0.16" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.3" />
   </ItemGroup>
 
   <ItemGroup>
