@@ -3,6 +3,7 @@
     using System;
     using System.IO;
     using System.Net;
+    using System.Threading.Tasks;
     using Newtonsoft.Json;
     using UPS.Quincus.APP.Common;
     using UPS.Quincus.APP.Configuration;
@@ -117,7 +118,7 @@
             return quincusTranslatedAddressResponse;            
         }
 
-        public static QuincusResponse GetQuincusResponse(QuincusGeoCodeDataRequest quincusGeoCodeDataRequest)
+        public async static Task<QuincusResponse> GetQuincusResponse(QuincusGeoCodeDataRequest quincusGeoCodeDataRequest, QuincusParams @params)
         {
             QuincusResponse quincusResponse = new QuincusResponse();
 

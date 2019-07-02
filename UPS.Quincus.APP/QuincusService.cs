@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UPS.DataObjects.Shipment;
 using UPS.Quincus.APP.Configuration;
 using UPS.Quincus.APP.ProxyConnections;
@@ -26,10 +27,10 @@ namespace UPS.Quincus.APP
             return quincusTranslatedAddressResponse;
         }
 
-        public static QuincusResponse GetGeoCodeReponseFromQuincus(QuincusGeoCodeDataRequest quincusGeoCodeDataRequest)
+        public async static Task<QuincusResponse> GetGeoCodeReponseFromQuincus(QuincusGeoCodeDataRequest quincusGeoCodeDataRequest, QuincusParams @params)
         {
-            QuincusResponse quincusReponse = QuincusProxy.GetQuincusResponse(quincusGeoCodeDataRequest);
-            return quincusReponse;
+            Task<QuincusResponse> quincusReponse = QuincusProxy.GetQuincusResponse(quincusGeoCodeDataRequest, @params);
+            return await quincusReponse;
         }
 
         public static GetSFCreateOrderServiceResponse SFExpressCreateOrder(SFCreateOrderServiceRequest sFCreateOrderServiceRequest)
