@@ -32,12 +32,16 @@ export class ShippingService {
     return this.httpService.makePostRequest('api/Shipment/GetTranslationAddress', data);  // Add URL here for send for translate
   }
 
-  public sendDataToSF(data: any): Observable<any[]> {
+  public sendDataToSF(data: any): Observable<any> {
     return this.httpService.makePostRequest('api/Shipment/CreateOrderShipment', data);
   }
 
   public UpdateShippingAddress(data: ShipmentDetails): Observable<ShipmentDetails> {
 
     return this.httpService.makePostRequest('api/Shipment/UpdateShipmentAddressById', data);
+  }
+
+  public deleteUploadedData(data: any): Observable<any> {
+    return this.httpService.makePostRequest(' ', data);
   }
 }
