@@ -429,5 +429,63 @@ namespace UPS.ServicesDataRepository
             return shipmentDataResponse;
         }
 
+        public ShipmentDataResponse DeleteShipments(List<ShipmentDataRequest> shipmentDataRequest)
+        {
+            ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
+            try
+            {
+                optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+
+                optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+                var context = new ApplicationDbContext(optionsBuilder.Options);
+
+                foreach (ShipmentDataRequest request in shipmentDataRequest)
+                {
+                    ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == request.ID).FirstOrDefault();
+                    context.shipmentDataRequests.Remove(data);
+                    context.Entry(request).State = EntityState.Deleted;
+                    context.SaveChanges();
+                    shipmentDataResponse.Shipments = context.shipmentDataRequests;
+                }
+                shipmentDataResponse.Success = true;
+                return shipmentDataResponse;
+            }
+            catch (Exception ex)
+            {
+                shipmentDataResponse.Success = false;
+                shipmentDataResponse.OperationExceptionMsg = ex.Message;
+            }
+            return shipmentDataResponse;
+        }
+
+        public ShipmentDataResponse DeleteShipment(ShipmentDataRequest shipmentDataRequest)
+        {
+            ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
+            try
+            {
+                optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+
+                optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+                var context = new ApplicationDbContext(optionsBuilder.Options);
+
+                ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == shipmentDataRequest.ID).FirstOrDefault();
+                context.shipmentDataRequests.Remove(data);
+                context.Entry(shipmentDataRequest).State = EntityState.Deleted;
+                context.SaveChanges();
+                shipmentDataResponse.Shipments = context.shipmentDataRequests;
+                shipmentDataResponse.Success = true;
+                return shipmentDataResponse;
+            }
+            catch (Exception ex)
+            {
+                shipmentDataResponse.Success = false;
+                shipmentDataResponse.OperationExceptionMsg = ex.Message;
+            }
+            return shipmentDataResponse;
+        }
     }
 }
