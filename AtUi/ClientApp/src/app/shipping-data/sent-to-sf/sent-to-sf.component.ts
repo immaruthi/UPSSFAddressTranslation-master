@@ -135,7 +135,8 @@ export class SentToSfComponent implements OnInit {
             successCount: SuccessCount,
             successList: SuccessList,
             failedCount: FailedCount,
-            failedList: FailedList
+            failedList: FailedList,
+            screenFrom: 'SendToSF'
           }
           if (response.processedShipments.length > 0) {
             this.getDataForSendToSF(this.WorkflowID);
