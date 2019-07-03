@@ -481,6 +481,7 @@ namespace AtService.Controllers
 
                     var getAddressTranslation = quincusTranslatedAddressResponse.ResponseData;
 
+                    await Task.Delay(5000);
                     var QuincusResponse = QuincusService.GetGeoCodeReponseFromQuincus(new UPS.Quincus.APP.Request.QuincusGeoCodeDataRequest()
                     {
                         endpoint = configuration["Quincus:GeoCodeEndPoint"],
@@ -521,7 +522,7 @@ namespace AtService.Controllers
                         }
                         ShipmentService shipmentService = new ShipmentService();
                         shipmentService.UpdateShipmentAddressByIds(shipmentsDataRequest);
-
+                        _workflowID = shipmentsDataRequest.FirstOrDefault().WFL_ID;
                         //we need to update the workflow status
                         int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);
                         WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
