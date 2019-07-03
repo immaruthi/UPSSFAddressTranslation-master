@@ -43,6 +43,7 @@
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
                     response = streamReader.ReadToEnd();
+                    streamReader.Close();
                 }
 
                 if (!string.IsNullOrWhiteSpace(response))
@@ -50,6 +51,8 @@
                     quincusTokenDataResponse.quincusTokenData = JsonConvert.DeserializeObject<QuincusTokenData>(response);
                     quincusTokenDataResponse.ResponseStatus = true;
                 }
+
+                httpResponse.Close();
 
             }
             catch(Exception exception)
@@ -100,7 +103,11 @@
                     using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                     {
                         response = streamReader.ReadToEnd();
+
+                        streamReader.Close();
                     }
+
+                    httpResponse.Close();
 
                     quincusTranslatedAddressResponse.ResponseData = JsonConvert.DeserializeObject<GetBatchResponseForAddressTranslation>(response);
                     quincusTranslatedAddressResponse.Response = true;
@@ -120,33 +127,51 @@
 
         public static QuincusResponse GetQuincusResponse(QuincusGeoCodeDataRequest quincusGeoCodeDataRequest)
         {
+            bool retryflag = true;
+            int retryCount = 0;
             QuincusResponse quincusResponse = new QuincusResponse();
+            HttpWebResponse httpResponse = null;
 
             try
             {
-                HttpRequestCachePolicy requestCachePolicy =
-                        new HttpRequestCachePolicy(HttpRequestCacheLevel.Default);
-
-                HttpWebRequest.DefaultCachePolicy = requestCachePolicy;
-
-                var httpWebRequest = (HttpWebRequest)WebRequest.Create(
-                    quincusGeoCodeDataRequest.endpoint + quincusGeoCodeDataRequest.id + "/");
-
-                HttpRequestCachePolicy noCachePolicy =
-                    new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
-
-                httpWebRequest.CachePolicy = noCachePolicy;
-
-                if (string.Equals(MapProxy.WebProxyEnable, true.ToString(), StringComparison.OrdinalIgnoreCase))
+                while (retryflag && retryCount<=3)
                 {
-                    WebProxy myProxy = new WebProxy(MapProxy.webProxyURI, false, null, new NetworkCredential(MapProxy.webProxyUsername, MapProxy.webProxyPassword));
-                    httpWebRequest.Proxy = myProxy;
+
+                    HttpRequestCachePolicy requestCachePolicy =
+                            new HttpRequestCachePolicy(HttpRequestCacheLevel.Default);
+
+                    HttpWebRequest.DefaultCachePolicy = requestCachePolicy;
+
+                    var httpWebRequest = (HttpWebRequest)WebRequest.Create(
+                        quincusGeoCodeDataRequest.endpoint + quincusGeoCodeDataRequest.id + "/");
+
+                    HttpRequestCachePolicy noCachePolicy =
+                        new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
+
+                    httpWebRequest.CachePolicy = noCachePolicy;
+
+                    if (string.Equals(MapProxy.WebProxyEnable, true.ToString(), StringComparison.OrdinalIgnoreCase))
+                    {
+                        WebProxy myProxy = new WebProxy(MapProxy.webProxyURI, false, null, new NetworkCredential(MapProxy.webProxyUsername, MapProxy.webProxyPassword));
+                        httpWebRequest.Proxy = myProxy;
+                    }
+
+                    httpWebRequest.ContentType = "application/json";
+                    httpWebRequest.Headers.Add("AUTHORIZATION", "JWT " + quincusGeoCodeDataRequest.quincusTokenData.token);
+                    httpWebRequest.Method = "GET";
+                    httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+
+                    if (string.Equals(httpResponse.StatusDescription, "No Content", StringComparison.OrdinalIgnoreCase))
+                    {
+                        System.Threading.Thread.Sleep(5000);
+                        retryCount++;
+                    }
+                    else
+                    {
+                        retryflag = false;
+                    }
                 }
 
-                httpWebRequest.ContentType = "application/json";
-                httpWebRequest.Headers.Add("AUTHORIZATION", "JWT " + quincusGeoCodeDataRequest.quincusTokenData.token);
-                httpWebRequest.Method = "GET";
-                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
                 string response;
 
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
