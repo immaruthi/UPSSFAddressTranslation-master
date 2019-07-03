@@ -92,9 +92,14 @@ export class TranslateComponent implements OnInit {
 
   getTranslateData(WorkflowID: any) {
     this.shippingService.getTranslateData(WorkflowID).subscribe((response: any) => {
-      this.dataSource.data = response;
+      if (response) {
+        this.dataSource.data = response;
+      } else {
+        this.dataSource.data = [];
+      }
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+      this.selection.clear();
     }, error => (this.errorMessage = <any>error));
   }
 
