@@ -343,8 +343,9 @@ namespace UPS.ServicesDataRepository
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
                 {
                     i = context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid).Sum(s => s.SMT_STA_NR);
-                    count = context.shipmentDataRequests.Count();
+                    count = context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid).Count();
                     i = i ?? 0;
+                    count = count ?? 1;
                     avg = i / count;
                     avg = Math.Round(avg.Value);
                     result = Convert.ToInt32(avg);
