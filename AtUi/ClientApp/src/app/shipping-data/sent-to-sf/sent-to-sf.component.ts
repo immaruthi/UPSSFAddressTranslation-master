@@ -83,7 +83,7 @@ export class SentToSfComponent implements OnInit {
       this.dataSource.data = this.ResponseData;
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-
+      this.selection.clear();
     }, error => (this.errorMessage = <any>error));
   }
 
