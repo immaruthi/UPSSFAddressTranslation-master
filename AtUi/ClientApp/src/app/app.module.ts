@@ -21,16 +21,25 @@ import { LoginGuard } from './services/LoginGuard';
 import { AssignProjectService } from './Services/AssignProjectService';
 import { DataService } from './services/data.service';
 
+/*  Interceptors */
 import { LoaderInterceptor } from "./shared/loader/loaderIntercepter";
+import { AuthInterceptor } from "./shared/Interceptor/AuthInterceptor";
+import { TokenInterceptor } from "./shared/Interceptor/TokenInterceptor";
+
+/* End  Interceptors */
 import { HomeService } from './services/HomeService';
 import { MaterialModule } from './shared/MaterialModule'
 import { AdminconfigComponent } from './adminconfig/adminconfig.component';
 import { AlertDialogComponent } from './dialogs/alert-dialog/alert-dialog.component';
 import { SummaryDialogComponent } from './dialogs/summary-dialog/summary-dialog.component';
+
+/* Service */
 import { DialogService } from './services/dialog.service';
 import { ExcelService } from './services/ExcelExport';
 import { ShippingService } from './services/shipping.service';
 import { HttpService } from './shared/http.service';
+import { AuthenticationService } from './services/authentication.service';
+
 
 import { WorkflowComponent } from './workflow/workflow.component';
 import { WorkflowService } from './services/WorkflowService';
@@ -104,14 +113,25 @@ import { DatePipe } from '@angular/common'
     AuthGuard, LoginGuard,
     AssignProjectService, ExcelService, HomeService,
     DialogService,
-      ShippingService,
-      HttpService,
+    ShippingService,
+    HttpService,
     LoaderService,
     DatePipe,
+    AuthenticationService,
     DataService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: LoaderInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
       multi: true
     }
     ],

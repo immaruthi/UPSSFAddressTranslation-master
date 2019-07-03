@@ -53,6 +53,8 @@
     <None Remove="ClientApp\src\app\services\WorkflowService.ts" />
     <None Remove="ClientApp\src\app\shared\Constants.ts" />
     <None Remove="ClientApp\src\app\shared\enums.service.ts" />
+    <None Remove="ClientApp\src\app\shared\Interceptor\AuthInterceptor.ts" />
+    <None Remove="ClientApp\src\app\shared\Interceptor\TokenInterceptor.ts" />
     <None Remove="ClientApp\src\app\shared\MaterialModule.ts" />
     <None Remove="ClientApp\src\app\workflow\workflow.component.spec.ts" />
     <None Remove="ClientApp\src\app\workflow\workflow.component.ts" />
@@ -76,6 +78,8 @@
     <TypeScriptCompile Include="ClientApp\src\app\services\WorkflowService.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\shared\Constants.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\shared\enums.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\Interceptor\AuthInterceptor.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\Interceptor\TokenInterceptor.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\shared\MaterialModule.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\workflow\workflow.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\workflow\workflow.component.spec.ts" />

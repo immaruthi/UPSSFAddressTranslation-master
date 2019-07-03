@@ -5,17 +5,16 @@ import { CanActivate, CanActivateChild, Route, Router } from '@angular/router';
 export class LoginGuard implements CanActivate {
   constructor(private router: Router) { }
   canActivate(): boolean {
-    if (localStorage.getItem("Emp_Id") == null) {
+    let currentUser :any = JSON.parse(sessionStorage.getItem('currentUser'));
+    if (currentUser == null || currentUser.token ==null) {
       return true;
     }
-    else if (localStorage.getItem("Emp_Id")) {
-      this.router.navigate(['/home']);
+    else if (currentUser.token != null) {
+      this.router.navigate(['/workflow']);
       console.log("in canactivate loginguard true");
       return true;
     }
-    else {
-      return true;
-    }
+    
   }
 
 }

@@ -16,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using UPS.Quincus.APP.Common;
+using UPS.ServicesAsyncActions;
 using UPS.ServicesDataRepository;
 using UPS.ServicesDataRepository.DataContext;
 using UPS.ServicesDataRepository.OverrideDbContext;
@@ -48,40 +49,58 @@ namespace UPS.AddressTranslationService
             MapProxy.webProxyPassword = Configuration["webProxy:Password"];
             MapProxy.WebProxyEnable = Configuration["webProxy:Enable"];
 
+            /* Dependancy Injection */
+
+            services.AddTransient<IUserServicesAsync, UserServices>();
+
+
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddDbContext<ApplicationDbContext>(
                 option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(
-                option =>
+            //services.AddIdentity<IdentityUser, IdentityRole>(
+            //    option =>
+            //    {
+            //        option.Password.RequireDigit = false;
+            //        option.Password.RequiredLength = 6;
+            //        option.Password.RequireNonAlphanumeric = false;
+            //        option.Password.RequireUppercase = false;
+            //        option.Password.RequireLowercase = false;
+            //    }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+
+            //services.AddAuthentication(new AuthenticationOptions().DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme);
+            //services.AddAuthentication(new AuthenticationOptions().DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme);
+            //services.AddAuthentication(new AuthenticationOptions().DefaultScheme = JwtBearerDefaults.AuthenticationScheme);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
-                    option.Password.RequireDigit = false;
-                    option.Password.RequiredLength = 6;
-                    option.Password.RequireNonAlphanumeric = false;
-                    option.Password.RequireUppercase = false;
-                    option.Password.RequireLowercase = false;
-                }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-
-
-            services.AddAuthentication(new AuthenticationOptions().DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme);
-            services.AddAuthentication(new AuthenticationOptions().DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme);
-            services.AddAuthentication(new AuthenticationOptions().DefaultScheme = JwtBearerDefaults.AuthenticationScheme);
-
-            services.AddAuthentication().AddJwtBearer(options =>
-            {
-                options.SaveToken = true;
-                options.RequireHttpsMetadata = true;
-                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidAudience = Configuration["Jwt:Site"],
-                    ValidIssuer = Configuration["Jwt:Site"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Pactera IDC JWT Integration"))
-                };
-            });
+                    var signingKey = Convert.FromBase64String(Configuration["Jwt:SigningKey"]);
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidAudience = Configuration["Jwt:Site"],
+                        ValidIssuer = Configuration["Jwt:Site"],
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(signingKey)
+                    };
+                });
+            //services.AddAuthentication().AddJwtBearer(options =>
+            //{
+            //    options.SaveToken = true;
+            //    options.RequireHttpsMetadata = true;
+            //    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+            //    {
+            //        ValidateIssuer = true,
+            //        ValidateAudience = true,
+            //        ValidAudience = Configuration["Jwt:Site"],
+            //        ValidIssuer = Configuration["Jwt:Site"],
+            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Pactera IDC JWT Integration"))
+            //    };
+            //});
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
@@ -89,7 +108,7 @@ namespace UPS.AddressTranslationService
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -105,7 +124,7 @@ namespace UPS.AddressTranslationService
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();
-         
+
         }
 
     }

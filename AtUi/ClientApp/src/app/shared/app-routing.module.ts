@@ -11,12 +11,14 @@ import { WorkflowComponent } from '../workflow/workflow.component';
 import { ShipmentComponent } from '../shipping-data/shipment.component';
 import { AdminconfigComponent } from '../adminconfig/adminconfig.component';
 const routes: Routes = [
-  
+
+  { path: '', redirectTo: '/login', pathMatch: 'full', canActivate: [LoginGuard], },
   {
-    path: '',
+    path: 'login',
     component: LoginlayoutComponent,
     children: [
       { path: '', canActivate: [LoginGuard], component: LoginComponent, pathMatch: 'full' },
+     
     ]
   },
   {

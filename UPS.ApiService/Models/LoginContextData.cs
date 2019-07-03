@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AtService.Models
 {
-    public class LoginContextData
+    public class UserLoginRequest
     {
         public string USR_ID_TE { get; set; }
         public string USR_PWD_TE { get; set; }

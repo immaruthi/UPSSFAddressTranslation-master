@@ -48,7 +48,6 @@ export class UserService {
   getAllWorkflows(user:any) {
     const params = new HttpParams()
       .set('Emp_Id', user)
-
     return this.httpClient.get(environment.LOCAL_API_URL + `api/ExcelWorkflow/getExcelData`, { params })
   }
   postFile(fileToUpload: File, user: any): Observable<Object> {
@@ -69,15 +68,5 @@ export class UserService {
         return response;
       });
   }
-
-  //logout service method
-  logout() {
-    localStorage.removeItem("Emp_Id");
-    localStorage.removeItem("pwd");
-    
-
-
-  }
-
 
 }

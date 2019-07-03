@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using AtService.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ namespace AtService.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("AllowAtUIOrigin")]
+    [Authorize(AuthenticationSchemes = "JwtBearer")]
     public class LoginController : ControllerBase
     {
         public LoginContext loginContext = null;
@@ -24,7 +26,7 @@ namespace AtService.Controllers
             loginContext = new LoginContext(DBConnectionContext.connectionString, userServices);
         }
         [HttpPost("[action]")]
-        public ActionResult<UserDataResponse> ValidateUser([FromBody] LoginContextData loginContextData)
+        public ActionResult<UserDataResponse> ValidateUser([FromBody] UserLoginRequest loginContextData)
         {
             return loginContext.ValidateUser(loginContextData.USR_ID_TE, loginContextData.USR_PWD_TE);
         }
