@@ -331,7 +331,10 @@ namespace UPS.ServicesDataRepository
 
         public int? SelectShipmentTotalStatusByWorkflowId(int wid)
         {
-            int? i = 0;
+            int? result = 0;
+            decimal? i = 0;
+            decimal? count = 1;
+            decimal? avg = 0; 
             try
             {
                 optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
@@ -339,13 +342,18 @@ namespace UPS.ServicesDataRepository
 
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
                 {
-                    i = context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid).Min(s => s.SMT_STA_NR);
-                    return i ?? 0;
+                    i = context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid).Sum(s => s.SMT_STA_NR);
+                    count = context.shipmentDataRequests.Count();
+                    i = i ?? 0;
+                    avg = i / count;
+                    avg = Math.Round(avg.Value);
+                    result = Convert.ToInt32(avg);
+                    return result ?? 0;
                 }
             }
             catch
             {
-                return i;
+                return result;
             }
         }
 
