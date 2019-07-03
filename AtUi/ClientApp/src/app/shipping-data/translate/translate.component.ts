@@ -198,7 +198,32 @@ export class TranslateComponent implements OnInit {
     this.shippingService.sendDataForTranslate(this.dataForTranslate).subscribe(
       (response: any) => {
         if (response) {
-          this.openSuccessMessageNotification("Shipment Address(es) Translated Successfully.");
+
+          if (response.geocode.length > 0) {
+            var EmptyCount: number = 0;
+            var NACount: number = 0;
+            var SuccessCount: number = 0;
+
+            for (let geocode of response.geocode) {
+              if (geocode.translated_adddress === ' ') {
+                EmptyCount = EmptyCount + 1;
+              } else if (geocode.translated_adddress === 'NA') {
+                NACount = NACount + 1;
+              } else {
+                SuccessCount = SuccessCount + 1;
+              }
+            }
+
+            const data = {
+              emptyCount: EmptyCount,
+              nACount: NACount,
+              successCount: SuccessCount,
+              screenFrom: 'Translate'
+            }
+            this.dialogService.openSummaryDialog(data);
+          }
+
+          //this.openSuccessMessageNotification("Shipment Address(es) Translated Successfully.");
           this.getTranslateData(this.WorkflowID);
           this.selection.clear();
         } else {

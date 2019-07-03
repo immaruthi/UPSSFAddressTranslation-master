@@ -3,6 +3,7 @@
     using System;
     using System.IO;
     using System.Net;
+    using System.Net.Cache;
     using Newtonsoft.Json;
     using UPS.Quincus.APP.Common;
     using UPS.Quincus.APP.Configuration;
@@ -123,8 +124,19 @@
 
             try
             {
+                HttpRequestCachePolicy requestCachePolicy =
+                        new HttpRequestCachePolicy(HttpRequestCacheLevel.Default);
+
+                HttpWebRequest.DefaultCachePolicy = requestCachePolicy;
+
                 var httpWebRequest = (HttpWebRequest)WebRequest.Create(
                     quincusGeoCodeDataRequest.endpoint + quincusGeoCodeDataRequest.id + "/");
+
+                HttpRequestCachePolicy noCachePolicy =
+                    new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
+
+                httpWebRequest.CachePolicy = noCachePolicy;
+
                 if (string.Equals(MapProxy.WebProxyEnable, true.ToString(), StringComparison.OrdinalIgnoreCase))
                 {
                     WebProxy myProxy = new WebProxy(MapProxy.webProxyURI, false, null, new NetworkCredential(MapProxy.webProxyUsername, MapProxy.webProxyPassword));
