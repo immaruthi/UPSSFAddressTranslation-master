@@ -155,6 +155,7 @@ namespace UPS.ServicesDataRepository
                         shipmentDataRequest.ACY_TE = shipmentData.ACY_TE;
                         shipmentDataRequest.CON_NR = shipmentData.CON_NR;
                         shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
+                        shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
 
                         shipmentDataRequests.Add(shipmentDataRequest);
                     }
@@ -219,6 +220,7 @@ namespace UPS.ServicesDataRepository
                 shipmentDataRequest.ACY_TE = shipmentData.ACY_TE;
                 shipmentDataRequest.CON_NR = shipmentData.CON_NR;
                 shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
+                shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
                 context.shipmentDataRequests.Add(shipmentDataRequest);
                 context.Entry(shipmentDataRequest).State = EntityState.Added;
                 context.SaveChanges();
@@ -280,6 +282,7 @@ namespace UPS.ServicesDataRepository
                         shipmentDataRequest.SVL_NR = Data.SVL_NR;
                         shipmentDataRequest.WFL_ID = Data.WFL_ID;
                         shipmentDataRequest.WGT_UNT_TE = Data.WGT_UNT_TE;
+                        shipmentDataRequest.POD_RTN_SVC = Data.POD_RTN_SVC;
                         context.shipmentDataRequests.Add(shipmentDataRequest);
                         context.Entry(shipmentDataRequest).State = EntityState.Added;
                     }
@@ -415,6 +418,7 @@ namespace UPS.ServicesDataRepository
                     data.SMT_STA_NR = request.SMT_STA_NR;
                     data.ACY_TE = request.ACY_TE;
                     data.CON_NR = request.CON_NR;
+                    data.POD_RTN_SVC = request.POD_RTN_SVC;
                     context.shipmentDataRequests.Update(data);
                     context.Entry(request).State = EntityState.Detached;
                     context.SaveChanges();
