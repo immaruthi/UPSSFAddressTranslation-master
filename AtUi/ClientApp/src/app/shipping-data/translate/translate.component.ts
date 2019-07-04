@@ -11,7 +11,7 @@ import { Constants } from '../../shared/Constants';
 import { DialogService } from '../../services/dialog.service';
 import { Observable } from 'rxjs';
 import { MatStepperTab } from '../../shared/enums.service';
-
+import { NotificationService } from '../../services/NotificationService';
 
 @Component({
   selector: 'app-translate',
@@ -43,7 +43,8 @@ export class TranslateComponent implements OnInit {
     private router: Router, public dialog: MatDialog,
     public dataService: DataService,
     private snackBar: MatSnackBar,
-    private dialogService: DialogService) {
+    private dialogService: DialogService,
+    private notificationService: NotificationService) {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -67,27 +68,6 @@ export class TranslateComponent implements OnInit {
 
   ngOnDestroy() {
     this.eventsSubscription.unsubscribe()
-  }
-
-  openSuccessMessageNotification(message: string) {
-    let config = new MatSnackBarConfig();
-    this.snackBar.open(message, '',
-      {
-        duration: Constants.SNAKBAR_SHOW_DURATION,
-        verticalPosition: "top",
-        horizontalPosition: "right",
-        extraClasses: 'custom-class-success'
-      });
-  }
-  openErrorMessageNotification(message: string) {
-    let config = new MatSnackBarConfig();
-    this.snackBar.open(message, '',
-      {
-        duration: Constants.SNAKBAR_SHOW_DURATION,
-        verticalPosition: "top",
-        horizontalPosition: "right",
-        extraClasses: 'custom-class-error'
-      });
   }
 
   getTranslateData(WorkflowID: any) {
@@ -163,7 +143,7 @@ export class TranslateComponent implements OnInit {
         if (updatedDetails.coD_TE == shipmentDetailToUpdate.coD_TE
           && updatedDetails.shP_ADR_TR_TE.toLowerCase() == shipmentDetailToUpdate.shP_ADR_TR_TE.toLowerCase()) {
 
-          this.openSuccessMessageNotification("No changes found to update");
+          this.notificationService.openSuccessMessageNotification("No changes found to update");
           return;
         }
 
@@ -179,9 +159,9 @@ export class TranslateComponent implements OnInit {
           shipmentDetailToUpdate.shP_ADR_TR_TE = response.shipmentDataRequest.shP_ADR_TR_TE;
           shipmentDetailToUpdate.coD_TE = response.shipmentDataRequest.coD_TE;
           shipmentDetailToUpdate.smT_STA_NR = response.shipmentDataRequest.smT_STA_NR;
-          this.openSuccessMessageNotification("Data Updated Successfully.");
+          this.notificationService.openSuccessMessageNotification("Data Updated Successfully.");
         },
-          error => this.openErrorMessageNotification("Error while updating data."))
+          error => this.notificationService.openErrorMessageNotification("Error while updating data."))
       }
     });
   }
@@ -228,15 +208,15 @@ export class TranslateComponent implements OnInit {
             this.dialogService.openSummaryDialog(data);
           }
 
-          //this.openSuccessMessageNotification("Shipment Address(es) Translated Successfully.");
+          //this.notificationService.openSuccessMessageNotification("Shipment Address(es) Translated Successfully.");
           this.getTranslateData(this.WorkflowID);
           this.selection.clear();
         } else {
-          this.openErrorMessageNotification("Error while Translating data.");
+          this.notificationService.openErrorMessageNotification("Error while Translating data.");
         }
       }
       ,
-      error => this.openErrorMessageNotification("Error while Translating data.")
+      error => this.notificationService.openErrorMessageNotification("Error while Translating data.")
     );
   }
 }
