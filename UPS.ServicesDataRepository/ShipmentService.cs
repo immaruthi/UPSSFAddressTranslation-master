@@ -80,7 +80,8 @@ namespace UPS.ServicesDataRepository
                                 s.SMT_WGT_DE,
                                 s.SPC_SLIC_NR,
                                 s.SVL_NR,
-                                s.WGT_UNT_TE
+                                s.WGT_UNT_TE,
+                                s.POD_RTN_SVC
                             }).ToList();
 
                     foreach (var shipmentData in anonymousList)
@@ -375,6 +376,7 @@ namespace UPS.ServicesDataRepository
 
                     data.SHP_ADR_TR_TE = shipmentDataRequest.SHP_ADR_TR_TE;
                     data.COD_TE = shipmentDataRequest.COD_TE;
+                    data.POD_RTN_SVC = shipmentDataRequest.POD_RTN_SVC;
                     data.SMT_STA_NR = shipmentStaus;
                     context.shipmentDataRequests.Update(data);
                     context.Entry(shipmentDataRequest).State = EntityState.Detached;
