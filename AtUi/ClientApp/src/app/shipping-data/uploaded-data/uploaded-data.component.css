@@ -37,43 +37,43 @@ mat-header-cell {
 }
 
 /*Select*/
-/*mat-cell:nth-child(1) {
-  margin-left: 0px 15px 0px 15px;
-  padding: 20px;
-  width: 70px;
-  flex: none;
-  float: left;
-  font-size: 12px;
-}*/
-
-/*Select*/
-/*mat-header-cell:nth-child(1) {
-  margin-left: 0px 15px 0px 15px;
-  padding: 20px;
-  width: 70px;
-  flex: none;
-  font-size: 14px;
-  font-weight: bold;
-}*/
-/*Actions*/
 mat-cell:nth-child(1) {
   margin-left: 0px 15px 0px 15px;
   padding: 20px;
-  width: 100px;
+  width: 70px;
   flex: none;
   float: left;
   font-size: 12px;
 }
 
-/*Actions*/
+/*Select*/
 mat-header-cell:nth-child(1) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 70px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+/*Actions*/
+/*mat-cell:nth-child(1) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 100px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}*/
+
+/*Actions*/
+/*mat-header-cell:nth-child(1) {
   margin-left: 0px 15px 0px 15px;
   padding: 20px;
   width: 100px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
-}
+}*/
 
 /*SHP Company Name*/
 mat-cell:nth-child(13) {

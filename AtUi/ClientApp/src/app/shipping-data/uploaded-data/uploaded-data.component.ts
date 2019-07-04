@@ -9,6 +9,7 @@ import { Constants } from '../../shared/Constants';
 import { Observable } from 'rxjs';
 import { MatStepperTab } from '../../shared/enums.service';
 import { DialogService } from '../../services/dialog.service';
+import { NotificationService } from '../../services/NotificationService';
 
 @Component({
   selector: 'app-uploaded-data',
@@ -18,7 +19,7 @@ import { DialogService } from '../../services/dialog.service';
 export class UploadedDataComponent implements OnInit {
 
   displayedColumns =
-    ['actions', 'wfL_ID', 'smT_STA_NR', 'smT_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE',
+    ['select', 'wfL_ID', 'smT_STA_NR', 'smT_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE',
       'csG_CTC_TE', 'pH_NR', 'fsT_INV_LN_DES_TE',
       'shP_CPY_NA', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD', 'imP_SLC_TE',
       'coD_TE'
@@ -35,7 +36,8 @@ export class UploadedDataComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
-    private router: Router, private snackBar: MatSnackBar, private dialogService: DialogService) {
+    private router: Router, private snackBar: MatSnackBar, private dialogService: DialogService,
+    private notificationService: NotificationService) {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -75,6 +77,7 @@ export class UploadedDataComponent implements OnInit {
       this.dataSource.data = this.ResponseData;
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+      this.selection.clear();
     }, error => (this.errorMessage = <any>error));
   }
 
@@ -104,42 +107,31 @@ export class UploadedDataComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
 
-  openSuccessMessageNotification(message: string) {
-    let config = new MatSnackBarConfig();
-    this.snackBar.open(message, '',
-      {
-        duration: Constants.SNAKBAR_SHOW_DURATION,
-        verticalPosition: "top",
-        horizontalPosition: "right",
-        extraClasses: 'custom-class-success'
-      });
-  }
-  openErrorMessageNotification(message: string) {
-    let config = new MatSnackBarConfig();
-    this.snackBar.open(message, '',
-      {
-        duration: Constants.SNAKBAR_SHOW_DURATION,
-        verticalPosition: "top",
-        horizontalPosition: "right",
-        extraClasses: 'custom-class-error'
-      });
-  }
-
-  delete(index: number, rowData: any) {
+  rowDelete(index: number, rowData: any) {
     this.dialogService.openAlertDialog('Work in Progress');
 
     // this.deleteUploadedData([rowData]);
+  }
+
+  delete() {
+    const checkedCount = this.selection.selected.length;
+    if (checkedCount <= 0) {
+      this.dialogService.openAlertDialog('Please select minimum one row to Delete.');
+    } else {
+      const dataForDelete = this.selection.selected; // Any changes can do here for sending array
+      this.deleteUploadedData(dataForDelete);
+    }
   }
 
   deleteUploadedData(data: any) {
     this.shippingService.deleteUploadedData(data).subscribe((response: any) => {
       if (response) {
         this.getUploadedData(this.WorkflowID);
-        this.openSuccessMessageNotification("Deleted Successfully");
+        this.notificationService.openSuccessMessageNotification("Deleted Successfully");
       } else {
-        this.openErrorMessageNotification("Error while Deleting data.");
+        this.notificationService.openErrorMessageNotification("Error while Deleting data.");
       }
     },
-      error => this.openErrorMessageNotification("Error while Deleting data."));
+      error => this.notificationService.openErrorMessageNotification("Error while Deleting data."));
   }
 }
