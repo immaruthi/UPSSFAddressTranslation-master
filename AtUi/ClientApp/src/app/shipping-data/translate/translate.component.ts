@@ -117,7 +117,7 @@ export class TranslateComponent implements OnInit {
     event.stopPropagation();
     if (!this.selection.isSelected(row)) {
       if (this.selection.selected.length >= 100) {
-        this.dialogService.openAlertDialog('As of now Quincus API supports only 100 shipment translations at maximum, Please try accordingly.');
+        this.dialogService.openAlertDialog('As of now Quincus API supports only 100 shipment translations at one attempt, Please try accordingly.');
         this.selection.toggle(row);
       }
     }
@@ -129,7 +129,7 @@ export class TranslateComponent implements OnInit {
     if (checkedCount <= 0) {
       this.dialogService.openAlertDialog('Please select minimum one row to Translate.');
     } else if (checkedCount > 100) {
-      this.dialogService.openAlertDialog('As of now Quincus API supports only 100 shipment translations at maximum, Please try accordingly.');
+      this.dialogService.openAlertDialog('As of now Quincus API supports only 100 shipment translations at one attempt, Please try accordingly.');
     } else {
       const data = this.selection.selected;
       this.dataTranslate(data);
