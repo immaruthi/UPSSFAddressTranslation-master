@@ -131,6 +131,7 @@
             int retryCount = 0;
             QuincusResponse quincusResponse = new QuincusResponse();
             HttpWebResponse httpResponse = null;
+            int sleepTime = 5000;
 
             try
             {
@@ -163,8 +164,13 @@
 
                     if (string.Equals(httpResponse.StatusDescription, "No Content", StringComparison.OrdinalIgnoreCase))
                     {
-                        System.Threading.Thread.Sleep(5000);
                         retryCount++;
+                        if(retryCount == 3)
+                        {
+                            sleepTime = 5000 * 12;
+                        }
+
+                        System.Threading.Thread.Sleep(sleepTime);
                     }
                     else
                     {
