@@ -102,7 +102,5 @@ namespace UPS.DataObjects.Shipment
         public int? SPC_SLIC_NR { get; set; }
         [NotMapped]
         public string SMT_STA_TE { get; set; }
-        [Column("POD-RTN-SVC")]
-        public int? POD_RTN_SVC { get; set; }
     }
 }
