@@ -50,6 +50,7 @@
         public string pyM_MTD { get; set; }
         public object exP_TYP { get; set; }
         public string coD_TE { get; set; }
+        public string poD_RTN_SVC { get; set; }
 
     }
 
