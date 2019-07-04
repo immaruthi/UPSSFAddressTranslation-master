@@ -449,6 +449,7 @@ namespace AtService.Controllers
         {
 
             int wid = 0;
+            decimal shipmentsCount = 0m;
             if (shipmentWorkFlowRequest.Any())
             {
                 wid = shipmentWorkFlowRequest.FirstOrDefault().wfL_ID;
@@ -473,6 +474,7 @@ namespace AtService.Controllers
                 //});
                 this._quincusAddressTranslationRequest.shipmentWorkFlowRequests = shipmentWorkFlowRequest;
                 this._quincusAddressTranslationRequest.token = quincusTokenDataResponse.quincusTokenData.token;
+                shipmentsCount = shipmentWorkFlowRequest.Count();
 
                 quincusTranslatedAddressResponse = QuincusService.GetTranslationAddress(this._quincusAddressTranslationRequest);
 
@@ -487,7 +489,7 @@ namespace AtService.Controllers
                         endpoint = configuration["Quincus:GeoCodeEndPoint"],
                         id = quincusTranslatedAddressResponse.ResponseData.batch_id,
                         quincusTokenData = quincusTokenDataResponse.quincusTokenData
-                    });
+                    },shipmentsCount);
 
                     if (QuincusResponse.ResponseStatus)
                     {
