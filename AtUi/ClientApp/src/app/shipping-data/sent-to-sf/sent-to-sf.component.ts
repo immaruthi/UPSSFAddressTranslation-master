@@ -12,6 +12,8 @@ import { DialogService } from '../../services/dialog.service';
 import { Observable } from 'rxjs';
 import { ExcelService } from '../../services/ExcelExport';
 import { MatStepperTab } from '../../shared/enums.service';
+import { NotificationService } from '../../services/NotificationService';
+
 
 @Component({
   selector: 'app-sent-to-sf',
@@ -42,7 +44,8 @@ export class SentToSfComponent implements OnInit {
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
     private router: Router, public dialog: MatDialog, public dataService: DataService,
     private snackBar: MatSnackBar, private dialogService: DialogService,
-    private excelService: ExcelService) {
+    private excelService: ExcelService,
+    private notificationService: NotificationService) {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -145,7 +148,7 @@ export class SentToSfComponent implements OnInit {
           this.dialogService.openSummaryDialog(data);
         }
       }, error =>
-        this.openErrorMessageNotification("Error while sending data to SF.")
+        this.notificationService.openErrorMessageNotification("Error while sending data to SF.")
       );
     }
   }
@@ -180,32 +183,11 @@ export class SentToSfComponent implements OnInit {
           shipmentDetails.shP_ADR_TR_TE = response.shipmentDataRequest.shP_ADR_TR_TE;;
           shipmentDetails.coD_TE = response.shipmentDataRequest.coD_TE;
           shipmentDetails.smT_STA_NR = response.shipmentDataRequest.smT_STA_NR;
-          this.openSuccessMessageNotification("Data Updated Successfully.");
+          this.notificationService.openSuccessMessageNotification("Data Updated Successfully.");
         },
-          error => this.openErrorMessageNotification("Error while updating data."))
+          error => this.notificationService.openErrorMessageNotification("Error while updating data."))
       }
     });
-  }
-
-  openSuccessMessageNotification(message: string) {
-    let config = new MatSnackBarConfig();
-    this.snackBar.open(message, '',
-      {
-        duration: Constants.SNAKBAR_SHOW_DURATION,
-        verticalPosition: "top",
-        horizontalPosition: "right",
-        extraClasses: 'custom-class-success'
-      });
-  }
-  openErrorMessageNotification(message: string) {
-    let config = new MatSnackBarConfig();
-    this.snackBar.open(message, '',
-      {
-        duration: Constants.SNAKBAR_SHOW_DURATION,
-        verticalPosition: "top",
-        horizontalPosition: "right",
-        extraClasses: 'custom-class-error'
-      });
   }
 
   SFexportToExcel() {

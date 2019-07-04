@@ -131,10 +131,12 @@
             int retryCount = 0;
             QuincusResponse quincusResponse = new QuincusResponse();
             HttpWebResponse httpResponse = null;
-            int maxRetryCount = Convert.ToInt32(Math.Round(shipmentsCount)/3);
+            int sleepTime = 5000;
+
+            int maxRetryCount = Convert.ToInt32(Math.Round(shipmentsCount)/2);
             try
             {
-                while (retryflag && retryCount<=maxRetryCount)
+                while (retryflag && retryCount<= maxRetryCount)
                 {
 
                     HttpRequestCachePolicy requestCachePolicy =
@@ -163,8 +165,13 @@
 
                     if (string.Equals(httpResponse.StatusDescription, "No Content", StringComparison.OrdinalIgnoreCase))
                     {
-                        System.Threading.Thread.Sleep(5000);
                         retryCount++;
+                        if (retryCount == 3)
+                        {
+                            sleepTime = 5000 * 12;
+                        }
+
+                        System.Threading.Thread.Sleep(sleepTime);
                     }
                     else
                     {
