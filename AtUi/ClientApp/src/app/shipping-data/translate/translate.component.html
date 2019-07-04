@@ -131,7 +131,7 @@
       </ng-container>
       <ng-container matColumnDef="poD_RTN_SVC" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Extra Service </mat-header-cell>
-        <mat-cell *matCellDef="let element" class="cell"> {{element.poD_RTN_SVC}} </mat-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{PODoptions[element?.poD_RTN_SVC!=null ?element.poD_RTN_SVC:0].value}} </mat-cell>
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
