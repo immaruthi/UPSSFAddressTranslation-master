@@ -99,7 +99,8 @@ export class TranslateComponent implements OnInit {
   masterToggle() {
     this.mainData = [];
     this.checkedData = [];
-    this.dataSource.data.forEach(row => this.mainData.push(row));
+    //this.dataSource.data.forEach(row => this.mainData.push(row));
+    this.mainData = this.dataSource._pageData(this.dataSource.data);
     this.checkedData = this.mainData.filter(data => (data.smT_STA_NR !== 2 && data.smT_STA_NR !== 3));
     this.isAllSelected() ?
       this.selection.clear() :
@@ -118,7 +119,7 @@ export class TranslateComponent implements OnInit {
     event.stopPropagation();
     if (!this.selection.isSelected(row)) {
       if (this.selection.selected.length >= 100) {
-        this.dialogService.openAlertDialog('As of now Quincus API supports only 100 shipment translations at one attempt, Please try accordingly.');
+        this.dialogService.openAlertDialog('Maximum allowed Shipments for Translation: 100 and You have selected: ' + this.selection.selected.length);
         this.selection.toggle(row);
       }
     }
@@ -130,7 +131,7 @@ export class TranslateComponent implements OnInit {
     if (checkedCount <= 0) {
       this.dialogService.openAlertDialog('Please select minimum one row to Translate.');
     } else if (checkedCount > 100) {
-      this.dialogService.openAlertDialog('As of now Quincus API supports only 100 shipment translations at one attempt, Please try accordingly.');
+      this.dialogService.openAlertDialog('Maximum allowed Shipments for Translation: 100 and You have selected: ' + this.selection.selected.length);
     } else {
       const data = this.selection.selected;
       this.dataTranslate(data);
