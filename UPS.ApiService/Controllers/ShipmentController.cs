@@ -243,6 +243,7 @@ namespace AtService.Controllers
                             shipmentDataRequest.SF_TRA_LG_ID = null;
                             shipmentDataRequest.QQS_TRA_LG_ID = null;
                             shipmentDataRequest.FST_INV_LN_DES_TE = excelDataObject.S_1stinvoicelinedesc;
+                            shipmentDataRequest.POD_RTN_SVC = "0";
 
                             shipmentData.Add(shipmentDataRequest);
                         }
@@ -334,7 +335,7 @@ namespace AtService.Controllers
                 XMLMessage += " j_county=\"中国\" j_address=\"广东省深圳市广东省深圳市福田区新洲十一街万基商务大厦10楼\"";
                 XMLMessage += " d_company=\"京东\" d_contact=\"刘XX\" d_tel=\"13865659879\" d_mobile=\"13865659879\" d_county=\"中国\"";
                 XMLMessage += " d_address=\"北京北京市北京亦庄经济技术开发区科创十一街18号院\" cargo_total_weight=\"" + orderRequest.pkG_WGT_DE + "\"";
-                XMLMessage += " remark=\"没有备注\" pay_method=\"1\" is_docall=\"" + 1 + "\" need_return_tracking_no=\"" + 1 + "\" express_type=\"154\"";
+                XMLMessage += " remark=\"没有备注\" pay_method=\"1\" is_docall=\"" + 1 + "\" need_return_tracking_no=\"" + orderRequest.poD_RTN_SVC + "\" express_type=\"154\"";
                 XMLMessage += " parcel_quantity=\"" + orderRequest.pcS_QTY_NR + "\" cargo_length=\"10.0\" cargo_width=\"" + orderRequest.smT_WGT_DE + "\" cargo_height=\"10.0\" sendstarttime=\"2019-05-21 16:35:50\">";
                 XMLMessage += "<Cargo name=\"电子产品,\" count=\"2\" unit=\"件\"/></Order></Body></Request>";
 
