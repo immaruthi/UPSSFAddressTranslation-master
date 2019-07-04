@@ -175,6 +175,7 @@ export class TranslateComponent implements OnInit {
           shipmentDetailToUpdate.shP_ADR_TR_TE = response.shipmentDataRequest.shP_ADR_TR_TE;
           shipmentDetailToUpdate.coD_TE = response.shipmentDataRequest.coD_TE;
           shipmentDetailToUpdate.smT_STA_NR = response.shipmentDataRequest.smT_STA_NR;
+          shipmentDetailToUpdate.poD_RTN_SVC = response.shipmentDataRequest.poD_RTN_SVC;
           this.notificationService.openSuccessMessageNotification("Data Updated Successfully.");
         },
           error => this.notificationService.openErrorMessageNotification("Error while updating data."))
