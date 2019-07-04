@@ -331,7 +331,10 @@ namespace UPS.ServicesDataRepository
 
         public int? SelectShipmentTotalStatusByWorkflowId(int wid)
         {
-            int? i = 0;
+            int? result = 0;
+            decimal? i = 0;
+            decimal? count = 1;
+            decimal? avg = 0; 
             try
             {
                 optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
@@ -339,13 +342,19 @@ namespace UPS.ServicesDataRepository
 
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
                 {
-                    i = context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid).Min(s => s.SMT_STA_NR);
-                    return i ?? 0;
+                    i = context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid).Sum(s => s.SMT_STA_NR);
+                    count = context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid).Count();
+                    i = i ?? 0;
+                    count = count ?? 1;
+                    avg = i / count;
+                    avg = Math.Round(avg.Value);
+                    result = Convert.ToInt32(avg);
+                    return result ?? 0;
                 }
             }
             catch
             {
-                return i;
+                return result;
             }
         }
 
@@ -420,5 +429,63 @@ namespace UPS.ServicesDataRepository
             return shipmentDataResponse;
         }
 
+        public ShipmentDataResponse DeleteShipments(List<ShipmentDataRequest> shipmentDataRequest)
+        {
+            ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
+            try
+            {
+                optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+
+                optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+                var context = new ApplicationDbContext(optionsBuilder.Options);
+
+                foreach (ShipmentDataRequest request in shipmentDataRequest)
+                {
+                    ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == request.ID).FirstOrDefault();
+                    context.shipmentDataRequests.Remove(data);
+                    context.Entry(request).State = EntityState.Deleted;
+                    context.SaveChanges();
+                    shipmentDataResponse.Shipments = context.shipmentDataRequests;
+                }
+                shipmentDataResponse.Success = true;
+                return shipmentDataResponse;
+            }
+            catch (Exception ex)
+            {
+                shipmentDataResponse.Success = false;
+                shipmentDataResponse.OperationExceptionMsg = ex.Message;
+            }
+            return shipmentDataResponse;
+        }
+
+        public ShipmentDataResponse DeleteShipment(ShipmentDataRequest shipmentDataRequest)
+        {
+            ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
+            try
+            {
+                optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+
+                optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+                var context = new ApplicationDbContext(optionsBuilder.Options);
+
+                ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == shipmentDataRequest.ID).FirstOrDefault();
+                context.shipmentDataRequests.Remove(data);
+                context.Entry(shipmentDataRequest).State = EntityState.Deleted;
+                context.SaveChanges();
+                shipmentDataResponse.Shipments = context.shipmentDataRequests;
+                shipmentDataResponse.Success = true;
+                return shipmentDataResponse;
+            }
+            catch (Exception ex)
+            {
+                shipmentDataResponse.Success = false;
+                shipmentDataResponse.OperationExceptionMsg = ex.Message;
+            }
+            return shipmentDataResponse;
+        }
     }
 }
