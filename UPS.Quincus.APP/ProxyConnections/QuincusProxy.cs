@@ -125,16 +125,18 @@
             return quincusTranslatedAddressResponse;            
         }
 
-        public static QuincusResponse GetQuincusResponse(QuincusGeoCodeDataRequest quincusGeoCodeDataRequest)
+        public static QuincusResponse GetQuincusResponse(QuincusGeoCodeDataRequest quincusGeoCodeDataRequest, decimal shipmentsCount)
         {
             bool retryflag = true;
             int retryCount = 0;
             QuincusResponse quincusResponse = new QuincusResponse();
             HttpWebResponse httpResponse = null;
+            int sleepTime = 5000;
 
+            int maxRetryCount = Convert.ToInt32(Math.Round(shipmentsCount)/2);
             try
             {
-                while (retryflag && retryCount<=3)
+                while (retryflag && retryCount<= maxRetryCount)
                 {
 
                     HttpRequestCachePolicy requestCachePolicy =
@@ -163,8 +165,13 @@
 
                     if (string.Equals(httpResponse.StatusDescription, "No Content", StringComparison.OrdinalIgnoreCase))
                     {
-                        System.Threading.Thread.Sleep(5000);
                         retryCount++;
+                        if (retryCount == 3)
+                        {
+                            sleepTime = 5000 * 12;
+                        }
+
+                        System.Threading.Thread.Sleep(sleepTime);
                     }
                     else
                     {

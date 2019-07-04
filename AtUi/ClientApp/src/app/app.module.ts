@@ -45,6 +45,7 @@ import { UploadedDataComponent } from './shipping-data/uploaded-data/uploaded-da
 import { AlertDialog, ConfirmDialog, ConfirmPopupComponent } from './shared/confirm-popup/confirm-popup.component';
 import { LoaderComponent } from './shared/loader/loader.component';
 import { LoaderService } from './shared/loader/loader.service';
+import { NotificationService } from './services/NotificationService';
 /* External Modules */
 import { AgGridModule } from 'ag-grid-angular';
 import { SentToSfComponent } from './shipping-data/sent-to-sf/sent-to-sf.component';
@@ -108,6 +109,7 @@ import { DatePipe } from '@angular/common'
       HttpService,
     LoaderService,
     DatePipe,
+    NotificationService,
     DataService,
     {
       provide: HTTP_INTERCEPTORS,
