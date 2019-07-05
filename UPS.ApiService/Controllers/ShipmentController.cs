@@ -444,6 +444,15 @@ namespace AtService.Controllers
 
         }
 
+        [Route("DeleteShipments")]
+        [HttpPost]
+        public async Task<ActionResult> DeleteShipments([FromBody] List<ShipmentDataRequest> shipmentDataRequests)
+        {
+            ShipmentService shipmentService = new ShipmentService();
+            shipmentService.DeleteShipments(shipmentDataRequests);
+            return Ok(shipmentDataRequests);
+        }
+
         [Route("GetTranslationAddress")]
         [HttpPost]
         public async Task<ActionResult> GetTranslationAddress([FromBody] List<ShipmentWorkFlowRequest> shipmentWorkFlowRequest)
