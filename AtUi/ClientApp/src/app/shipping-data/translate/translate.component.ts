@@ -205,14 +205,11 @@ export class TranslateComponent implements OnInit {
       (response: any) => {
         if (response.geocode.length > 0) {
           var EmptyCount: number = 0;
-          var NACount: number = 0;
           var SuccessCount: number = 0;
 
           for (let geocode of response.geocode) {
             if (geocode.translated_adddress === ' ') {
               EmptyCount = EmptyCount + 1;
-            } else if (geocode.translated_adddress === 'NA') {
-              NACount = NACount + 1;
             } else {
               SuccessCount = SuccessCount + 1;
             }
@@ -220,7 +217,6 @@ export class TranslateComponent implements OnInit {
 
           const data = {
             emptyCount: EmptyCount,
-            nACount: NACount,
             successCount: SuccessCount,
             screenFrom: 'Translate'
           }
