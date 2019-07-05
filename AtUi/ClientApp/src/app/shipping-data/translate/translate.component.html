@@ -22,7 +22,7 @@
           </mat-checkbox>
         </mat-header-cell>
         <mat-cell *matCellDef="let row">
-          <mat-checkbox (click)="$event.stopPropagation()"
+          <mat-checkbox (click)="rowChecked($event, row)"
                         (change)="$event ? selection.toggle(row) : null"
                         [checked]="selection.isSelected(row)"
                         [aria-label]="checkboxLabel(row)"
@@ -129,6 +129,10 @@
         <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Consignee Phone </mat-header-cell>
         <mat-cell *matCellDef="let element" class="cell"> {{element.pH_NR}} </mat-cell>
       </ng-container>
+      <ng-container matColumnDef="poD_RTN_SVC" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Extra Service </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{PODoptions[element?.poD_RTN_SVC!=null ?element.poD_RTN_SVC:0].value}} </mat-cell>
+      </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
     </mat-table>
@@ -136,6 +140,6 @@
   </div>
   <mat-paginator #paginator
                  [pageSize]="10"
-                 [pageSizeOptions]="[5, 10, 20]"
+                 [pageSizeOptions]="[5, 10, 20, 50, 100]"
                  [showFirstLastButtons]="true">
   </mat-paginator>

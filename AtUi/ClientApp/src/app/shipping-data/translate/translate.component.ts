@@ -23,7 +23,7 @@ export class TranslateComponent implements OnInit {
   displayedColumns =
     ['select', 'actions', 'wfL_ID', 'smT_STA_NR', 'pkG_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'coN_NR', 'acY_TE',
       'dsT_CTY_TE', 'dsT_PSL_TE', 'csG_CTC_TE', 'pH_NR', 'fsT_INV_LN_DES_TE', 'shP_CPY_NA', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE',
-      'orG_CTY_TE', 'orG_PSL_CD', 'imP_SLC_TE', 'coD_TE'
+      'orG_CTY_TE', 'orG_PSL_CD', 'imP_SLC_TE', 'coD_TE', 'poD_RTN_SVC'
     ];
   private eventsSubscription: any
 
@@ -32,6 +32,7 @@ export class TranslateComponent implements OnInit {
   public ResponseData: any[] = [];
   public WorkflowID: any;
   public shipmentStatusList = Constants.ShipmentStatusList;
+  public PODoptions= Constants.PODoptions;
   dataSource = new MatTableDataSource<Element>();
   public errorMessage: string;
   selection = new SelectionModel<any>(true, []);
@@ -98,7 +99,8 @@ export class TranslateComponent implements OnInit {
   masterToggle() {
     this.mainData = [];
     this.checkedData = [];
-    this.dataSource.data.forEach(row => this.mainData.push(row));
+    //this.dataSource.data.forEach(row => this.mainData.push(row));
+    this.mainData = this.dataSource._pageData(this.dataSource.data);
     this.checkedData = this.mainData.filter(data => (data.smT_STA_NR !== 2 && data.smT_STA_NR !== 3));
     this.isAllSelected() ?
       this.selection.clear() :
@@ -113,11 +115,23 @@ export class TranslateComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
 
+  rowChecked(event: Event, row: any) {
+    event.stopPropagation();
+    if (!this.selection.isSelected(row)) {
+      if (this.selection.selected.length >= 100) {
+        this.dialogService.openAlertDialog('Maximum allowed Shipments for Translation: 100 and You have selected: ' + this.selection.selected.length);
+        this.selection.toggle(row);
+      }
+    }
+  }
+
   /** Method to Translate the Data*/
   public sendForTranslate() {
     const checkedCount = this.selection.selected.length;
     if (checkedCount <= 0) {
       this.dialogService.openAlertDialog('Please select minimum one row to Translate.');
+    } else if (checkedCount > 100) {
+      this.dialogService.openAlertDialog('Maximum allowed Shipments for Translation: 100 and You have selected: ' + this.selection.selected.length);
     } else {
       const data = this.selection.selected;
       this.dataTranslate(data);
@@ -133,7 +147,8 @@ export class TranslateComponent implements OnInit {
         shP_ADR_TR_TE: shipmentDetailToUpdate.shP_ADR_TR_TE,
         coD_TE: shipmentDetailToUpdate.coD_TE,
         pkG_NR_TE: shipmentDetailToUpdate.pkG_NR_TE,
-        rcV_CPY_TE: shipmentDetailToUpdate.rcV_CPY_TE
+        rcV_CPY_TE: shipmentDetailToUpdate.rcV_CPY_TE,
+        poD_RTN_SVC: shipmentDetailToUpdate.poD_RTN_SVC
       }
     });
 
@@ -141,7 +156,8 @@ export class TranslateComponent implements OnInit {
       if (result === 1) {
         let updatedDetails = this.dataService.getDialogData();
         if (updatedDetails.coD_TE == shipmentDetailToUpdate.coD_TE
-          && updatedDetails.shP_ADR_TR_TE.toLowerCase() == shipmentDetailToUpdate.shP_ADR_TR_TE.toLowerCase()) {
+          && updatedDetails.shP_ADR_TR_TE.toLowerCase() == shipmentDetailToUpdate.shP_ADR_TR_TE.toLowerCase()
+          && updatedDetails.poD_RTN_SVC == shipmentDetailToUpdate.poD_RTN_SVC) {
 
           this.notificationService.openSuccessMessageNotification("No changes found to update");
           return;
@@ -152,6 +168,7 @@ export class TranslateComponent implements OnInit {
           COD_TE: updatedDetails.coD_TE,
           WFL_ID: shipmentDetails.wfL_ID,
           ID: shipmentDetails.id,
+          POD_RTN_SVC: updatedDetails.poD_RTN_SVC
         }
 
         this.shippingService.UpdateShippingAddress(details).subscribe((response: any) => {
@@ -159,6 +176,7 @@ export class TranslateComponent implements OnInit {
           shipmentDetailToUpdate.shP_ADR_TR_TE = response.shipmentDataRequest.shP_ADR_TR_TE;
           shipmentDetailToUpdate.coD_TE = response.shipmentDataRequest.coD_TE;
           shipmentDetailToUpdate.smT_STA_NR = response.shipmentDataRequest.smT_STA_NR;
+          shipmentDetailToUpdate.poD_RTN_SVC = response.shipmentDataRequest.poD_RTN_SVC;
           this.notificationService.openSuccessMessageNotification("Data Updated Successfully.");
         },
           error => this.notificationService.openErrorMessageNotification("Error while updating data."))

@@ -133,10 +133,10 @@
             HttpWebResponse httpResponse = null;
             int sleepTime = 5000;
 
-            int maxRetryCount = Convert.ToInt32(Math.Round(shipmentsCount)/2);
+            int maxRetryCount = Convert.ToInt32(Math.Round(shipmentsCount / 1.5m));
             try
             {
-                while (retryflag && retryCount<= maxRetryCount)
+                while (retryflag && retryCount <= maxRetryCount)
                 {
 
                     HttpRequestCachePolicy requestCachePolicy =
@@ -166,10 +166,10 @@
                     if (string.Equals(httpResponse.StatusDescription, "No Content", StringComparison.OrdinalIgnoreCase))
                     {
                         retryCount++;
-                        if (retryCount == 3)
-                        {
-                            sleepTime = 5000 * 12;
-                        }
+                        //if (retryCount == maxRetryCount)
+                        //{
+                        sleepTime = Convert.ToInt32(Math.Round(1000m * 3.6m * shipmentsCount));
+                        //}
 
                         System.Threading.Thread.Sleep(sleepTime);
                     }
