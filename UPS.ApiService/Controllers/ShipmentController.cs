@@ -368,18 +368,25 @@ namespace AtService.Controllers
 
                     if (xmlDocumentShipmentResponseParser.Contains("<ERROR"))
                     {
+                        XmlDocument xmlDocument = new XmlDocument();
+
+                        xmlDocument.LoadXml(getSFCreateOrderServiceResponse.OrderResponse);
+
+                        string xmlAttributeCollectionError = xmlDocument.GetElementsByTagName("ERROR")[0].Attributes[0].InnerText;
+
+
+
                         if (xmlDocumentShipmentResponseParser.Contains("8019"))
                         {
                             createOrderShipmentResponse.FailedToProcessShipments.Add("Customer order number(" + orderRequest.pkG_NR_TE + ") is already confirmed");
                         }
                         else if (xmlDocumentShipmentResponseParser.Contains("8016"))
                         {
-
                             createOrderShipmentResponse.FailedToProcessShipments.Add("Repeat order numbers ( " + orderRequest.pkG_NR_TE + " )");
                         }
                         else
                         {
-                            createOrderShipmentResponse.FailedToProcessShipments.Add(orderRequest.pkG_NR_TE);
+                            createOrderShipmentResponse.FailedToProcessShipments.Add("Error Code ( " + xmlAttributeCollectionError + " ) -> " + orderRequest.pkG_NR_TE);
                         }
                     }
                     else
