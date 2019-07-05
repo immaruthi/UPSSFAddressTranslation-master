@@ -22,7 +22,7 @@ export class UploadedDataComponent implements OnInit {
     ['select', 'wfL_ID', 'smT_STA_NR', 'smT_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE',
       'csG_CTC_TE', 'pH_NR', 'fsT_INV_LN_DES_TE',
       'shP_CPY_NA', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD', 'imP_SLC_TE',
-      'coD_TE'
+      'coD_TE', 'poD_RTN_SVC'
     ];
 
   private eventsSubscription: any
@@ -31,6 +31,7 @@ export class UploadedDataComponent implements OnInit {
   public ResponseData: any[] = [];
   public WorkflowID: any;
   public shipmentStatusList = Constants.ShipmentStatusList;
+  public PODoptions = Constants.PODoptions;
   dataSource = new MatTableDataSource<Element>();
   public errorMessage: string;
   selection = new SelectionModel<any>(true, []);

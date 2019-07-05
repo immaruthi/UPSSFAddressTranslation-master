@@ -229,6 +229,7 @@ export class SentToSfComponent implements OnInit {
             'Origin Postal code': data.orG_PSL_CD,
             'IMP SLC': data.imP_SLC_TE,
             'COD': data.coD_TE,
+            'Extra Service': this.PODoptions[data.poD_RTN_SVC].value,
             'Payment Method': data.pyM_MTD,
             'Express Type': data.exP_TYP,
             'Slic': data.spC_SLIC_NR
