@@ -41,6 +41,7 @@ export class SentToSfComponent implements OnInit {
   public checkedData: any[] = [];
   public tableData: any[] = [];
   public excelMainData: any[] = [];
+  filterText: string = '';
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
     private router: Router, public dialog: MatDialog, public dataService: DataService,
@@ -88,10 +89,13 @@ export class SentToSfComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.selection.clear();
+      this.filterText = '';
+      this.applyFilter('');
     }, error => (this.errorMessage = <any>error));
   }
 
   applyFilter(filterValue: string) {
+    this.filterText = filterValue;
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
@@ -229,6 +233,7 @@ export class SentToSfComponent implements OnInit {
             'Origin Postal code': data.orG_PSL_CD,
             'IMP SLC': data.imP_SLC_TE,
             'COD': data.coD_TE,
+            'Extra Service': this.PODoptions[data.poD_RTN_SVC].value,
             'Payment Method': data.pyM_MTD,
             'Express Type': data.exP_TYP,
             'Slic': data.spC_SLIC_NR
@@ -238,5 +243,39 @@ export class SentToSfComponent implements OnInit {
     } else {
       this.dialogService.openAlertDialog('No data for export.');
     }    
+  }
+
+  rowDelete(index: number, rowData: any) {
+
+  }
+
+  delete() {
+    const checkedCount = this.selection.selected.length;
+    if (checkedCount <= 0) {
+      this.dialogService.openAlertDialog('Please select minimum one row to Delete.');
+    } else {
+      const dialogRef = this.dialogService.openConfirmationDialog('Are you sure, you want to delete all the selected records ?');
+
+      dialogRef.afterClosed().subscribe(data => {
+        if (data === true) {
+          const dataForDelete = this.selection.selected; // Any changes can do here for sending array
+          this.deleteData(dataForDelete);
+        } else {
+
+        }
+      })
+    }
+  }
+
+  deleteData(data: any) {
+    this.shippingService.deleteUploadedData(data).subscribe((response: any) => {
+      if (response != null && response.success === true) {
+        this.getDataForSendToSF(this.WorkflowID);
+        this.notificationService.openSuccessMessageNotification("Deleted Successfully");
+      } else {
+        this.notificationService.openErrorMessageNotification("Error while Deleting data.");
+      }
+    },
+      error => this.notificationService.openErrorMessageNotification("Error while Deleting data."));
   }
 }

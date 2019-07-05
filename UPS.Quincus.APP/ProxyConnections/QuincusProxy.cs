@@ -1,7 +1,9 @@
 ﻿namespace UPS.Quincus.APP.ProxyConnections
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Net;
     using System.Net.Cache;
     using Newtonsoft.Json;
@@ -11,7 +13,7 @@
     using UPS.Quincus.APP.Response;
     using UPS.Quincus.APP.Utilities;
 
-    public class QuincusProxy
+    public static class QuincusProxy
     {
         public static QuincusTokenDataResponse GetToken(QuincusParams quincusParams)
         {
@@ -55,7 +57,7 @@
                 httpResponse.Close();
 
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 quincusTokenDataResponse.exception = exception;
             }
@@ -63,6 +65,14 @@
             return quincusTokenDataResponse;
         }
 
+        public static List<List<T>> ChunkBy<T>(this List<T> source, int chunkSize)
+        {
+            return source
+                .Select((x, i) => new { Index = i, Value = x })
+                .GroupBy(x => x.Index / chunkSize)
+                .Select(x => x.Select(v => v.Value).ToList())
+                .ToList();
+        }
 
         public static QuincusTranslatedAddressResponse GetTranslatedAddressResponse(IQuincusAddressTranslationRequest quincusAddressTranslationRequest)
         {
@@ -75,10 +85,9 @@
 
                 if (!string.IsNullOrWhiteSpace(content))
                 {
-
                     var httpWebRequest = (HttpWebRequest)WebRequest.Create(
                         quincusAddressTranslationRequest.endpoint);
-                    if (string.Equals(MapProxy.WebProxyEnable,true.ToString(),StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(MapProxy.WebProxyEnable, true.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
                         WebProxy myProxy = new WebProxy(MapProxy.webProxyURI, false, null, new NetworkCredential(MapProxy.webProxyUsername, MapProxy.webProxyPassword));
 
@@ -117,12 +126,12 @@
 
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 quincusTranslatedAddressResponse.exception = exception;
             }
 
-            return quincusTranslatedAddressResponse;            
+            return quincusTranslatedAddressResponse;
         }
 
         public static QuincusResponse GetQuincusResponse(QuincusGeoCodeDataRequest quincusGeoCodeDataRequest, decimal shipmentsCount)
@@ -168,7 +177,7 @@
                         retryCount++;
                         //if (retryCount == maxRetryCount)
                         //{
-                        sleepTime = Convert.ToInt32(Math.Round(1000m * 3.6m * shipmentsCount));
+                        sleepTime = Convert.ToInt32(Math.Round(1000m * 1.8m * shipmentsCount));
                         //}
 
                         System.Threading.Thread.Sleep(sleepTime);
@@ -192,7 +201,7 @@
                     quincusResponse.ResponseStatus = true;
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 quincusResponse.Exception = exception;
             }
