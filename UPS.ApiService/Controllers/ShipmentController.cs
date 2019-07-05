@@ -35,6 +35,7 @@ namespace AtService.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("AllowAtUIOrigin")]
+    [Authorize]
     public class ShipmentController : ControllerBase
     {
 
@@ -53,13 +54,15 @@ namespace AtService.Controllers
         }
 
         private static int _workflowID = 0;
-        [Route("ExcelFileUpload/{Emp_Id}")]
+        [Route("ExcelFileUpload")]
         [HttpPost]
-        public async Task<ActionResult> ExcelFile(IList<IFormFile> excelFileName, int Emp_Id)
+      
+        public async Task<ActionResult> ExcelFile(IList<IFormFile> excelFileName)
         {
             ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
             try
             {
+                int userId = Convert.ToInt32(HttpContext.User.Claims.FirstOrDefault(x => x.Type == JwtConstant.UserId).Value);
                 ShipmentDataResponse result = null;
                 //string response = string.Empty;
                 if (excelFileName != null)
@@ -85,7 +88,7 @@ namespace AtService.Controllers
                             string JSONString = new ExcelExtension().Test(filePath);
                             var excelDataObject2 = JsonConvert.DeserializeObject<List<ExcelDataObject>>(JSONString);
                             WorkflowController workflowController = new WorkflowController();
-                            WorkflowDataResponse response = ((WorkflowDataResponse)((ObjectResult)(workflowController.CreateWorkflow(file, Emp_Id)).Result).Value);
+                            WorkflowDataResponse response = ((WorkflowDataResponse)((ObjectResult)(workflowController.CreateWorkflow(file, userId)).Result).Value);
                             _workflowID = response.Workflow.ID;
                             result = this.CreateShipments(excelDataObject2, _workflowID);
                             if (result.Success)

@@ -11,11 +11,10 @@ export class AuthenticationService {
   _baseURL: string =  environment.LOCAL_API_URL;;
 
   constructor(private _http: HttpClient) {
-    var currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+    var currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this._token = currentUser && currentUser.token;
   }
   login(userId: string, password: string): Observable<boolean> {
-    debugger;
     let headers = new HttpHeaders();
     headers = headers.append('noToken', 'noToken');
     let userData = { USR_ID_TE: userId, USR_PWD_TE: password };
@@ -49,17 +48,15 @@ export class AuthenticationService {
   }
 
   private SetCurrentUserSession(response: any) {
-      sessionStorage.setItem('currentUser', JSON.stringify({
-          token: response.token,
-          expiration: response.expiration,
-          UserId: response.userId,
-          UserName: response.userName
+      localStorage.setItem('currentUser', JSON.stringify({
+          token: response.Token,
+          UserName: response.UserName
       }));
   }
 
   logout(): void {
     // clear token remove user from local storage to log user out.
     this._token = null;
-    sessionStorage.removeItem('currentUser');
+    localStorage.removeItem('currentUser');
   }
 }

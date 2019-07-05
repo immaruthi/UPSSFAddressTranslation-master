@@ -4,8 +4,11 @@ var TokenInterceptor = /** @class */ (function () {
     function TokenInterceptor() {
     }
     TokenInterceptor.prototype.intercept = function (httpReq, next) {
-        var headers = httpReq.headers
-            .set('Content-Type', 'application/json');
+        var headers = httpReq.headers;
+        if (headers.get('fileupload') !== 'fileupload') {
+            headers = httpReq.headers
+                .set('Content-Type', 'application/json');
+        }
         if (headers.get('noToken') === 'noToken') {
             headers = headers.delete('Authorization').delete('noToken');
         }

@@ -10,10 +10,8 @@ export class AuthInterceptor implements HttpInterceptor {
 
   }
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    debugger;
-   
     if (request.headers.get('notoken') !== 'noToken') {
-      let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+      let currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
       if (currentUser != null && currentUser.token) {
         request = request.clone({
@@ -30,8 +28,8 @@ export class AuthInterceptor implements HttpInterceptor {
       }
     }, (err: any) => {
       if (err instanceof HttpErrorResponse) {
-        debugger;
         if (err.status === 401) {
+          localStorage.removeItem('currentUser');
           this.router.navigate(['/login']);
         }
       }

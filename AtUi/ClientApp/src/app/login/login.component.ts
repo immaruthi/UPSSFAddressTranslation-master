@@ -65,7 +65,6 @@ export class LoginComponent {
 
       this._authService.login(userid, password).subscribe(
         (response: any) => {
-          debugger;
           if (response == true) {
             this.router.navigate(['/workflow']);
           }

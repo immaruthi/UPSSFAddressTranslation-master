@@ -21,12 +21,17 @@ using System;
 using System.Net.Http.Headers;
 using System.Collections.Generic;
 using UPS.ServicesDataRepository.OverrideDbContext;
+using Microsoft.AspNetCore.Authorization;
+using System.Linq;
+using UPS.ServicesDataRepository.Common;
+using System.Security.Claims;
 
 namespace AtService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("AllowAtUIOrigin")]
+    [Authorize]
     public class ExcelWorkflowController : Controller
     {
         private IHostingEnvironment _hostingEnvironment;
@@ -65,7 +70,7 @@ namespace AtService.Controllers
                 string result = SaveExcelFileInformation1(fileName,Emp_Id);
             }
 
-            excelwkflow = ExcelData(Emp_Id);
+            excelwkflow = ExcelData();
             //ImportDataFromExcel(file1);
             return excelwkflow;
         }
@@ -107,58 +112,58 @@ namespace AtService.Controllers
             return EmpID;
         }
 
-        public List<WorkflowDataRequest> ExcelData(string EmpID)
-        {
-            List<WorkflowDataRequest> excelWorkflowsLst = new List<WorkflowDataRequest>();
+        //public List<WorkflowDataRequest> ExcelData()
+        //{
+        //    List<WorkflowDataRequest> excelWorkflowsLst = new List<WorkflowDataRequest>();
 
 
-            SqlConnection conn = new SqlConnection(DBConnectionContext.connectionString);
-            conn.Open();
-            //string query = "select * from [WR-FLW] inner join [USR] on USR.ID = [WR-FLW].[CRD-BY-NR] ";
-            string query = "select * from [WR-FLW] " +
-                "inner join [USR] on USR.ID = [WR-FLW].[CRD-BY-NR] order by [WR-FLW].ID desc"; // USR.ID = (select [ID] from [USR] where [USR].[USR-EML-TE]= '"+ EmpID+"')";
-            SqlCommand command = new SqlCommand(query, conn);
+        //    SqlConnection conn = new SqlConnection(DBConnectionContext.connectionString);
+        //    conn.Open();
+        //    //string query = "select * from [WR-FLW] inner join [USR] on USR.ID = [WR-FLW].[CRD-BY-NR] ";
+        //    string query = "select * from [WR-FLW] " +
+        //        "inner join [USR] on USR.ID = [WR-FLW].[CRD-BY-NR] order by [WR-FLW].ID desc"; // USR.ID = (select [ID] from [USR] where [USR].[USR-EML-TE]= '"+ EmpID+"')";
+        //    SqlCommand command = new SqlCommand(query, conn);
 
-            SqlDataReader reader = command.ExecuteReader();
-            //DataTable dataTable = new DataTable();
+        //    SqlDataReader reader = command.ExecuteReader();
+        //    //DataTable dataTable = new DataTable();
 
-            //dataTable.Load(reader);
-            //while (reader.HasRows)
-            //{
-            while (reader.Read())
-            {
-                WorkflowDataRequest exflow = new WorkflowDataRequest();
-                exflow.ID = Convert.ToInt32(reader[0]);
-                exflow.USR_FST_NA = reader["USR-FST-NA"].ToString();
-                exflow.FLE_NA = reader["FLE-NA"].ToString();
-                exflow.WFL_STA_TE = reader["WFL-STA-TE"] != null ? Convert.ToInt32(reader["WFL-STA-TE"].ToString()) : 0;
-                exflow.CRD_DT = reader["CRD-DT"] != null && reader["CRD-DT"].ToString() != string.Empty ? Convert.ToDateTime(reader["CRD-DT"].ToString()): DateTime.Now;
-                exflow.UDT_DT = reader["UDT-DT"] != null && reader["UDT-DT"].ToString() != string.Empty ? Convert.ToDateTime(reader["UDT-DT"].ToString()): DateTime.Now;
+        //    //dataTable.Load(reader);
+        //    //while (reader.HasRows)
+        //    //{
+        //    while (reader.Read())
+        //    {
+        //        WorkflowDataRequest exflow = new WorkflowDataRequest();
+        //        exflow.ID = Convert.ToInt32(reader[0]);
+        //        exflow.USR_FST_NA = reader["USR-FST-NA"].ToString();
+        //        exflow.FLE_NA = reader["FLE-NA"].ToString();
+        //        exflow.WFL_STA_TE = reader["WFL-STA-TE"] != null ? Convert.ToInt32(reader["WFL-STA-TE"].ToString()) : 0;
+        //        exflow.CRD_DT = reader["CRD-DT"] != null && reader["CRD-DT"].ToString() != string.Empty ? Convert.ToDateTime(reader["CRD-DT"].ToString()): DateTime.Now;
+        //        exflow.UDT_DT = reader["UDT-DT"] != null && reader["UDT-DT"].ToString() != string.Empty ? Convert.ToDateTime(reader["UDT-DT"].ToString()): DateTime.Now;
 
-                if (exflow.WFL_STA_TE == 0)
-                {
-                    exflow.WFL_STA_TE_TEXT = "Created"; //Uploaded
-                }
-                else if (exflow.WFL_STA_TE == 1 || exflow.WFL_STA_TE == 2)
-                {
-                    exflow.WFL_STA_TE_TEXT = "InProgress"; //Curated || Translated
-                }
-                else if(exflow.WFL_STA_TE == 3)
-                {
-                    exflow.WFL_STA_TE_TEXT = "Completed"; //Done
-                }
+        //        if (exflow.WFL_STA_TE == 0)
+        //        {
+        //            exflow.WFL_STA_TE_TEXT = "Created"; //Uploaded
+        //        }
+        //        else if (exflow.WFL_STA_TE == 1 || exflow.WFL_STA_TE == 2)
+        //        {
+        //            exflow.WFL_STA_TE_TEXT = "InProgress"; //Curated || Translated
+        //        }
+        //        else if(exflow.WFL_STA_TE == 3)
+        //        {
+        //            exflow.WFL_STA_TE_TEXT = "Completed"; //Done
+        //        }
 
-                excelWorkflowsLst.Add(exflow);
-            }
-
-
-            // }
-            conn.Close();
+        //        excelWorkflowsLst.Add(exflow);
+        //    }
 
 
-            return excelWorkflowsLst;
+        //    // }
+        //    conn.Close();
 
-        }
+
+        //    return excelWorkflowsLst;
+
+        //}
 
         public List<WorkflowDataRequest> ExcelData()
         {
@@ -205,10 +210,10 @@ namespace AtService.Controllers
 
 
         [HttpGet("[action]")]
-        public List<WorkflowDataRequest> getExcelData(string Emp_Id)
+        public List<WorkflowDataRequest> getExcelData()
         {
             List<WorkflowDataRequest> lst = new List<WorkflowDataRequest>();
-            lst = ExcelData(Emp_Id);
+            lst = ExcelData();
             return lst;
         }
 

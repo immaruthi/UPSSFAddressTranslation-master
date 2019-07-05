@@ -5,7 +5,7 @@ import { CanActivate, CanActivateChild, Route, Router } from '@angular/router';
 export class LoginGuard implements CanActivate {
   constructor(private router: Router) { }
   canActivate(): boolean {
-    let currentUser :any = JSON.parse(sessionStorage.getItem('currentUser'));
+    let currentUser :any = JSON.parse(localStorage.getItem('currentUser'));
     if (currentUser == null || currentUser.token ==null) {
       return true;
     }

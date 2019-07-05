@@ -8,12 +8,7 @@ import { FormControl } from '@angular/forms';
 import { LoaderService } from '../shared/loader/loader.service';
 import { List } from 'linq-typescript';
 import { Constants } from '../shared/Constants';
-
-
-
-/**
- * @title Table with pagination
- */
+import { WorkflowService } from '../services/WorkflowService';
 
 @Component({
   selector: 'workflow',
@@ -26,7 +21,6 @@ export class WorkflowComponent {
   arrayBuffer: any;
   file: File;
   fileToUpload: File = null;
-  //displayedColumns = ['position', 'name', 'weight', 'symbol'];
   displayedColumns = ['id', 'usR_FST_NA', 'flE_NA', 'wfL_STA_TE_TEXT', 'crD_DT'];
   dataSource = new MatTableDataSource<Element>();
 
@@ -37,26 +31,16 @@ export class WorkflowComponent {
      { key: 2, value: 'Uploaded' }
 ]; // create an empty array
 
-
-
   constructor(
-    private userService: UserService,
     private _loaderService: LoaderService,
-    private snackBar: MatSnackBar) {
+    private snackBar: MatSnackBar,
+    private workflowService: WorkflowService
+    ) {
 
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  //set paginator(value: MatPaginator) {
-  //  this.dataSource.paginator = value;
-  //}
-
-
-  /**
-  * Set the paginator after the view init since this component will
-  * be able to query its view for the initialized paginator.
-  */
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
@@ -68,7 +52,7 @@ export class WorkflowComponent {
 
   getWorkflowDetails() {
     var user = localStorage.getItem("Emp_Id");
-    this.userService.getAllWorkflows(user)
+    this.workflowService.GetAllWorkflow()
       .subscribe((data: any) => {
 
         this.dataSource.data = data;
@@ -134,22 +118,11 @@ export class WorkflowComponent {
     }
     else {
       this.isValidFile = true;
-      var user = localStorage.getItem("userid");
-  
-      this.userService.postFile(this.fileToUpload, user)
+      this.workflowService.UploadFile(this.fileToUpload)
         .subscribe((response: any) => {
           this.getWorkflowDetails();
           this.openSuccessMessageNotification("File Uploaded successfully");
           this.fileNameControl.setValue('');
-
-          //if (response.success === true) {
-          //  this.getWorkflowDetails();
-          //  this.openSuccessMessageNotification("File Uploaded successfully");
-          //  this.fileNameControl.setValue('');
-          //} else {
-          //  this.openErrorMessageNotification(response.);
-          //  this.fileNameControl.setValue('');
-          //}
         },
         error =>
         {

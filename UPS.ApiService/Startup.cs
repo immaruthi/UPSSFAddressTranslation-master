@@ -31,8 +31,7 @@ namespace UPS.AddressTranslationService
         }
 
         public IConfiguration Configuration { get; }
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+
         public void ConfigureServices(IServiceCollection services)
         {
             // ********************
@@ -52,6 +51,7 @@ namespace UPS.AddressTranslationService
             /* Dependancy Injection */
 
             services.AddTransient<IUserServicesAsync, UserServices>();
+            services.AddTransient<IUPSAuthenticationService, UPSAuthenticationService>();
 
 
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
@@ -60,20 +60,6 @@ namespace UPS.AddressTranslationService
             services.AddDbContext<ApplicationDbContext>(
                 option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            //services.AddIdentity<IdentityUser, IdentityRole>(
-            //    option =>
-            //    {
-            //        option.Password.RequireDigit = false;
-            //        option.Password.RequiredLength = 6;
-            //        option.Password.RequireNonAlphanumeric = false;
-            //        option.Password.RequireUppercase = false;
-            //        option.Password.RequireLowercase = false;
-            //    }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-
-
-            //services.AddAuthentication(new AuthenticationOptions().DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme);
-            //services.AddAuthentication(new AuthenticationOptions().DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme);
-            //services.AddAuthentication(new AuthenticationOptions().DefaultScheme = JwtBearerDefaults.AuthenticationScheme);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -88,19 +74,6 @@ namespace UPS.AddressTranslationService
                         IssuerSigningKey = new SymmetricSecurityKey(signingKey)
                     };
                 });
-            //services.AddAuthentication().AddJwtBearer(options =>
-            //{
-            //    options.SaveToken = true;
-            //    options.RequireHttpsMetadata = true;
-            //    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
-            //    {
-            //        ValidateIssuer = true,
-            //        ValidateAudience = true,
-            //        ValidAudience = Configuration["Jwt:Site"],
-            //        ValidIssuer = Configuration["Jwt:Site"],
-            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Pactera IDC JWT Integration"))
-            //    };
-            //});
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }

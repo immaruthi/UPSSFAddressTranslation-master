@@ -13,14 +13,19 @@ import { LoginData } from '../models/LoginData';
   styleUrls: ['./top.component.css']
 })
 export class TopComponent implements OnInit {
-  employeeId: string;
+  userName: string;
   loginfo: string;
-  constructor(private _authService: AuthenticationService, private router: Router) { }
+  constructor(private _authService: AuthenticationService,
+    private router: Router) {
+
+  }
   log_info: LoginData;
   logout() {
     this._authService.logout();
     this.router.navigate(['']);
   }
   ngOnInit() {
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.userName = currentUser != null ? currentUser.UserName : '';
   }
 }
