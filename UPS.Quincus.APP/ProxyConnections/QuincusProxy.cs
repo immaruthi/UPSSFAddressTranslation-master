@@ -81,6 +81,8 @@
 
             try
             {
+                quincusTranslatedAddressResponse.RequestDataCount = quincusAddressTranslationRequest.shipmentWorkFlowRequests.Count;
+
                 string content = GetRequestContextForAddress.GetAddressStringFromRequest(quincusAddressTranslationRequest.shipmentWorkFlowRequests);
 
                 if (!string.IsNullOrWhiteSpace(content))
@@ -145,8 +147,8 @@
             int maxRetryCount = Convert.ToInt32(Math.Round(shipmentsCount / 1.5m));
             try
             {
-                while (retryflag && retryCount <= maxRetryCount)
-                {
+                //while (retryflag && retryCount <= maxRetryCount)
+                //{
 
                     HttpRequestCachePolicy requestCachePolicy =
                             new HttpRequestCachePolicy(HttpRequestCacheLevel.Default);
@@ -172,21 +174,21 @@
                     httpWebRequest.Method = "GET";
                     httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
 
-                    if (string.Equals(httpResponse.StatusDescription, "No Content", StringComparison.OrdinalIgnoreCase))
-                    {
-                        retryCount++;
-                        //if (retryCount == maxRetryCount)
-                        //{
-                        sleepTime = Convert.ToInt32(Math.Round(1000m * 1.8m * shipmentsCount));
-                        //}
+                    //if (string.Equals(httpResponse.StatusDescription, "No Content", StringComparison.OrdinalIgnoreCase))
+                    //{
+                    //    retryCount++;
+                    //    //if (retryCount == maxRetryCount)
+                    //    //{
+                    //    sleepTime = Convert.ToInt32(Math.Round(1000m * 1.8m * shipmentsCount));
+                    //    //}
 
-                        System.Threading.Thread.Sleep(sleepTime);
-                    }
-                    else
-                    {
-                        retryflag = false;
-                    }
-                }
+                    //    System.Threading.Thread.Sleep(sleepTime);
+                    //}
+                    //else
+                    //{
+                    //    retryflag = false;
+                    //}
+                //}
 
                 string response;
 
