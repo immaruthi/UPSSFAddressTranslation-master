@@ -14,6 +14,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="elmah" Version="1.2.2" />
+    <PackageReference Include="ElmahCore.Sql" Version="1.2.5" />
     <PackageReference Include="EntityFramework.SqlServerCompact" Version="6.2.0" />
     <PackageReference Include="EntityFrameworkCore.SqlServerCompact40.Core" Version="2.2.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -23,6 +25,7 @@
     <PackageReference Include="Microsoft.SqlServer.Compact" Version="4.0.8876.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
     <PackageReference Include="MySql.Data" Version="8.0.16" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,6 +52,7 @@
     <None Remove="ClientApp\src\app\services\file.ts" />
     <None Remove="ClientApp\src\app\services\HomeService.ts" />
     <None Remove="ClientApp\src\app\services\LoginGuard.ts" />
+    <None Remove="ClientApp\src\app\services\NotificationService.ts" />
     <None Remove="ClientApp\src\app\services\shipping.service.ts" />
     <None Remove="ClientApp\src\app\services\WorkflowService.ts" />
     <None Remove="ClientApp\src\app\shared\Constants.ts" />
@@ -74,6 +78,7 @@
     <TypeScriptCompile Include="ClientApp\src\app\services\ExcelExport.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\HomeService.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\LoginGuard.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\NotificationService.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\shipping.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\WorkflowService.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\shared\Constants.ts" />

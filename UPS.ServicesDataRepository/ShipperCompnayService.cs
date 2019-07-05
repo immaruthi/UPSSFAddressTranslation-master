@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using UPS.DataObjects.Shipment;
-using UPS.DataObjects.UserData;
-using UPS.ServicesAsyncActions;
-using UPS.ServicesDataRepository.DataContext;
-using UPS.DataObjects.SPC_LST;
-using UPS.ServicesDataRepository.Common;
-
-namespace UPS.ServicesDataRepository
+﻿namespace UPS.ServicesDataRepository
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Microsoft.EntityFrameworkCore;
+    using UPS.DataObjects.Shipment;
+    using UPS.DataObjects.SPC_LST;
+    using UPS.ServicesAsyncActions;
+    using UPS.ServicesDataRepository.Common;
+    using UPS.ServicesDataRepository.DataContext;
+
     public class ShipperCompnayService : IShipperCompanyAsync
     {
         private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
@@ -82,7 +80,8 @@ namespace UPS.ServicesDataRepository
                                 s.SMT_WGT_DE,
                                 SPC_SLIC_NR = c.SPC_SLIC_NR,
                                 s.SVL_NR,
-                                s.WGT_UNT_TE
+                                s.WGT_UNT_TE,
+                                s.POD_RTN_SVC
                             }).ToList();
 
                     foreach (var shipmentData in anonymousList)
@@ -125,6 +124,29 @@ namespace UPS.ServicesDataRepository
                         shipmentDataRequest.SHP_PH_TE = shipmentData.SHP_PH_TE;
                         shipmentDataRequest.SMT_NR_TE = shipmentData.SMT_NR_TE;
                         shipmentDataRequest.SMT_STA_NR = shipmentData.SMT_STA_NR;
+
+                        switch (shipmentDataRequest.SMT_STA_NR)
+                        {
+                            case 0:
+                                shipmentDataRequest.SMT_STA_TE = "Uploaded";
+                                break;
+                            case 1:
+                                shipmentDataRequest.SMT_STA_TE = "Curated";
+                                break;
+                            case 2:
+                                shipmentDataRequest.SMT_STA_TE = "Translated";
+                                break;
+                            case 3:
+                                shipmentDataRequest.SMT_STA_TE = "Completed";
+                                break;
+                            case 4:
+                                shipmentDataRequest.SMT_STA_TE = "Inactive";
+                                break;
+                            default:
+                                shipmentDataRequest.SMT_STA_TE = "Uploaded";
+                                break;
+                        }
+
                         shipmentDataRequest.SMT_VAL_DE = shipmentData.SMT_VAL_DE;
                         shipmentDataRequest.SMT_WGT_DE = shipmentData.SMT_WGT_DE;
                         shipmentDataRequest.SVL_NR = shipmentData.SVL_NR;
@@ -133,6 +155,7 @@ namespace UPS.ServicesDataRepository
                         shipmentDataRequest.ACY_TE = shipmentData.ACY_TE;
                         shipmentDataRequest.CON_NR = shipmentData.CON_NR;
                         shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
+                        shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
 
                         shipmentDataRequests.Add(shipmentDataRequest);
                     }
@@ -167,7 +190,6 @@ namespace UPS.ServicesDataRepository
                             join c in context.shipperCompanyRequests on s.DST_PSL_TE equals c.SPC_PSL_CD_TE where s.WFL_ID == workflowID
                             where s.WFL_ID == workflowID
                             && s.SMT_STA_NR == ((int)Enums.ATStatus.Completed)
-                            && s.SMT_STA_NR != ((int)Enums.ATStatus.Inactive)
                             orderby s.ID
                             select new
                             {
@@ -215,7 +237,8 @@ namespace UPS.ServicesDataRepository
                                 s.SMT_WGT_DE,
                                 SPC_SLIC_NR = c.SPC_SLIC_NR,
                                 s.SVL_NR,
-                                s.WGT_UNT_TE
+                                s.WGT_UNT_TE,
+                                s.POD_RTN_SVC
                             }).ToList();
 
                     foreach (var shipmentData in anonymousList)
@@ -258,6 +281,29 @@ namespace UPS.ServicesDataRepository
                         shipmentDataRequest.SHP_PH_TE = shipmentData.SHP_PH_TE;
                         shipmentDataRequest.SMT_NR_TE = shipmentData.SMT_NR_TE;
                         shipmentDataRequest.SMT_STA_NR = shipmentData.SMT_STA_NR;
+
+                        switch (shipmentDataRequest.SMT_STA_NR)
+                        {
+                            case 0:
+                                shipmentDataRequest.SMT_STA_TE = "Uploaded";
+                                break;
+                            case 1:
+                                shipmentDataRequest.SMT_STA_TE = "Curated";
+                                break;
+                            case 2:
+                                shipmentDataRequest.SMT_STA_TE = "Translated";
+                                break;
+                            case 3:
+                                shipmentDataRequest.SMT_STA_TE = "Completed";
+                                break;
+                            case 4:
+                                shipmentDataRequest.SMT_STA_TE = "Inactive";
+                                break;
+                            default:
+                                shipmentDataRequest.SMT_STA_TE = "Uploaded";
+                                break;
+                        }
+
                         shipmentDataRequest.SMT_VAL_DE = shipmentData.SMT_VAL_DE;
                         shipmentDataRequest.SMT_WGT_DE = shipmentData.SMT_WGT_DE;
                         shipmentDataRequest.SVL_NR = shipmentData.SVL_NR;
@@ -266,6 +312,7 @@ namespace UPS.ServicesDataRepository
                         shipmentDataRequest.ACY_TE = shipmentData.ACY_TE;
                         shipmentDataRequest.CON_NR = shipmentData.CON_NR;
                         shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
+                        shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
 
                         shipmentDataRequests.Add(shipmentDataRequest);
                     }

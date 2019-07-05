@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { MatPaginator, MatTableDataSource, MatSnackBar, MatSnackBarConfig, MatProgressSpinner } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatSnackBar, MatSnackBarConfig, MatProgressSpinner, MatSort } from '@angular/material';
 import { UserService } from '../services/UserService';
 import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';  
@@ -8,6 +8,7 @@ import { FormControl } from '@angular/forms';
 import { LoaderService } from '../shared/loader/loader.service';
 import { List } from 'linq-typescript';
 import { Constants } from '../shared/Constants';
+import { NotificationService } from '../services/NotificationService';
 import { WorkflowService } from '../services/WorkflowService';
 
 @Component({
@@ -23,6 +24,7 @@ export class WorkflowComponent {
   fileToUpload: File = null;
   displayedColumns = ['id', 'usR_FST_NA', 'flE_NA', 'wfL_STA_TE_TEXT', 'crD_DT'];
   dataSource = new MatTableDataSource<Element>();
+  filterText: string;
 
   fileNameControl = new FormControl('');
   isValidFile: boolean = true;
@@ -34,15 +36,18 @@ export class WorkflowComponent {
   constructor(
     private _loaderService: LoaderService,
     private snackBar: MatSnackBar,
-    private workflowService: WorkflowService
-    ) {
+      private notificationService: NotificationService,
+      private workflowService: WorkflowService
+  ) {
 
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   ngOnInit() {
@@ -57,32 +62,14 @@ export class WorkflowComponent {
 
         this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
 
       },
         error => console.log(error));
   }
-  openSuccessMessageNotification(message: string) {
-    let config = new MatSnackBarConfig();
-    this.snackBar.open(message, '',
-      {
-        duration: Constants.SNAKBAR_SHOW_DURATION,
-        verticalPosition: "top",
-        horizontalPosition: "right",
-        extraClasses:'custom-class-success'
-      });
-  }
-  openErrorMessageNotification(message: string) {
-    let config = new MatSnackBarConfig();
-    this.snackBar.open(message, '',
-      {
-        duration: Constants.SNAKBAR_SHOW_DURATION,
-        verticalPosition: "top",
-        horizontalPosition: "right",
-        extraClasses: 'custom-class-error'
-      });
-  }
-
+  
   applyFilter(filterValue: string) {
+    this.filterText = filterValue;
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
@@ -120,16 +107,25 @@ export class WorkflowComponent {
       this.isValidFile = true;
       this.workflowService.UploadFile(this.fileToUpload)
         .subscribe((response: any) => {
-          this.getWorkflowDetails();
-          this.openSuccessMessageNotification("File Uploaded successfully");
-          this.fileNameControl.setValue('');
+          if (response.success === true) {
+            this.getWorkflowDetails();
+            this.notificationService.openSuccessMessageNotification("File Uploaded successfully");
+            this.resetFileUpload();
+          } else if (response.success === false) {
+            if (response.exception) {
+              this.notificationService.openErrorMessageNotification(response.exception.Message);
+              this.resetFileUpload();
+            }
+          }
         },
         error =>
         {
-          this.openErrorMessageNotification("Error while uploading file");
-          this.fileNameControl.setValue('');
+          this.notificationService.openErrorMessageNotification("Error while uploading file");
+          this.resetFileUpload();
         }
       );
+      this.applyFilter('');
+      this.filterText = '';
     }
   }
   validateFile(name: String) {
@@ -140,6 +136,11 @@ export class WorkflowComponent {
     else {
       return false;
     }
+  }
+
+  resetFileUpload() {
+    this.fileNameControl.setValue('');
+    (<HTMLInputElement>document.getElementById('file')).value = '';
   }
  
 }

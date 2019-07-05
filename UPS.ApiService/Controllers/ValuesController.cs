@@ -25,6 +25,7 @@ namespace UPS.AddressTranslationService.Controllers
     public class ValuesController : Controller
     {
         // GET: api/<controller>
+        //[Authorize(AuthenticationSchemes = "JwtBearer")]
         [HttpGet]
         public IEnumerable<string> Get()
         {

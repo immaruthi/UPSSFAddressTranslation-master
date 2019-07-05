@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
+using NLog.Web;
+using System;
+using System.IO;
 
 namespace UPS.AddressTranslationService
 {
@@ -15,17 +14,19 @@ namespace UPS.AddressTranslationService
         public static void Main(string[] args)
         {
 
-            //var config = new ConfigurationBuilder()
-            //             .AddJsonFile("hosting.json", optional: true)
-            //             .Build();
-
-
+            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
             CreateWebHostBuilder(args).Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+          .ConfigureLogging(logging =>
+          {
+              logging.ClearProviders();
+              logging.SetMinimumLevel(LogLevel.Information);
+          })
                 .UseKestrel()
+            .UseNLog()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseWebRoot("www")
                 .UseIISIntegration()

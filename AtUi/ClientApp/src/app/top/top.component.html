@@ -1,14 +1,31 @@
-<nav class="navbar" style="position:fixed; z-index: 1;">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a href="/home"><img class="logo" src="assets/images/logo.png" alt="UPS-Logo"></a>
-    </div>
-    <div class="collapse navbar-collapse">
-      <span class="apptxt">UPS Address Translation</span>
-      <div class="navbar navbar-right">
-        <a style="cursor: pointer" id="usericon"><span class="user"><span class="glyphicon glyphicon-user"></span> {{userName}}</span></a>
-        <a style="cursor: pointer" (click)="logout()" id="logouticon"><span class="logout"><span class="glyphicon glyphicon-log-out"></span> Logout</span></a>
-      </div>
-    </div>
-  </div>
-</nav>
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+               [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+               [mode]="(isHandset$ | async) ? 'over' : 'side'"
+               [opened]="(isHandset$ | async) === true">
+    <mat-toolbar style="background-color:#351C15 !important"></mat-toolbar>
+    <mat-nav-list>
+      <ul class="list-unstyled components">
+        <li routerLinkActive="active"><a routerLink="/workflow"><span class="glyphicon glyphicon-calendar"></span> Workflow</a></li>
+        <li routerLinkActive="active"><a routerLink="#"><span class="glyphicon glyphicon-list-alt"></span> Address Book</a></li>
+        <li routerLinkActive="active"><a routerLink="#"><span class="glyphicon glyphicon-signal"></span> Auditing Log</a></li>
+        <li routerLinkActive="active"><a routerLink="#"><span class="glyphicon glyphicon-user"></span> User Management</a></li>
+      </ul>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar>
+      <button style="color:white !important" type="button"
+              aria-label="Toggle sidenav"
+              mat-icon-button
+              (click)="drawer.toggle()">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span style="color:#FFB500 !important"><a href="home"><img class="logo" src="assets/images/logo.png" alt="UPS-Logo">UPS Address Translation</a></span>
+      <span class="spacer"></span>
+      <a style="cursor: pointer"><span class="glyphicon glyphicon-user"></span>&nbsp;{{userName}}</a>
+      <a style="cursor: pointer" (click)="logout()"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logout</a>
+    </mat-toolbar>
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>

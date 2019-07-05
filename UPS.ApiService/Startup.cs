@@ -16,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using UPS.Quincus.APP.Common;
+using UPS.Quincus.APP.Request;
 using UPS.ServicesAsyncActions;
 using UPS.ServicesDataRepository;
 using UPS.ServicesDataRepository.DataContext;
@@ -48,6 +49,7 @@ namespace UPS.AddressTranslationService
             MapProxy.webProxyPassword = Configuration["webProxy:Password"];
             MapProxy.WebProxyEnable = Configuration["webProxy:Enable"];
 
+            services.AddSingleton<IQuincusAddressTranslationRequest>(new QuincusAddressTranslationRequest() { endpoint = Configuration["Quincus:GeoCodeEndPoint"] });
             /* Dependancy Injection */
 
             services.AddTransient<IUserServicesAsync, UserServices>();

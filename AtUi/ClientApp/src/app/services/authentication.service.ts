@@ -49,8 +49,8 @@ export class AuthenticationService {
 
   private SetCurrentUserSession(response: any) {
       localStorage.setItem('currentUser', JSON.stringify({
-          token: response.Token,
-          UserName: response.UserName
+          token: response.token,
+          UserName: response.userName
       }));
   }
 

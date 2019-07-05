@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace UPS.Quincus.APP.Request
+﻿namespace UPS.Quincus.APP.Request
 {
     public class SFOrderXMLRequest
     {
@@ -54,6 +50,7 @@ namespace UPS.Quincus.APP.Request
         public string pyM_MTD { get; set; }
         public object exP_TYP { get; set; }
         public string coD_TE { get; set; }
+        public string poD_RTN_SVC { get; set; }
 
     }
 

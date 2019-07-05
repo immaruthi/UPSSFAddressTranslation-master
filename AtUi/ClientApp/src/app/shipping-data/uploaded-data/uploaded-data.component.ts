@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit, Input } from '@angular/core';
 import { ShipmentDetails } from '../../models/shipmentdetails';
-import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
 import { ShippingService } from '../../services/shipping.service';
@@ -17,7 +17,8 @@ import { MatStepperTab } from '../../shared/enums.service';
 export class UploadedDataComponent implements OnInit {
 
   displayedColumns =
-    ['smT_STA_NR', 'smT_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE', 'fsT_INV_LN_DES_TE',
+    ['wfL_ID', 'smT_STA_NR', 'smT_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE',
+      'csG_CTC_TE', 'pH_NR', 'fsT_INV_LN_DES_TE',
       'shP_CPY_NA', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD', 'imP_SLC_TE',
       'coD_TE'
     ];
@@ -37,6 +38,7 @@ export class UploadedDataComponent implements OnInit {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   /**
   * Set the paginator after the view init since this component will
@@ -44,6 +46,7 @@ export class UploadedDataComponent implements OnInit {
   */
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   ngOnInit() {
@@ -70,6 +73,7 @@ export class UploadedDataComponent implements OnInit {
       this.ResponseData = response;
       this.dataSource.data = this.ResponseData;
       this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     }, error => (this.errorMessage = <any>error));
   }
 
