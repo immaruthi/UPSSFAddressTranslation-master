@@ -1,10 +1,11 @@
 <div class="row">
   <div class="col-md-6">
     <mat-form-field>
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+      <input matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="filterText" placeholder="Filter">
     </mat-form-field>
   </div><br />
   <div class="col-md-6 text-right">
+    <label *ngIf="filterText.length === 0">selected row count : {{selection.selected.length}}</label>
     <button mat-raised-button color="primary" (click)="sendToSF()"> Send To SF </button>
     <button mat-raised-button color="primary" (click)="delete()"> Delete </button>
     <button mat-raised-button color="primary" (click)="SFexportToExcel()"> Export to Excel </button>

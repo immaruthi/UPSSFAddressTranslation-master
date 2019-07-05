@@ -41,6 +41,7 @@ export class SentToSfComponent implements OnInit {
   public checkedData: any[] = [];
   public tableData: any[] = [];
   public excelMainData: any[] = [];
+  filterText: string = '';
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
     private router: Router, public dialog: MatDialog, public dataService: DataService,
@@ -88,10 +89,13 @@ export class SentToSfComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.selection.clear();
+      this.filterText = '';
+      this.applyFilter('');
     }, error => (this.errorMessage = <any>error));
   }
 
   applyFilter(filterValue: string) {
+    this.filterText = filterValue;
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
