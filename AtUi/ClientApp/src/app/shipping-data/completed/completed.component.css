@@ -1,0 +1,163 @@
+.table-div {
+  width: 100%;
+  height: 435px;
+  overflow: auto;
+}
+
+mat-table {
+  width: 100%;
+  min-width: 4000px;
+  padding: 0;
+}
+
+mat-row {
+  padding: 0;
+  margin: 0% 1% 0% 0%;
+}
+
+mat-header-row {
+  padding: 0;
+}
+
+mat-cell {
+  padding: 0px 15px 0px 15px;
+  width: 150px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+mat-header-cell {
+  padding: 0px 15px 0px 15px;
+  width: 150px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+  color:white;
+}
+/*package Number*/
+mat-cell:nth-child(3) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*package Number*/
+mat-header-cell:nth-child(3) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*SHP Company Name*/
+mat-cell:nth-child(12) {
+  padding: 0px 15px 0px 15px;
+  width: 200px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*SHP Company Name*/
+mat-header-cell:nth-child(12) {
+  padding: 0px 15px 0px 15px;
+  width: 200px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*SHP Address*/
+mat-cell:nth-child(13) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*SHP Address*/
+mat-header-cell:nth-child(13) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Receiving Company*/
+mat-cell:nth-child(4) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Receiving Company*/
+mat-header-cell:nth-child(4) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Receive Address*/
+mat-cell:nth-child(5) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Receive Address*/
+mat-header-cell:nth-child(5) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*SHP Translated Address*/
+mat-cell:nth-child(6) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*SHP Translated Address*/
+mat-header-cell:nth-child(6) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+mat-row:nth-child(odd) {
+  background: #F2F2F2;
+}
+
+mat-header-row {
+  background-color: gray;
+}
+
+.mat-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  color: white;
+}
+
+mat-cell {
+  font-size: 12px;
+}

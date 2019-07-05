@@ -27,9 +27,9 @@ namespace UPS.DataObjects.Shipment
         [Column("PKG-NR-TE")]
         public string PKG_NR_TE { get; set; }
         [Column("PKG-WGT-DE")]
-        public decimal PKG_WGT_DE { get; set; }
+        public decimal? PKG_WGT_DE { get; set; }
         [Column("SMT-WGT-DE")]
-        public decimal SMT_WGT_DE { get; set; }
+        public decimal? SMT_WGT_DE { get; set; }
         [Column("DIM-WGT-DE")]
         public decimal? DIM_WGT_DE { get; set; }
         [Column("WGT-UNT-TE")]
@@ -45,7 +45,7 @@ namespace UPS.DataObjects.Shipment
         [Column("BIL-TYP-TE")]
         public string BIL_TYP_TE { get; set; }
         [Column("SMT-VAL-DE")]
-        public decimal SMT_VAL_DE { get; set; }
+        public decimal? SMT_VAL_DE { get; set; }
         [Column("CCY-VAL-TE")]
         public string CCY_VAL_TE { get; set; }
         [Column("FST-INV-LN-DES-TE")]
@@ -94,7 +94,15 @@ namespace UPS.DataObjects.Shipment
         public string EXP_TYP { get; set; }
         [Column("COD-TE")]
         public string COD_TE { get; set; }
-
-
+        [Column("ACY-TE")]
+        public string ACY_TE { get; set; }
+        [Column("CON-NR")]
+        public string CON_NR { get; set; }
+        [Column("SPC-SLIC-NR")]
+        public int? SPC_SLIC_NR { get; set; }
+        [Column("POD-RTN-SVC")]
+        public string POD_RTN_SVC { get; set;}
+        [NotMapped]
+        public string SMT_STA_TE { get; set; }
     }
 }

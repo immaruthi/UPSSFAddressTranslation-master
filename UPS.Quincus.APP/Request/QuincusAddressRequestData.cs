@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace UPS.Quincus.APP.Request
+﻿namespace UPS.Quincus.APP.Request
 {
+    using System.Collections.Generic;
+
     public class QuincusAddressRequestData
     {
         public class QuincusAddressRequestDataObject
@@ -21,7 +19,6 @@ namespace UPS.Quincus.APP.Request
             public string address_type_flag { get; set; }
             public string lang { get; set; }
         }
-
 
         public class ListQuincusAddressRequestData
         {

@@ -40,7 +40,7 @@ export class LoginComponent {
   submitted = false;
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
-      userId: ['', Validators.required],
+      userId: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(10)]],
       password: ['', Validators.required],
 
 
@@ -80,7 +80,7 @@ export class LoginComponent {
                 if (this.isExists) {
                   //this.router.navigate(['/counter', name]);
                   this.router.navigate(['/workflow']);
-                  this.setSession(userid, password, data.user);
+                  this.setSession(userid, password, data.user.id);
 
 
                 }
@@ -135,23 +135,14 @@ else{
   private setSession(userid, password, user) {
     localStorage.setItem('Emp_Id', userid);
     localStorage.setItem("pwd", password);
-    localStorage.setItem("user", user);
-    console.log("in Setsession");
-    console.log(localStorage.getItem("Emp_Id"));
-
+    localStorage.setItem("userid", user);
   }
 
   private logout() {
-    localStorage.removeItem("userId");
+    localStorage.removeItem("userid");
     localStorage.removeItem("password");
-
-
+    localStorage.removeItem("Emp_Id");
   }
-
-
-
-
-
   }
 
 

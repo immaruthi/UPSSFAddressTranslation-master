@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace UPS.Quincus.APP.Configuration
+﻿namespace UPS.Quincus.APP.Configuration
 {
     public class QuincusParams
     {

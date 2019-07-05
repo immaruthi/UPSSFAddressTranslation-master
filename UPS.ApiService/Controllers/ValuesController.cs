@@ -8,6 +8,9 @@ using System.Data.SqlClient;
 using System.Data;
 using AtService.Models;
 using UPS.ServicesDataRepository;
+using UPS.Application.CustomLogs;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,14 +18,16 @@ namespace UPS.AddressTranslationService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowAtUIOrigin")]
     public class ValuesController : Controller
     {
         // GET: api/<controller>
+        //[Authorize(AuthenticationSchemes = "JwtBearer")]
         [HttpGet]
         public IEnumerable<string> Get()
         {
-
-            //SqlConnection connection = new SqlConnection(GetConnectionString.connectionString);
+            AuditEventEntry.WriteEntry(new Exception("This is test Message"));
+            //SqlConnection connection = new SqlConnection(DBConnectionContext.connectionString);
 
             //connection.Open();
 

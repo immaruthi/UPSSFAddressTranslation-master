@@ -30,7 +30,7 @@
 
 mat-table {
   width: 100%;
-  min-width: 3300px;
+  min-width: 4100px;
   padding: 0;
 }
 
@@ -44,7 +44,7 @@ mat-header-row {
 }
 
 mat-cell {
-  padding: 20px;
+  padding: 0px 15px 0px 15px;
   width: 150px;
   flex: none;
   float: left;
@@ -52,16 +52,17 @@ mat-cell {
 }
 
 mat-header-cell {
-  padding: 20px;
+  padding: 0px 15px 0px 15px;
   width: 150px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
+  color:white;
 }
 
 /*Select*/
 mat-cell:nth-child(1) {
-  margin-left:20px;
+  margin-left: 0px 15px 0px 15px;
   padding: 20px;
   width: 70px;
   flex: none;
@@ -71,53 +72,70 @@ mat-cell:nth-child(1) {
 
 /*Select*/
 mat-header-cell:nth-child(1) {
-  margin-left: 20px;
+  margin-left: 0px 15px 0px 15px;
   padding: 20px;
   width: 70px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
 }
-
-/*SHP Company Name*/
-mat-cell:nth-child(9) {
-  padding: 20px;
-  width: 200px;
-  flex: none;
-  float: left;
-  font-size: 12px;
-}
-
-/*SHP Company Name*/
-mat-header-cell:nth-child(9) {
-  padding: 20px;
-  width: 200px;
-  flex: none;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-/*SHP Address*/
-mat-cell:nth-child(11) {
-  padding: 20px;
-  width: 250px;
-  flex: none;
-  float: left;
-  font-size: 12px;
-}
-
-/*SHP Address*/
-mat-header-cell:nth-child(11) {
-  padding: 20px;
-  width: 250px;
-  flex: none;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-/*Receiving Company*/
+/*package Number*/
 mat-cell:nth-child(5) {
-  padding: 20px;
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*package Number*/
+mat-header-cell:nth-child(5) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*SHP Company Name*/
+mat-cell:nth-child(16) {
+  padding: 0px 15px 0px 15px;
+  width: 200px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*SHP Company Name*/
+mat-header-cell:nth-child(16) {
+  padding: 0px 15px 0px 15px;
+  width: 200px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*SHP Address*/
+mat-cell:nth-child(17) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*SHP Address*/
+mat-header-cell:nth-child(17) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Receiving Company*/
+mat-cell:nth-child(6) {
+  padding: 0px 15px 0px 15px;
   width: 250px;
   flex: none;
   float: left;
@@ -125,26 +143,26 @@ mat-cell:nth-child(5) {
 }
 
 /*Receiving Company*/
-mat-header-cell:nth-child(5) {
-  padding: 20px;
-  width: 250px;
-  flex: none;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-/*Receive Address*/
-mat-cell:nth-child(6) {
-  padding: 20px;
-  width: 250px;
-  flex: none;
-  float: left;
-  font-size: 12px;
-}
-
-/*Receive Address*/
 mat-header-cell:nth-child(6) {
-  padding: 20px;
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Receive Address*/
+mat-cell:nth-child(7) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Receive Address*/
+mat-header-cell:nth-child(7) {
+  padding: 0px 15px 0px 15px;
   width: 250px;
   flex: none;
   font-size: 14px;
@@ -152,8 +170,8 @@ mat-header-cell:nth-child(6) {
 }
 
 /*SHP Translated Address*/
-mat-cell:nth-child(7) {
-  padding: 20px;
+mat-cell:nth-child(8) {
+  padding: 0px 15px 0px 15px;
   width: 250px;
   flex: none;
   float: left;
@@ -161,14 +179,29 @@ mat-cell:nth-child(7) {
 }
 
 /*SHP Translated Address*/
-mat-header-cell:nth-child(7) {
-  padding: 20px;
+mat-header-cell:nth-child(8) {
+  padding: 0px 15px 0px 15px;
   width: 250px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
 }
 
-mat-row:nth-child(even) {
-  background-color: rgb(214, 213, 213);
+mat-row:nth-child(odd) {
+  background: #F2F2F2;
+}
+
+mat-header-row {
+  background-color: gray;
+}
+
+.mat-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  color: white;
+}
+
+mat-cell {
+  font-size: 12px;
 }

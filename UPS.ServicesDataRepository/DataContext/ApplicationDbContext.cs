@@ -7,15 +7,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UPS.DataObjects.Shipment;
+using UPS.DataObjects.SPC_LST;
 using UPS.DataObjects.UserData;
 using UPS.DataObjects.WR_FLW;
+using UPS.ServicesDataRepository.OverrideDbContext;
 
 namespace UPS.ServicesDataRepository.DataContext
 {
     public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
-
-        const string connectionString = "Server=tcp:upssf.database.windows.net,1433;Initial Catalog=AT;Persist Security Info=False;User ID=suresh;Password=123456Aa#;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         { }
@@ -29,14 +29,14 @@ namespace UPS.ServicesDataRepository.DataContext
                 new { Id = "2", Name = "Customer", NormalizedName = "Customer" }
                 );
             builder.Entity<ShipmentDataRequest>().ToTable("SMT-DTL-FRM-XL");
-            builder.Entity<ShipperListRequest>().ToTable("SPC-LST");
             builder.Entity<USR>().ToTable("USR");
             builder.Entity<WorkflowDataRequest>().ToTable("WR-FLW");
+            builder.Entity<ShipperCompanyRequest>().ToTable("SPC-LST");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(connectionString);
+            optionsBuilder.UseSqlServer(DBConnectionContext.connectionString);
         }
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
@@ -56,16 +56,18 @@ namespace UPS.ServicesDataRepository.DataContext
             get;
             set;
         }
+
         public DbSet<ShipmentDataRequest> shipmentDataRequests
         {
             get; set;
         }
+
         public DbSet<WorkflowDataRequest> workflowDataRequests
         {
             get; set;
         }
 
-        public DbSet<ShipperListRequest> ShipperListRequests
+        public DbSet<ShipperCompanyRequest> shipperCompanyRequests
         {
             get; set;
         }

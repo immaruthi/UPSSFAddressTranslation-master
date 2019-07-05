@@ -34,8 +34,12 @@ namespace UPS.ServicesDataRepository
             {
                 var context = new ApplicationDbContext(optionsBuilder.Options);
                 USR user = context.UserData.Where(u => u.USR_ID_TE == USR_ID_TE && u.USR_PWD_TE == USR_PWD_TE).FirstOrDefault();
+                userDataResponse.Success = false;
+                if(user != null)
+                {
+                    userDataResponse.Success = true;
+                }
                 userDataResponse.User = user;
-                userDataResponse.Success = true;
             }
             catch(Exception ex)
             {

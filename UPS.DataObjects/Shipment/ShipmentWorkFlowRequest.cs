@@ -11,6 +11,7 @@ namespace UPS.DataObjects.Shipment
         public int? qqS_TRA_LG_ID { get; set; }
         public int? sF_TRA_LG_ID { get; set; }
         public object smT_STA_NR { get; set; }
+        public object smT_STA_TE { get; set; }
         public object smT_NR_TE { get; set; }
         public object pcS_QTY_NR { get; set; }
         public object pkG_NR_TE { get; set; }
