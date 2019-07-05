@@ -451,7 +451,7 @@ namespace UPS.ServicesDataRepository
                 {
                     ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == request.ID).FirstOrDefault();
                     context.shipmentDataRequests.Remove(data);
-                    context.Entry(request).State = EntityState.Deleted;
+                    context.Entry(request).State = EntityState.Detached;
                     context.SaveChanges();
                     shipmentDataResponse.Shipments = context.shipmentDataRequests;
                 }

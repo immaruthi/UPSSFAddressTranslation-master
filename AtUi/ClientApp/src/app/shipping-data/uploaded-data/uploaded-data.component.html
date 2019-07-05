@@ -4,10 +4,37 @@
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
     </mat-form-field>
   </div>
+  <div class="col-md-6 text-right">
+    <button mat-raised-button color="primary" (click)="delete()"> Delete </button>
+  </div>
 </div>
 <br />
 <div class="table-div">
   <mat-table class="table" [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="select" class="container">
+      <mat-header-cell *matHeaderCellDef class="header-cell">
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      [aria-label]="checkboxLabel()">
+        </mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)"
+                      [aria-label]="checkboxLabel(row)">
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="actions" class="container">
+      <mat-header-cell *matHeaderCellDef class="header-cell"> Action </mat-header-cell>
+      <mat-cell *matCellDef="let row; let i=index;" class="cell">
+        <button mat-icon-button (click)="rowDelete(i,row)">
+          <span><i class="material-icons">delete_forever</i></span>
+        </button>
+      </mat-cell>
+    </ng-container>
     <ng-container matColumnDef="wfL_ID" class="container">
       <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Workflow ID </mat-header-cell>
       <mat-cell *matCellDef="let element" class="cell"> {{element.wfL_ID}} </mat-cell>

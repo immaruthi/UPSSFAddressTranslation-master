@@ -239,4 +239,38 @@ export class SentToSfComponent implements OnInit {
       this.dialogService.openAlertDialog('No data for export.');
     }    
   }
+
+  rowDelete(index: number, rowData: any) {
+
+  }
+
+  delete() {
+    const checkedCount = this.selection.selected.length;
+    if (checkedCount <= 0) {
+      this.dialogService.openAlertDialog('Please select minimum one row to Delete.');
+    } else {
+      const dialogRef = this.dialogService.openConfirmationDialog('Are you sure, you want to delete all the selected records ?');
+
+      dialogRef.afterClosed().subscribe(data => {
+        if (data === true) {
+          const dataForDelete = this.selection.selected; // Any changes can do here for sending array
+          this.deleteData(dataForDelete);
+        } else {
+
+        }
+      })
+    }
+  }
+
+  deleteData(data: any) {
+    this.shippingService.deleteUploadedData(data).subscribe((response: any) => {
+      if (response != null && response.success === true) {
+        this.getDataForSendToSF(this.WorkflowID);
+        this.notificationService.openSuccessMessageNotification("Deleted Successfully");
+      } else {
+        this.notificationService.openErrorMessageNotification("Error while Deleting data.");
+      }
+    },
+      error => this.notificationService.openErrorMessageNotification("Error while Deleting data."));
+  }
 }
