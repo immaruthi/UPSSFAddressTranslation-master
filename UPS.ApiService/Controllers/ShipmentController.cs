@@ -524,10 +524,10 @@ namespace AtService.Controllers
                                 shipmentDataRequest.CON_NR = geocodes[i].confidence;
 
                                 if (
-                                            !string.IsNullOrEmpty(geocodes[i].translated_adddress)
-                                        && geocodes[i].translated_adddress != "NA"
-                                        && !string.Equals(shipmentWorkFlowRequest.Where(s => s.id == shipmentDataRequest.ID).FirstOrDefault().rcV_ADR_TE.Trim(),
-                                            geocodes[i].translated_adddress.Trim())
+                                        !string.IsNullOrEmpty(geocodes[i].translated_adddress)
+                                        //&&  geocodes[i].translated_adddress != "NA"
+                                        //&& !string.Equals(shipmentWorkFlowRequest.Where(s => s.id == shipmentDataRequest.ID).FirstOrDefault().rcV_ADR_TE.Trim(),
+                                        //    geocodes[i].translated_adddress.Trim())
                                    )
                                 {
                                     shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Translated);
