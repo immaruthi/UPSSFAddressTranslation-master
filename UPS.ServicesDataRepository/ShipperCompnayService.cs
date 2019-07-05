@@ -82,7 +82,7 @@
                                 s.SVL_NR,
                                 s.WGT_UNT_TE,
                                 s.POD_RTN_SVC
-                            }).ToList();2154479016
+                            }).ToList();
 
                     foreach (var shipmentData in anonymousList)
                     {
