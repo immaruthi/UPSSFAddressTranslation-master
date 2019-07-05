@@ -65,7 +65,8 @@ import { EditModeDirective } from './shared/editable/edit-mode.directive';
 import { ViewModeDirective } from './shared/editable/view-mode.directive';
 import { EditOnEnterDirective } from './shared/editable/edit-on-enter.directive';
 import { AddressEditModelComponent } from './shipping-data/address-edit-model/address-edit-model.component';
-import { DatePipe } from '@angular/common'
+import { DatePipe } from '@angular/common';
+import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component'
 
 @NgModule({
   declarations: [
@@ -96,6 +97,7 @@ import { DatePipe } from '@angular/common'
     ConfirmDialog,
     ConfirmPopupComponent,
     AddressEditModelComponent,
+    ConfirmationDialogComponent,
    
   ],
   imports: [
@@ -138,7 +140,7 @@ import { DatePipe } from '@angular/common'
     }
     ],
   bootstrap: [AppComponent],
-  entryComponents: [LoginComponent, AlertDialogComponent, SummaryDialogComponent, AddressEditModelComponent]
+  entryComponents: [LoginComponent, AlertDialogComponent, SummaryDialogComponent, ConfirmationDialogComponent, AddressEditModelComponent]
 
 })
 export class AppModule { }
