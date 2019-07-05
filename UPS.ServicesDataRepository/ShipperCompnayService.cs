@@ -73,7 +73,7 @@
                                 SHP_CTC_TE = c.SPC_NA,
                                 s.SHP_DT,
                                 s.SHP_NR,
-                                SHP_PH_TE = c.SPC_CTC_PH,
+                                SHP_PH_TE = c.SPC_SND_PTY_CTC_TE,
                                 s.SMT_NR_TE,
                                 s.SMT_STA_NR,
                                 s.SMT_VAL_DE,
@@ -82,7 +82,7 @@
                                 s.SVL_NR,
                                 s.WGT_UNT_TE,
                                 s.POD_RTN_SVC
-                            }).ToList();
+                            }).ToList();2154479016
 
                     foreach (var shipmentData in anonymousList)
                     {
@@ -230,7 +230,7 @@
                                 SHP_CTC_TE = c.SPC_NA,
                                 s.SHP_DT,
                                 s.SHP_NR,
-                                SHP_PH_TE = c.SPC_CTC_PH,
+                                SHP_PH_TE = c.SPC_SND_PTY_CTC_TE,
                                 s.SMT_NR_TE,
                                 s.SMT_STA_NR,
                                 s.SMT_VAL_DE,
