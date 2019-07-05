@@ -453,7 +453,6 @@ namespace UPS.ServicesDataRepository
                     context.shipmentDataRequests.Remove(data);
                     context.Entry(request).State = EntityState.Detached;
                     context.SaveChanges();
-                    shipmentDataResponse.Shipments = context.shipmentDataRequests;
                 }
                 shipmentDataResponse.Success = true;
                 return shipmentDataResponse;

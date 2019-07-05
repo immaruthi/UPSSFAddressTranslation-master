@@ -32,7 +32,7 @@ export class TranslateComponent implements OnInit {
   public ResponseData: any[] = [];
   public WorkflowID: any;
   public shipmentStatusList = Constants.ShipmentStatusList;
-  public PODoptions= Constants.PODoptions;
+  public PODoptions = Constants.PODoptions;
   dataSource = new MatTableDataSource<Element>();
   public errorMessage: string;
   selection = new SelectionModel<any>(true, []);
@@ -56,12 +56,11 @@ export class TranslateComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  ngOnInit() {   
+  ngOnInit() {
     this.WorkflowID = this.activatedRoute.snapshot.params.WorkflowID;
-    this.eventsSubscription = this.events.subscribe((event:any) =>
-    {
+    this.eventsSubscription = this.events.subscribe((event: any) => {
       let selectedTabIndex = event.selectedIndex;
-      if (this.WorkflowID && selectedTabIndex == MatStepperTab.TranslatedTab ) {
+      if (this.WorkflowID && selectedTabIndex == MatStepperTab.TranslatedTab) {
         this.getTranslateData(this.WorkflowID)
       }
     });
@@ -201,29 +200,34 @@ export class TranslateComponent implements OnInit {
     this.shippingService.sendDataForTranslate(this.dataForTranslate).subscribe(
       (response: any) => {
         if (response) {
+          if (response.lenth > 0) {
+            for (let batch of response.quincusreponsedatalist) {
 
-          if (response.geocode.length > 0) {
-            var EmptyCount: number = 0;
-            var NACount: number = 0;
-            var SuccessCount: number = 0;
+              var EmptyCount: number = 0;
+              var NACount: number = 0;
+              var SuccessCount: number = 0;
 
-            for (let geocode of response.geocode) {
-              if (geocode.translated_adddress === ' ') {
-                EmptyCount = EmptyCount + 1;
-              } else if (geocode.translated_adddress === 'NA') {
-                NACount = NACount + 1;
-              } else {
-                SuccessCount = SuccessCount + 1;
+              if (batch.geocode.length > 0) {
+
+                for (let geocode of batch.geocode) {
+                  if (geocode.translated_adddress === ' ') {
+                    EmptyCount = EmptyCount + 1;
+                  } else if (geocode.translated_adddress === 'NA') {
+                    NACount = NACount + 1;
+                  } else {
+                    SuccessCount = SuccessCount + 1;
+                  }
+                }
+
+                const data = {
+                  emptyCount: EmptyCount,
+                  nACount: NACount,
+                  successCount: SuccessCount,
+                  screenFrom: 'Translate'
+                }
+                this.dialogService.openSummaryDialog(data);
               }
             }
-
-            const data = {
-              emptyCount: EmptyCount,
-              nACount: NACount,
-              successCount: SuccessCount,
-              screenFrom: 'Translate'
-            }
-            this.dialogService.openSummaryDialog(data);
           }
 
           //this.notificationService.openSuccessMessageNotification("Shipment Address(es) Translated Successfully.");
