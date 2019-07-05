@@ -331,14 +331,14 @@ namespace AtService.Controllers
                 XMLMessage = "<Request lang=\"zh-CN\" service=\"OrderService\">";
                 XMLMessage += "<Head>LJ_T6NVV</Head>";
                 XMLMessage += "<Body>";
-                XMLMessage += "<Order orderid=\"" + orderRequest.pkG_NR_TE + "\" custid=\"" + 7551234567 + "\" j_company=\"顺丰速运\"";
-                XMLMessage += " j_contact=\"李XXX\" j_tel=\"13865659879\" j_mobile=\"13865659879\" j_province=\"北京\" j_city=\"北京市\"";
-                XMLMessage += " j_county=\"中国\" j_address=\"广东省深圳市广东省深圳市福田区新洲十一街万基商务大厦10楼\"";
-                XMLMessage += " d_company=\"京东\" d_contact=\"刘XX\" d_tel=\"13865659879\" d_mobile=\"13865659879\" d_county=\"中国\"";
-                XMLMessage += " d_address=\"北京北京市北京亦庄经济技术开发区科创十一街18号院\" cargo_total_weight=\"" + orderRequest.pkG_WGT_DE + "\"";
-                XMLMessage += " remark=\"没有备注\" pay_method=\"1\" is_docall=\"" + 1 + "\" need_return_tracking_no=\"" + orderRequest.poD_RTN_SVC + "\" express_type=\"154\"";
-                XMLMessage += " parcel_quantity=\"" + orderRequest.pcS_QTY_NR + "\" cargo_length=\"10.0\" cargo_width=\"" + orderRequest.smT_WGT_DE + "\" cargo_height=\"10.0\" sendstarttime=\"2019-05-21 16:35:50\">";
-                XMLMessage += "<Cargo name=\"电子产品,\" count=\"2\" unit=\"件\"/></Order></Body></Request>";
+                XMLMessage += "<Order orderid=\"" + orderRequest.pkG_NR_TE + "\" custid=\"" + 7551234567 + "\"";
+                XMLMessage += " j_tel=\"" + orderRequest.shP_CTC_TE + "\"";
+                XMLMessage += " j_address=\"" + orderRequest.shP_ADR_TE + "\"";
+                XMLMessage += " d_tel=\"" + orderRequest.pH_NR + "\"";
+                XMLMessage += " d_address=\"" + orderRequest.shP_ADR_TR_TE + "\" cargo_total_weight=\"" + orderRequest.pkG_WGT_DE + "\"";
+                XMLMessage += " pay_method=\"1\" is_docall=\"" + 1 + "\" need_return_tracking_no=\"" + orderRequest.poD_RTN_SVC + "\" express_type=\"6\"";
+                XMLMessage += " >";
+                XMLMessage += " </Order></Body></Request>";
 
 
                 SFCreateOrderServiceRequest sFCreateOrderServiceRequest = new SFCreateOrderServiceRequest()
@@ -524,10 +524,10 @@ namespace AtService.Controllers
                                 shipmentDataRequest.CON_NR = geocodes[i].confidence;
 
                                 if (
-                                            !string.IsNullOrEmpty(geocodes[i].translated_adddress)
-                                        && geocodes[i].translated_adddress != "NA"
-                                        && !string.Equals(shipmentWorkFlowRequest.Where(s => s.id == shipmentDataRequest.ID).FirstOrDefault().rcV_ADR_TE.Trim(),
-                                            geocodes[i].translated_adddress.Trim())
+                                        !string.IsNullOrEmpty(geocodes[i].translated_adddress)
+                                        //&&  geocodes[i].translated_adddress != "NA"
+                                        //&& !string.Equals(shipmentWorkFlowRequest.Where(s => s.id == shipmentDataRequest.ID).FirstOrDefault().rcV_ADR_TE.Trim(),
+                                        //    geocodes[i].translated_adddress.Trim())
                                    )
                                 {
                                     shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Translated);
