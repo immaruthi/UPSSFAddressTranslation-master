@@ -35,6 +35,7 @@ export class UploadedDataComponent implements OnInit {
   dataSource = new MatTableDataSource<Element>();
   public errorMessage: string;
   selection = new SelectionModel<any>(true, []);
+  filterText: string = '';
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
     private router: Router, private snackBar: MatSnackBar, private dialogService: DialogService,
@@ -79,10 +80,13 @@ export class UploadedDataComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.selection.clear();
+      this.filterText = '';
+      this.applyFilter('');
     }, error => (this.errorMessage = <any>error));
   }
 
   applyFilter(filterValue: string) {
+    this.filterText = filterValue;
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
