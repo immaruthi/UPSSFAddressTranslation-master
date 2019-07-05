@@ -49,13 +49,13 @@ namespace UPS.AddressTranslationService
             MapProxy.webProxyPassword = Configuration["webProxy:Password"];
             MapProxy.WebProxyEnable = Configuration["webProxy:Enable"];
 
+            /******* Dependancy Injection section start************/
             services.AddSingleton<IQuincusAddressTranslationRequest>(new QuincusAddressTranslationRequest() { endpoint = Configuration["Quincus:GeoCodeEndPoint"] });
-            /* Dependancy Injection */
-
             services.AddTransient<IUserServicesAsync, UserServices>();
             services.AddTransient<IUPSAuthenticationService, UPSAuthenticationService>();
+            services.AddTransient<IWorkflowService, WorkflowService>();
 
-
+            /*************** Dependancy Injection section End*************/
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

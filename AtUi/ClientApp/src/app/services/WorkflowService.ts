@@ -10,17 +10,13 @@ import { HttpService } from '../shared/http.service';
 export class WorkflowService {
   constructor(private httpClient: HttpClient, private httpService: HttpService) { }
   GetAllWorkflow() {
-    
-    return this.httpService.makeGetRequest(`api/ExcelWorkflow/getExcelData`);
+    return this.httpService.makeGetRequest(`api/Workflow/GetAll`);
   }
   AddWorkflow(workflow: Workflow[]): Observable<Workflow[]> {
-    let httpHeaders = new HttpHeaders().set('Content-Type', 'application/json');
-    let options = { headers: httpHeaders };
-    return this.httpClient.post<Workflow[]>('api/Workflow/AddWorkflow', JSON.stringify(workflow), options);
+    return this.httpClient.post<Workflow[]>('api/Workflow/AddWorkflow', JSON.stringify(workflow));
   }
 
   UploadFile(fileToUpload: File): Observable<Object> {
-    debugger;
     const endpoint = 'api/Shipment/ExcelFileUpload/';
     let  formData: FormData = new FormData();
 

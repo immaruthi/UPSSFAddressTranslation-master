@@ -6,8 +6,8 @@ namespace UPS.DataObjects.WR_FLW
 {
     public class WorkflowDataResponse
     {
-        public IEnumerable<WorkflowDataRequest> Workflows { get; set; }
-        public WorkflowDataRequest Workflow { get; set; }
+        public IEnumerable<Workflow> Workflows { get; set; }
+        public Workflow Workflow { get; set; }
         public bool Success { get; set; }
         public Exception OperationException { get; set; }
     }

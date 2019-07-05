@@ -44,30 +44,4 @@ export class UserService {
     return this.httpClient.get(environment.LOCAL_API_URL + `api/Login/InsertUser`, { params })
     //return this.httpClient.get(`https://localhost:44330/api/values/ValidateUser`, { params })
   }
-
-  getAllWorkflows(user:any) {
-   
-    return this.httpClient.get(environment.LOCAL_API_URL + `api/ExcelWorkflow/getExcelData`)
-  }
-  postFile(fileToUpload: File, user: any): Observable<Object> {
-    let Emp_Id = user;
-    //const endpoint = 'api/ExcelWorkflow/UploadExcel';
-    //const endpoint = 'https://atservicetest.azurewebsites.net/api/Shipment/ExcelFileUpload';
-    const endpoint = environment.LOCAL_API_URL + 'api/Shipment/ExcelFileUpload';
-    const formData: FormData = new FormData();
-    let headers = new HttpHeaders();
-
-    headers = headers.append('fileupload', 'fileupload');
-    headers.append('Content-Type', 'multipart/form-data');
-    headers.append('Accept', 'application/json');
-    //let options = new RequestOptions({ headers: headers });
-    formData.append('excelFileName', fileToUpload);
-    let fileList = new List<File>([fileToUpload]);
-    return this.httpClient.post(endpoint, formData, { headers: headers })
-      .map((response: Response) => {
-        console.log(response);
-        return response;
-      });
-  }
-
 }

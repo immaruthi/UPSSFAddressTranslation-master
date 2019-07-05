@@ -30,6 +30,7 @@ using UPS.DataObjects.SPC_LST;
 using UPS.ServicesDataRepository.Common;
 using System.Xml;
 using UPS.Application.CustomLogs;
+using UPS.ServicesAsyncActions;
 
 namespace AtService.Controllers
 {
@@ -45,16 +46,21 @@ namespace AtService.Controllers
         private ShipmentDataResponse shipmentDataResponse;
 
         private ShipmentService shipmentService { get; set; }
-        private WorkflowService workflowService { get; set; }
+        private IWorkflowService workflowService { get; set; }
 
         private IQuincusAddressTranslationRequest  _quincusAddressTranslationRequest{ get; set; }
 
-        public ShipmentController(IConfiguration Configuration, IHostingEnvironment HostingEnvironment, IQuincusAddressTranslationRequest QuincusAddressTranslationRequest)
+        public ShipmentController(
+            IConfiguration Configuration, 
+            IHostingEnvironment HostingEnvironment, 
+            IQuincusAddressTranslationRequest QuincusAddressTranslationRequest,
+            IWorkflowService workflowService
+            )
         {
             this.configuration = Configuration;
             this.hostingEnvironment = HostingEnvironment;
             shipmentService = new ShipmentService();
-            workflowService = new WorkflowService();
+            this.workflowService = workflowService;
             _quincusAddressTranslationRequest = QuincusAddressTranslationRequest;
 
         }
@@ -96,8 +102,7 @@ namespace AtService.Controllers
                             if (excelExtensionReponse.success)
                             {
                                 var excelDataObject2 = JsonConvert.DeserializeObject<List<ExcelDataObject>>(excelExtensionReponse.ExcelExtensionReponseData);
-                                WorkflowController workflowController = new WorkflowController();
-                                WorkflowDataResponse response = ((WorkflowDataResponse)((ObjectResult)(workflowController.CreateWorkflow(file, userId)).Result).Value);
+                                WorkflowDataResponse response = workflowService.InsertWorkflow(file.FileName, userId);
                                 _workflowID = response.Workflow.ID;
                                 result = this.CreateShipments(excelDataObject2, _workflowID);
                                 if (result.Success)
@@ -109,7 +114,6 @@ namespace AtService.Controllers
                                 {
                                     shipmentDataResponse.Success = false;
                                     shipmentDataResponse.OperationExceptionMsg = result.OperationExceptionMsg;
-                                    WorkflowService workflowService = new WorkflowService();
                                     workflowService.DeleteWorkflowById(_workflowID);
                                 }
                             }
@@ -294,7 +298,7 @@ namespace AtService.Controllers
 
             //we need to update the workflow status
             int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(shipmentDataRequest.WFL_ID);
-            WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
+            Workflow workflowDataRequest = new Workflow();
             workflowDataRequest.ID = shipmentDataRequest.WFL_ID;
             workflowDataRequest.WFL_STA_TE = workflowstatus;
             workflowService.UpdateWorkflowStatusById(workflowDataRequest);
@@ -409,8 +413,7 @@ namespace AtService.Controllers
             }
             //we need to update the workflow status
             int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);
-            WorkflowService workflowService = new WorkflowService();
-            WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
+            Workflow workflowDataRequest = new Workflow();
             workflowDataRequest.ID = _workflowID;
             workflowDataRequest.WFL_STA_TE = workflowstatus;
             workflowService.UpdateWorkflowStatusById(workflowDataRequest);
@@ -531,7 +534,7 @@ namespace AtService.Controllers
                         _workflowID = shipmentsDataRequest.FirstOrDefault().WFL_ID;
                         //we need to update the workflow status
                         int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);
-                        WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
+                        Workflow workflowDataRequest = new Workflow();
                         workflowDataRequest.ID = _workflowID;
                         workflowDataRequest.WFL_STA_TE = workflowstatus;
                         workflowService.UpdateWorkflowStatusById(workflowDataRequest);

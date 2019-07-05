@@ -7,7 +7,7 @@ using System.Text;
 namespace UPS.DataObjects.WR_FLW
 {
     [Table("WR-FLW")]
-    public class WorkflowDataRequest
+    public class Workflow
     {
         [Key]
         [Column("ID")]

@@ -10,7 +10,13 @@
             Completed = 3,
             Inactive =4
         }
-        
+
+        public enum WorkflowStatus
+        {
+            Created = 0,
+            InProgress= 1,
+            Completed = 2
+        }
     }
 
 }
