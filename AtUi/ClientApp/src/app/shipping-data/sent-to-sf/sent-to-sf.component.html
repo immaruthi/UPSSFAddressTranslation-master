@@ -6,6 +6,7 @@
   </div><br />
   <div class="col-md-6 text-right">
     <button mat-raised-button color="primary" (click)="sendToSF()"> Send To SF </button>
+    <button mat-raised-button color="primary" (click)="delete()"> Delete </button>
     <button mat-raised-button color="primary" (click)="SFexportToExcel()"> Export to Excel </button>
   </div>
 </div>
@@ -33,9 +34,12 @@
           <ng-container matColumnDef="actions" class="container">
               <mat-header-cell *matHeaderCellDef class="header-cell"> Action </mat-header-cell>
               <mat-cell *matCellDef="let row; let i=index;" class="cell">
-                  <button mat-icon-button (click)="startEdit(i,row)">
-                      <span><i class="material-icons">edit</i></span>
-                  </button>
+                <button mat-icon-button (click)="startEdit(i,row)">
+                  <span><i class="material-icons">edit</i></span>
+                </button>
+                <!--<button mat-icon-button (click)="rowDelete(i,row)">
+                  <span><i class="material-icons">delete_forever</i></span>
+                </button>-->
               </mat-cell>
           </ng-container>
           <ng-container matColumnDef="wfL_ID" class="container">

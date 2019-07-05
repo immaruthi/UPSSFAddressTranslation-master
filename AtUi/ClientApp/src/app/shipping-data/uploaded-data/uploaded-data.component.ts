@@ -108,9 +108,7 @@ export class UploadedDataComponent implements OnInit {
   }
 
   rowDelete(index: number, rowData: any) {
-    this.dialogService.openAlertDialog('Work in Progress');
 
-    // this.deleteUploadedData([rowData]);
   }
 
   delete() {
@@ -118,8 +116,16 @@ export class UploadedDataComponent implements OnInit {
     if (checkedCount <= 0) {
       this.dialogService.openAlertDialog('Please select minimum one row to Delete.');
     } else {
-      const dataForDelete = this.selection.selected; // Any changes can do here for sending array
-      this.deleteUploadedData(dataForDelete);
+      const dialogRef = this.dialogService.openConfirmationDialog('Are you sure, you want to delete all the selected records ?');
+
+      dialogRef.afterClosed().subscribe(data => {
+        if (data === true) {
+          const dataForDelete = this.selection.selected; // Any changes can do here for sending array
+          this.deleteUploadedData(dataForDelete);
+        } else {
+
+        }
+      })
     }
   }
 
