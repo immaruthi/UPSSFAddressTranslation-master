@@ -131,7 +131,7 @@ export class UploadedDataComponent implements OnInit {
 
   deleteUploadedData(data: any) {
     this.shippingService.deleteUploadedData(data).subscribe((response: any) => {
-      if (response) {
+      if (response != null && response.success === true) {
         this.getUploadedData(this.WorkflowID);
         this.notificationService.openSuccessMessageNotification("Deleted Successfully");
       } else {

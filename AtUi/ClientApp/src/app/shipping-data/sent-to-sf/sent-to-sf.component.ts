@@ -264,7 +264,7 @@ export class SentToSfComponent implements OnInit {
 
   deleteData(data: any) {
     this.shippingService.deleteUploadedData(data).subscribe((response: any) => {
-      if (response) {
+      if (response != null && response.success === true) {
         this.getDataForSendToSF(this.WorkflowID);
         this.notificationService.openSuccessMessageNotification("Deleted Successfully");
       } else {

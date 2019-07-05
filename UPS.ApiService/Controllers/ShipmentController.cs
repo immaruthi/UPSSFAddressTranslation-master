@@ -46,7 +46,7 @@ namespace AtService.Controllers
         private ShipmentService shipmentService { get; set; }
         private WorkflowService workflowService { get; set; }
 
-        private IQuincusAddressTranslationRequest  _quincusAddressTranslationRequest{ get; set; }
+        private IQuincusAddressTranslationRequest _quincusAddressTranslationRequest { get; set; }
 
         public ShipmentController(IConfiguration Configuration, IHostingEnvironment HostingEnvironment, IQuincusAddressTranslationRequest QuincusAddressTranslationRequest)
         {
@@ -400,8 +400,8 @@ namespace AtService.Controllers
                 else
                 {
                     createOrderShipmentResponse.Response = false;
-                    if(getSFCreateOrderServiceResponse.exception != null)
-                    AuditEventEntry.WriteEntry(new Exception(getSFCreateOrderServiceResponse.exception.ToString()));
+                    if (getSFCreateOrderServiceResponse.exception != null)
+                        AuditEventEntry.WriteEntry(new Exception(getSFCreateOrderServiceResponse.exception.ToString()));
                 }
             }
             //we need to update the workflow status
@@ -449,8 +449,8 @@ namespace AtService.Controllers
         public async Task<ActionResult> DeleteShipments([FromBody] List<ShipmentDataRequest> shipmentDataRequests)
         {
             ShipmentService shipmentService = new ShipmentService();
-            shipmentService.DeleteShipments(shipmentDataRequests);
-            return Ok(shipmentDataRequests);
+            ShipmentDataResponse shipmentDataResponse = shipmentService.DeleteShipments(shipmentDataRequests);
+            return Ok(shipmentDataResponse);
         }
 
         [Route("GetTranslationAddress")]
@@ -499,7 +499,7 @@ namespace AtService.Controllers
                         endpoint = configuration["Quincus:GeoCodeEndPoint"],
                         id = quincusTranslatedAddressResponse.ResponseData.batch_id,
                         quincusTokenData = quincusTokenDataResponse.quincusTokenData
-                    },shipmentsCount);
+                    }, shipmentsCount);
 
                     if (QuincusResponse.ResponseStatus)
                     {
@@ -516,9 +516,9 @@ namespace AtService.Controllers
                             shipmentDataRequest.CON_NR = geocodes[i].confidence;
 
                             if (
-                                        !string.IsNullOrEmpty(geocodes[i].translated_adddress) 
-                                    &&  geocodes[i].translated_adddress != "NA"
-                                    &&  !string.Equals(shipmentWorkFlowRequest.Where(s => s.id == shipmentDataRequest.ID).FirstOrDefault().rcV_ADR_TE.Trim(),
+                                        !string.IsNullOrEmpty(geocodes[i].translated_adddress)
+                                    && geocodes[i].translated_adddress != "NA"
+                                    && !string.Equals(shipmentWorkFlowRequest.Where(s => s.id == shipmentDataRequest.ID).FirstOrDefault().rcV_ADR_TE.Trim(),
                                         geocodes[i].translated_adddress.Trim())
                                )
                             {
@@ -546,7 +546,7 @@ namespace AtService.Controllers
                     }
                     else
                     {
-                        if(QuincusResponse.Exception == null)
+                        if (QuincusResponse.Exception == null)
                         {
                             AuditEventEntry.WriteEntry(new Exception("Translation failed..."));
                         }
@@ -656,7 +656,7 @@ namespace AtService.Controllers
         {
             ShipperCompnayService shipperCompanyService = new ShipperCompnayService();
             shipmentDataResponse = shipperCompanyService.SelectCompletedShipments(wid);
-            if(!shipmentDataResponse.Success)
+            if (!shipmentDataResponse.Success)
             {
                 AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
             }

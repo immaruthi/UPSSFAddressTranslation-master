@@ -42,6 +42,6 @@ export class ShippingService {
   }
 
   public deleteUploadedData(data: any): Observable<any> {
-    return this.httpService.makePostRequest(' ', data);
+    return this.httpService.makePostRequest('api/Shipment/DeleteShipments', data);
   }
 }
