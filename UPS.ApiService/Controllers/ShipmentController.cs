@@ -571,47 +571,47 @@ namespace AtService.Controllers
         {
             int sleepEstimation = quincusTranslatedAddressResponse.RequestDataCount;
 
-            int sleepMode = 60000;
+            double sleepMode = 60000;
 
             if (Enumerable.Range(1, 10).Contains(sleepEstimation))
             {
-                sleepMode = sleepMode * 2;
+                sleepMode = sleepMode * 1;
             }
             else if (Enumerable.Range(11, 20).Contains(sleepEstimation))
             {
-                sleepMode = sleepMode * 3;
+                sleepMode = sleepMode * 1;
             }
             else if (Enumerable.Range(21, 30).Contains(sleepEstimation))
             {
-                sleepMode = sleepMode * 3;
+                sleepMode = sleepMode * 1.5;
             }
             else if (Enumerable.Range(31, 40).Contains(sleepEstimation))
             {
-                sleepMode = sleepMode * 3;
+                sleepMode = sleepMode * 2;
             }
             else if (Enumerable.Range(41, 50).Contains(sleepEstimation))
             {
-                sleepMode = sleepMode * 4;
+                sleepMode = sleepMode * 2.5;
             }
             else if (Enumerable.Range(51, 20).Contains(sleepEstimation))
             {
-                sleepMode = sleepMode * 5;
+                sleepMode = sleepMode * 3;
             }
             else if (Enumerable.Range(61, 30).Contains(sleepEstimation))
             {
-                sleepMode = sleepMode * 5;
+                sleepMode = sleepMode * 3.2;
             }
             else if (Enumerable.Range(71, 40).Contains(sleepEstimation))
             {
-                sleepMode = sleepMode * 5;
+                sleepMode = sleepMode * 3.3;
             }
             else if (Enumerable.Range(81, 100).Contains(sleepEstimation))
             {
-                sleepMode = sleepMode * 5;
+                sleepMode = sleepMode * 3.3;
             }
             else if (Enumerable.Range(101, 300).Contains(sleepEstimation))
             {
-                sleepMode = sleepMode * 8;
+                sleepMode = sleepMode * 4;
             }
 
             if (sleepEstimation >= 301 && sleepEstimation <= 10000)
@@ -619,7 +619,7 @@ namespace AtService.Controllers
 
             }
 
-            System.Threading.Thread.Sleep(sleepMode);
+            System.Threading.Thread.Sleep(Convert.ToInt32(sleepMode));
         }
 
         [Route("UpdateShipmentCode")]
