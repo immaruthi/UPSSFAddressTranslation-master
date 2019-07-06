@@ -113,10 +113,16 @@ export class TranslateComponent implements OnInit {
     //this.dataSource.data.forEach(row => this.mainData.push(row));
     this.mainData = this.dataSource._pageData(this.dataSource.data);
     this.checkedData = this.mainData.filter(data => (data.smT_STA_NR !== 2 && data.smT_STA_NR !== 3));
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.selection.clear(),
-      this.checkedData.forEach(row => this.selection.select(row));
+    this.isAllSelected() ? this.AllSelectedTrue() : this.AllSelectionFalse();
+  }
+
+  AllSelectedTrue() {
+    this.selection.clear()
+  }
+
+  AllSelectionFalse() {
+    this.selection.clear(),
+    this.checkedData.forEach(row => this.selection.select(row));
   }
 
   handlePageChange(event: Event) {
