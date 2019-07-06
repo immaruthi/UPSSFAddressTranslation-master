@@ -616,7 +616,7 @@ namespace AtService.Controllers
 
             if (sleepEstimation >= 301 && sleepEstimation <= 10000)
             {
-
+                sleepMode = sleepMode * 5;
             }
 
             System.Threading.Thread.Sleep(Convert.ToInt32(sleepMode));
