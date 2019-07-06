@@ -87,7 +87,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="web.config">
+    <Content Update="wwwroot\web.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
