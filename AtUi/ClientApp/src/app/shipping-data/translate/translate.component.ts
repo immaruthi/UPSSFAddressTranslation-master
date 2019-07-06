@@ -94,9 +94,17 @@ export class TranslateComponent implements OnInit {
   }
 
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.checkedData.length;
-    return numSelected === numRows;
+    const MainData: any[] = this.dataSource._pageData(this.dataSource.data);
+    const ValidData: any[] = MainData.filter(data => (data.smT_STA_NR !== 2 && data.smT_STA_NR !== 3));
+    const checkedDataCount = ValidData.length;
+    var count: number = 0;
+    ValidData.forEach(row => {
+      if (this.selection.isSelected(row)) {
+        count = count + 1;
+      }
+    });
+
+    return checkedDataCount === count;
   }
 
   masterToggle() {
@@ -107,9 +115,14 @@ export class TranslateComponent implements OnInit {
     this.checkedData = this.mainData.filter(data => (data.smT_STA_NR !== 2 && data.smT_STA_NR !== 3));
     this.isAllSelected() ?
       this.selection.clear() :
+      this.selection.clear(),
       this.checkedData.forEach(row => this.selection.select(row));
   }
 
+  handlePageChange(event: Event) {
+    // this.selection.clear();
+  }
+  
   /** The label for the checkbox on the passed row */
   checkboxLabel(row?: any): string {
     if (!row) {
