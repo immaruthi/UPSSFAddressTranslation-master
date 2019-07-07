@@ -117,11 +117,12 @@ export class TranslateComponent implements OnInit {
   }
 
   AllSelectedTrue() {
-    this.selection.clear()
+    //this.selection.clear()
+    this.checkedData.forEach(row => this.selection.deselect(row));
   }
 
   AllSelectionFalse() {
-    this.selection.clear(),
+    //this.selection.clear(),
     this.checkedData.forEach(row => this.selection.select(row));
   }
 
@@ -140,8 +141,8 @@ export class TranslateComponent implements OnInit {
   rowChecked(event: Event, row: any) {
     event.stopPropagation();
     if (!this.selection.isSelected(row)) {
-      if (this.selection.selected.length >= 100) {
-        this.dialogService.openAlertDialog('Maximum allowed Shipments for Translation: 100 and You have selected: ' + this.selection.selected.length);
+      if (this.selection.selected.length >= 200) {
+        this.dialogService.openAlertDialog('Maximum allowed Shipments for Translation: 200 and You have selected: ' + this.selection.selected.length);
         this.selection.toggle(row);
       }
     }
@@ -152,8 +153,8 @@ export class TranslateComponent implements OnInit {
     const checkedCount = this.selection.selected.length;
     if (checkedCount <= 0) {
       this.dialogService.openAlertDialog('Please select minimum one row to Translate.');
-    } else if (checkedCount > 100) {
-      this.dialogService.openAlertDialog('Maximum allowed Shipments for Translation: 100 and You have selected: ' + this.selection.selected.length);
+    } else if (checkedCount > 200) {
+      this.dialogService.openAlertDialog('Maximum allowed Shipments for Translation: 200 and You have selected: ' + this.selection.selected.length);
     } else {
       const data = this.selection.selected;
       this.dataTranslate(data);
@@ -222,29 +223,29 @@ export class TranslateComponent implements OnInit {
 
     this.shippingService.sendDataForTranslate(this.dataForTranslate).subscribe(
       (response: any) => {
-        if (response.geocode.length > 0) {
-          var EmptyCount: number = 0;
-          var SuccessCount: number = 0;
+        if (response && response.geocode) {
+           var EmptyCount: number = 0;
+           var SuccessCount: number = 0;
 
-          for (let geocode of response.geocode) {
-            if (geocode.translated_adddress === ' ') {
-              EmptyCount = EmptyCount + 1;
-            } else {
-              SuccessCount = SuccessCount + 1;
+            for (let geocode of response.geocode) {
+              if (geocode.translated_adddress === ' ') {
+                EmptyCount = EmptyCount + 1;
+              } else {
+                SuccessCount = SuccessCount + 1;
+              }
             }
-          }
 
-          const data = {
-            emptyCount: EmptyCount,
-            successCount: SuccessCount,
-            screenFrom: 'Translate'
-          }
-          this.dialogService.openSummaryDialog(data);
+            const data = {
+              emptyCount: EmptyCount,
+              successCount: SuccessCount,
+              screenFrom: 'Translate'
+            }
+            this.dialogService.openSummaryDialog(data);
+            this.getTranslateData(this.WorkflowID);
+            this.selection.clear(); 
+        } else {
+          this.notificationService.openErrorMessageNotification("Error while Translating data.")
         }
-
-        //this.notificationService.openSuccessMessageNotification("Shipment Address(es) Translated Successfully.");
-        this.getTranslateData(this.WorkflowID);
-        this.selection.clear();
       }
       ,
       error => this.notificationService.openErrorMessageNotification("Error while Translating data.")
