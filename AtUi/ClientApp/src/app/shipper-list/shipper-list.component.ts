@@ -2,6 +2,7 @@ import { Component, ViewChild, OnInit, Input } from '@angular/core';
 import { MatPaginator, MatTableDataSource, MatDialog, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { ShippingService } from '../services/shipping.service';
+import { ShipperListService } from '../services/ShipperListService';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../services/data.service';
 import { Observable } from 'rxjs';
@@ -14,7 +15,7 @@ import { Observable } from 'rxjs';
 export class ShipperListComponent implements OnInit {
 
   displayedColumns =
-    ['S_No'];
+    ['spC_PSL_CD_TE', 'spC_CTY_TE', 'spC_CTR_TE', 'spC_CPY_TE', 'spC_NA', 'spC_SND_PTY_CTC_TE', 'spC_ADR_TE', 'spC_CTC_PH','spC_SLIC_NR',];
 
   private eventsSubscription: any;
   @Input() events: Observable<void>;
@@ -26,7 +27,8 @@ export class ShipperListComponent implements OnInit {
   filterText: string = '';
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
-    public dialog: MatDialog, public dataService: DataService) {
+    public dialog: MatDialog, public dataService: DataService,
+    private shipperListService: ShipperListService) {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -48,17 +50,19 @@ export class ShipperListComponent implements OnInit {
   
   getShipperListData() {
     this.ResponseData = [];
-    this.shippingService.getCompletedShipments('169').subscribe((response: any) => {
-      if (response.success === true) {
-        this.ResponseData = response.shipments;
-      } else {
-        this.ResponseData = [];
+    this.shipperListService.getShipperListData().subscribe((response: any) => {
+      if (response) {
+        if (response.success === true) {
+          this.ResponseData = response.shipperCompanies;
+        } else {
+          this.ResponseData = [];
+        }
+        this.dataSource.data = this.ResponseData;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.filterText = '';
+        this.applyFilter('');
       }
-      this.dataSource.data = this.ResponseData;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.filterText = '';
-      this.applyFilter('');
     }, error => (this.errorMessage = <any>error));
   }
 

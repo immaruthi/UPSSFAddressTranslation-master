@@ -30,6 +30,7 @@ import { SummaryDialogComponent } from './dialogs/summary-dialog/summary-dialog.
 import { DialogService } from './services/dialog.service';
 import { ExcelService } from './services/ExcelExport';
 import { ShippingService } from './services/shipping.service';
+import { ShipperListService } from './services/ShipperListService';
 import { HttpService } from './shared/http.service';
 
 import { WorkflowComponent } from './workflow/workflow.component';
@@ -109,7 +110,8 @@ import { ShipperListComponent } from './shipper-list/shipper-list.component'
     AuthGuard, LoginGuard,
     AssignProjectService, ExcelService, HomeService,
     DialogService,
-      ShippingService,
+    ShippingService,
+    ShipperListService,
       HttpService,
     LoaderService,
     DatePipe,
