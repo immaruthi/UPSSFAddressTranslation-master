@@ -15,7 +15,14 @@ namespace UPS.ServicesDataRepository
     public class ShipmentService : IShipmentAsync
     {
         private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
+        private readonly ApplicationDbContext context;
+        private IAddressBookService addressBookService;
 
+        public ShipmentService(ApplicationDbContext applicationDbContext, IAddressBookService addressBookService)
+        {
+            this.context = applicationDbContext;
+            this.addressBookService = addressBookService;
+        }
         public List<ShipmentDataRequest> GetShipment(int workflowID)
         {
             optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
@@ -344,44 +351,58 @@ namespace UPS.ServicesDataRepository
             }
             return shipmentDataResponse;
         }
-
-        public ShipmentDataResponse UpdateShipmentAddressByIds(List<ShipmentDataRequest> shipmentDataRequest)
+        public void UpdateShipmentAddressByIds(List<ShipmentDataRequest> shipmentDataRequest)
         {
-            ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
             try
-            {
-                optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-
-
-                optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-
-                var context = new ApplicationDbContext(optionsBuilder.Options);
-
-                foreach (ShipmentDataRequest request in shipmentDataRequest)
-                {
-                    ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == request.ID).FirstOrDefault();
-                    data.ID = request.ID;
-                    data.WFL_ID = request.WFL_ID;
-                    data.SHP_ADR_TR_TE = request.SHP_ADR_TR_TE;
-                    data.SMT_STA_NR = request.SMT_STA_NR;
-                    data.ACY_TE = request.ACY_TE;
-                    data.CON_NR = request.CON_NR;
-                    data.POD_RTN_SVC = request.POD_RTN_SVC;
-                    context.shipmentDataRequests.Update(data);
-                    context.Entry(request).State = EntityState.Detached;
-                    context.SaveChanges();
-                    shipmentDataResponse.Shipments = context.shipmentDataRequests;
-                }
-                shipmentDataResponse.Success = true;
-                return shipmentDataResponse;
+            { 
+                context.BulkUpdate(shipmentDataRequest);
             }
             catch (Exception ex)
             {
-                shipmentDataResponse.Success = false;
-                shipmentDataResponse.OperationExceptionMsg = ex.Message;
+                
             }
-            return shipmentDataResponse;
         }
+        //public ShipmentDataResponse UpdateShipmentAddressByIds(List<ShipmentDataRequest> shipmentDataRequest)
+        //{
+        //    ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
+        //    try
+        //    {
+        //        optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+
+        //        optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+        //        var context = new ApplicationDbContext(optionsBuilder.Options);
+
+        //        List<ShipmentDataRequest> shipmentDetailsToUpdate = new List<ShipmentDataRequest>();
+        //        foreach (ShipmentDataRequest request in shipmentDataRequest)
+        //        {
+        //            ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == request.ID).FirstOrDefault();
+        //            data.ID = request.ID;
+        //            data.WFL_ID = request.WFL_ID;
+        //            data.SHP_ADR_TR_TE = request.SHP_ADR_TR_TE;
+        //            data.SMT_STA_NR = request.SMT_STA_NR;
+        //            data.ACY_TE = request.ACY_TE;
+        //            data.CON_NR = request.CON_NR;
+        //            data.POD_RTN_SVC = request.POD_RTN_SVC;
+        //            shipmentDetailsToUpdate.Add(data);
+        //            //context.shipmentDataRequests.Update(data);
+        //            //context.Entry(request).State = EntityState.Detached;
+        //            //context.SaveChanges();
+        //            shipmentDataResponse.Shipments = context.shipmentDataRequests;
+        //        }
+        //        context.BulkUpdate(shipmentDetailsToUpdate);
+        //        //shipmentDataResponse.Shipments = context.shipmentDataRequests;
+        //        shipmentDataResponse.Success = true;
+        //        return shipmentDataResponse;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        shipmentDataResponse.Success = false;
+        //        shipmentDataResponse.OperationExceptionMsg = ex.Message;
+        //    }
+        //    return shipmentDataResponse;
+        //}
 
         public ShipmentDataResponse DeleteShipments(List<ShipmentDataRequest> shipmentDataRequest)
         {

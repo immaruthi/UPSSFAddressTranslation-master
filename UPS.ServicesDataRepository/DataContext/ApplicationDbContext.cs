@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UPS.DataObjects.AddressBook;
 using UPS.DataObjects.Shipment;
 using UPS.DataObjects.SPC_LST;
 using UPS.DataObjects.UserData;
@@ -32,25 +33,13 @@ namespace UPS.ServicesDataRepository.DataContext
             builder.Entity<USR>().ToTable("USR");
             builder.Entity<WorkflowDataRequest>().ToTable("WR-FLW");
             builder.Entity<ShipperCompanyRequest>().ToTable("SPC-LST");
+            builder.Entity<AddressBook>().ToTable("ADR-BK");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(DBConnectionContext.connectionString);
         }
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (!optionsBuilder.IsConfigured)
-        //    {
-        //        IConfigurationRoot configuration = new ConfigurationBuilder()
-        //        .SetBasePath(Directory.GetCurrentDirectory())
-        //        .AddJsonFile("appsettings.json")
-        //        .Build();
-        //        var connectionString = configuration.GetConnectionString("DbCoreConnectionString");
-        //        optionsBuilder.UseSqlServer(connectionString);
-        //    }
-        //}
-
         public DbSet<USR> UserData
         {
             get;
@@ -68,6 +57,11 @@ namespace UPS.ServicesDataRepository.DataContext
         }
 
         public DbSet<ShipperCompanyRequest> shipperCompanyRequests
+        {
+            get; set;
+        }
+
+        public DbSet<AddressBook> AddressBooks
         {
             get; set;
         }
