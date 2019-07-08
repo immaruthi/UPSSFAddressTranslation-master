@@ -581,15 +581,15 @@ namespace AtService.Controllers
 
             if (Enumerable.Range(1, 10).Contains(sleepEstimation))
             {
-                sleepMode = sleepMode * 1;
+                sleepMode = sleepMode * 0.5;
             }
             else if (Enumerable.Range(11, 20).Contains(sleepEstimation))
             {
-                sleepMode = sleepMode * 1;
+                sleepMode = sleepMode * 0.5;
             }
             else if (Enumerable.Range(21, 30).Contains(sleepEstimation))
             {
-                sleepMode = sleepMode * 1.5;
+                sleepMode = sleepMode * 1.25;
             }
             else if (Enumerable.Range(31, 40).Contains(sleepEstimation))
             {
