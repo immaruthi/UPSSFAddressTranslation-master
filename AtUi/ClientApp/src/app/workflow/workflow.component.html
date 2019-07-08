@@ -28,6 +28,8 @@
       </div>
     </div>
     <div>
+      <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+      </mat-paginator>
       <div class="table-div">
         <mat-table class="table" [dataSource]="dataSource" matSort>
           <!-- Position Column -->
@@ -77,9 +79,7 @@
           <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
           <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
         </mat-table>
-        </div>
-        <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
-        </mat-paginator>
       </div>
+    </div>
       <app-loader></app-loader>
     </div>
