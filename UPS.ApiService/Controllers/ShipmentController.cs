@@ -130,6 +130,8 @@ namespace AtService.Controllers
 
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         //[HttpPost]
+
+        [NonAction]
         public ShipmentDataResponse CreateShipments(List<ExcelDataObject> excelDataObjects, int workflowID)
         {
             //int i = 0;

@@ -129,5 +129,52 @@ namespace UPS.ServicesDataRepository
             }
             return workflowDataResponse;
         }
+
+        public List<WorkflowDataRequest> getExcelData()
+        {
+            optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            List<WorkflowDataRequest> workflowDataRequests = new List<WorkflowDataRequest>();
+            using (var context = new ApplicationDbContext(optionsBuilder.Options))
+            {
+                var workflowList = from wf in context.workflowDataRequests
+                                   join us in context.UserData on (int?)wf.CRD_BY_NR equals us.ID
+                                   orderby wf.ID descending
+                                   select new
+                                   {
+                                       wf.ID,
+                                       wf.WFL_STA_TE,
+                                       wf.FLE_NA,
+                                       wf.CRD_BY_NR,
+                                       wf.CRD_DT,
+                                       wf.UDT_DT,
+                                       USR_FST_NA = us.USR_FST_NA + " " + us.USR_LST_NA,
+                                   };
+                foreach (var wfList in workflowList)
+                {
+                    WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
+                    workflowDataRequest.ID = wfList.ID;
+                    workflowDataRequest.FLE_NA = wfList.FLE_NA;
+                    workflowDataRequest.USR_FST_NA = wfList.USR_FST_NA;
+                    workflowDataRequest.CRD_BY_NR = wfList.CRD_BY_NR;
+                    workflowDataRequest.CRD_DT = wfList.CRD_DT;
+                    workflowDataRequest.WFL_STA_TE = wfList.WFL_STA_TE;
+                    if (workflowDataRequest.WFL_STA_TE == 0)
+                    {
+                        workflowDataRequest.WFL_STA_TE_TEXT = "Created"; //Uploaded
+                    }
+                    else if (workflowDataRequest.WFL_STA_TE == 1 || workflowDataRequest.WFL_STA_TE == 2)
+                    {
+                        workflowDataRequest.WFL_STA_TE_TEXT = "InProgress"; //Curated || Translated
+                    }
+                    else if (workflowDataRequest.WFL_STA_TE == 3)
+                    {
+                        workflowDataRequest.WFL_STA_TE_TEXT = "Completed"; //Done
+                    }
+                    workflowDataRequests.Add(workflowDataRequest);
+                }
+            }
+
+            return workflowDataRequests;
+        }
     }
 }
