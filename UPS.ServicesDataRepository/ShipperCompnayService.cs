@@ -352,5 +352,27 @@
             }
             return shipperCompanyResponse;
         }
+
+        public ShipperCompanyResponse GetShipperList()
+        {
+            ShipperCompanyResponse shipperCompanyResponse = new ShipperCompanyResponse();
+            optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+            using (var context = new ApplicationDbContext(optionsBuilder.Options))
+            {
+                try
+                {
+                    shipperCompanyResponse.ShipperCompanies = context.shipperCompanyRequests.ToList();
+                    shipperCompanyResponse.Success = true;
+                    return shipperCompanyResponse;
+                }
+                catch (Exception ex)
+                {
+                    shipperCompanyResponse.Success = false;
+                    shipperCompanyResponse.OperatonExceptionMessage = ex.Message;
+                }
+            }
+            return shipperCompanyResponse;
+        }
     }
 }
