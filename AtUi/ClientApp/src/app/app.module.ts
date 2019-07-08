@@ -45,6 +45,7 @@ import { UploadedDataComponent } from './shipping-data/uploaded-data/uploaded-da
 import { AlertDialog, ConfirmDialog, ConfirmPopupComponent } from './shared/confirm-popup/confirm-popup.component';
 import { LoaderComponent } from './shared/loader/loader.component';
 import { LoaderService } from './shared/loader/loader.service';
+import { NotificationService } from './services/NotificationService';
 /* External Modules */
 import { AgGridModule } from 'ag-grid-angular';
 import { SentToSfComponent } from './shipping-data/sent-to-sf/sent-to-sf.component';
@@ -55,7 +56,8 @@ import { EditModeDirective } from './shared/editable/edit-mode.directive';
 import { ViewModeDirective } from './shared/editable/view-mode.directive';
 import { EditOnEnterDirective } from './shared/editable/edit-on-enter.directive';
 import { AddressEditModelComponent } from './shipping-data/address-edit-model/address-edit-model.component';
-import { DatePipe } from '@angular/common'
+import { DatePipe } from '@angular/common';
+import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component'
 
 @NgModule({
   declarations: [
@@ -86,6 +88,7 @@ import { DatePipe } from '@angular/common'
     ConfirmDialog,
     ConfirmPopupComponent,
     AddressEditModelComponent,
+    ConfirmationDialogComponent,
    
   ],
   imports: [
@@ -108,6 +111,7 @@ import { DatePipe } from '@angular/common'
       HttpService,
     LoaderService,
     DatePipe,
+    NotificationService,
     DataService,
     {
       provide: HTTP_INTERCEPTORS,
@@ -116,7 +120,7 @@ import { DatePipe } from '@angular/common'
     }
     ],
   bootstrap: [AppComponent],
-  entryComponents: [LoginComponent, AlertDialogComponent, SummaryDialogComponent, AddressEditModelComponent]
+  entryComponents: [LoginComponent, AlertDialogComponent, SummaryDialogComponent, ConfirmationDialogComponent, AddressEditModelComponent]
 
 })
 export class AppModule { }

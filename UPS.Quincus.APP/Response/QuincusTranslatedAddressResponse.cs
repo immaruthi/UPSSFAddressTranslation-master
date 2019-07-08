@@ -11,5 +11,7 @@ namespace UPS.Quincus.APP.Response
         public bool Response { get; set; }
 
         public Exception exception { get; set; }
+
+        public int RequestDataCount { get; set; }
     }
 }

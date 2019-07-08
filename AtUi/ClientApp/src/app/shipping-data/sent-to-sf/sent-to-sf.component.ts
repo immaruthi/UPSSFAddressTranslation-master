@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit, Input } from '@angular/core';
 import { ShipmentDetails } from '../../models/shipmentdetails';
-import { MatPaginator, MatTableDataSource, MatDialog, MatSnackBarConfig, MatSnackBar } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatDialog, MatSnackBarConfig, MatSnackBar, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
 import { ShippingService } from '../../services/shipping.service';
@@ -12,6 +12,8 @@ import { DialogService } from '../../services/dialog.service';
 import { Observable } from 'rxjs';
 import { ExcelService } from '../../services/ExcelExport';
 import { MatStepperTab } from '../../shared/enums.service';
+import { NotificationService } from '../../services/NotificationService';
+
 
 @Component({
   selector: 'app-sent-to-sf',
@@ -22,7 +24,7 @@ export class SentToSfComponent implements OnInit {
   displayedColumns =
     ['select', 'actions', 'wfL_ID', 'smT_STA_NR', 'pkG_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE',
       'csG_CTC_TE', 'pH_NR', 'fsT_INV_LN_DES_TE', 'shP_CPY_NA', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE', 'orG_CTY_TE', 'orG_PSL_CD',
-      'imP_SLC_TE', 'coD_TE', 'pyM_MTD', 'exP_TYP', 'spC_SLIC_NR'
+      'imP_SLC_TE', 'coD_TE', 'poD_RTN_SVC', 'pyM_MTD', 'exP_TYP', 'spC_SLIC_NR'
     ];
 
   private eventsSubscription: any
@@ -31,6 +33,7 @@ export class SentToSfComponent implements OnInit {
   public ResponseData: any[] = [];
   public WorkflowID: any;
   public shipmentStatusList = Constants.ShipmentStatusList;
+  public PODoptions = Constants.PODoptions;
   dataSource = new MatTableDataSource<Element>();
   public errorMessage: string;
   selection = new SelectionModel<any>(true, []);
@@ -38,14 +41,17 @@ export class SentToSfComponent implements OnInit {
   public checkedData: any[] = [];
   public tableData: any[] = [];
   public excelMainData: any[] = [];
+  filterText: string = '';
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
     private router: Router, public dialog: MatDialog, public dataService: DataService,
     private snackBar: MatSnackBar, private dialogService: DialogService,
-    private excelService: ExcelService) {
+    private excelService: ExcelService,
+    private notificationService: NotificationService) {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   /**
   * Set the paginator after the view init since this component will
@@ -53,6 +59,7 @@ export class SentToSfComponent implements OnInit {
   */
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   ngOnInit() {
@@ -80,11 +87,15 @@ export class SentToSfComponent implements OnInit {
       }
       this.dataSource.data = this.ResponseData;
       this.dataSource.paginator = this.paginator;
-
+      this.dataSource.sort = this.sort;
+      this.selection.clear();
+      this.filterText = '';
+      this.applyFilter('');
     }, error => (this.errorMessage = <any>error));
   }
 
   applyFilter(filterValue: string) {
+    this.filterText = filterValue;
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
@@ -132,7 +143,8 @@ export class SentToSfComponent implements OnInit {
             successCount: SuccessCount,
             successList: SuccessList,
             failedCount: FailedCount,
-            failedList: FailedList
+            failedList: FailedList,
+            screenFrom: 'SendToSF'
           }
           if (response.processedShipments.length > 0) {
             this.getDataForSendToSF(this.WorkflowID);
@@ -141,7 +153,7 @@ export class SentToSfComponent implements OnInit {
           this.dialogService.openSummaryDialog(data);
         }
       }, error =>
-        this.openErrorMessageNotification("Error while sending data to SF.")
+        this.notificationService.openErrorMessageNotification("Error while sending data to SF.")
       );
     }
   }
@@ -155,7 +167,8 @@ export class SentToSfComponent implements OnInit {
         shP_ADR_TR_TE: shipmentDetailToUpdate.shP_ADR_TR_TE,
         coD_TE: shipmentDetailToUpdate.coD_TE,
         pkG_NR_TE: shipmentDetailToUpdate.pkG_NR_TE,
-        rcV_CPY_TE: shipmentDetailToUpdate.rcV_CPY_TE
+        rcV_CPY_TE: shipmentDetailToUpdate.rcV_CPY_TE,
+        poD_RTN_SVC: shipmentDetailToUpdate.poD_RTN_SVC
       }
     });
 
@@ -163,11 +176,20 @@ export class SentToSfComponent implements OnInit {
       if (result === 1) {
         let updatedDetails = this.dataService.getDialogData();
 
+        if (updatedDetails.coD_TE == shipmentDetailToUpdate.coD_TE
+          && updatedDetails.shP_ADR_TR_TE.toLowerCase() == shipmentDetailToUpdate.shP_ADR_TR_TE.toLowerCase()
+          && updatedDetails.poD_RTN_SVC == shipmentDetailToUpdate.poD_RTN_SVC) {
+
+          this.notificationService.openSuccessMessageNotification("No changes found to update");
+          return;
+        }
+
         const details = {
           SHP_ADR_TR_TE: updatedDetails.shP_ADR_TR_TE,
           COD_TE: updatedDetails.coD_TE,
           WFL_ID: shipmentDetails.wfL_ID,
           ID: shipmentDetails.id,
+          POD_RTN_SVC: updatedDetails.poD_RTN_SVC
         }
 
         this.shippingService.UpdateShippingAddress(details).subscribe((response:any) => {
@@ -176,32 +198,12 @@ export class SentToSfComponent implements OnInit {
           shipmentDetails.shP_ADR_TR_TE = response.shipmentDataRequest.shP_ADR_TR_TE;;
           shipmentDetails.coD_TE = response.shipmentDataRequest.coD_TE;
           shipmentDetails.smT_STA_NR = response.shipmentDataRequest.smT_STA_NR;
-          this.openSuccessMessageNotification("Data Updated Successfully.");
+          shipmentDetailToUpdate.poD_RTN_SVC = response.shipmentDataRequest.poD_RTN_SVC;
+          this.notificationService.openSuccessMessageNotification("Data Updated Successfully.");
         },
-          error => this.openErrorMessageNotification("Error while updating data."))
+          error => this.notificationService.openErrorMessageNotification("Error while updating data."))
       }
     });
-  }
-
-  openSuccessMessageNotification(message: string) {
-    let config = new MatSnackBarConfig();
-    this.snackBar.open(message, '',
-      {
-        duration: Constants.SNAKBAR_SHOW_DURATION,
-        verticalPosition: "top",
-        horizontalPosition: "right",
-        extraClasses: 'custom-class-success'
-      });
-  }
-  openErrorMessageNotification(message: string) {
-    let config = new MatSnackBarConfig();
-    this.snackBar.open(message, '',
-      {
-        duration: Constants.SNAKBAR_SHOW_DURATION,
-        verticalPosition: "top",
-        horizontalPosition: "right",
-        extraClasses: 'custom-class-error'
-      });
   }
 
   SFexportToExcel() {
@@ -213,7 +215,7 @@ export class SentToSfComponent implements OnInit {
         this.excelMainData.push(
           {
             'Workflow ID': data.wfL_ID,
-            'SHP Status': this.shipmentStatusList[data.smT_STA_NR].value,
+            'SHP Status': this.shipmentStatusList[data.smT_STA_NR === null ? 4 : data.smT_STA_NR].value,
             'Package Number': data.pkG_NR_TE,
             'Receiving Company': data.rcV_CPY_TE,
             'Receiving Address': data.rcV_ADR_TE,
@@ -231,6 +233,7 @@ export class SentToSfComponent implements OnInit {
             'Origin Postal code': data.orG_PSL_CD,
             'IMP SLC': data.imP_SLC_TE,
             'COD': data.coD_TE,
+            'Extra Service': this.PODoptions[data.poD_RTN_SVC === null ? 0 : data.poD_RTN_SVC].value,
             'Payment Method': data.pyM_MTD,
             'Express Type': data.exP_TYP,
             'Slic': data.spC_SLIC_NR
@@ -240,5 +243,39 @@ export class SentToSfComponent implements OnInit {
     } else {
       this.dialogService.openAlertDialog('No data for export.');
     }    
+  }
+
+  rowDelete(index: number, rowData: any) {
+
+  }
+
+  delete() {
+    const checkedCount = this.selection.selected.length;
+    if (checkedCount <= 0) {
+      this.dialogService.openAlertDialog('Please select minimum one row to Delete.');
+    } else {
+      const dialogRef = this.dialogService.openConfirmationDialog('Are you sure, you want to delete all the selected records ?');
+
+      dialogRef.afterClosed().subscribe(data => {
+        if (data === true) {
+          const dataForDelete = this.selection.selected; // Any changes can do here for sending array
+          this.deleteData(dataForDelete);
+        } else {
+
+        }
+      })
+    }
+  }
+
+  deleteData(data: any) {
+    this.shippingService.deleteUploadedData(data).subscribe((response: any) => {
+      if (response != null && response.success === true) {
+        this.getDataForSendToSF(this.WorkflowID);
+        this.notificationService.openSuccessMessageNotification("Deleted Successfully");
+      } else {
+        this.notificationService.openErrorMessageNotification("Error while Deleting data.");
+      }
+    },
+      error => this.notificationService.openErrorMessageNotification("Error while Deleting data."));
   }
 }

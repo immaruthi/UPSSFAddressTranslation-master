@@ -11,6 +11,10 @@ namespace UPS.ServicesAsyncActions
         int CreateShipment(ShipmentDataRequest shipmentData);
         ShipmentDataResponse CreateShipments(List<ShipmentDataRequest> shipmentDataRequests);
         ShipmentDataResponse UpdateShipmentStatusById(ShipmentDataRequest shipmentDataRequest);
+        ShipmentDataResponse DeleteShipments(List<ShipmentDataRequest> shipmentDataRequests);
+        ShipmentDataResponse DeleteShipment(ShipmentDataRequest shipmentDataRequest);
         ShipmentDataResponse UpdateShipmentAddressById(ShipmentDataRequest shipmentDataRequest);
+        int? SelectShipmentTotalStatusByWorkflowId(int wid);
+        void UpdateShipmentAddressByIds(List<ShipmentDataRequest> shipmentDataRequest);
     }
 }

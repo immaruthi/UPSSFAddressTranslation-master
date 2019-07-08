@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit, Input } from '@angular/core';
 import { ShipmentDetails } from '../../models/shipmentdetails';
-import { MatPaginator, MatTableDataSource, MatDialog, MatSnackBarConfig, MatSnackBar } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatDialog, MatSnackBarConfig, MatSnackBar, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl, FormArray, FormGroup, Validators } from '@angular/forms';
 import { ShippingService } from '../../services/shipping.service';
@@ -22,7 +22,7 @@ export class CompletedComponent implements OnInit {
   displayedColumns =
     ['wfL_ID', 'smT_STA_NR', 'pkG_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'dsT_CTY_TE', 'dsT_PSL_TE',
       'csG_CTC_TE', 'pH_NR', 'fsT_INV_LN_DES_TE', 'shP_CPY_NA', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE',  'orG_CTY_TE', 'orG_PSL_CD',
-     'imP_SLC_TE', 'coD_TE', 'pyM_MTD', 'exP_TYP', 'spC_SLIC_NR'
+      'imP_SLC_TE', 'coD_TE', 'poD_RTN_SVC', 'pyM_MTD', 'exP_TYP', 'spC_SLIC_NR'
     ];
   private eventsSubscription: any;
   @Input() events: Observable<void>;
@@ -30,6 +30,7 @@ export class CompletedComponent implements OnInit {
   public ResponseData: any[] = [];
   public WorkflowID: any;
   public shipmentStatusList = Constants.ShipmentStatusList;
+  public PODoptions = Constants.PODoptions;
   dataSource = new MatTableDataSource<Element>();
   public errorMessage: string;
   selection = new SelectionModel<any>(true, []);
@@ -37,6 +38,7 @@ export class CompletedComponent implements OnInit {
   public checkedData: any[] = [];
   public tableData: any[] = [];
   public excelMainData: any[] = [];
+  filterText: string = '';
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
     private router: Router, public dialog: MatDialog, public dataService: DataService,
@@ -45,6 +47,7 @@ export class CompletedComponent implements OnInit {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   /**
   * Set the paginator after the view init since this component will
@@ -52,6 +55,7 @@ export class CompletedComponent implements OnInit {
   */
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   ngOnInit() {
@@ -79,11 +83,14 @@ export class CompletedComponent implements OnInit {
       }
       this.dataSource.data = this.ResponseData;
       this.dataSource.paginator = this.paginator;
-
+      this.dataSource.sort = this.sort;
+      this.filterText = '';
+      this.applyFilter('');
     }, error => (this.errorMessage = <any>error));
   }
 
   applyFilter(filterValue: string) {
+    this.filterText = filterValue;
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
@@ -98,7 +105,7 @@ export class CompletedComponent implements OnInit {
         this.excelMainData.push(
           {
             'Workflow ID': data.wfL_ID,
-            'SHP Status': this.shipmentStatusList[data.smT_STA_NR].value,
+            'SHP Status': this.shipmentStatusList[data.smT_STA_NR === null ? 4 : data.smT_STA_NR].value,
             'Package Number': data.pkG_NR_TE,
             'Receiving Company': data.rcV_CPY_TE,
             'Receiving Address': data.rcV_ADR_TE,
@@ -116,6 +123,7 @@ export class CompletedComponent implements OnInit {
             'Origin Postal code': data.orG_PSL_CD,
             'IMP SLC': data.imP_SLC_TE,
             'COD': data.coD_TE,
+            'Extra Service': this.PODoptions[data.poD_RTN_SVC === null ? 0 : data.poD_RTN_SVC].value,
             'Payment Method': data.pyM_MTD,
             'Express Type': data.exP_TYP,
             'Slic': data.spC_SLIC_NR

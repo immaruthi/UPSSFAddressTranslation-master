@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 using UPS.DataObjects.Shipment;
 using UPS.DataObjects.UserData;
@@ -14,7 +15,14 @@ namespace UPS.ServicesDataRepository
     public class ShipmentService : IShipmentAsync
     {
         private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
+        private readonly ApplicationDbContext context;
+        private IAddressBookService addressBookService;
 
+        public ShipmentService(ApplicationDbContext applicationDbContext, IAddressBookService addressBookService)
+        {
+            this.context = applicationDbContext;
+            this.addressBookService = addressBookService;
+        }
         public List<ShipmentDataRequest> GetShipment(int workflowID)
         {
             optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
@@ -80,7 +88,8 @@ namespace UPS.ServicesDataRepository
                                 s.SMT_WGT_DE,
                                 s.SPC_SLIC_NR,
                                 s.SVL_NR,
-                                s.WGT_UNT_TE
+                                s.WGT_UNT_TE,
+                                s.POD_RTN_SVC
                             }).ToList();
 
                     foreach (var shipmentData in anonymousList)
@@ -154,6 +163,7 @@ namespace UPS.ServicesDataRepository
                         shipmentDataRequest.ACY_TE = shipmentData.ACY_TE;
                         shipmentDataRequest.CON_NR = shipmentData.CON_NR;
                         shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
+                        shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
 
                         shipmentDataRequests.Add(shipmentDataRequest);
                     }
@@ -218,6 +228,7 @@ namespace UPS.ServicesDataRepository
                 shipmentDataRequest.ACY_TE = shipmentData.ACY_TE;
                 shipmentDataRequest.CON_NR = shipmentData.CON_NR;
                 shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
+                shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
                 context.shipmentDataRequests.Add(shipmentDataRequest);
                 context.Entry(shipmentDataRequest).State = EntityState.Added;
                 context.SaveChanges();
@@ -235,63 +246,11 @@ namespace UPS.ServicesDataRepository
 
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
                 {
-                    foreach (ShipmentDataRequest Data in shipmentData)
-                    {
-                        ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
-                        shipmentDataRequest.BIL_TYP_TE = Data.BIL_TYP_TE;
-                        shipmentDataRequest.CCY_VAL_TE = Data.CCY_VAL_TE;
-                        shipmentDataRequest.COD_TE = Data.COD_TE;
-                        shipmentDataRequest.CSG_CTC_TE = Data.CSG_CTC_TE;
-                        shipmentDataRequest.DIM_WGT_DE = Data.DIM_WGT_DE;
-                        shipmentDataRequest.DST_CTY_TE = Data.DST_CTY_TE;
-                        shipmentDataRequest.DST_PSL_TE = Data.DST_PSL_TE;
-                        shipmentDataRequest.EXP_SLC_CD = Data.EXP_SLC_CD;
-                        shipmentDataRequest.EXP_TYP = Data.EXP_TYP;
-                        shipmentDataRequest.FST_INV_LN_DES_TE = Data.FST_INV_LN_DES_TE;
-                        shipmentDataRequest.IMP_NR = Data.IMP_NR;
-                        shipmentDataRequest.IMP_SLC_TE = Data.IMP_SLC_TE;
-                        shipmentDataRequest.IN_FLG_TE = Data.IN_FLG_TE;
-                        shipmentDataRequest.ORG_CTY_TE = Data.ORG_CTY_TE;
-                        shipmentDataRequest.ORG_PSL_CD = Data.ORG_PSL_CD;
-                        shipmentDataRequest.OU_FLG_TE = Data.OU_FLG_TE;
-                        shipmentDataRequest.PCS_QTY_NR = Data.PCS_QTY_NR;
-                        shipmentDataRequest.PH_NR = Data.PH_NR;
-                        shipmentDataRequest.PKG_NR_TE = Data.PKG_NR_TE;
-                        shipmentDataRequest.PKG_WGT_DE = Data.PKG_WGT_DE;
-                        shipmentDataRequest.PK_UP_TM = null; //Data.PK_UP_TM;
-                        shipmentDataRequest.PYM_MTD = Data.PYM_MTD;
-                        shipmentDataRequest.PY_MT_TE = Data.PY_MT_TE;
-                        shipmentDataRequest.QQS_TRA_LG_ID = Data.QQS_TRA_LG_ID;
-                        shipmentDataRequest.RCV_ADR_TE = Data.RCV_ADR_TE;
-                        shipmentDataRequest.RCV_CPY_TE = Data.RCV_CPY_TE;
-                        shipmentDataRequest.SF_TRA_LG_ID = Data.SF_TRA_LG_ID;
-                        shipmentDataRequest.SHP_ADR_TE = Data.SHP_ADR_TE;
-                        shipmentDataRequest.SHP_ADR_TR_TE = Data.SHP_ADR_TR_TE;
-                        shipmentDataRequest.SHP_CPY_NA = Data.SHP_CPY_NA;
-                        shipmentDataRequest.SHP_CTC_TE = Data.SHP_CTC_TE;
-                        shipmentDataRequest.SHP_DT = null; //Data.SHP_DT;
-                        shipmentDataRequest.SHP_NR = Data.SHP_NR;
-                        shipmentDataRequest.SHP_PH_TE = Data.SHP_PH_TE;
-                        shipmentDataRequest.SMT_NR_TE = Data.SMT_NR_TE;
-                        shipmentDataRequest.SMT_STA_NR = Data.SMT_STA_NR;
-                        shipmentDataRequest.SMT_VAL_DE = Data.SMT_VAL_DE;
-                        shipmentDataRequest.SMT_WGT_DE = Data.SMT_WGT_DE;
-                        shipmentDataRequest.SVL_NR = Data.SVL_NR;
-                        shipmentDataRequest.WFL_ID = Data.WFL_ID;
-                        shipmentDataRequest.WGT_UNT_TE = Data.WGT_UNT_TE;
-                        context.shipmentDataRequests.Add(shipmentDataRequest);
-                        context.Entry(shipmentDataRequest).State = EntityState.Added;
-                    }
-
-                    context.SaveChanges();
+                    context.BulkInsert(shipmentData);
                     shipmentDataResponse.Shipments = shipmentData; //context.shipmentDataRequests.ToList();
                     shipmentDataResponse.Success = true;
                     return shipmentDataResponse;
-
-
                 }
-
-                //return shipmentDataResponse;
             }
             catch(Exception exception)
             {
@@ -331,7 +290,10 @@ namespace UPS.ServicesDataRepository
 
         public int? SelectShipmentTotalStatusByWorkflowId(int wid)
         {
-            int? i = 0;
+            int? result = 0;
+            decimal? i = 0;
+            decimal? count = 1;
+            decimal? avg = 0; 
             try
             {
                 optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
@@ -339,13 +301,19 @@ namespace UPS.ServicesDataRepository
 
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
                 {
-                    i = context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid).Min(s => s.SMT_STA_NR);
-                    return i;
+                    i = context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid).Sum(s => s.SMT_STA_NR);
+                    count = context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid).Count();
+                    i = i ?? 0;
+                    count = count ?? 1;
+                    avg = i / count;
+                    avg = Math.Round(avg.Value);
+                    result = Convert.ToInt32(avg);
+                    return result ?? 0;
                 }
             }
             catch
             {
-                return i;
+                return result;
             }
         }
 
@@ -366,6 +334,7 @@ namespace UPS.ServicesDataRepository
 
                     data.SHP_ADR_TR_TE = shipmentDataRequest.SHP_ADR_TR_TE;
                     data.COD_TE = shipmentDataRequest.COD_TE;
+                    data.POD_RTN_SVC = shipmentDataRequest.POD_RTN_SVC;
                     data.SMT_STA_NR = shipmentStaus;
                     context.shipmentDataRequests.Update(data);
                     context.Entry(shipmentDataRequest).State = EntityState.Detached;
@@ -382,8 +351,60 @@ namespace UPS.ServicesDataRepository
             }
             return shipmentDataResponse;
         }
+        public void UpdateShipmentAddressByIds(List<ShipmentDataRequest> shipmentDataRequest)
+        {
+            try
+            { 
+                context.BulkUpdate(shipmentDataRequest);
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        }
+        //public ShipmentDataResponse UpdateShipmentAddressByIds(List<ShipmentDataRequest> shipmentDataRequest)
+        //{
+        //    ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
+        //    try
+        //    {
+        //        optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
-        public ShipmentDataResponse UpdateShipmentAddressByIds(List<ShipmentDataRequest> shipmentDataRequest)
+
+        //        optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+        //        var context = new ApplicationDbContext(optionsBuilder.Options);
+
+        //        List<ShipmentDataRequest> shipmentDetailsToUpdate = new List<ShipmentDataRequest>();
+        //        foreach (ShipmentDataRequest request in shipmentDataRequest)
+        //        {
+        //            ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == request.ID).FirstOrDefault();
+        //            data.ID = request.ID;
+        //            data.WFL_ID = request.WFL_ID;
+        //            data.SHP_ADR_TR_TE = request.SHP_ADR_TR_TE;
+        //            data.SMT_STA_NR = request.SMT_STA_NR;
+        //            data.ACY_TE = request.ACY_TE;
+        //            data.CON_NR = request.CON_NR;
+        //            data.POD_RTN_SVC = request.POD_RTN_SVC;
+        //            shipmentDetailsToUpdate.Add(data);
+        //            //context.shipmentDataRequests.Update(data);
+        //            //context.Entry(request).State = EntityState.Detached;
+        //            //context.SaveChanges();
+        //            shipmentDataResponse.Shipments = context.shipmentDataRequests;
+        //        }
+        //        context.BulkUpdate(shipmentDetailsToUpdate);
+        //        //shipmentDataResponse.Shipments = context.shipmentDataRequests;
+        //        shipmentDataResponse.Success = true;
+        //        return shipmentDataResponse;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        shipmentDataResponse.Success = false;
+        //        shipmentDataResponse.OperationExceptionMsg = ex.Message;
+        //    }
+        //    return shipmentDataResponse;
+        //}
+
+        public ShipmentDataResponse DeleteShipments(List<ShipmentDataRequest> shipmentDataRequest)
         {
             ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
             try
@@ -398,16 +419,9 @@ namespace UPS.ServicesDataRepository
                 foreach (ShipmentDataRequest request in shipmentDataRequest)
                 {
                     ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == request.ID).FirstOrDefault();
-                    data.ID = request.ID;
-                    data.WFL_ID = request.WFL_ID;
-                    data.SHP_ADR_TR_TE = request.SHP_ADR_TR_TE;
-                    data.SMT_STA_NR = request.SMT_STA_NR;
-                    data.ACY_TE = request.ACY_TE;
-                    data.CON_NR = request.CON_NR;
-                    context.shipmentDataRequests.Update(data);
+                    context.shipmentDataRequests.Remove(data);
                     context.Entry(request).State = EntityState.Detached;
                     context.SaveChanges();
-                    shipmentDataResponse.Shipments = context.shipmentDataRequests;
                 }
                 shipmentDataResponse.Success = true;
                 return shipmentDataResponse;
@@ -420,5 +434,32 @@ namespace UPS.ServicesDataRepository
             return shipmentDataResponse;
         }
 
+        public ShipmentDataResponse DeleteShipment(ShipmentDataRequest shipmentDataRequest)
+        {
+            ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
+            try
+            {
+                optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+
+                optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+                var context = new ApplicationDbContext(optionsBuilder.Options);
+
+                ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == shipmentDataRequest.ID).FirstOrDefault();
+                context.shipmentDataRequests.Remove(data);
+                context.Entry(shipmentDataRequest).State = EntityState.Deleted;
+                context.SaveChanges();
+                shipmentDataResponse.Shipments = context.shipmentDataRequests;
+                shipmentDataResponse.Success = true;
+                return shipmentDataResponse;
+            }
+            catch (Exception ex)
+            {
+                shipmentDataResponse.Success = false;
+                shipmentDataResponse.OperationExceptionMsg = ex.Message;
+            }
+            return shipmentDataResponse;
+        }
     }
 }

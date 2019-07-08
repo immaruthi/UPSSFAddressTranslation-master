@@ -1,12 +1,12 @@
 .table-div {
   width: 100%;
-  height: 435px;
+  height: calc(100vh - 325px);
   overflow: auto;
 }
 
 mat-table {
   width: 100%;
-  min-width: 4000px;
+  min-width: 4200px;
   padding: 0;
 }
 

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { MatPaginator, MatTableDataSource, MatSnackBar, MatSnackBarConfig, MatProgressSpinner } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatSnackBar, MatSnackBarConfig, MatProgressSpinner, MatSort } from '@angular/material';
 import { UserService } from '../services/UserService';
 import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';  
@@ -8,6 +8,7 @@ import { FormControl } from '@angular/forms';
 import { LoaderService } from '../shared/loader/loader.service';
 import { List } from 'linq-typescript';
 import { Constants } from '../shared/Constants';
+import { NotificationService } from '../services/NotificationService';
 
 
 
@@ -43,16 +44,13 @@ export class WorkflowComponent {
   constructor(
     private userService: UserService,
     private _loaderService: LoaderService,
-    private snackBar: MatSnackBar) {
+    private snackBar: MatSnackBar,
+    private notificationService: NotificationService) {
 
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-
-  //set paginator(value: MatPaginator) {
-  //  this.dataSource.paginator = value;
-  //}
-
+  @ViewChild(MatSort) sort: MatSort;
 
   /**
   * Set the paginator after the view init since this component will
@@ -60,6 +58,7 @@ export class WorkflowComponent {
   */
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   ngOnInit() {
@@ -74,31 +73,12 @@ export class WorkflowComponent {
 
         this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
 
       },
         error => console.log(error));
   }
-  openSuccessMessageNotification(message: string) {
-    let config = new MatSnackBarConfig();
-    this.snackBar.open(message, '',
-      {
-        duration: Constants.SNAKBAR_SHOW_DURATION,
-        verticalPosition: "top",
-        horizontalPosition: "right",
-        extraClasses:'custom-class-success'
-      });
-  }
-  openErrorMessageNotification(message: string) {
-    let config = new MatSnackBarConfig();
-    this.snackBar.open(message, '',
-      {
-        duration: Constants.SNAKBAR_SHOW_DURATION,
-        verticalPosition: "top",
-        horizontalPosition: "right",
-        extraClasses: 'custom-class-error'
-      });
-  }
-
+  
   applyFilter(filterValue: string) {
     this.filterText = filterValue;
     filterValue = filterValue.trim(); // Remove whitespace
@@ -142,18 +122,18 @@ export class WorkflowComponent {
         .subscribe((response: any) => {
           if (response.success === true) {
             this.getWorkflowDetails();
-            this.openSuccessMessageNotification("File Uploaded successfully");
+            this.notificationService.openSuccessMessageNotification("File Uploaded successfully");
             this.resetFileUpload();
           } else if (response.success === false) {
             if (response.exception) {
-              this.openErrorMessageNotification(response.exception.Message);
+              this.notificationService.openErrorMessageNotification(response.exception.Message);
               this.resetFileUpload();
             }
           }
         },
         error =>
         {
-          this.openErrorMessageNotification("Error while uploading file");
+          this.notificationService.openErrorMessageNotification("Error while uploading file");
           this.resetFileUpload();
         }
       );

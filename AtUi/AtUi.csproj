@@ -54,6 +54,7 @@
     <None Remove="ClientApp\src\app\services\file.ts" />
     <None Remove="ClientApp\src\app\services\HomeService.ts" />
     <None Remove="ClientApp\src\app\services\LoginGuard.ts" />
+    <None Remove="ClientApp\src\app\services\NotificationService.ts" />
     <None Remove="ClientApp\src\app\services\shipping.service.ts" />
     <None Remove="ClientApp\src\app\services\WorkflowService.ts" />
     <None Remove="ClientApp\src\app\shared\Constants.ts" />
@@ -77,6 +78,7 @@
     <TypeScriptCompile Include="ClientApp\src\app\services\ExcelExport.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\HomeService.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\LoginGuard.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\NotificationService.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\shipping.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\WorkflowService.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\shared\Constants.ts" />
@@ -84,6 +86,12 @@
     <TypeScriptCompile Include="ClientApp\src\app\shared\MaterialModule.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\workflow\workflow.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\workflow\workflow.component.spec.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

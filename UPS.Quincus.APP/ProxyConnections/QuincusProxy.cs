@@ -1,8 +1,11 @@
 ﻿namespace UPS.Quincus.APP.ProxyConnections
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Net;
+    using System.Net.Cache;
     using Newtonsoft.Json;
     using UPS.Quincus.APP.Common;
     using UPS.Quincus.APP.Configuration;
@@ -10,7 +13,7 @@
     using UPS.Quincus.APP.Response;
     using UPS.Quincus.APP.Utilities;
 
-    public class QuincusProxy
+    public static class QuincusProxy
     {
         public static QuincusTokenDataResponse GetToken(QuincusParams quincusParams)
         {
@@ -42,6 +45,7 @@
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
                     response = streamReader.ReadToEnd();
+                    streamReader.Close();
                 }
 
                 if (!string.IsNullOrWhiteSpace(response))
@@ -50,8 +54,10 @@
                     quincusTokenDataResponse.ResponseStatus = true;
                 }
 
+                httpResponse.Close();
+
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 quincusTokenDataResponse.exception = exception;
             }
@@ -59,6 +65,14 @@
             return quincusTokenDataResponse;
         }
 
+        public static List<List<T>> ChunkBy<T>(this List<T> source, int chunkSize)
+        {
+            return source
+                .Select((x, i) => new { Index = i, Value = x })
+                .GroupBy(x => x.Index / chunkSize)
+                .Select(x => x.Select(v => v.Value).ToList())
+                .ToList();
+        }
 
         public static QuincusTranslatedAddressResponse GetTranslatedAddressResponse(IQuincusAddressTranslationRequest quincusAddressTranslationRequest)
         {
@@ -67,14 +81,15 @@
 
             try
             {
+                quincusTranslatedAddressResponse.RequestDataCount = quincusAddressTranslationRequest.shipmentWorkFlowRequests.Count;
+
                 string content = GetRequestContextForAddress.GetAddressStringFromRequest(quincusAddressTranslationRequest.shipmentWorkFlowRequests);
 
                 if (!string.IsNullOrWhiteSpace(content))
                 {
-
                     var httpWebRequest = (HttpWebRequest)WebRequest.Create(
                         quincusAddressTranslationRequest.endpoint);
-                    if (string.Equals(MapProxy.WebProxyEnable,true.ToString(),StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(MapProxy.WebProxyEnable, true.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
                         WebProxy myProxy = new WebProxy(MapProxy.webProxyURI, false, null, new NetworkCredential(MapProxy.webProxyUsername, MapProxy.webProxyPassword));
 
@@ -99,7 +114,11 @@
                     using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                     {
                         response = streamReader.ReadToEnd();
+
+                        streamReader.Close();
                     }
+
+                    httpResponse.Close();
 
                     quincusTranslatedAddressResponse.ResponseData = JsonConvert.DeserializeObject<GetBatchResponseForAddressTranslation>(response);
                     quincusTranslatedAddressResponse.Response = true;
@@ -109,32 +128,68 @@
 
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 quincusTranslatedAddressResponse.exception = exception;
             }
 
-            return quincusTranslatedAddressResponse;            
+            return quincusTranslatedAddressResponse;
         }
 
-        public static QuincusResponse GetQuincusResponse(QuincusGeoCodeDataRequest quincusGeoCodeDataRequest)
+        public static QuincusResponse GetQuincusResponse(QuincusGeoCodeDataRequest quincusGeoCodeDataRequest, decimal shipmentsCount)
         {
+            bool retryflag = true;
+            int retryCount = 0;
             QuincusResponse quincusResponse = new QuincusResponse();
+            HttpWebResponse httpResponse = null;
+            int sleepTime = 5000;
 
+            int maxRetryCount = Convert.ToInt32(Math.Round(shipmentsCount / 1.5m));
             try
             {
-                var httpWebRequest = (HttpWebRequest)WebRequest.Create(
-                    quincusGeoCodeDataRequest.endpoint + quincusGeoCodeDataRequest.id + "/");
-                if (string.Equals(MapProxy.WebProxyEnable, true.ToString(), StringComparison.OrdinalIgnoreCase))
-                {
-                    WebProxy myProxy = new WebProxy(MapProxy.webProxyURI, false, null, new NetworkCredential(MapProxy.webProxyUsername, MapProxy.webProxyPassword));
-                    httpWebRequest.Proxy = myProxy;
-                }
+                //while (retryflag && retryCount <= maxRetryCount)
+                //{
 
-                httpWebRequest.ContentType = "application/json";
-                httpWebRequest.Headers.Add("AUTHORIZATION", "JWT " + quincusGeoCodeDataRequest.quincusTokenData.token);
-                httpWebRequest.Method = "GET";
-                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                    HttpRequestCachePolicy requestCachePolicy =
+                            new HttpRequestCachePolicy(HttpRequestCacheLevel.Default);
+
+                    HttpWebRequest.DefaultCachePolicy = requestCachePolicy;
+
+                    var httpWebRequest = (HttpWebRequest)WebRequest.Create(
+                        quincusGeoCodeDataRequest.endpoint + quincusGeoCodeDataRequest.id + "/");
+
+                    HttpRequestCachePolicy noCachePolicy =
+                        new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
+
+                    httpWebRequest.CachePolicy = noCachePolicy;
+
+                    if (string.Equals(MapProxy.WebProxyEnable, true.ToString(), StringComparison.OrdinalIgnoreCase))
+                    {
+                        WebProxy myProxy = new WebProxy(MapProxy.webProxyURI, false, null, new NetworkCredential(MapProxy.webProxyUsername, MapProxy.webProxyPassword));
+                        httpWebRequest.Proxy = myProxy;
+                    }
+
+                    httpWebRequest.ContentType = "application/json";
+                    httpWebRequest.Headers.Add("AUTHORIZATION", "JWT " + quincusGeoCodeDataRequest.quincusTokenData.token);
+                    httpWebRequest.Method = "GET";
+                    httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+
+                    //if (string.Equals(httpResponse.StatusDescription, "No Content", StringComparison.OrdinalIgnoreCase))
+                    //{
+                    //    retryCount++;
+                    //    //if (retryCount == maxRetryCount)
+                    //    //{
+                    //    sleepTime = Convert.ToInt32(Math.Round(1000m * 1.8m * shipmentsCount));
+                    //    //}
+
+                    //    System.Threading.Thread.Sleep(sleepTime);
+                    //}
+                    //else
+                    //{
+                    //    retryflag = false;
+                    //}
+                //}
+
                 string response;
 
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
@@ -148,7 +203,7 @@
                     quincusResponse.ResponseStatus = true;
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 quincusResponse.Exception = exception;
             }

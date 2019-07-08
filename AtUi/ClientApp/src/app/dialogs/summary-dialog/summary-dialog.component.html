@@ -1,28 +1,77 @@
 <div>
-  <div>
-    <h1 style="text-align: center"> Summary </h1>
+  <div *ngIf="data.message.screenFrom === 'SendToSF'">
+    <h1 style="text-align: center"> Send To SF Summary </h1>
     <br />
     <div>
       <span class="content-span full-width">Processed Shipments to SF : {{data.message.successCount}}</span>
       <br />
-      <div *ngIf="data.message.successCount > 0" style="padding:0px 0px 0px 30px; height: 150px; overflow:auto">
-        <div *ngFor="let SuccessList of data.message.successList; let i = index">
-          <label > {{SuccessList}} </label>
-        </div>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let SuccessList of data.message.successList; let i = index">
+              <td> {{i+1}} </td>
+              <td> {{SuccessList}} </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
     <br />
     <div>
       <span class="content-span full-width">Failed Shipments to SF : {{data.message.failedCount}}</span>
       <br />
-      <div *ngIf="data.message.failedCount > 0" style="padding:0px 0px 0px 30px; height: 150px; overflow:auto">
-        <div *ngFor="let FailList of data.message.failedList; let i = index">
-          <label> {{FailList}} </label>
-        </div>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let FailList of data.message.failedList; let i = index">
+              <td> {{i+1}} </td>
+              <td> {{FailList}} </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+      
     </div>
   </div>
-
+  <div *ngIf="data.message.screenFrom === 'Translate'">
+    <h1 style="text-align: center"> Translate Summary </h1>
+    <br />
+    <div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Process Details</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td> Sucess </td>
+            <td>{{data.message.successCount}}</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td> No Address Returned</td>
+            <td>{{data.message.emptyCount}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
   <div>
     <button mat-flat-button id="okay-button" [mat-dialog-close]="true">Ok</button>
   </div>

@@ -12,6 +12,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using UPS.Quincus.APP.Common;
 using UPS.Quincus.APP.Request;
+using UPS.ServicesAsyncActions;
+using UPS.ServicesDataRepository;
 using UPS.ServicesDataRepository.DataContext;
 using UPS.ServicesDataRepository.OverrideDbContext;
 
@@ -45,6 +47,9 @@ namespace UPS.AddressTranslationService
 
             services.AddSingleton<IQuincusAddressTranslationRequest>(new QuincusAddressTranslationRequest() { endpoint = Configuration["Quincus:GeoCodeEndPoint"] });
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
+
+            services.AddTransient<IShipmentAsync, ShipmentService>();
+            services.AddTransient<IAddressBookService, AddressBookService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddSwaggerGen(c =>

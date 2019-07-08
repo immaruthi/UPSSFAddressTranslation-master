@@ -21,7 +21,6 @@
             List<ShipmentDataRequest> shipmentDataRequests = null;
             try
             {
-              
                 optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
@@ -74,14 +73,15 @@
                                 SHP_CTC_TE = c.SPC_NA,
                                 s.SHP_DT,
                                 s.SHP_NR,
-                                SHP_PH_TE = c.SPC_CTC_PH,
+                                SHP_PH_TE = c.SPC_SND_PTY_CTC_TE,
                                 s.SMT_NR_TE,
                                 s.SMT_STA_NR,
                                 s.SMT_VAL_DE,
                                 s.SMT_WGT_DE,
                                 SPC_SLIC_NR = c.SPC_SLIC_NR,
                                 s.SVL_NR,
-                                s.WGT_UNT_TE
+                                s.WGT_UNT_TE,
+                                s.POD_RTN_SVC
                             }).ToList();
 
                     foreach (var shipmentData in anonymousList)
@@ -124,7 +124,7 @@
                         shipmentDataRequest.SHP_PH_TE = shipmentData.SHP_PH_TE;
                         shipmentDataRequest.SMT_NR_TE = shipmentData.SMT_NR_TE;
                         shipmentDataRequest.SMT_STA_NR = shipmentData.SMT_STA_NR;
-                            
+
                         switch (shipmentDataRequest.SMT_STA_NR)
                         {
                             case 0:
@@ -155,6 +155,7 @@
                         shipmentDataRequest.ACY_TE = shipmentData.ACY_TE;
                         shipmentDataRequest.CON_NR = shipmentData.CON_NR;
                         shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
+                        shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
 
                         shipmentDataRequests.Add(shipmentDataRequest);
                     }
@@ -229,14 +230,15 @@
                                 SHP_CTC_TE = c.SPC_NA,
                                 s.SHP_DT,
                                 s.SHP_NR,
-                                SHP_PH_TE = c.SPC_CTC_PH,
+                                SHP_PH_TE = c.SPC_SND_PTY_CTC_TE,
                                 s.SMT_NR_TE,
                                 s.SMT_STA_NR,
                                 s.SMT_VAL_DE,
                                 s.SMT_WGT_DE,
                                 SPC_SLIC_NR = c.SPC_SLIC_NR,
                                 s.SVL_NR,
-                                s.WGT_UNT_TE
+                                s.WGT_UNT_TE,
+                                s.POD_RTN_SVC
                             }).ToList();
 
                     foreach (var shipmentData in anonymousList)
@@ -310,6 +312,7 @@
                         shipmentDataRequest.ACY_TE = shipmentData.ACY_TE;
                         shipmentDataRequest.CON_NR = shipmentData.CON_NR;
                         shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
+                        shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
 
                         shipmentDataRequests.Add(shipmentDataRequest);
                     }
