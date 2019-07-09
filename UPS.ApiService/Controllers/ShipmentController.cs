@@ -530,48 +530,52 @@ namespace AtService.Controllers
 
                     if (QuincusResponse.ResponseStatus)
                     {
-                        List<Geocode> geocodes = (List<Geocode>)((QuincusReponseData)QuincusResponse.QuincusReponseDataList[0]).geocode;
-                        List<ShipmentDataRequest> shipmentDataRequestList = new List<ShipmentDataRequest>(geocodes.Count);
-
-                        foreach (Geocode geocode in geocodes)
+                        QuincusResponse.QuincusReponseDataList.ForEach(datalist =>
                         {
-                            ShipmentDataRequest shipmentDataRequest =
-                                _shipmentDataRequest.FirstOrDefault(_=>_.ID== Convert.ToInt32(geocode.id));
-                            shipmentDataRequest.SHP_ADR_TR_TE = geocode.translated_adddress;
-                            shipmentDataRequest.ACY_TE = geocode.accuracy;
-                            shipmentDataRequest.CON_NR = geocode.confidence;
+                            List<Geocode> geocodes = (List<Geocode>)((QuincusReponseData)datalist).geocode;
+                            List<ShipmentDataRequest> shipmentDataRequestList = new List<ShipmentDataRequest>(geocodes.Count);
 
-                            if (
-                                        !string.IsNullOrEmpty(geocode.translated_adddress)
-                                    &&  geocode.translated_adddress != "NA"
-                                    &&  !string.Equals(_shipmentDataRequest.Where(s => s.ID == Convert.ToInt32(geocode.id)).FirstOrDefault().RCV_ADR_TE.Trim(),
-                                        geocode.translated_adddress.Trim())
-                               )
+                            foreach (Geocode geocode in geocodes)
                             {
-                                shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Translated);
+                                ShipmentDataRequest shipmentDataRequest =
+                                    _shipmentDataRequest.FirstOrDefault(_ => _.ID == Convert.ToInt32(geocode.id));
+                                shipmentDataRequest.SHP_ADR_TR_TE = geocode.translated_adddress;
+                                shipmentDataRequest.ACY_TE = geocode.accuracy;
+                                shipmentDataRequest.CON_NR = geocode.confidence;
+
+                                if (
+                                            !string.IsNullOrEmpty(geocode.translated_adddress)
+                                        && geocode.translated_adddress != "NA"
+                                        && !string.Equals(_shipmentDataRequest.Where(s => s.ID == Convert.ToInt32(geocode.id)).FirstOrDefault().RCV_ADR_TE.Trim(),
+                                            geocode.translated_adddress.Trim())
+                                   )
+                                {
+                                    shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Translated);
+                                }
+                                else
+                                {
+                                    shipmentDataRequest.SMT_STA_NR = Convert.ToInt32(_shipmentDataRequest.Where(s => s.ID == shipmentDataRequest.ID).FirstOrDefault().SMT_STA_NR);
+                                }
+
+                                shipmentDataRequestList.Add(shipmentDataRequest);
                             }
-                            else
-                            {
-                                shipmentDataRequest.SMT_STA_NR = Convert.ToInt32(_shipmentDataRequest.Where(s => s.ID == shipmentDataRequest.ID).FirstOrDefault().SMT_STA_NR);
-                            }
+                            shipmentService.UpdateShipmentAddressByIds(shipmentDataRequestList);
 
-                            shipmentDataRequestList.Add(shipmentDataRequest);
-                        }
-                        shipmentService.UpdateShipmentAddressByIds(shipmentDataRequestList);
-
-                        //we need to update the workflow status
-                        int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);
-                        WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
-                        workflowDataRequest.ID = _workflowID;
-                        workflowDataRequest.WFL_STA_TE = workflowstatus;
-                        workflowService.UpdateWorkflowStatusById(workflowDataRequest);
-
+                            //we need to update the workflow status
+                            int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);
+                            WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
+                            workflowDataRequest.ID = _workflowID;
+                            workflowDataRequest.WFL_STA_TE = workflowstatus;
+                            workflowService.UpdateWorkflowStatusById(workflowDataRequest);
+                        });
+                       
                         return Ok(QuincusResponse.QuincusReponseDataList);
                     }
                     else
                     {
                         return Ok(QuincusResponse.Exception);
                     }
+                
                 }
                 else
                 {

@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Net;
     using System.Net.Cache;
+    using System.Threading.Tasks;
     using Newtonsoft.Json;
     using UPS.Quincus.APP.Common;
     using UPS.Quincus.APP.Configuration;
@@ -143,9 +144,56 @@
             quincusResponse.QuincusReponseDataList = new List<QuincusReponseData>();
             try
             {
-                foreach(var requestData in quincusGeoCodeDataRequest.batchIDList)
+
+                List<string> webRequestURLS = new List<string>();
+
+                quincusGeoCodeDataRequest.batchIDList.ForEach(requestID =>
                 {
-                    System.Threading.Thread.Sleep(3000);
+                    webRequestURLS.Add(quincusGeoCodeDataRequest.endpoint + requestID);
+                });
+
+                //Parallel.ForEach(webRequestURLS, urls =>
+                // {
+                //     var httpWebRequest = (HttpWebRequest)WebRequest.Create(urls);
+
+                //     HttpRequestCachePolicy noCachePolicy =
+                //         new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
+
+                //     httpWebRequest.CachePolicy = noCachePolicy;
+
+                //     if (string.Equals(MapProxy.WebProxyEnable, true.ToString(), StringComparison.OrdinalIgnoreCase))
+                //     {
+                //         WebProxy myProxy = new WebProxy(MapProxy.webProxyURI, false, null, new NetworkCredential(MapProxy.webProxyUsername, MapProxy.webProxyPassword));
+                //         httpWebRequest.Proxy = myProxy;
+                //     }
+
+                //     httpWebRequest.ContentType = "application/json";
+                //     httpWebRequest.Headers.Add("AUTHORIZATION", "JWT " + quincusGeoCodeDataRequest.quincusTokenData.token);
+                //     httpWebRequest.Method = "GET";
+                //     httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+
+                //     string response;
+
+                //     using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                //     {
+                //         response = streamReader.ReadToEnd();
+                //         streamReader.Close();
+                //     }
+
+                //     if (!string.IsNullOrEmpty(response))
+                //     {
+                //         quincusResponse.QuincusReponseDataList.Add(Newtonsoft.Json.JsonConvert.DeserializeObject<QuincusReponseData>(response));
+                //         quincusResponse.ResponseStatus = true;
+                //     }
+
+                //     httpResponse.Close();
+                // });
+
+                //var intermediateResponse = quincusResponse.QuincusReponseDataList;
+
+                quincusGeoCodeDataRequest.batchIDList.ForEach(requestData =>
+                {
+                    System.Threading.Thread.Sleep(5000);
                     HttpRequestCachePolicy requestCachePolicy =
                             new HttpRequestCachePolicy(HttpRequestCacheLevel.Default);
 
@@ -168,6 +216,7 @@
                     httpWebRequest.ContentType = "application/json";
                     httpWebRequest.Headers.Add("AUTHORIZATION", "JWT " + quincusGeoCodeDataRequest.quincusTokenData.token);
                     httpWebRequest.Method = "GET";
+                    httpWebRequest.Timeout = 60000;
                     httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
 
                     string response;
@@ -185,8 +234,9 @@
                     }
 
                     httpResponse.Close();
-
-                }
+                    httpResponse.Dispose();
+                    httpWebRequest.Abort();
+                });
             }
             catch (Exception exception)
             {
