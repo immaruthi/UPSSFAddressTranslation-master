@@ -6,6 +6,6 @@ namespace UPS.DataObjects.Shipment
 {
     public class ShipmentGeoCodes
     {
-        public string geoCode { get; set; }
+        public List<string> geoCode { get; set; }
     }
 }

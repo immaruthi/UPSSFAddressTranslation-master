@@ -509,18 +509,27 @@ namespace AtService.Controllers
                 {
                     var getAddressTranslation = quincusTranslatedAddressResponse.ResponseData;
 
-                    GoToSleep(quincusTranslatedAddressResponse);
+                    //GoToSleep(quincusTranslatedAddressResponse);
+
+                    System.Threading.Thread.Sleep(5000);
+
+                    List<string> batchIds = new List<string>();
+
+                    quincusTranslatedAddressResponse.ResponseData.ForEach(batches =>
+                    {
+                        batchIds.Add(batches.batch_id);
+                    });
 
                     var QuincusResponse = QuincusService.GetGeoCodeReponseFromQuincus(new UPS.Quincus.APP.Request.QuincusGeoCodeDataRequest()
                     {
                         endpoint = configuration["Quincus:GeoCodeEndPoint"],
-                        id = quincusTranslatedAddressResponse.ResponseData.batch_id,
+                        batchIDList = batchIds,
                         quincusTokenData = quincusTokenDataResponse.quincusTokenData
                     });
 
                     if (QuincusResponse.ResponseStatus)
                     {
-                        List<Geocode> geocodes = (List<Geocode>)((QuincusReponseData)QuincusResponse.QuincusReponseData).geocode;
+                        List<Geocode> geocodes = (List<Geocode>)((QuincusReponseData)QuincusResponse.QuincusReponseDataList[0]).geocode;
                         List<ShipmentDataRequest> shipmentDataRequestList = new List<ShipmentDataRequest>(geocodes.Count);
 
                         foreach (Geocode geocode in geocodes)
@@ -556,7 +565,7 @@ namespace AtService.Controllers
                         workflowDataRequest.WFL_STA_TE = workflowstatus;
                         workflowService.UpdateWorkflowStatusById(workflowDataRequest);
 
-                        return Ok(QuincusResponse.QuincusReponseData);
+                        return Ok(QuincusResponse.QuincusReponseDataList);
                     }
                     else
                     {
@@ -650,7 +659,7 @@ namespace AtService.Controllers
                 quincusResponse = QuincusService.GetGeoCodeReponseFromQuincus(new UPS.Quincus.APP.Request.QuincusGeoCodeDataRequest()
                 {
                     endpoint = configuration["Quincus:GeoCodeEndPoint"],
-                    id = shipmentGeoCodes.geoCode,
+                    batchIDList = shipmentGeoCodes.geoCode,
                     quincusTokenData = quincusTokenDataResponse.quincusTokenData
                 });
 

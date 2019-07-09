@@ -6,7 +6,7 @@ namespace UPS.Quincus.APP.Response
 {
     public class QuincusTranslatedAddressResponse
     {
-        public GetBatchResponseForAddressTranslation ResponseData { get; set; }
+        public List<GetBatchResponseForAddressTranslation> ResponseData { get; set; }
 
         public bool Response { get; set; }
 
