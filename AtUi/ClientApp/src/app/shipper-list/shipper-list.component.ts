@@ -73,12 +73,6 @@ export class ShipperListComponent implements OnInit {
     this.dataSource.filter = filterValue;
   }
 
-  addNewRow() {
-    const data = this.dataSource.data;
-    //data.push({});
-    this.dataSource.data = data;
-  }
-
   addNew() {
 
   }

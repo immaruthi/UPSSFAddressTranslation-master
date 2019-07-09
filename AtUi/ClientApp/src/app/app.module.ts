@@ -59,7 +59,8 @@ import { EditOnEnterDirective } from './shared/editable/edit-on-enter.directive'
 import { AddressEditModelComponent } from './shipping-data/address-edit-model/address-edit-model.component';
 import { DatePipe } from '@angular/common';
 import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component';
-import { ShipperListComponent } from './shipper-list/shipper-list.component'
+import { ShipperListComponent } from './shipper-list/shipper-list.component';
+import { AddressBookComponent } from './address-book/address-book.component'
 
 @NgModule({
   declarations: [
@@ -92,6 +93,7 @@ import { ShipperListComponent } from './shipper-list/shipper-list.component'
     AddressEditModelComponent,
     ConfirmationDialogComponent,
     ShipperListComponent,
+    AddressBookComponent,
    
   ],
   imports: [

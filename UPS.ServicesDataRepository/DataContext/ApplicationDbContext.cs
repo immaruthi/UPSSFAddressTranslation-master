@@ -33,7 +33,7 @@ namespace UPS.ServicesDataRepository.DataContext
             builder.Entity<USR>().ToTable("USR");
             builder.Entity<WorkflowDataRequest>().ToTable("WR-FLW");
             builder.Entity<ShipperCompanyRequest>().ToTable("SPC-LST");
-            builder.Entity<AddressBook>().ToTable("ADR-BK");
+            builder.Entity<AddressBookRequest>().ToTable("ADR-BK");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -61,7 +61,7 @@ namespace UPS.ServicesDataRepository.DataContext
             get; set;
         }
 
-        public DbSet<AddressBook> AddressBooks
+        public DbSet<AddressBookRequest> AddressBookRequests
         {
             get; set;
         }

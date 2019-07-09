@@ -5,10 +5,9 @@
       <input matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="filterText" placeholder="Filter">
     </mat-form-field>
   </div>
-  <div class="col-md-6 text-right">
-    <button mat-raised-button color="primary" (click)="addNewRow()"> Add New Row </button>
+  <!--<div class="col-md-6 text-right">
     <button mat-raised-button color="primary" (click)="addNew()"> Add New </button>
-  </div>
+  </div>-->
 </div>
 <mat-paginator #paginator
                [pageSize]="5"
