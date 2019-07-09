@@ -27,6 +27,9 @@
   height: calc(100vh - 325px);
   overflow: auto;
 }
+.rowPaginator {
+  background-color: white;
+}
 
 mat-table {
   width: 100%;
