@@ -1,3 +1,149 @@
-<p>
-  address-book works!
-</p>
+<label>Shipper List</label>
+<div class="row">
+  <div class="col-md-6">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="filterText" placeholder="Filter">
+    </mat-form-field>
+  </div>
+</div>
+<mat-paginator #paginator
+               [pageSize]="5"
+               [pageSizeOptions]="[5, 10, 20]"
+               [showFirstLastButtons]="true">
+</mat-paginator>
+<div class="table-div">
+  <div class="row">
+    <mat-table class="table" [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="S_No" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Shipment ID </mat-header-cell>
+        <mat-cell *matCellDef="let element, let i = index" class="cell"> {{i+1}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_PSL_CD_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Batch ID </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_PSL_CD_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_CTY_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Organization </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_CTY_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_CTR_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Status Code </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_CTR_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_CPY_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Consignee Address ID </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_CPY_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_NA" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Consignee Address </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_NA}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SND_PTY_CTC_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Consignee Translated Address </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SND_PTY_CTC_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_ADR_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Address 1 </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_ADR_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_CTC_PH" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Address 2 </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_CTC_PH}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Address 3 </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Address 4 </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Road </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> City </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Region </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Country </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Address Type </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Longitude </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Latitude </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Geo Code </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Geo Code Error </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Bulding Number </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Building Name </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Unit </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Area </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Batch ID </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Postal Code </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Confidence </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Semantic Check </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Accuracy </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Verify Match </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Created Date </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Modified Date </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
+    </mat-table>
+  </div>
+</div>
