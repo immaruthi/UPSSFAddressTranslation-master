@@ -35,7 +35,7 @@ namespace UPS.ServicesDataRepository
             {
                 using (var command = ctx.Database.GetDbConnection().CreateCommand())
                 {
-                    command.CommandText = "SELECT [CST-ID] from CST-DTL";
+                    command.CommandText = "SELECT [CST-ID] from [CST-DTL]";
                     ctx.Database.OpenConnection();
                     using (var result = command.ExecuteReader())
                     {
