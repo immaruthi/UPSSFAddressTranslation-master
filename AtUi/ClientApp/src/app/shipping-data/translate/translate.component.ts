@@ -141,10 +141,6 @@ export class TranslateComponent implements OnInit {
     }
   }
 
-  handlePageChange(event: Event) {
-    // this.selection.clear();
-  }
-  
   /** The label for the checkbox on the passed row */
   checkboxLabel(row?: any): string {
     if (!row) {
