@@ -143,8 +143,9 @@
             quincusResponse.QuincusReponseDataList = new List<QuincusReponseData>();
             try
             {
-                quincusGeoCodeDataRequest.batchIDList.ForEach(requestData =>
+                foreach(var requestData in quincusGeoCodeDataRequest.batchIDList)
                 {
+                    System.Threading.Thread.Sleep(3000);
                     HttpRequestCachePolicy requestCachePolicy =
                             new HttpRequestCachePolicy(HttpRequestCacheLevel.Default);
 
@@ -185,7 +186,7 @@
 
                     httpResponse.Close();
 
-                });
+                }
             }
             catch (Exception exception)
             {
