@@ -324,6 +324,7 @@ namespace AtService.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateOrderShipment([FromBody] List<UIOrderRequestBodyData> uIOrderRequestBodyDatas)
         {
+            string customerID = shipmentService.GetShipmentCustomCodesInformation();
             _workflowID = uIOrderRequestBodyDatas[0].wfL_ID;
             CreateOrderShipmentResponse createOrderShipmentResponse = new CreateOrderShipmentResponse();
             createOrderShipmentResponse.FailedToProcessShipments = new List<string>();
@@ -339,7 +340,7 @@ namespace AtService.Controllers
                 XMLMessage = "<Request lang=\"zh-CN\" service=\"OrderService\">";
                 XMLMessage += "<Head>LJ_T6NVV</Head>";
                 XMLMessage += "<Body>";
-                XMLMessage += "<Order orderid=\"" + orderRequest.pkG_NR_TE + "\" custid=\"" + 7551234567 + "\"";
+                XMLMessage += "<Order orderid=\"" + orderRequest.pkG_NR_TE + "\" custid=\"" + customerID + "\"";
                 XMLMessage += " j_tel=\"" + orderRequest.shP_CTC_TE + "\"";
                 XMLMessage += " j_address=\"" + orderRequest.shP_ADR_TE + "\"";
                 XMLMessage += " d_tel=\"" + orderRequest.pH_NR + "\"";
@@ -509,18 +510,27 @@ namespace AtService.Controllers
                 {
                     var getAddressTranslation = quincusTranslatedAddressResponse.ResponseData;
 
-                    GoToSleep(quincusTranslatedAddressResponse);
+                    //GoToSleep(quincusTranslatedAddressResponse);
+
+                    //System.Threading.Thread.Sleep(5000);
+
+                    List<string> batchIds = new List<string>();
+
+                    quincusTranslatedAddressResponse.ResponseData.ForEach(batches =>
+                    {
+                        batchIds.Add(batches.batch_id);
+                    });
 
                     var QuincusResponse = QuincusService.GetGeoCodeReponseFromQuincus(new UPS.Quincus.APP.Request.QuincusGeoCodeDataRequest()
                     {
                         endpoint = configuration["Quincus:GeoCodeEndPoint"],
-                        id = quincusTranslatedAddressResponse.ResponseData.batch_id,
+                        batchIDList = batchIds,
                         quincusTokenData = quincusTokenDataResponse.quincusTokenData
                     });
 
                     if (QuincusResponse.ResponseStatus)
                     {
-                        List<Geocode> geocodes = (List<Geocode>)((QuincusReponseData)QuincusResponse.QuincusReponseData).geocode;
+                        List<Geocode> geocodes = (List<Geocode>)((QuincusReponseData)QuincusResponse.QuincusReponseDataList[0]).geocode;
                         List<ShipmentDataRequest> shipmentDataRequestList = new List<ShipmentDataRequest>(geocodes.Count);
 
                         foreach (Geocode geocode in geocodes)
@@ -556,7 +566,7 @@ namespace AtService.Controllers
                         workflowDataRequest.WFL_STA_TE = workflowstatus;
                         workflowService.UpdateWorkflowStatusById(workflowDataRequest);
 
-                        return Ok(QuincusResponse.QuincusReponseData);
+                        return Ok(QuincusResponse.QuincusReponseDataList);
                     }
                     else
                     {
@@ -650,7 +660,7 @@ namespace AtService.Controllers
                 quincusResponse = QuincusService.GetGeoCodeReponseFromQuincus(new UPS.Quincus.APP.Request.QuincusGeoCodeDataRequest()
                 {
                     endpoint = configuration["Quincus:GeoCodeEndPoint"],
-                    id = shipmentGeoCodes.geoCode,
+                    batchIDList = shipmentGeoCodes.geoCode,
                     quincusTokenData = quincusTokenDataResponse.quincusTokenData
                 });
 

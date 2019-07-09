@@ -78,15 +78,17 @@
         {
             string response = string.Empty;
             QuincusTranslatedAddressResponse quincusTranslatedAddressResponse = new QuincusTranslatedAddressResponse();
+            quincusTranslatedAddressResponse.ResponseData = new List<GetBatchResponseForAddressTranslation>();
 
             try
             {
                 quincusTranslatedAddressResponse.RequestDataCount = quincusAddressTranslationRequest.shipmentWorkFlowRequests.Count;
 
-                string content = GetRequestContextForAddress.GetAddressStringFromRequest(quincusAddressTranslationRequest.shipmentWorkFlowRequests);
+                List<string> content = GetRequestContextForAddress.GetAddressStringFromRequest(quincusAddressTranslationRequest.shipmentWorkFlowRequests);
 
-                if (!string.IsNullOrWhiteSpace(content))
+                content.ForEach(requestdata =>
                 {
+                    
                     var httpWebRequest = (HttpWebRequest)WebRequest.Create(
                         quincusAddressTranslationRequest.endpoint);
                     if (string.Equals(MapProxy.WebProxyEnable, true.ToString(), StringComparison.OrdinalIgnoreCase))
@@ -102,7 +104,7 @@
 
                     using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                     {
-                        var input = content;
+                        var input = requestdata;
 
                         streamWriter.Write(input);
                         streamWriter.Flush();
@@ -120,13 +122,10 @@
 
                     httpResponse.Close();
 
-                    quincusTranslatedAddressResponse.ResponseData = JsonConvert.DeserializeObject<GetBatchResponseForAddressTranslation>(response);
+                    quincusTranslatedAddressResponse.ResponseData.Add(JsonConvert.DeserializeObject<GetBatchResponseForAddressTranslation>(response));
                     quincusTranslatedAddressResponse.Response = true;
-                }
-                else
-                {
-
-                }
+                
+                });
             }
             catch (Exception exception)
             {
@@ -136,27 +135,24 @@
             return quincusTranslatedAddressResponse;
         }
 
-        public static QuincusResponse GetQuincusResponse(QuincusGeoCodeDataRequest quincusGeoCodeDataRequest, decimal shipmentsCount)
+        public static QuincusResponse GetQuincusResponse(QuincusGeoCodeDataRequest quincusGeoCodeDataRequest)
         {
-            bool retryflag = true;
-            int retryCount = 0;
+            
             QuincusResponse quincusResponse = new QuincusResponse();
             HttpWebResponse httpResponse = null;
-            int sleepTime = 5000;
-
-            int maxRetryCount = Convert.ToInt32(Math.Round(shipmentsCount / 1.5m));
+            quincusResponse.QuincusReponseDataList = new List<QuincusReponseData>();
             try
             {
-                //while (retryflag && retryCount <= maxRetryCount)
-                //{
-
+                foreach(var requestData in quincusGeoCodeDataRequest.batchIDList)
+                {
+                    System.Threading.Thread.Sleep(3000);
                     HttpRequestCachePolicy requestCachePolicy =
                             new HttpRequestCachePolicy(HttpRequestCacheLevel.Default);
 
                     HttpWebRequest.DefaultCachePolicy = requestCachePolicy;
 
                     var httpWebRequest = (HttpWebRequest)WebRequest.Create(
-                        quincusGeoCodeDataRequest.endpoint + quincusGeoCodeDataRequest.id + "/");
+                        quincusGeoCodeDataRequest.endpoint + requestData + "/");
 
                     HttpRequestCachePolicy noCachePolicy =
                         new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
@@ -174,33 +170,22 @@
                     httpWebRequest.Method = "GET";
                     httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
 
-                    //if (string.Equals(httpResponse.StatusDescription, "No Content", StringComparison.OrdinalIgnoreCase))
-                    //{
-                    //    retryCount++;
-                    //    //if (retryCount == maxRetryCount)
-                    //    //{
-                    //    sleepTime = Convert.ToInt32(Math.Round(1000m * 1.8m * shipmentsCount));
-                    //    //}
+                    string response;
 
-                    //    System.Threading.Thread.Sleep(sleepTime);
-                    //}
-                    //else
-                    //{
-                    //    retryflag = false;
-                    //}
-                //}
+                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                    {
+                        response = streamReader.ReadToEnd();
+                        streamReader.Close();
+                    }
 
-                string response;
+                    if (!string.IsNullOrEmpty(response))
+                    {
+                        quincusResponse.QuincusReponseDataList.Add(Newtonsoft.Json.JsonConvert.DeserializeObject<QuincusReponseData>(response));
+                        quincusResponse.ResponseStatus = true;
+                    }
 
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    response = streamReader.ReadToEnd();
-                }
+                    httpResponse.Close();
 
-                if (!string.IsNullOrEmpty(response))
-                {
-                    quincusResponse.QuincusReponseData = Newtonsoft.Json.JsonConvert.DeserializeObject<QuincusReponseData>(response);
-                    quincusResponse.ResponseStatus = true;
                 }
             }
             catch (Exception exception)
