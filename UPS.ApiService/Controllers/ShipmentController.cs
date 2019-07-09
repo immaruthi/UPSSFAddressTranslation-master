@@ -31,6 +31,7 @@ using UPS.ServicesDataRepository.Common;
 using System.Xml;
 using UPS.Application.CustomLogs;
 using UPS.Quincus.APP.ProxyConnections;
+using UPS.ServicesAsyncActions;
 
 namespace AtService.Controllers
 {
@@ -44,16 +45,22 @@ namespace AtService.Controllers
         private readonly IHostingEnvironment hostingEnvironment;
         private ShipmentDataResponse shipmentDataResponse;
 
-        private ShipmentService shipmentService { get; set; }
+        //private ShipmentService shipmentService { get; set; }
         private WorkflowService workflowService { get; set; }
+        private IShipmentAsync shipmentService { get; set; }
 
         private IQuincusAddressTranslationRequest _quincusAddressTranslationRequest { get; set; }
 
-        public ShipmentController(IConfiguration Configuration, IHostingEnvironment HostingEnvironment, IQuincusAddressTranslationRequest QuincusAddressTranslationRequest)
+        public ShipmentController(
+            IConfiguration Configuration, 
+            IHostingEnvironment HostingEnvironment,
+            IQuincusAddressTranslationRequest QuincusAddressTranslationRequest,
+            IShipmentAsync shipmentAsync
+            )
         {
             this.configuration = Configuration;
             this.hostingEnvironment = HostingEnvironment;
-            shipmentService = new ShipmentService();
+            shipmentService = shipmentAsync;
             workflowService = new WorkflowService();
             _quincusAddressTranslationRequest = QuincusAddressTranslationRequest;
 
@@ -131,6 +138,8 @@ namespace AtService.Controllers
 
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         //[HttpPost]
+
+        [NonAction]
         public ShipmentDataResponse CreateShipments(List<ExcelDataObject> excelDataObjects, int workflowID)
         {
             //int i = 0;
@@ -251,7 +260,6 @@ namespace AtService.Controllers
                     }
 
                 }
-                shipmentService = new ShipmentService();
                 shipmentDataResponse = shipmentService.CreateShipments(shipmentData);
                 shipmentDataResponse.Success = true;
                 return shipmentDataResponse;
@@ -272,7 +280,7 @@ namespace AtService.Controllers
         [ProducesResponseType(500)]
         public async Task<ActionResult> UpdateShipmentStatusById([FromBody] ShipmentDataRequest shipmentDataRequest)
         {
-            shipmentService = new ShipmentService();
+            //shipmentService = new ShipmentService();
             ShipmentDataResponse shipmentDataResponse = shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
             if (!shipmentDataResponse.Success)
             {
@@ -287,7 +295,7 @@ namespace AtService.Controllers
         [ProducesResponseType(500)]
         public async Task<ActionResult> UpdateShipmentAddressById([FromBody] ShipmentDataRequest shipmentDataRequest)
         {
-            shipmentService = new ShipmentService();
+            //shipmentService = new ShipmentService();
             ShipmentDataResponse shipmentDataResponse = shipmentService.UpdateShipmentAddressById(shipmentDataRequest);
 
             //we need to update the workflow status
@@ -307,7 +315,7 @@ namespace AtService.Controllers
         [ProducesResponseType(500)]
         public List<ShipmentDataRequest> GetShipmentData(int wid)
         {
-            shipmentService = new ShipmentService();
+            //shipmentService = new ShipmentService();
             List<ShipmentDataRequest> shipmentDataRequests = shipmentService.GetShipment(wid);
             return shipmentDataRequests;
         }
@@ -320,7 +328,7 @@ namespace AtService.Controllers
             CreateOrderShipmentResponse createOrderShipmentResponse = new CreateOrderShipmentResponse();
             createOrderShipmentResponse.FailedToProcessShipments = new List<string>();
             createOrderShipmentResponse.ProcessedShipments = new List<string>();
-            ShipmentService shipmentService = new ShipmentService();
+            //ShipmentService shipmentService = new ShipmentService();
 
             //List<UIOrderRequestBodyData> uIOrderRequestBodyDatas = new List<UIOrderRequestBodyData>();
 
@@ -456,20 +464,19 @@ namespace AtService.Controllers
         [HttpPost]
         public async Task<ActionResult> DeleteShipments([FromBody] List<ShipmentDataRequest> shipmentDataRequests)
         {
-            ShipmentService shipmentService = new ShipmentService();
+            //ShipmentService shipmentService = new ShipmentService();
             ShipmentDataResponse shipmentDataResponse = shipmentService.DeleteShipments(shipmentDataRequests);
             return Ok(shipmentDataResponse);
         }
 
         [Route("GetTranslationAddress")]
         [HttpPost]
-        public async Task<ActionResult> GetTranslationAddress([FromBody] List<ShipmentWorkFlowRequest> shipmentWorkFlowRequest)
+        public async Task<ActionResult> GetTranslationAddress([FromBody] List<ShipmentDataRequest> _shipmentDataRequest)
         {
-
             int wid = 0;
-            if (shipmentWorkFlowRequest.Any())
+            if (_shipmentDataRequest.Any())
             {
-                wid = shipmentWorkFlowRequest.FirstOrDefault().wfL_ID;
+                wid = _shipmentDataRequest.FirstOrDefault().WFL_ID;
             }
             QuincusTranslatedAddressResponse quincusTranslatedAddressResponse = new QuincusTranslatedAddressResponse();
 
@@ -483,21 +490,23 @@ namespace AtService.Controllers
 
             if (quincusTokenDataResponse.ResponseStatus)
             {
-                //quincusTranslatedAddressResponse = QuincusService.GetTranslationAddress(new UPS.Quincus.APP.Request.QuincusAddressTranslationRequest()
-                //{
-                //    endpoint = configuration["Quincus:GeoCodeEndPoint"],
-                //    shipmentWorkFlowRequests = shipmentWorkFlowRequest,
-                //    token = quincusTokenDataResponse.quincusTokenData.token
-                //});
-                this._quincusAddressTranslationRequest.shipmentWorkFlowRequests = shipmentWorkFlowRequest;
+                List<ShipmentWorkFlowRequest> shipmentWorkFlowRequests =
+                    _shipmentDataRequest.Select(_ =>
+                    new ShipmentWorkFlowRequest()
+                    {
+                        id = _.ID,
+                        rcV_ADR_TE = _.RCV_ADR_TE,
+                        dsT_CTY_TE = _.DST_CTY_TE,
+                        wfL_ID = _.WFL_ID
+                    }).ToList();
+
+                this._quincusAddressTranslationRequest.shipmentWorkFlowRequests = shipmentWorkFlowRequests;
                 this._quincusAddressTranslationRequest.token = quincusTokenDataResponse.quincusTokenData.token;
 
                 quincusTranslatedAddressResponse = QuincusService.GetTranslationAddress(this._quincusAddressTranslationRequest);
 
                 if (quincusTranslatedAddressResponse.Response)
                 {
-                    //return Ok(quincusTranslatedAddressResponse.ResponseData);
-
                     var getAddressTranslation = quincusTranslatedAddressResponse.ResponseData;
 
                     GoToSleep(quincusTranslatedAddressResponse);
@@ -511,35 +520,34 @@ namespace AtService.Controllers
 
                     if (QuincusResponse.ResponseStatus)
                     {
-                        ShipmentDataRequest shipment = new ShipmentDataRequest();
                         List<Geocode> geocodes = (List<Geocode>)((QuincusReponseData)QuincusResponse.QuincusReponseData).geocode;
-                        List<ShipmentDataRequest> shipmentsDataRequest = new List<ShipmentDataRequest>(geocodes.Count);
-                        for (int i = 0; i < geocodes.Count; i++)
+                        List<ShipmentDataRequest> shipmentDataRequestList = new List<ShipmentDataRequest>(geocodes.Count);
+
+                        foreach (Geocode geocode in geocodes)
                         {
-                            ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
-                            shipmentDataRequest.ID = Convert.ToInt32(geocodes[i].id);
-                            shipmentDataRequest.WFL_ID = wid;
-                            shipmentDataRequest.SHP_ADR_TR_TE = geocodes[i].translated_adddress;
-                            shipmentDataRequest.ACY_TE = geocodes[i].accuracy;
-                            shipmentDataRequest.CON_NR = geocodes[i].confidence;
+                            ShipmentDataRequest shipmentDataRequest =
+                                _shipmentDataRequest.FirstOrDefault(_=>_.ID== Convert.ToInt32(geocode.id));
+                            shipmentDataRequest.SHP_ADR_TR_TE = geocode.translated_adddress;
+                            shipmentDataRequest.ACY_TE = geocode.accuracy;
+                            shipmentDataRequest.CON_NR = geocode.confidence;
 
                             if (
-                                        !string.IsNullOrEmpty(geocodes[i].translated_adddress)
-                                    && geocodes[i].translated_adddress != "NA"
-                                    && !string.Equals(shipmentWorkFlowRequest.Where(s => s.id == shipmentDataRequest.ID).FirstOrDefault().rcV_ADR_TE.Trim(),
-                                        geocodes[i].translated_adddress.Trim())
+                                        !string.IsNullOrEmpty(geocode.translated_adddress)
+                                    &&  geocode.translated_adddress != "NA"
+                                    &&  !string.Equals(_shipmentDataRequest.Where(s => s.ID == Convert.ToInt32(geocode.id)).FirstOrDefault().RCV_ADR_TE.Trim(),
+                                        geocode.translated_adddress.Trim())
                                )
                             {
                                 shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Translated);
                             }
                             else
                             {
-                                shipmentDataRequest.SMT_STA_NR = Convert.ToInt32(shipmentWorkFlowRequest.Where(s => s.id == shipmentDataRequest.ID).FirstOrDefault().smT_STA_NR);
+                                shipmentDataRequest.SMT_STA_NR = Convert.ToInt32(_shipmentDataRequest.Where(s => s.ID == shipmentDataRequest.ID).FirstOrDefault().SMT_STA_NR);
                             }
-                            shipmentsDataRequest.Add(shipmentDataRequest);
+
+                            shipmentDataRequestList.Add(shipmentDataRequest);
                         }
-                        ShipmentService shipmentService = new ShipmentService();
-                        shipmentService.UpdateShipmentAddressByIds(shipmentsDataRequest);
+                        shipmentService.UpdateShipmentAddressByIds(shipmentDataRequestList);
 
                         //we need to update the workflow status
                         int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);
@@ -575,15 +583,15 @@ namespace AtService.Controllers
 
             if (Enumerable.Range(1, 10).Contains(sleepEstimation))
             {
-                sleepMode = sleepMode * 1;
+                sleepMode = sleepMode * 0.5;
             }
             else if (Enumerable.Range(11, 20).Contains(sleepEstimation))
             {
-                sleepMode = sleepMode * 1;
+                sleepMode = sleepMode * 0.5;
             }
             else if (Enumerable.Range(21, 30).Contains(sleepEstimation))
             {
-                sleepMode = sleepMode * 1.5;
+                sleepMode = sleepMode * 1.25;
             }
             else if (Enumerable.Range(31, 40).Contains(sleepEstimation))
             {

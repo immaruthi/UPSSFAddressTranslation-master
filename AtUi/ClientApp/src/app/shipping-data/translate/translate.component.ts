@@ -140,12 +140,12 @@ export class TranslateComponent implements OnInit {
 
   rowChecked(event: Event, row: any) {
     event.stopPropagation();
-    if (!this.selection.isSelected(row)) {
-      if (this.selection.selected.length >= 200) {
-        this.dialogService.openAlertDialog('Maximum allowed Shipments for Translation: 200 and You have selected: ' + this.selection.selected.length);
-        this.selection.toggle(row);
-      }
-    }
+    //if (!this.selection.isSelected(row)) {
+    //  if (this.selection.selected.length >= 200) {
+    //    this.dialogService.openAlertDialog('Maximum allowed Shipments for Translation: 200 and You have selected: ' + this.selection.selected.length);
+    //    this.selection.toggle(row);
+    //  }
+    //}
   }
 
   /** Method to Translate the Data*/
@@ -153,8 +153,8 @@ export class TranslateComponent implements OnInit {
     const checkedCount = this.selection.selected.length;
     if (checkedCount <= 0) {
       this.dialogService.openAlertDialog('Please select minimum one row to Translate.');
-    } else if (checkedCount > 200) {
-      this.dialogService.openAlertDialog('Maximum allowed Shipments for Translation: 200 and You have selected: ' + this.selection.selected.length);
+    //} else if (checkedCount > 200) {
+    //  this.dialogService.openAlertDialog('Maximum allowed Shipments for Translation: 200 and You have selected: ' + this.selection.selected.length);
     } else {
       const data = this.selection.selected;
       this.dataTranslate(data);
