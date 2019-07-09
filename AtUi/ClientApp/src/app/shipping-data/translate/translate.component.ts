@@ -245,7 +245,7 @@ export class TranslateComponent implements OnInit {
             for (let res of response) {
               if (res.geocode) {
                 for (let geocode of res.geocode) {
-                  if (geocode.translated_adddress === ' ') {
+                  if (geocode.translated_adddress === '' || geocode.translated_adddress === null) {
                     EmptyCount = EmptyCount + 1;
                   } else {
                     SuccessCount = SuccessCount + 1;
