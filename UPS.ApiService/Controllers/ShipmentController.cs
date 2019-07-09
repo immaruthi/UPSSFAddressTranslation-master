@@ -511,7 +511,7 @@ namespace AtService.Controllers
 
                     //GoToSleep(quincusTranslatedAddressResponse);
 
-                    System.Threading.Thread.Sleep(5000);
+                    //System.Threading.Thread.Sleep(5000);
 
                     List<string> batchIds = new List<string>();
 

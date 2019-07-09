@@ -23,6 +23,35 @@ namespace UPS.ServicesDataRepository
             this.context = applicationDbContext;
             this.addressBookService = addressBookService;
         }
+
+
+        public string GetShipmentCustomCodesInformation()
+        {
+            string customerID = string.Empty;
+
+            optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+            using (var ctx = new ApplicationDbContext(optionsBuilder.Options))
+            {
+                using (var command = ctx.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = "SELECT [CST-ID] from CST-DTL";
+                    ctx.Database.OpenConnection();
+                    using (var result = command.ExecuteReader())
+                    {
+                        while (result.Read())
+                        {
+                            customerID = result.GetString(0);
+                        }
+                    }
+                }
+            }
+
+            return customerID;
+        }
+
+
+
         public List<ShipmentDataRequest> GetShipment(int workflowID)
         {
             optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
