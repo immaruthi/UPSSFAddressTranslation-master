@@ -1,0 +1,15 @@
+<mat-dialog-content class="container">
+  <form (ngSubmit)="submit" #formControl="ngForm" class="example-form">
+    <mat-form-field class="example-full-width">
+      <textarea matInput placeholder="Consignee Address" value="{{data.ConsigneeAddress}}" [(ngModel)]="data.ConsigneeAddress" name="ConsigneeAddress" readonly rows="2"></textarea>
+    </mat-form-field><br />
+    <mat-form-field class="example-full-width">
+      <textarea matInput placeholder="Consignee TranslatedAddress" value="{{data.ConsigneeTranslatedAddress}}" [(ngModel)]="data.ConsigneeTranslatedAddress" name="ConsigneeTranslatedAddress" rows="2"></textarea>
+    </mat-form-field><br />
+   </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button (click)="onNoClick()" color="warn">Cancel</button>
+  <button mat-raised-button [type]="submit" [disabled]="!formControl.valid" [mat-dialog-close]="1" (click)="stopEdit()" color="primary">Save</button>
+</mat-dialog-actions>
+

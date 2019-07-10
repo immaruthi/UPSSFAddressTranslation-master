@@ -31,6 +31,7 @@ import { DialogService } from './services/dialog.service';
 import { ExcelService } from './services/ExcelExport';
 import { ShippingService } from './services/shipping.service';
 import { ShipperListService } from './services/ShipperListService';
+import { AddressBookService } from './services/AddressBookService';
 import { HttpService } from './shared/http.service';
 
 import { WorkflowComponent } from './workflow/workflow.component';
@@ -60,7 +61,8 @@ import { AddressEditModelComponent } from './shipping-data/address-edit-model/ad
 import { DatePipe } from '@angular/common';
 import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component';
 import { ShipperListComponent } from './shipper-list/shipper-list.component';
-import { AddressBookComponent } from './address-book/address-book.component'
+import { AddressBookComponent } from './address-book/address-book.component';
+import { AddressBookEditModelComponent } from './address-book/address-book-edit-model/address-book-edit-model.component'
 
 @NgModule({
   declarations: [
@@ -94,6 +96,7 @@ import { AddressBookComponent } from './address-book/address-book.component'
     ConfirmationDialogComponent,
     ShipperListComponent,
     AddressBookComponent,
+    AddressBookEditModelComponent,
    
   ],
   imports: [
@@ -114,6 +117,7 @@ import { AddressBookComponent } from './address-book/address-book.component'
     DialogService,
     ShippingService,
     ShipperListService,
+    AddressBookService,
       HttpService,
     LoaderService,
     DatePipe,
@@ -126,7 +130,8 @@ import { AddressBookComponent } from './address-book/address-book.component'
     }
     ],
   bootstrap: [AppComponent],
-  entryComponents: [LoginComponent, AlertDialogComponent, SummaryDialogComponent, ConfirmationDialogComponent, AddressEditModelComponent]
+  entryComponents: [LoginComponent, AlertDialogComponent, SummaryDialogComponent, ConfirmationDialogComponent, AddressEditModelComponent,
+    AddressBookEditModelComponent]
 
 })
 export class AppModule { }
