@@ -47,7 +47,7 @@ namespace UPS.DataObjects.AddressBook
         [Column("CSG-CUN-TE")]
         public string Country { get; set; }
         [Column("CSG-ADR-TYP-FLG-B")]
-        public bool AddressTypeFlag { get; set; }
+        public bool? AddressTypeFlag { get; set; }
         [Column("CSG-LNG-TE")]
         public string Longitude { get; set; }
         [Column("CSG-LAT-TE")]

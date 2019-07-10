@@ -523,7 +523,7 @@ namespace AtService.Controllers
                     if (QuincusResponse.ResponseStatus)
                     {
                         // Insert Address into AddressBook
-                        addressBookService.InsertAddress(QuincusResponse?.QuincusReponseData);
+                        addressBookService.InsertAddress(QuincusResponse.QuincusReponseDataList);
                         QuincusResponse.QuincusReponseDataList.ForEach(datalist =>
                         {
                             List<Geocode> geocodes = (List<Geocode>)((QuincusReponseData)datalist).geocode;
@@ -562,7 +562,7 @@ namespace AtService.Controllers
                             workflowDataRequest.WFL_STA_TE = workflowstatus;
                             workflowService.UpdateWorkflowStatusById(workflowDataRequest);
                         });
-                       
+
                         return Ok(QuincusResponse.QuincusReponseDataList);
                     }
                     else
