@@ -1,47 +1,87 @@
-﻿namespace UPS.ServicesDataRepository
+﻿using EFCore.BulkExtensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using UPS.DataObjects.AddressBook;
+using UPS.DataObjects.Common;
+using UPS.ServicesAsyncActions;
+using UPS.ServicesDataRepository.DataContext;
+
+namespace UPS.ServicesDataRepository
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using UPS.ServicesAsyncActions;
-    using UPS.ServicesDataRepository.DataContext;
-    using UPS.ServicesDataRepository.Common;
-    using Microsoft.EntityFrameworkCore;
-    using UPS.DataObjects.AddressBook;
-
-    public class AddressBookService : IAddressBookAsync
+    public class AddressBookService : IAddressBookService
     {
-        private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
-        //private ApplicationDbContext context;
-        //public AddressBookService(ApplicationDbContext applicationDbContext)
-        //{
-        //    this.context = applicationDbContext;
-        //}
-        //public void InsertAddress()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        public AddressBookResponse GetAddressBookData()
+        private ApplicationDbContext context;
+        public AddressBookService(ApplicationDbContext applicationDbContext)
         {
-            AddressBookResponse addressBookResponse = new AddressBookResponse();
-            //List<AddressBookRequest> AddressBookRequests = new List<AddressBookRequest>();
-            optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            using (var context = new ApplicationDbContext(optionsBuilder.Options))
+            this.context = applicationDbContext;
+        }
+
+        public List<AddressBook> GetAddressBooks()
+        {
+            return this.context.AddressBooks.ToList();
+        }
+
+        public void InsertAddress(QuincusReponseData quincusReponseData)
+        {
+            try
             {
-                try
+                if
+                (
+                    quincusReponseData.geocode != null
+                    && quincusReponseData.addresses != null
+                )
                 {
-                    addressBookResponse.AddressBookList = context.AddressBookRequests;
-                    addressBookResponse.Success = true;
-                    return addressBookResponse;
-                }
-                catch (Exception ex)
-                {
-                    addressBookResponse.Success = false;
-                    addressBookResponse.OperatonExceptionMessage = ex.Message;
+                    List<AddressBook> addressBooks = 
+                        (from address in quincusReponseData.addresses?.ToList()
+                        join geocode in quincusReponseData.geocode?.ToList()
+                        on address.id equals geocode.id
+                        select
+                        new AddressBook
+                        {
+                            Accuracy = geocode?.accuracy,
+                            AddressTypeFlag = Convert.ToBoolean(address?.address_type_flag),
+                            Address_One = address?.addressline1,
+                            Address_Two = address?.addressline2,
+                            Address_Three = address?.addressline3,
+                            Address_Four = address?.addressline4,
+                            Area = geocode?.area,
+                            BatchId = quincusReponseData?.batch_id,
+                            Bat_Id = string.Empty,
+                            BuildingName = geocode?.building_name,
+                            BuldingNumber = geocode?.building_number,
+                            City = geocode?.city,
+                            Confidence = geocode?.confidence,
+                            ConsigneeAddress = address?.address,
+                            ConsigneeAddressId = address?.id!=null ? Convert.ToInt32(address?.id): -1,//
+                            ConsigneeTranslatedAddress = geocode?.translated_adddress,
+                            Country = geocode?.country,
+                            CreatedDate = DateTime.Now,
+                            GeoCode = geocode?.postcode,
+                            GeoCodeError =Convert.ToString(quincusReponseData?.geocode_errors?? string.Empty),
+                            Latitude = geocode?.latitude,
+                            Longitude = geocode?.longitude,
+                            PostalCode = geocode?.postcode,
+                            Organization = quincusReponseData?.organisation!=null? Convert.ToString(quincusReponseData?.organisation):string.Empty,
+                            Region = geocode?.region,
+                            Road = geocode?.road,
+                            SemanticCheck = geocode?.semantic_check,
+                            ShipmentId = address?.id!= null ? Convert.ToInt32(address?.id):-1,
+                            StatusCode = quincusReponseData?.status_code,
+                            Unit = geocode?.unit,
+                            VerifyMatch = geocode?.verify_match
+                        }).ToList();
+
+                    this.context.BulkInsert(addressBooks);
                 }
             }
-            return addressBookResponse;
+            catch (Exception exception)
+            {
+               // Need to log exception if Any
+            }
+
+
         }
     }
 }

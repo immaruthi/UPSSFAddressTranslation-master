@@ -16,9 +16,9 @@ namespace UPS.ServicesDataRepository
     {
         private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
         private readonly ApplicationDbContext context;
-        private IAddressBookAsync addressBookService;
+        private IAddressBookService addressBookService;
 
-        public ShipmentService(ApplicationDbContext applicationDbContext, IAddressBookAsync addressBookService)
+        public ShipmentService(ApplicationDbContext applicationDbContext, IAddressBookService addressBookService)
         {
             this.context = applicationDbContext;
             this.addressBookService = addressBookService;

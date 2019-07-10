@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using AtService.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UPS.ServicesDataRepository;
 using UPS.DataObjects.Shipment;
-using Microsoft.EntityFrameworkCore;
-using UPS.ServicesDataRepository.DataContext;
 using UPS.Quincus.APP;
 using UPS.Quincus.APP.Response;
 using Microsoft.Extensions.Configuration;
@@ -20,18 +13,15 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using UPS.AddressTranslationService.Controllers;
-using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Cors;
-using UPS.DataObjects.Shipment;
 using UPS.DataObjects.WR_FLW;
 using UPS.Quincus.APP.Request;
-using UPS.DataObjects.SPC_LST;
 using UPS.ServicesDataRepository.Common;
 using System.Xml;
 using UPS.Application.CustomLogs;
-using UPS.Quincus.APP.ProxyConnections;
 using UPS.ServicesAsyncActions;
+using UPS.DataObjects.Common;
 
 namespace AtService.Controllers
 {
@@ -43,6 +33,7 @@ namespace AtService.Controllers
 
         private readonly IConfiguration configuration;
         private readonly IHostingEnvironment hostingEnvironment;
+        private IAddressBookService addressBookService;
         private ShipmentDataResponse shipmentDataResponse;
 
         //private ShipmentService shipmentService { get; set; }
@@ -55,7 +46,8 @@ namespace AtService.Controllers
             IConfiguration Configuration, 
             IHostingEnvironment HostingEnvironment,
             IQuincusAddressTranslationRequest QuincusAddressTranslationRequest,
-            IShipmentAsync shipmentAsync
+            IShipmentAsync shipmentAsync,
+            IAddressBookService addressBookService
             )
         {
             this.configuration = Configuration;
@@ -63,7 +55,7 @@ namespace AtService.Controllers
             shipmentService = shipmentAsync;
             workflowService = new WorkflowService();
             _quincusAddressTranslationRequest = QuincusAddressTranslationRequest;
-
+            this.addressBookService = addressBookService;
         }
 
         private static int _workflowID = 0;
@@ -530,6 +522,8 @@ namespace AtService.Controllers
 
                     if (QuincusResponse.ResponseStatus)
                     {
+                        // Insert Address into AddressBook
+                        addressBookService.InsertAddress(QuincusResponse?.QuincusReponseData);
                         QuincusResponse.QuincusReponseDataList.ForEach(datalist =>
                         {
                             List<Geocode> geocodes = (List<Geocode>)((QuincusReponseData)datalist).geocode;

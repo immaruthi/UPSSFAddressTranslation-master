@@ -1,27 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using UPS.DataObjects.AddressBook;
-using UPS.ServicesDataRepository;
+using UPS.ServicesAsyncActions;
 
 namespace AtService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowAtUIOrigin")]
     public class AddressBookController : ControllerBase
     {
-        private AddressBookService addressBookService { get; set; }
-
-        [Route("GetAddressBookData")]
-        [HttpGet]
-        public AddressBookResponse GetAddressBookData()
+        private IAddressBookService addressBookService;
+        public AddressBookController(IAddressBookService addressBookService)
         {
-            addressBookService = new AddressBookService();
-            AddressBookResponse addressBookResponse = addressBookService.GetAddressBookData();
-            return addressBookResponse;
+            this.addressBookService = addressBookService;
         }
+
+        /// <summary>
+        /// This service is for getting all addresses from addressBook
+        /// </summary>
+        /// <returns>List of addresses </returns>
+        [HttpGet]
+        [Route("getall")]
+        public IActionResult GetAddressBooks()
+        {
+            List<AddressBook> addressBooks = this.addressBookService.GetAddressBooks();
+            return Ok(addressBooks);
+        }
+
     }
 }

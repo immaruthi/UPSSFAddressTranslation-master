@@ -6,14 +6,14 @@ using System.Text;
 
 namespace UPS.DataObjects.AddressBook
 {
-   [Table("ADR-BK")]
-   public class AddressBookRequest
+    [Table("ADR-BK")]
+   public class AddressBook
     {
         [Key]
         [Column("ID")]
         public int Id { get; set; }
         [Column("SMT-ID")]
-        public int ShipmentId { get; set; }
+        public int? ShipmentId { get; set; }
         [Column("BAT-ID-TE")]
         public string BatchId { get; set; }
         [Column("ORG-TE")]
@@ -22,12 +22,12 @@ namespace UPS.DataObjects.AddressBook
         [Column("STA-CD-TE")]
         public string StatusCode { get; set; }
         [Column("CSG-ADR-ID")]
-        public int ConsigneeAddressId { get; set; }
+        public int? ConsigneeAddressId { get; set; }
         [Column("CSG-ADR")]
         public string ConsigneeAddress { get; set; }
         [Column("CSG-ADR-TR")]
         public string ConsigneeTranslatedAddress { get; set; }
-
+     
         [Column("CSG-AD1-TE")]
         public string Address_One { get; set; }
         [Column("CSG-AD2-TE")]
@@ -35,7 +35,7 @@ namespace UPS.DataObjects.AddressBook
         [Column("CSG-AD3-TE")]
         public string Address_Three { get; set; }
         [Column("CSG-AD4-TE")]
-
+     
         public string Address_Four { get; set; }
         [Column("CSG-RD-TE")]
         public string Road { get; set; }
@@ -77,9 +77,9 @@ namespace UPS.DataObjects.AddressBook
         [Column("VFY-MAT-NR")]
         public string VerifyMatch { get; set; }
         [Column("CRD-DT")]
-        public DateTime CreatedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
         [Column("MDF-DT")]
-        public DateTime ModifiedDate { get; set; }
-
+        public DateTime? ModifiedDate { get; set; }
+    
     }
 }
