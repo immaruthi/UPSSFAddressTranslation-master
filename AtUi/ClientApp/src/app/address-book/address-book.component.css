@@ -1,3 +1,27 @@
+::ng-deep snack-bar-container.custom-class-success {
+  background: #F2F2F2;
+  position: absolute;
+  top: 50px;
+  right: 16px;
+}
+
+::ng-deep .custom-class-success .mat-simple-snackbar {
+  color: #339900 !important;
+  font-weight: bold;
+}
+
+::ng-deep snack-bar-container.custom-class-error {
+  background: #F2F2F2;
+  position: absolute;
+  top: 50px;
+  right: 16px;
+}
+
+::ng-deep .custom-class-error .mat-simple-snackbar {
+  color: red !important;
+  font-weight: bold;
+}
+
 .table-div {
   width: 100%;
   height: calc(100vh - 177.5px);
@@ -6,7 +30,7 @@
 
 mat-table {
   width: 100%;
-  min-width: 5000px;
+  min-width: 5400px;
   padding: 0;
 }
 
@@ -51,6 +75,94 @@ mat-header-row {
   color: white;
 }
 
-mat-cell {
+/*Action*/
+  mat-cell:nth-child(1) {
+    margin-left: 0px 15px 0px 15px;
+    padding: 20px;
+    width: 100px;
+    flex: none;
+    float: left;
+    font-size: 12px;
+  }
+
+/*Action*/
+mat-header-cell:nth-child(1) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 100px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Consignee Address*/
+mat-cell:nth-child(4) {
+  padding: 0px 15px 0px 15px;
+  width: 300px;
+  flex: none;
+  float: left;
   font-size: 12px;
+}
+
+/*Consignee Address*/
+mat-header-cell:nth-child(4) {
+  padding: 0px 15px 0px 15px;
+  width: 300px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Consignee Translated Address*/
+mat-cell:nth-child(5) {
+  padding: 0px 15px 0px 15px;
+  width: 300px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Consignee Translated Address*/
+mat-header-cell:nth-child(5) {
+  padding: 0px 15px 0px 15px;
+  width: 300px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Created Date*/
+mat-cell:nth-child(8) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Created Date*/
+mat-header-cell:nth-child(8) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Modified Date*/
+mat-cell:nth-child(9) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Modified Date*/
+mat-header-cell:nth-child(9) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
 }
