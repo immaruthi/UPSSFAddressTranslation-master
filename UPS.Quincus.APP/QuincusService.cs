@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UPS.DataObjects.Common;
 using UPS.DataObjects.Shipment;
 using UPS.Quincus.APP.Configuration;
 using UPS.Quincus.APP.ProxyConnections;

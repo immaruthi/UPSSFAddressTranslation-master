@@ -13,7 +13,7 @@ namespace UPS.DataObjects.AddressBook
         [Column("ID")]
         public int Id { get; set; }
         [Column("SMT-ID")]
-        public int ShipmentId { get; set; }
+        public int? ShipmentId { get; set; }
         [Column("BAT-ID-TE")]
         public string BatchId { get; set; }
         [Column("ORG-TE")]
@@ -22,7 +22,7 @@ namespace UPS.DataObjects.AddressBook
         [Column("STA-CD-TE")]
         public string StatusCode { get; set; }
         [Column("CSG-ADR-ID")]
-        public int ConsigneeAddressId { get; set; }
+        public int? ConsigneeAddressId { get; set; }
         [Column("CSG-ADR")]
         public string ConsigneeAddress { get; set; }
         [Column("CSG-ADR-TR")]
@@ -77,9 +77,9 @@ namespace UPS.DataObjects.AddressBook
         [Column("VFY-MAT-NR")]
         public string VerifyMatch { get; set; }
         [Column("CRD-DT")]
-        public DateTime CreatedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
         [Column("MDF-DT")]
-        public DateTime ModifiedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
     
     }
 }
