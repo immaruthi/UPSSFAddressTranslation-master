@@ -8,6 +8,7 @@
     using System.Net.Cache;
     using System.Threading.Tasks;
     using Newtonsoft.Json;
+    using UPS.DataObjects.Common;
     using UPS.Quincus.APP.Common;
     using UPS.Quincus.APP.Configuration;
     using UPS.Quincus.APP.Request;
