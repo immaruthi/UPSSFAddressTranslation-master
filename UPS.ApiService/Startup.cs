@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AtService.Models;
+﻿using ElmahCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -15,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using UPS.Quincus.APP.Common;
 using UPS.Quincus.APP.Request;
 using UPS.ServicesAsyncActions;
@@ -57,6 +52,15 @@ namespace UPS.AddressTranslationService
             services.AddTransient<IAddressBookService, AddressBookService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Core API", Description = "Swagger Core API" });
+                c.OperationFilter<FormFileSwaggerFilter>();
+            }
+
+             );
+
+            services.AddElmah();
             services.AddDbContext<ApplicationDbContext>(
                 option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -103,6 +107,7 @@ namespace UPS.AddressTranslationService
             {
                 app.UseHsts();
             }
+            app.UseElmah();
             app.UseCors(
                 options => options.WithOrigins(Configuration["CorsEnableDomain:Domain"]).AllowAnyHeader()
                            .AllowAnyMethod()
@@ -110,7 +115,13 @@ namespace UPS.AddressTranslationService
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();
-         
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Core API");
+                
+            }
+            );
         }
 
     }

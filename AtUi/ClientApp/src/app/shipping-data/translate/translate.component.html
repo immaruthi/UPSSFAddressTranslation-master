@@ -9,7 +9,18 @@
     <button mat-raised-button color="primary" (click)="sendForTranslate()"> Translate </button>
   </div>
 </div>
-<br />
+<div class="row rowPaginator">
+  <div class="col-md-1">
+    <button mat-raised-button color="primary" (click)="toggleSelect()"> {{toggleSelectAll}} </button>
+  </div>
+  <div class="col-md-11">
+    <mat-paginator #paginator
+                   [pageSize]="10"
+                   [pageSizeOptions]="[5, 10, 20, 50, 100]"
+                   [showFirstLastButtons]="true">
+    </mat-paginator>
+  </div>
+</div>
 <div class="table-div">
   <div class="row">
     <mat-table class="table" [dataSource]="dataSource" matSort>
@@ -138,10 +149,5 @@
       <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
     </mat-table>
   </div>
-  </div>
-  <mat-paginator #paginator
-                 [pageSize]="10"
-                 [pageSizeOptions]="[5, 10, 20, 50, 100]"
-                 (page)="pageEvent = handlePageChange($event)"
-                 [showFirstLastButtons]="true">
-  </mat-paginator>
+</div>
+

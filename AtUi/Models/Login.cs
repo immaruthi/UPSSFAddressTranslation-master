@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 
 namespace AtUi.Models
 {
-    public class Login
-    {
+    //public class Login
+    //{
 
-        private LoginContext context;
+    //    private LoginContext context;
 
-        public int Emp_Id { get; set; }
+    //    public int Emp_Id { get; set; }
 
-        public string pwd { get; set; }
+    //    public string pwd { get; set; }
 
-    }
+    //}
 }

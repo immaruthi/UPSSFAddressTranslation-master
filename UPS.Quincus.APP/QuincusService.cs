@@ -27,9 +27,9 @@ namespace UPS.Quincus.APP
             return quincusTranslatedAddressResponse;
         }
 
-        public static QuincusResponse GetGeoCodeReponseFromQuincus(QuincusGeoCodeDataRequest quincusGeoCodeDataRequest, decimal shipmentsCount = 30)
+        public static QuincusResponse GetGeoCodeReponseFromQuincus(QuincusGeoCodeDataRequest quincusGeoCodeDataRequest)
         {
-            QuincusResponse quincusReponse = QuincusProxy.GetQuincusResponse(quincusGeoCodeDataRequest,shipmentsCount);
+            QuincusResponse quincusReponse = QuincusProxy.GetQuincusResponse(quincusGeoCodeDataRequest);
             return quincusReponse;
         }
 

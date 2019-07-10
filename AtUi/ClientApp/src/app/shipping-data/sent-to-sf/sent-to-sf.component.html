@@ -11,7 +11,11 @@
     <button mat-raised-button color="primary" (click)="SFexportToExcel()"> Export to Excel </button>
   </div>
 </div>
-<br />
+<mat-paginator #paginator
+               [pageSize]="10"
+               [pageSizeOptions]="[5, 10, 20, 50]"
+               [showFirstLastButtons]="true">
+</mat-paginator>
 <div class="table-div">
   <div class="row">
       <mat-table class="table" [dataSource]="dataSource" matSort>
@@ -144,8 +148,4 @@
       </mat-table>
   </div>
 </div>
-<mat-paginator #paginator
-               [pageSize]="10"
-               [pageSizeOptions]="[5, 10, 20, 50]"
-               [showFirstLastButtons]="true">
-</mat-paginator>
+

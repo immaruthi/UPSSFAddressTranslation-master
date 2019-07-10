@@ -16,5 +16,7 @@ namespace UPS.ServicesAsyncActions
         ShipmentDataResponse UpdateShipmentAddressById(ShipmentDataRequest shipmentDataRequest);
         int? SelectShipmentTotalStatusByWorkflowId(int wid);
         void UpdateShipmentAddressByIds(List<ShipmentDataRequest> shipmentDataRequest);
+
+        string GetShipmentCustomCodesInformation();
     }
 }

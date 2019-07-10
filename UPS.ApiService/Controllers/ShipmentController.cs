@@ -130,6 +130,8 @@ namespace AtService.Controllers
 
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         //[HttpPost]
+
+        [NonAction]
         public ShipmentDataResponse CreateShipments(List<ExcelDataObject> excelDataObjects, int workflowID)
         {
             //int i = 0;
@@ -314,6 +316,7 @@ namespace AtService.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateOrderShipment([FromBody] List<UIOrderRequestBodyData> uIOrderRequestBodyDatas)
         {
+            string customerID = shipmentService.GetShipmentCustomCodesInformation();
             _workflowID = uIOrderRequestBodyDatas[0].wfL_ID;
             CreateOrderShipmentResponse createOrderShipmentResponse = new CreateOrderShipmentResponse();
             createOrderShipmentResponse.FailedToProcessShipments = new List<string>();
@@ -329,7 +332,7 @@ namespace AtService.Controllers
                 XMLMessage = "<Request lang=\"zh-CN\" service=\"OrderService\">";
                 XMLMessage += "<Head>LJ_T6NVV</Head>";
                 XMLMessage += "<Body>";
-                XMLMessage += "<Order orderid=\"" + orderRequest.pkG_NR_TE + "\" custid=\"" + 7551234567 + "\"";
+                XMLMessage += "<Order orderid=\"" + orderRequest.pkG_NR_TE + "\" custid=\"" + customerID + "\"";
                 XMLMessage += " j_tel=\"" + orderRequest.shP_CTC_TE + "\"";
                 XMLMessage += " j_address=\"" + orderRequest.shP_ADR_TE + "\"";
                 XMLMessage += " d_tel=\"" + orderRequest.pH_NR + "\"";
@@ -499,12 +502,21 @@ namespace AtService.Controllers
                 {
                     var getAddressTranslation = quincusTranslatedAddressResponse.ResponseData;
 
-                    GoToSleep(quincusTranslatedAddressResponse);
+                    //GoToSleep(quincusTranslatedAddressResponse);
 
-                    var QuincusResponse = QuincusService.GetGeoCodeReponseFromQuincus(new QuincusGeoCodeDataRequest()
+                    //System.Threading.Thread.Sleep(5000);
+
+                    List<string> batchIds = new List<string>();
+
+                    quincusTranslatedAddressResponse.ResponseData.ForEach(batches =>
+                    {
+                        batchIds.Add(batches.batch_id);
+                    });
+
+                    var QuincusResponse = QuincusService.GetGeoCodeReponseFromQuincus(new UPS.Quincus.APP.Request.QuincusGeoCodeDataRequest()
                     {
                         endpoint = configuration["Quincus:GeoCodeEndPoint"],
-                        id = quincusTranslatedAddressResponse.ResponseData.batch_id,
+                        batchIDList = batchIds,
                         quincusTokenData = quincusTokenDataResponse.quincusTokenData
                     });
 
@@ -512,49 +524,52 @@ namespace AtService.Controllers
                     {
                         // Insert Address into AddressBook
                         addressBookService.InsertAddress(QuincusResponse?.QuincusReponseData);
-
-                        List<Geocode> geocodes = (List<Geocode>)(QuincusResponse.QuincusReponseData).geocode;
-                        List<ShipmentDataRequest> shipmentDataRequestList = new List<ShipmentDataRequest>(geocodes.Count);
-
-                        foreach (Geocode geocode in geocodes)
+                        QuincusResponse.QuincusReponseDataList.ForEach(datalist =>
                         {
-                            ShipmentDataRequest shipmentDataRequest =
-                                _shipmentDataRequest.FirstOrDefault(_=>_.ID== Convert.ToInt32(geocode.id));
-                            shipmentDataRequest.SHP_ADR_TR_TE = geocode.translated_adddress;
-                            shipmentDataRequest.ACY_TE = geocode.accuracy;
-                            shipmentDataRequest.CON_NR = geocode.confidence;
+                            List<Geocode> geocodes = (List<Geocode>)((QuincusReponseData)datalist).geocode;
+                            List<ShipmentDataRequest> shipmentDataRequestList = new List<ShipmentDataRequest>(geocodes.Count);
 
-                            if (
-                                        !string.IsNullOrEmpty(geocode.translated_adddress)
-                                    &&  geocode.translated_adddress != "NA"
-                                    &&  !string.Equals(_shipmentDataRequest.Where(s => s.ID == Convert.ToInt32(geocode.id)).FirstOrDefault().RCV_ADR_TE.Trim(),
-                                        geocode.translated_adddress.Trim())
-                               )
+                            foreach (Geocode geocode in geocodes)
                             {
-                                shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Translated);
+                                ShipmentDataRequest shipmentDataRequest =
+                                    _shipmentDataRequest.FirstOrDefault(_ => _.ID == Convert.ToInt32(geocode.id));
+                                shipmentDataRequest.SHP_ADR_TR_TE = geocode.translated_adddress;
+                                shipmentDataRequest.ACY_TE = geocode.accuracy;
+                                shipmentDataRequest.CON_NR = geocode.confidence;
+
+                                if (
+                                            !string.IsNullOrEmpty(geocode.translated_adddress)
+                                        && geocode.translated_adddress != "NA"
+                                        && !string.Equals(_shipmentDataRequest.Where(s => s.ID == Convert.ToInt32(geocode.id)).FirstOrDefault().RCV_ADR_TE.Trim(),
+                                            geocode.translated_adddress.Trim())
+                                   )
+                                {
+                                    shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Translated);
+                                }
+                                else
+                                {
+                                    shipmentDataRequest.SMT_STA_NR = Convert.ToInt32(_shipmentDataRequest.Where(s => s.ID == shipmentDataRequest.ID).FirstOrDefault().SMT_STA_NR);
+                                }
+
+                                shipmentDataRequestList.Add(shipmentDataRequest);
                             }
-                            else
-                            {
-                                shipmentDataRequest.SMT_STA_NR = Convert.ToInt32(_shipmentDataRequest.Where(s => s.ID == shipmentDataRequest.ID).FirstOrDefault().SMT_STA_NR);
-                            }
+                            shipmentService.UpdateShipmentAddressByIds(shipmentDataRequestList);
 
-                            shipmentDataRequestList.Add(shipmentDataRequest);
-                        }
-                        shipmentService.UpdateShipmentAddressByIds(shipmentDataRequestList);
-
-                        //we need to update the workflow status
-                        int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);
-                        WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
-                        workflowDataRequest.ID = _workflowID;
-                        workflowDataRequest.WFL_STA_TE = workflowstatus;
-                        workflowService.UpdateWorkflowStatusById(workflowDataRequest);
-
-                        return Ok(QuincusResponse.QuincusReponseData);
+                            //we need to update the workflow status
+                            int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);
+                            WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
+                            workflowDataRequest.ID = _workflowID;
+                            workflowDataRequest.WFL_STA_TE = workflowstatus;
+                            workflowService.UpdateWorkflowStatusById(workflowDataRequest);
+                        });
+                       
+                        return Ok(QuincusResponse.QuincusReponseDataList);
                     }
                     else
                     {
                         return Ok(QuincusResponse.Exception);
                     }
+                
                 }
                 else
                 {
@@ -576,15 +591,15 @@ namespace AtService.Controllers
 
             if (Enumerable.Range(1, 10).Contains(sleepEstimation))
             {
-                sleepMode = sleepMode * 1;
+                sleepMode = sleepMode * 0.5;
             }
             else if (Enumerable.Range(11, 20).Contains(sleepEstimation))
             {
-                sleepMode = sleepMode * 1;
+                sleepMode = sleepMode * 0.5;
             }
             else if (Enumerable.Range(21, 30).Contains(sleepEstimation))
             {
-                sleepMode = sleepMode * 1.5;
+                sleepMode = sleepMode * 1.25;
             }
             else if (Enumerable.Range(31, 40).Contains(sleepEstimation))
             {
@@ -643,7 +658,7 @@ namespace AtService.Controllers
                 quincusResponse = QuincusService.GetGeoCodeReponseFromQuincus(new UPS.Quincus.APP.Request.QuincusGeoCodeDataRequest()
                 {
                     endpoint = configuration["Quincus:GeoCodeEndPoint"],
-                    id = shipmentGeoCodes.geoCode,
+                    batchIDList = shipmentGeoCodes.geoCode,
                     quincusTokenData = quincusTokenDataResponse.quincusTokenData
                 });
 
