@@ -1,6 +1,7 @@
 ﻿using EFCore.BulkExtensions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using UPS.DataObjects.AddressBook;
@@ -13,9 +14,11 @@ namespace UPS.ServicesDataRepository
     public class AddressBookService : IAddressBookService
     {
         private ApplicationDbContext context;
-        public AddressBookService(ApplicationDbContext applicationDbContext)
+        private IEntityValidationService entityValidationService;
+        public AddressBookService(ApplicationDbContext applicationDbContext, IEntityValidationService entityValidationService)
         {
             this.context = applicationDbContext;
+            this.entityValidationService = entityValidationService;
         }
 
         public List<AddressBook> GetAddressBooks()
@@ -38,8 +41,10 @@ namespace UPS.ServicesDataRepository
                         && quincusReponseData.addresses != null
                     )
                     {
+                        List<Address> newAddress = FilterNewAddress(quincusReponseData.addresses);
+
                         List<AddressBook> addressBooks =
-                            (from address in quincusReponseData.addresses?.ToList()
+                            (from address in newAddress
                              join geocode in quincusReponseData.geocode?.ToList()
                              on address.id equals geocode.id
                              select
@@ -66,30 +71,51 @@ namespace UPS.ServicesDataRepository
                                  GeoCode = geocode?.postcode,
                                  GeoCodeError = Convert.ToString(quincusReponseData?.geocode_errors ?? string.Empty),
                                  Latitude = geocode?.latitude.Trim(),
-                                Longitude =geocode?.longitude.Trim(),
-                                PostalCode = geocode?.postcode,
-                                Organization = quincusReponseData?.organisation != null ? Convert.ToString(quincusReponseData?.organisation) : string.Empty,
-                                Region = geocode?.region,
-                                Road = geocode?.road,
-                                SemanticCheck = geocode?.semantic_check,
-                                ShipmentId = address?.id != null ? Convert.ToInt32(address?.id) : -1,
-                                StatusCode = quincusReponseData?.status_code,
-                                Unit = geocode?.unit,
-                                VerifyMatch = geocode?.verify_match
-                            }).ToList();
+                                 Longitude = geocode?.longitude.Trim(),
+                                 PostalCode = geocode?.postcode,
+                                 Organization = quincusReponseData?.organisation != null ? Convert.ToString(quincusReponseData?.organisation) : string.Empty,
+                                 Region = geocode?.region,
+                                 Road = geocode?.road,
+                                 SemanticCheck = geocode?.semantic_check,
+                                 ShipmentId = address?.id != null ? Convert.ToInt32(address?.id) : -1,
+                                 StatusCode = quincusReponseData?.status_code,
+                                 Unit = geocode?.unit,
+                                 VerifyMatch = geocode?.verify_match
+                             }).ToList();
 
-                        addressBooksList.AddRange(addressBooks);
-                     
+                        List<AddressBook> validEntity = this.entityValidationService.FilterValidEntity<AddressBook>(addressBooks);
+                        if (validEntity != null && validEntity.Any())
+                        {
+                            addressBooksList.AddRange(validEntity);
+                        }
                     }
                 }
-                this.context.BulkInsert(addressBooksList);
+                if (addressBooksList.Any())
+                {
+                    this.context.BulkInsert(addressBooksList);
+                }
             }
             catch (Exception exception)
             {
                // Need to log exception if Any
             }
+        }
 
+        private List<Address> FilterNewAddress(IList<Address> addresses)
+        {
+            List<Address> newAddresses = addresses
+                   .Where(
+                       (Address ad) =>
+                           !this.context.AddressBooks
+                               .Select(
+                               (AddressBook x) =>
+                                   x.ConsigneeAddress.ToLower()).ToList()
+                               .Contains(ad.address.ToLower()))
+                    .GroupBy(_=>_.address)
+                    .Select(x=>x.First())
+                    .ToList();
 
+            return newAddresses;
         }
     }
 }

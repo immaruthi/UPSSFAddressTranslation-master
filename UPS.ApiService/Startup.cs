@@ -14,6 +14,7 @@ using UPS.Quincus.APP.Common;
 using UPS.Quincus.APP.Request;
 using UPS.ServicesAsyncActions;
 using UPS.ServicesDataRepository;
+using UPS.ServicesDataRepository.Common;
 using UPS.ServicesDataRepository.DataContext;
 using UPS.ServicesDataRepository.OverrideDbContext;
 
@@ -51,6 +52,7 @@ namespace UPS.AddressTranslationService
             services.AddTransient<IShipmentAsync, ShipmentService>();
             services.AddTransient<IAddressBookService, AddressBookService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IEntityValidationService, EntityValidationServic>();
 
             services.AddSwaggerGen(c =>
             {
