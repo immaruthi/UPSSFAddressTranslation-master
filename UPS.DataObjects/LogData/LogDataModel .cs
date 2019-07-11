@@ -32,6 +32,7 @@ namespace UPS.DataObjects.LogData
         QuincusAPI_Translation = 4,
         AddressBookSetup = 5,
         EFCoreContext = 6,
-        Others = 7
+        ExcelUpload=7,
+        Others = 8
     }
 }

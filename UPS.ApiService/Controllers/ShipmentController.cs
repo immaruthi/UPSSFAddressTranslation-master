@@ -1,5 +1,6 @@
 ﻿namespace AtService.Controllers
 {
+    using AtService.HeadController;
     using ExcelFileRead;
     using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Hosting;
@@ -14,6 +15,7 @@
     using System.Threading.Tasks;
     using System.Xml;
     using UPS.AddressTranslationService.Controllers;
+    using UPS.Application.CustomLogs;
     using UPS.DataObjects.ADR_ADT_LG;
     using UPS.DataObjects.Common;
     using UPS.DataObjects.Shipment;
@@ -28,9 +30,9 @@
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("AllowAtUIOrigin")]
-    public class ShipmentController : ControllerBase
+    public class ShipmentController : UPSController
     {
-
+        public ICustomLog iCustomLog { get; set; }
         private readonly IConfiguration configuration;
         private readonly IHostingEnvironment hostingEnvironment;
         private IAddressBookService addressBookService;
@@ -39,7 +41,7 @@
         //private ShipmentService shipmentService { get; set; }
         private WorkflowService workflowService { get; set; }
         private IShipmentAsync shipmentService { get; set; }
-        private IAddressAuditLogAsync addressAuditLogService { get; set; } 
+        private IAddressAuditLogAsync addressAuditLogService { get; set; }
 
         private IQuincusAddressTranslationRequest _quincusAddressTranslationRequest { get; set; }
 
@@ -99,7 +101,7 @@
                                 WorkflowController workflowController = new WorkflowController();
                                 WorkflowDataResponse response = ((WorkflowDataResponse)((ObjectResult)(workflowController.CreateWorkflow(file, Emp_Id)).Result).Value);
                                 _workflowID = response.Workflow.ID;
-                                result = this.CreateShipments(excelDataObject2, _workflowID);
+                                result = shipmentService.CreateShipments(excelDataObject2, _workflowID);
                                 if (result.Success)
                                 {
                                     shipmentDataResponse.Success = true;
@@ -115,157 +117,42 @@
                             }
                             else
                             {
+                                iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                                {
+                                    apiTypes = UPS.DataObjects.LogData.APITypes.ExcelUpload,
+                                    dateTime = System.DateTime.Now,
+                                    LogInformation = new UPS.DataObjects.LogData.LogInformation()
+                                    {
+                                        LogException = excelExtensionReponse.exception,
+                                        LogRequest = "Excel Uploaded",
+                                        LogResponse = JsonConvert.SerializeObject(excelExtensionReponse)
+                                    }
+                                });
                                 return Ok(excelExtensionReponse);
                             }
                         }
                     }
                 }
 
+                iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                {
+                    apiTypes = UPS.DataObjects.LogData.APITypes.ExcelUpload,
+                    dateTime = System.DateTime.Now,
+                    LogInformation = new UPS.DataObjects.LogData.LogInformation()
+                    {
+                        LogException = null,
+                        LogRequest = "Excel Uploaded",
+                        LogResponse = JsonConvert.SerializeObject(shipmentDataResponse)
+                    }
+                });
+
                 return Ok(shipmentDataResponse);
             }
             catch (Exception ex)
             {
-               // new AuditEventEntry.WriteEntry(new Exception(ex.Message));
+                // new AuditEventEntry.WriteEntry(new Exception(ex.Message));
                 return Ok(shipmentDataResponse.OperationExceptionMsg = ex.Message);
             }
-        }
-
-
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //[HttpPost]
-
-        [NonAction]
-        public ShipmentDataResponse CreateShipments(List<ExcelDataObject> excelDataObjects, int workflowID)
-        {
-            //int i = 0;
-            ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
-            try
-            {
-                List<ShipmentDataRequest> shipmentData = new List<ShipmentDataRequest>();
-                foreach (ExcelDataObject excelDataObject in excelDataObjects)
-                {
-                    bool allPropertiesNull = !excelDataObject.GetType().GetProperties().Any(prop => prop == null);
-                    if (allPropertiesNull)
-                    {
-
-                        ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
-
-                        if (!string.IsNullOrWhiteSpace(excelDataObject.S_shipmentno))
-                        {
-
-                            shipmentDataRequest.BIL_TYP_TE = excelDataObject.S_billtype;
-                            shipmentDataRequest.CCY_VAL_TE = string.Empty;
-                            shipmentDataRequest.COD_TE = string.Empty;
-                            shipmentDataRequest.CSG_CTC_TE = excelDataObject.S_cneectc;
-
-                            decimal decimalvalue = 0;
-                            shipmentDataRequest.DIM_WGT_DE = 0;
-                            if (!string.IsNullOrEmpty(excelDataObject.S_dimwei))
-                            {
-                                if (decimal.TryParse(excelDataObject.S_dimwei, out decimalvalue))
-                                {
-                                    shipmentDataRequest.DIM_WGT_DE = decimalvalue;
-                                }
-                            }
-
-                            //shipmentDataRequest.DIM_WGT_DE = null; //Convert.ToDecimal(excelDataObject.S_dimwei);
-                            shipmentDataRequest.DST_CTY_TE = excelDataObject.S_dstcity;
-                            shipmentDataRequest.DST_PSL_TE = excelDataObject.S_dstpsl;
-                            shipmentDataRequest.EXP_SLC_CD = excelDataObject.S_expslic;
-                            shipmentDataRequest.EXP_TYP = "顺丰即日";//excelDataObject.S_expslic;
-                            shipmentDataRequest.IMP_NR = excelDataObject.S_impr;
-                            shipmentDataRequest.IMP_SLC_TE = excelDataObject.S_impslic;
-                            shipmentDataRequest.IN_FLG_TE = excelDataObject.S_inflight;
-                            shipmentDataRequest.ORG_CTY_TE = excelDataObject.S_orgcity;
-
-                            string pststring = Convert.ToString(excelDataObject.S_orgpsl);
-                            if (InputValidations.IsDecimalFormat(pststring))
-                            {
-                                shipmentDataRequest.ORG_PSL_CD = Decimal.ToInt32(Decimal.Parse(pststring)).ToString();
-                            }
-                            else
-                            {
-                                shipmentDataRequest.ORG_PSL_CD = pststring;
-                            }
-
-                            // OU_FLG_TE = Convert.ToString(excelDataObject.S_outflight),
-
-                            int intvalue = 0;
-                            shipmentDataRequest.PCS_QTY_NR = 0;
-                            if (!string.IsNullOrEmpty(excelDataObject.pcs))
-                            {
-                                if (int.TryParse(excelDataObject.pcs, out intvalue))
-                                {
-                                    shipmentDataRequest.PCS_QTY_NR = intvalue;
-                                }
-                            }
-
-                            //shipmentDataRequest.PCS_QTY_NR = null;//Convert.ToInt32(Convert.ToDouble(excelDataObject.pcs));
-                            shipmentDataRequest.PH_NR = excelDataObject.S_ph;
-                            shipmentDataRequest.PKG_NR_TE = excelDataObject.S_packageno;
-                            shipmentDataRequest.PKG_WGT_DE = Convert.ToDecimal(excelDataObject.S_pkgwei);
-                            shipmentDataRequest.PK_UP_TM = null;//Convert.ToString(excelDataObject.S_pkuptime),
-                            shipmentDataRequest.PYM_MTD = "寄付月结";//excelDataObject.pymt;
-                            shipmentDataRequest.RCV_ADR_TE = excelDataObject.S_address1;
-                            shipmentDataRequest.RCV_CPY_TE = excelDataObject.S_receivercompany;
-                            shipmentDataRequest.SHP_ADR_TE = excelDataObject.address;
-                            shipmentDataRequest.SHP_ADR_TR_TE = string.Empty;
-                            shipmentDataRequest.SHP_CPY_NA = excelDataObject.S_shippercompany;
-                            shipmentDataRequest.SHP_CTC_TE = excelDataObject.S_shptctc;
-
-                            DateTime dDate;
-                            int intdate;
-                            shipmentDataRequest.SHP_DT = null;
-                            if (!string.IsNullOrEmpty(excelDataObject.S_shipdate))
-                            {
-                                if (int.TryParse(excelDataObject.S_shipdate, out intdate))
-                                {
-                                    shipmentDataRequest.SHP_DT = null;
-                                }
-                                else if (DateTime.TryParse(excelDataObject.S_shipdate, out dDate))
-                                {
-                                    shipmentDataRequest.SHP_DT = Convert.ToDateTime(excelDataObject.S_shipdate);
-                                }
-                            }
-                            //if(!string.IsNullOrEmpty(excelDataObject.S_shipdate))
-                            //{
-                            //    if (DateTime.TryParse(excelDataObject.S_shipdate, out dDate))
-                            //    {
-                            //        shipmentDataRequest.SHP_DT = Convert.ToDateTime(excelDataObject.S_shipdate);
-                            //    }
-                            //}
-                            shipmentDataRequest.SHP_DT = null; //Convert.ToDateTime(excelDataObject.S_shipdate);
-                            shipmentDataRequest.SHP_NR = excelDataObject.S_shpr;
-                            shipmentDataRequest.SHP_PH_TE = excelDataObject.S_shptph;
-                            shipmentDataRequest.SMT_NR_TE = excelDataObject.S_shipmentno;
-                            shipmentDataRequest.SMT_STA_NR = 0;
-                            shipmentDataRequest.SMT_STA_TE = "Uploaded";
-                            shipmentDataRequest.SMT_VAL_DE = 0;
-                            shipmentDataRequest.SMT_WGT_DE = Convert.ToDecimal(excelDataObject.S_shptwei);
-                            shipmentDataRequest.SVL_NR = Convert.ToString(excelDataObject.svl);
-                            shipmentDataRequest.WGT_UNT_TE = excelDataObject.S_weiunit;
-                            shipmentDataRequest.WFL_ID = workflowID;
-                            shipmentDataRequest.SF_TRA_LG_ID = null;
-                            shipmentDataRequest.QQS_TRA_LG_ID = null;
-                            shipmentDataRequest.FST_INV_LN_DES_TE = excelDataObject.S_1stinvoicelinedesc;
-                            shipmentDataRequest.POD_RTN_SVC = "0";
-
-                            shipmentData.Add(shipmentDataRequest);
-                        }
-                    }
-
-                }
-                shipmentDataResponse = shipmentService.CreateShipments(shipmentData);
-                shipmentDataResponse.Success = true;
-                return shipmentDataResponse;
-            }
-            catch (Exception exception)
-            {
-                shipmentDataResponse.OperationExceptionMsg = exception.Message;
-                shipmentDataResponse.Success = true;
-                //AuditEventEntry.WriteEntry(new Exception(exception.Message));
-            }
-            return shipmentDataResponse;
         }
 
         //private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
@@ -292,7 +179,7 @@
         {
             //shipmentService = new ShipmentService();
             ShipmentDataResponse shipmentDataResponse = shipmentService.UpdateShipmentAddressById(shipmentDataRequest);
-            if(shipmentDataResponse.Success && !string.IsNullOrEmpty(shipmentDataResponse.BeforeAddress))
+            if (shipmentDataResponse.Success && !string.IsNullOrEmpty(shipmentDataResponse.BeforeAddress))
             {
                 try
                 {
@@ -316,11 +203,11 @@
                     }
 
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
 
                 }
-                
+
             }
 
             //we need to update the workflow status
@@ -329,6 +216,18 @@
             workflowDataRequest.ID = shipmentDataRequest.WFL_ID;
             workflowDataRequest.WFL_STA_TE = workflowstatus;
             workflowService.UpdateWorkflowStatusById(workflowDataRequest);
+
+            iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+            {
+                apiTypes = UPS.DataObjects.LogData.APITypes.EFCoreContext,
+                dateTime = System.DateTime.Now,
+                LogInformation = new UPS.DataObjects.LogData.LogInformation()
+                {
+                    LogException = null,
+                    LogRequest = JsonConvert.SerializeObject(shipmentDataRequest),
+                    LogResponse = JsonConvert.SerializeObject(shipmentDataResponse)
+                }
+            });
 
             return Ok(shipmentDataResponse);
         }
@@ -462,6 +361,19 @@
             workflowDataRequest.ID = _workflowID;
             workflowDataRequest.WFL_STA_TE = workflowstatus;
             workflowService.UpdateWorkflowStatusById(workflowDataRequest);
+
+            iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+            {
+                apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                dateTime = System.DateTime.Now,
+                LogInformation = new UPS.DataObjects.LogData.LogInformation()
+                {
+                    LogException = null,
+                    LogRequest = JsonConvert.SerializeObject(uIOrderRequestBodyDatas),
+                    LogResponse = JsonConvert.SerializeObject(createOrderShipmentResponse)
+                }
+            });
+
             return Ok(createOrderShipmentResponse);
         }
 
@@ -485,10 +397,35 @@
 
             if (getSFCancelOrderServiceResponse.Response)
             {
+                iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                {
+                    apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                    dateTime = System.DateTime.Now,
+                    LogInformation = new UPS.DataObjects.LogData.LogInformation()
+                    {
+                        LogException = null,
+                        LogRequest = JsonConvert.SerializeObject(sFOrderXMLRequest),
+                        LogResponse = JsonConvert.SerializeObject(getSFCancelOrderServiceResponse)
+                    }
+                });
+
                 return Ok(getSFCancelOrderServiceResponse.OrderResponse);
             }
             else
             {
+
+                iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                {
+                    apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                    dateTime = System.DateTime.Now,
+                    LogInformation = new UPS.DataObjects.LogData.LogInformation()
+                    {
+                        LogException = getSFCancelOrderServiceResponse.exception,
+                        LogRequest = JsonConvert.SerializeObject(sFOrderXMLRequest),
+                        LogResponse = null
+                    }
+                });
+
                 //AuditEventEntry.WriteEntry(new Exception(getSFCancelOrderServiceResponse.exception.ToString()));
                 return Ok(getSFCancelOrderServiceResponse.exception);
             }
@@ -544,10 +481,6 @@
                 {
                     var getAddressTranslation = quincusTranslatedAddressResponse.ResponseData;
 
-                    //GoToSleep(quincusTranslatedAddressResponse);
-
-                    //System.Threading.Thread.Sleep(5000);
-
                     List<string> batchIds = new List<string>();
 
                     quincusTranslatedAddressResponse.ResponseData.ForEach(batches =>
@@ -574,16 +507,16 @@
                             foreach (Geocode geocode in geocodes)
                             {
                                 ShipmentDataRequest shipmentDataRequest =
-                                    _shipmentDataRequest.FirstOrDefault(_ => _.ID == Convert.ToInt32(geocode.id));
+                                _shipmentDataRequest.FirstOrDefault(_ => _.ID == Convert.ToInt32(geocode.id));
                                 shipmentDataRequest.SHP_ADR_TR_TE = geocode.translated_adddress;
                                 shipmentDataRequest.ACY_TE = geocode.accuracy;
                                 shipmentDataRequest.CON_NR = geocode.confidence;
 
                                 if (
                                             !string.IsNullOrEmpty(geocode.translated_adddress)
-                                        //&& geocode.translated_adddress != "NA"
-                                        //&& !string.Equals(_shipmentDataRequest.Where(s => s.ID == Convert.ToInt32(geocode.id)).FirstOrDefault().RCV_ADR_TE.Trim(),
-                                        //    geocode.translated_adddress.Trim())
+                                   //&& geocode.translated_adddress != "NA"
+                                   //&& !string.Equals(_shipmentDataRequest.Where(s => s.ID == Convert.ToInt32(geocode.id)).FirstOrDefault().RCV_ADR_TE.Trim(),
+                                   //    geocode.translated_adddress.Trim())
                                    )
                                 {
                                     shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Translated);
@@ -597,24 +530,58 @@
                             }
                             shipmentService.UpdateShipmentAddressByIds(shipmentDataRequestList);
 
-                            //we need to update the workflow status
-                            int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);
+                        //we need to update the workflow status
+                        int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);
                             WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
                             workflowDataRequest.ID = _workflowID;
                             workflowDataRequest.WFL_STA_TE = workflowstatus;
                             workflowService.UpdateWorkflowStatusById(workflowDataRequest);
                         });
 
+                        iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                        {
+                            apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                            dateTime = System.DateTime.Now,
+                            LogInformation = new UPS.DataObjects.LogData.LogInformation()
+                            {
+                                LogException = null,
+                                LogRequest = JsonConvert.SerializeObject(QuincusResponse.QuincusReponseDataList),
+                                LogResponse = null
+                            }
+                        });
+
                         return Ok(QuincusResponse.QuincusReponseDataList);
                     }
                     else
                     {
+                        iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                        {
+                            apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                            dateTime = System.DateTime.Now,
+                            LogInformation = new UPS.DataObjects.LogData.LogInformation()
+                            {
+                                LogException = QuincusResponse.Exception,
+                                LogRequest = JsonConvert.SerializeObject(_shipmentDataRequest),
+                                LogResponse = null
+                            }
+                        });
                         return Ok(QuincusResponse.Exception);
                     }
 
                 }
                 else
                 {
+                    iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                    {
+                        apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                        dateTime = System.DateTime.Now,
+                        LogInformation = new UPS.DataObjects.LogData.LogInformation()
+                        {
+                            LogException = quincusTranslatedAddressResponse.exception,
+                            LogRequest = JsonConvert.SerializeObject(_shipmentDataRequest),
+                            LogResponse = null
+                        }
+                    });
                     return Ok(quincusTranslatedAddressResponse.exception);
                 }
 
@@ -623,61 +590,6 @@
             {
                 return Ok(quincusTokenDataResponse.exception);
             }
-        }
-
-        private static void GoToSleep(QuincusTranslatedAddressResponse quincusTranslatedAddressResponse)
-        {
-            int sleepEstimation = quincusTranslatedAddressResponse.RequestDataCount;
-
-            double sleepMode = 60000;
-
-            if (Enumerable.Range(1, 10).Contains(sleepEstimation))
-            {
-                sleepMode = sleepMode * 0.5;
-            }
-            else if (Enumerable.Range(11, 20).Contains(sleepEstimation))
-            {
-                sleepMode = sleepMode * 0.5;
-            }
-            else if (Enumerable.Range(21, 30).Contains(sleepEstimation))
-            {
-                sleepMode = sleepMode * 1.25;
-            }
-            else if (Enumerable.Range(31, 40).Contains(sleepEstimation))
-            {
-                sleepMode = sleepMode * 2;
-            }
-            else if (Enumerable.Range(41, 50).Contains(sleepEstimation))
-            {
-                sleepMode = sleepMode * 2.5;
-            }
-            else if (Enumerable.Range(51, 20).Contains(sleepEstimation))
-            {
-                sleepMode = sleepMode * 3;
-            }
-            else if (Enumerable.Range(61, 30).Contains(sleepEstimation))
-            {
-                sleepMode = sleepMode * 3.2;
-            }
-            else if (Enumerable.Range(71, 40).Contains(sleepEstimation))
-            {
-                sleepMode = sleepMode * 3.3;
-            }
-            else if (Enumerable.Range(81, 100).Contains(sleepEstimation))
-            {
-                sleepMode = sleepMode * 3.3;
-            }
-            else if (Enumerable.Range(101, 300).Contains(sleepEstimation))
-            {
-                sleepMode = sleepMode * 4;
-            }
-
-            if (sleepEstimation >= 301 && sleepEstimation <= 10000)
-            {
-                sleepMode = sleepMode * 5;
-            }
-
-            System.Threading.Thread.Sleep(Convert.ToInt32(sleepMode));
         }
 
         [Route("UpdateShipmentCode")]
@@ -758,3 +670,4 @@
         }
     }
 }
+
