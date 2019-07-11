@@ -43,7 +43,7 @@ a {
 }
 .table-div {
   width: 100%;
-  height: calc(100vh - 237px );
+  height: calc(100vh - 230px );
   overflow: auto;
   padding: 0;
 }

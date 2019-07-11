@@ -29,5 +29,14 @@ namespace AtService.Controllers
             return Ok(addressBooks);
         }
 
+        [Route("UpdateAddressBookById")]
+        [HttpPost]
+        public IActionResult UpdateAddressBookById([FromBody] AddressBook addressBookData)
+        {
+            AddressBookResponse addressBookResponse = this.addressBookService.UpdateAddressBookById(addressBookData);
+            
+            return Ok(addressBookResponse);
+        }
+
     }
 }

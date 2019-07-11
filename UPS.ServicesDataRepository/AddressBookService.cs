@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using UPS.DataObjects.AddressBook;
 using UPS.DataObjects.Common;
 using UPS.ServicesAsyncActions;
@@ -23,6 +24,31 @@ namespace UPS.ServicesDataRepository
             return this.context.AddressBooks
                     .OrderBy(( AddressBook ab)=> ab.Id)
                     .ToList();
+        }
+
+        public AddressBookResponse UpdateAddressBookById(AddressBook addressBookData)
+        {
+            AddressBookResponse addressBookResponse = new AddressBookResponse();
+            try
+            {
+                AddressBook data = this.context.AddressBooks.Where(s => s.Id == addressBookData.Id).FirstOrDefault();
+
+                data.ConsigneeTranslatedAddress = addressBookData.ConsigneeTranslatedAddress;
+                data.ModifiedDate = DateTime.Now;
+
+                this.context.AddressBooks.Update(data);
+                this.context.Entry(addressBookData).State = EntityState.Detached;
+                this.context.SaveChanges();
+                addressBookResponse.AddressBookData = this.context.AddressBooks.Where(s => s.Id == addressBookData.Id).FirstOrDefault();
+                addressBookResponse.Success = true;
+                return addressBookResponse;
+            }
+            catch (Exception ex)
+            {
+                addressBookResponse.Success = false;
+                addressBookResponse.OperatonExceptionMessage = ex.Message;
+            }
+            return addressBookResponse;
         }
 
         public void InsertAddress(List<QuincusReponseData> quincusReponseDataList)

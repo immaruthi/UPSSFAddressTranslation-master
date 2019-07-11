@@ -14,6 +14,7 @@ import { LoginData } from '../models/LoginData';
 export class TopComponent implements OnInit {
   employeeId: string;
   loginfo: string;
+  isHandset$: any;
 constructor(private userService: UserService, private router: Router) { }
   log_info: LoginData;
   logout() {
