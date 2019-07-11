@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace UPS.Application.CustomLogs
 {
-    public class AuditEventEntry:IDisposable
+    public class AuditEventEntry: ICustomLog, IDisposable
     { 
 
         public static IConfiguration Configuration { get; set; }
@@ -50,6 +50,11 @@ namespace UPS.Application.CustomLogs
         public void Dispose()
         {
             GC.SuppressFinalize(this);
+        }
+
+        public void AddLogEntry(LogDataModel logDataModel)
+        {
+            LogEntry(logDataModel);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using AtService.CustomConatiner;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,6 +22,9 @@ namespace AtService.Extensions
 {
     public static class AppBuilderExtensions
     {
+
+        //public static IServiceCollection iServiceCollection { get; set; }
+
         public static void AddLogFile(this IApplicationBuilder app, IHostingEnvironment env, IConfiguration Configuration)
         {
             AuditEventEntry.Configuration = Configuration;
@@ -59,7 +63,14 @@ namespace AtService.Extensions
             });
         }
 
-        public static void ContextSetup(this IServiceCollection services, IConfiguration Configuration)
+        public static void IocSetup(this IServiceCollection services)
+        {
+            
+
+            IoCContainer.BuildUp(services);
+        }
+
+            public static void ContextSetup(this IServiceCollection services, IConfiguration Configuration)
         {
             DBConnectionContext.getconnection(Configuration);
             MapProxy.webProxyURI = Configuration["webProxy:URL"];

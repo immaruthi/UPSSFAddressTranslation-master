@@ -61,6 +61,8 @@ namespace UPS.AddressTranslationService
             services.ConfigureJWTAuthentication(Configuration);
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+            services.IocSetup();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Quincus.Implementations\Quincus.Implementations.csproj" />
     <ProjectReference Include="..\UPS.DataObjects\UPS.DataObjects.csproj" />
   </ItemGroup>
 
