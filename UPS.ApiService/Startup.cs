@@ -47,6 +47,7 @@ namespace UPS.AddressTranslationService
             MapProxy.WebProxyEnable = Configuration["webProxy:Enable"];
 
             services.AddSingleton<IQuincusAddressTranslationRequest>(new QuincusAddressTranslationRequest() { endpoint = Configuration["Quincus:GeoCodeEndPoint"] });
+            services.AddSingleton<IAddressAuditLogAsync, AddressAuditLogService>();
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
 
             services.AddTransient<IShipmentAsync, ShipmentService>();
