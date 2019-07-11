@@ -122,7 +122,7 @@ namespace AtService.Controllers
             }
             catch (Exception ex)
             {
-                AuditEventEntry.WriteEntry(new Exception(ex.Message));
+               // new AuditEventEntry.WriteEntry(new Exception(ex.Message));
                 return Ok(shipmentDataResponse.OperationExceptionMsg = ex.Message);
             }
         }
@@ -260,7 +260,7 @@ namespace AtService.Controllers
             {
                 shipmentDataResponse.OperationExceptionMsg = exception.Message;
                 shipmentDataResponse.Success = true;
-                AuditEventEntry.WriteEntry(new Exception(exception.Message));
+                //AuditEventEntry.WriteEntry(new Exception(exception.Message));
             }
             return shipmentDataResponse;
         }
@@ -276,7 +276,7 @@ namespace AtService.Controllers
             ShipmentDataResponse shipmentDataResponse = shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
             if (!shipmentDataResponse.Success)
             {
-                AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
+                //AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
             }
             return Ok(shipmentDataResponse);
         }
@@ -420,8 +420,6 @@ namespace AtService.Controllers
                 else
                 {
                     createOrderShipmentResponse.Response = false;
-                    if (getSFCreateOrderServiceResponse.exception != null)
-                        AuditEventEntry.WriteEntry(new Exception(getSFCreateOrderServiceResponse.exception.ToString()));
                 }
             }
             //we need to update the workflow status
@@ -458,7 +456,7 @@ namespace AtService.Controllers
             }
             else
             {
-                AuditEventEntry.WriteEntry(new Exception(getSFCancelOrderServiceResponse.exception.ToString()));
+                //AuditEventEntry.WriteEntry(new Exception(getSFCancelOrderServiceResponse.exception.ToString()));
                 return Ok(getSFCancelOrderServiceResponse.exception);
             }
 
@@ -688,7 +686,7 @@ namespace AtService.Controllers
             }
             else
             {
-                AuditEventEntry.WriteEntry(new Exception(quincusTokenDataResponse.exception.ToString()));
+                //AuditEventEntry.WriteEntry(new Exception(quincusTokenDataResponse.exception.ToString()));
                 return Ok(quincusTokenDataResponse.exception);
             }
 
@@ -703,7 +701,7 @@ namespace AtService.Controllers
             shipmentDataResponse = shipperCompanyService.SelectMatchedShipmentsWithShipperCompanies(wid);
             if (!shipmentDataResponse.Success)
             {
-                AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
+                //AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
             }
             //else
             //{
@@ -721,7 +719,7 @@ namespace AtService.Controllers
             shipmentDataResponse = shipperCompanyService.SelectCompletedShipments(wid);
             if (!shipmentDataResponse.Success)
             {
-                AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
+                //AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
             }
             return shipmentDataResponse;
         }
