@@ -4,11 +4,17 @@ using System.Diagnostics;
 using System.IO;
 using UPS.DataObjects.LogData;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Hosting;
 
 namespace UPS.Application.CustomLogs
 {
-    public class AuditEventEntry
-    {
+    public class AuditEventEntry: ICustomLog, IDisposable
+    { 
+
+        public static IConfiguration Configuration { get; set; }
+        public static IHostingEnvironment HostingEnvironment { get; set; }
+        private static string filePath { get; set; }
 
         public static void WriteEntry(Exception exception)
         {
@@ -19,43 +25,36 @@ namespace UPS.Application.CustomLogs
             }
         }
 
-
-        public static void LogEntry(LogDataModel logDataModel, string path)
+        private static void LogInit()
         {
+            filePath = Path.Combine(HostingEnvironment.WebRootPath, string.Format(Configuration["APILogger:logFileName"], System.DateTime.Now.ToString("yyyyMMdd")));
 
-            LogDataModel logDataModelData = new LogDataModel()
+            if (!File.Exists(filePath))
             {
-                apiTypes = APITypes.QuincusAPI_Translation,
-                dateTime = System.DateTime.Now,
-                LogInformation = new LogInformation()
+                using (FileStream fs = File.Create(filePath))
                 {
-                    LogException = new Exception("Test Message"),
-                    LogRequest = "Test Log Request",
-                    LogResponse = "Test Lod Response"
+
                 }
-            };
-
-            String JsonData = string.Empty;
-
-            for (int i = 0; i < 2; i++)
-            {
-
-                JsonData += JsonConvert.SerializeObject(logDataModelData) + ",";
             }
+        }
 
-            JsonData = JsonData.Remove(JsonData.Length - 1);
-
-            JsonData = "[" + JsonData + "]";
-
-
-
-            LogDataModel[] logDataModels = JsonConvert.DeserializeObject<LogDataModel[]>(JsonData);
-
-
-            using (StreamWriter sw = File.AppendText(path))
+        public static void LogEntry(LogDataModel logDataModel)
+        {
+            LogInit();
+            using (StreamWriter sw = File.AppendText(filePath))
             {
-                sw.WriteLine(JsonData + System.Environment.NewLine);
+                sw.WriteLine(JsonConvert.SerializeObject(logDataModel) + "," + System.Environment.NewLine);
             }
+        }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
+
+        public void AddLogEntry(LogDataModel logDataModel)
+        {
+            LogEntry(logDataModel);
         }
     }
 }
