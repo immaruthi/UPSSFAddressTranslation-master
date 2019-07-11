@@ -15,6 +15,6 @@ export class AddressBookService {
   }
 
   public updateAddressBook(data: any): Observable<any> {
-    return this.httpService.makePostRequest(' ', data);
+    return this.httpService.makePostRequest('api/AddressBook/UpdateAddressBookById', data);
   }
 }

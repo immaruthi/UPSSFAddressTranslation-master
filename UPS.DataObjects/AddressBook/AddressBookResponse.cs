@@ -7,6 +7,7 @@ namespace UPS.DataObjects.AddressBook
     public class AddressBookResponse
     {
         public IEnumerable<AddressBook> AddressBookList { get; set; }
+        public AddressBook AddressBookData { get; set; }
         public string OperatonExceptionMessage { get; set; }
         public bool Success { get; set; }
     }

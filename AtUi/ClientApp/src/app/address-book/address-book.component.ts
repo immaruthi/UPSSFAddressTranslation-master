@@ -104,8 +104,18 @@ export class AddressBookComponent implements OnInit {
         this.addressBookService.updateAddressBook(details).subscribe((response: any) => {
           console.log(response)
 
-          addressBookDetails.consigneeTranslatedAddress = ''; //response.shipmentDataRequest.shP_ADR_TR_TE;;
-          this.notificationService.openSuccessMessageNotification("Data Updated Successfully.");
+          if (response) {
+            if (response.success === true) {
+              addressBookDetails.consigneeTranslatedAddress = response.addressBookData.consigneeTranslatedAddress;
+              addressBookDetails.modifiedDate = response.addressBookData.modifiedDate;
+              this.notificationService.openSuccessMessageNotification("Data Updated Successfully.");
+            } else {
+              this.notificationService.openErrorMessageNotification(response.OperatonExceptionMessage);
+            }
+          } else {
+            this.notificationService.openErrorMessageNotification("Error while updating data.")
+          }
+
         },
           error => this.notificationService.openErrorMessageNotification("Error while updating data."))
       }
