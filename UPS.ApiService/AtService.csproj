@@ -19,10 +19,12 @@
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.Examples" Version="2.9.0" />
+    <PackageReference Include="Unity" Version="4.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ExcelFileRead\ExcelFileRead.csproj" />
+    <ProjectReference Include="..\Quincus.Implementations\Quincus.Implementations.csproj" />
     <ProjectReference Include="..\UPS.Application.CustomLogs\UPS.Application.CustomLogs.csproj" />
     <ProjectReference Include="..\UPS.DataObjects\UPS.DataObjects.csproj" />
     <ProjectReference Include="..\UPS.Quincus.APP\UPS.Quincus.APP.csproj" />

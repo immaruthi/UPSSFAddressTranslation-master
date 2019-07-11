@@ -1,4 +1,5 @@
-﻿using ElmahCore.Mvc;
+﻿using AtService.Extensions;
+using ElmahCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -8,15 +9,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using System.IO;
 using System.Text;
-using UPS.Quincus.APP.Common;
 using UPS.Quincus.APP.Request;
 using UPS.ServicesAsyncActions;
 using UPS.ServicesDataRepository;
 using UPS.ServicesDataRepository.DataContext;
-using UPS.ServicesDataRepository.OverrideDbContext;
 
 namespace UPS.AddressTranslationService
 {
@@ -40,11 +37,7 @@ namespace UPS.AddressTranslationService
                 c.AddPolicy("AllowAtUIOrigin", options => options.WithOrigins(Configuration["CorsEnableDomain:Domain"]));
             });
 
-            DBConnectionContext.getconnection(Configuration);
-            MapProxy.webProxyURI = Configuration["webProxy:URL"];
-            MapProxy.webProxyUsername = Configuration["webProxy:Username"];
-            MapProxy.webProxyPassword = Configuration["webProxy:Password"];
-            MapProxy.WebProxyEnable = Configuration["webProxy:Enable"];
+            services.ContextSetup(Configuration);
 
             services.AddSingleton<IQuincusAddressTranslationRequest>(new QuincusAddressTranslationRequest() { endpoint = Configuration["Quincus:GeoCodeEndPoint"] });
             services.AddSingleton<IAddressAuditLogAsync, AddressAuditLogService>();
@@ -66,36 +59,11 @@ namespace UPS.AddressTranslationService
             services.AddDbContext<ApplicationDbContext>(
                 option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(
-                option =>
-                {
-                    option.Password.RequireDigit = false;
-                    option.Password.RequiredLength = 6;
-                    option.Password.RequireNonAlphanumeric = false;
-                    option.Password.RequireUppercase = false;
-                    option.Password.RequireLowercase = false;
-                }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-
-
-            services.AddAuthentication(new AuthenticationOptions().DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme);
-            services.AddAuthentication(new AuthenticationOptions().DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme);
-            services.AddAuthentication(new AuthenticationOptions().DefaultScheme = JwtBearerDefaults.AuthenticationScheme);
-
-            services.AddAuthentication().AddJwtBearer(options =>
-            {
-                options.SaveToken = true;
-                options.RequireHttpsMetadata = true;
-                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidAudience = Configuration["Jwt:Site"],
-                    ValidIssuer = Configuration["Jwt:Site"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Pactera IDC JWT Integration"))
-                };
-            });
+            services.ConfigureJWTAuthentication(Configuration);
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+            services.IocSetup();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -126,17 +94,7 @@ namespace UPS.AddressTranslationService
             }
             );
 
-
-            if (!File.Exists(Path.Combine(env.WebRootPath, Configuration["APILogger:logFileName"])))
-            {
-                using (FileStream fs = File.Create(Path.Combine(env.WebRootPath, Configuration["APILogger:logFileName"])))
-                {
-
-                }
-            }
+            app.AddLogFile(env, Configuration);
         }
-
-
-
     }
 }
