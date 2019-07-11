@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.IO;
 using System.Text;
 using UPS.Quincus.APP.Common;
 using UPS.Quincus.APP.Request;
@@ -97,6 +98,7 @@ namespace UPS.AddressTranslationService
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -119,10 +121,21 @@ namespace UPS.AddressTranslationService
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Core API");
-                
+
             }
             );
+
+
+            if (!File.Exists(Path.Combine(env.WebRootPath, Configuration["APILogger:logFileName"])))
+            {
+                using (FileStream fs = File.Create(Path.Combine(env.WebRootPath, Configuration["APILogger:logFileName"])))
+                {
+
+                }
+            }
         }
+
+
 
     }
 }
