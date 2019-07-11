@@ -30,6 +30,8 @@ import { SummaryDialogComponent } from './dialogs/summary-dialog/summary-dialog.
 import { DialogService } from './services/dialog.service';
 import { ExcelService } from './services/ExcelExport';
 import { ShippingService } from './services/shipping.service';
+import { ShipperListService } from './services/ShipperListService';
+import { AddressBookService } from './services/AddressBookService';
 import { HttpService } from './shared/http.service';
 
 import { WorkflowComponent } from './workflow/workflow.component';
@@ -57,7 +59,10 @@ import { ViewModeDirective } from './shared/editable/view-mode.directive';
 import { EditOnEnterDirective } from './shared/editable/edit-on-enter.directive';
 import { AddressEditModelComponent } from './shipping-data/address-edit-model/address-edit-model.component';
 import { DatePipe } from '@angular/common';
-import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component'
+import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component';
+import { ShipperListComponent } from './shipper-list/shipper-list.component';
+import { AddressBookComponent } from './address-book/address-book.component';
+import { AddressBookEditModelComponent } from './address-book/address-book-edit-model/address-book-edit-model.component'
 
 @NgModule({
   declarations: [
@@ -89,6 +94,9 @@ import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confi
     ConfirmPopupComponent,
     AddressEditModelComponent,
     ConfirmationDialogComponent,
+    ShipperListComponent,
+    AddressBookComponent,
+    AddressBookEditModelComponent,
    
   ],
   imports: [
@@ -107,7 +115,9 @@ import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confi
     AuthGuard, LoginGuard,
     AssignProjectService, ExcelService, HomeService,
     DialogService,
-      ShippingService,
+    ShippingService,
+    ShipperListService,
+    AddressBookService,
       HttpService,
     LoaderService,
     DatePipe,
@@ -120,7 +130,8 @@ import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confi
     }
     ],
   bootstrap: [AppComponent],
-  entryComponents: [LoginComponent, AlertDialogComponent, SummaryDialogComponent, ConfirmationDialogComponent, AddressEditModelComponent]
+  entryComponents: [LoginComponent, AlertDialogComponent, SummaryDialogComponent, ConfirmationDialogComponent, AddressEditModelComponent,
+    AddressBookEditModelComponent]
 
 })
 export class AppModule { }

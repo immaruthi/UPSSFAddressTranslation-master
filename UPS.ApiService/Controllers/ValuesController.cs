@@ -26,16 +26,19 @@ namespace UPS.AddressTranslationService.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            AuditEventEntry.WriteEntry(new Exception("This is test Message"));
-            //SqlConnection connection = new SqlConnection(DBConnectionContext.connectionString);
+            
 
-            //connection.Open();
-
-            //SqlDataAdapter sqlDataAdapter = new SqlDataAdapter("select * from [ADR-BK]", connection);
-
-            //DataSet ds = new DataSet();
-
-            //sqlDataAdapter.Fill(ds);
+                //AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
+                //{
+                //    apiTypes = DataObjects.LogData.APITypes.AddressBookSetup,
+                //    dateTime = System.DateTime.Now,
+                //    LogInformation = new DataObjects.LogData.LogInformation()
+                //    {
+                //        LogException = new Exception("Test Exception"),
+                //        LogRequest = "Test Request",
+                //        LogResponse = "Test Response"
+                //    }
+                //});
 
             return new string[] { "value1", "value2" };
         }
@@ -43,13 +46,8 @@ namespace UPS.AddressTranslationService.Controllers
         [HttpGet("[action]")]
         public bool ValidateUser(String userId, String password)
         {
-            //LoginContext context = HttpContext.RequestServices.GetService(typeof(RMG.Models.LoginContext)) as LoginContext;
-            return true; //context.ValidateUser(userId, password);
+            return true; 
         }
-
-
-        
-
 
         [HttpGet("[action]")]
         public bool ValidateUserId(String userId)
@@ -70,35 +68,5 @@ namespace UPS.AddressTranslationService.Controllers
 
             return loginData;//context.getLoginData(Emp_Id);
         }
-
-        // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<controller>
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-
-
-
-
-
     }
 }

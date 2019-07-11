@@ -597,7 +597,7 @@ namespace UPS.ServicesDataRepository
 
                         if (translatedAddress!= null)
                         {
-                            shipmentDataRequest.SHP_ADR_TR_TE = translatedAddress.ConsigneeAddress;
+                            shipmentDataRequest.SHP_ADR_TR_TE = translatedAddress.ConsigneeTranslatedAddress;
                             shipmentDataRequest.SMT_STA_NR = (int)Enums.ATStatus.Translated;
                             shipmentDataRequest.SMT_STA_TE = Convert.ToString(Enums.ATStatus.Translated);
                             shipmentDataRequest.CON_NR = translatedAddress.Confidence;
