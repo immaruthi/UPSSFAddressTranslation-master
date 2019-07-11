@@ -37,8 +37,8 @@ export class ShippingService {
   }
 
   public UpdateShippingAddress(data: ShipmentDetails): Observable<ShipmentDetails> {
-
-    return this.httpService.makePostRequest('api/Shipment/UpdateShipmentAddressById', data);
+    var user = localStorage.getItem("userid");
+    return this.httpService.makePostRequest('api/Shipment/UpdateShipmentAddressById/' + user, data);
   }
 
   public deleteUploadedData(data: any): Observable<any> {

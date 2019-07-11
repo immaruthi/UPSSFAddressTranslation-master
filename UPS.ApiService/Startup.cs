@@ -40,7 +40,7 @@ namespace UPS.AddressTranslationService
             services.ContextSetup(Configuration);
 
             services.AddSingleton<IQuincusAddressTranslationRequest>(new QuincusAddressTranslationRequest() { endpoint = Configuration["Quincus:GeoCodeEndPoint"] });
-            services.AddSingleton<IAddressAuditLogAsync, AddressAuditLogService>();
+            services.AddTransient<IAddressAuditLogAsync, AddressAuditLogService>();
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
 
             services.AddTransient<IShipmentAsync, ShipmentService>();

@@ -30,7 +30,8 @@ namespace UPS.ServicesDataRepository
             AddressAuditLogResponse addressAuditLogResponse = new AddressAuditLogResponse();
             try
             {
-                this.context.Entry(addressAuditLogRequest).State = EntityState.Detached;
+                this.context.AddressAuditLogRequests.Add(addressAuditLogRequest);
+                this.context.Entry(addressAuditLogRequest).State = EntityState.Added;
                 this.context.SaveChanges();
                 addressAuditLogResponse.AddressAuditLogRequestList = this.context.AddressAuditLogRequests.Where(a => a.ID == addressAuditLogRequest.ID);
                 addressAuditLogResponse.Success = true;

@@ -355,7 +355,10 @@ namespace UPS.ServicesDataRepository
 
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
                 {
+                    //Shipment Update
                     ShipmentDataRequest data = context.shipmentDataRequests.Where(s => s.ID == shipmentDataRequest.ID).FirstOrDefault();
+
+                    string beforeAddress = data.SHP_ADR_TR_TE;
                     int? shipmentStaus =
                        data.SHP_ADR_TR_TE.ToLower() != shipmentDataRequest.SHP_ADR_TR_TE.ToLower()
                        ? ((int)Enums.ATStatus.Curated)
@@ -370,6 +373,11 @@ namespace UPS.ServicesDataRepository
                     context.SaveChanges();
                     shipmentDataResponse.ShipmentDataRequest = context.shipmentDataRequests.Where(s => s.ID == shipmentDataRequest.ID).FirstOrDefault();
                     shipmentDataResponse.Success = true;
+                    shipmentDataResponse.BeforeAddress = string.Empty;
+                    if(!string.Equals(beforeAddress, data.SHP_ADR_TR_TE))
+                    {
+                        shipmentDataResponse.BeforeAddress = beforeAddress;
+                    }
                     return shipmentDataResponse;
                 }
             }
