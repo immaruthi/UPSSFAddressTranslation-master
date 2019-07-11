@@ -12,6 +12,8 @@ import { ShipmentComponent } from '../shipping-data/shipment.component';
 import { ShipperListComponent } from '../shipper-list/shipper-list.component';
 import { AddressBookComponent } from '../address-book/address-book.component';
 import { AdminconfigComponent } from '../adminconfig/adminconfig.component';
+import { LogGridComponent } from '../log-grid/log-grid.component';
+import { AuditingLogComponent } from '../auditing-log/auditing-log.component';
 const routes: Routes = [
   
   {
@@ -30,6 +32,8 @@ const routes: Routes = [
       { path: 'addressbook', canActivate: [AuthGuard], component: AddressBookComponent },
       { path: 'shipment/:WorkflowID', canActivate: [AuthGuard], component: ShipmentComponent },
       { path: 'config', canActivate: [AuthGuard], component: AdminconfigComponent },
+      { path: 'logs', canActivate: [AuthGuard], component: LogGridComponent },
+      { path: 'auditinglog', canActivate: [AuthGuard], component: AuditingLogComponent },
       { path: 'home', canActivate: [AuthGuard], component: WorkflowComponent }
     ]
   },
