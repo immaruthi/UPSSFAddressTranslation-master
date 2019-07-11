@@ -63,6 +63,8 @@ import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confi
 import { ShipperListComponent } from './shipper-list/shipper-list.component';
 import { AddressBookComponent } from './address-book/address-book.component';
 import { AddressBookEditModelComponent } from './address-book/address-book-edit-model/address-book-edit-model.component'
+import { LogGridComponent } from './log-grid/log-grid.component';
+import { AuditingLogComponent } from './auditing-log/auditing-log.component';
 
 @NgModule({
   declarations: [
@@ -97,7 +99,8 @@ import { AddressBookEditModelComponent } from './address-book/address-book-edit-
     ShipperListComponent,
     AddressBookComponent,
     AddressBookEditModelComponent,
-   
+    LogGridComponent,
+    AuditingLogComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

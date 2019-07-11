@@ -1,4 +1,3 @@
-<label>Shipper List</label>
 <div class="row">
   <div class="col-md-6">
     <mat-form-field>
@@ -10,13 +9,13 @@
   </div>-->
 </div>
 <mat-paginator #paginator
-               [pageSize]="5"
-               [pageSizeOptions]="[5, 10, 20]"
+               [pageSize]="10"
+               [pageSizeOptions]="[5, 10, 20, 50, 100]"
                [showFirstLastButtons]="true">
 </mat-paginator>
 <div class="table-div">
   <div class="row">
-    <mat-table class="table" [dataSource]="dataSource" matSort>
+    <mat-table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="S_No" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> S.No </mat-header-cell>
         <mat-cell *matCellDef="let element, let i = index" class="cell"> {{i+1}} </mat-cell>

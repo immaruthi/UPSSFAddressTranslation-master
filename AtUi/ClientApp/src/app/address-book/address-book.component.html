@@ -11,7 +11,7 @@
                [showFirstLastButtons]="true">
 </mat-paginator>
 <div class="table-div">
-    <mat-table class="table" [dataSource]="dataSource" matSort>
+    <mat-table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="actions" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell"> Action </mat-header-cell>
         <mat-cell *matCellDef="let row; let i=index;" class="cell">
