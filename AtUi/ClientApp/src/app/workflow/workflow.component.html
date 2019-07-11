@@ -31,7 +31,7 @@
       <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
       </mat-paginator>
       <div class="table-div">
-        <mat-table class="table" [dataSource]="dataSource" matSort>
+        <mat-table [dataSource]="dataSource" matSort>
           <!-- Position Column -->
           <ng-container matColumnDef="id" class="container">
             <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Workflow Id </mat-header-cell>

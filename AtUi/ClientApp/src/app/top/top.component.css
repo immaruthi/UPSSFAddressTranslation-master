@@ -65,5 +65,5 @@ mat-toolbar a, a:hover {
   margin: 0px 20px 0px 10px;
 }
 mat-sidenav-content{
-  overflow:auto;
+  overflow:hidden;
 }

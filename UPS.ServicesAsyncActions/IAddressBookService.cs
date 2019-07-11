@@ -10,5 +10,6 @@ namespace UPS.ServicesAsyncActions
     {
         void InsertAddress(List<QuincusReponseData> quincusReponseData);
         List<AddressBook> GetAddressBooks();
+        AddressBookResponse UpdateAddressBookById(AddressBook addressBookData);
     }
 }
