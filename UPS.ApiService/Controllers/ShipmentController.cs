@@ -22,15 +22,16 @@ using System.Xml;
 using UPS.Application.CustomLogs;
 using UPS.ServicesAsyncActions;
 using UPS.DataObjects.Common;
+using AtService.HeadController;
 
 namespace AtService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("AllowAtUIOrigin")]
-    public class ShipmentController : ControllerBase
+    public class ShipmentController : UPSController
     {
-
+        public ICustomLog iCustomLog { get; set; }
         private readonly IConfiguration configuration;
         private readonly IHostingEnvironment hostingEnvironment;
         private IAddressBookService addressBookService;
@@ -112,11 +113,34 @@ namespace AtService.Controllers
                             }
                             else
                             {
+                                iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                                {
+                                    apiTypes = UPS.DataObjects.LogData.APITypes.ExcelUpload,
+                                    dateTime = System.DateTime.Now,
+                                    LogInformation = new UPS.DataObjects.LogData.LogInformation()
+                                    {
+                                        LogException = excelExtensionReponse.exception,
+                                        LogRequest = "Excel Uploaded",
+                                        LogResponse = JsonConvert.SerializeObject(excelExtensionReponse)
+                                    }
+                                });
                                 return Ok(excelExtensionReponse);
                             }
                         }
                     }
                 }
+
+                iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                {
+                    apiTypes = UPS.DataObjects.LogData.APITypes.ExcelUpload,
+                    dateTime = System.DateTime.Now,
+                    LogInformation = new UPS.DataObjects.LogData.LogInformation()
+                    {
+                        LogException = null,
+                        LogRequest = "Excel Uploaded",
+                        LogResponse = JsonConvert.SerializeObject(shipmentDataResponse)
+                    }
+                });
 
                 return Ok(shipmentDataResponse);
             }
@@ -254,10 +278,36 @@ namespace AtService.Controllers
                 }
                 shipmentDataResponse = shipmentService.CreateShipments(shipmentData);
                 shipmentDataResponse.Success = true;
+
+                iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                {
+                    apiTypes = UPS.DataObjects.LogData.APITypes.ExcelUpload,
+                    dateTime = System.DateTime.Now,
+                    LogInformation = new UPS.DataObjects.LogData.LogInformation()
+                    {
+                        LogException = null,
+                        LogRequest = JsonConvert.SerializeObject(excelDataObjects),
+                        LogResponse = JsonConvert.SerializeObject(shipmentDataResponse)
+                    }
+                });
+
                 return shipmentDataResponse;
             }
             catch (Exception exception)
             {
+
+                iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                {
+                    apiTypes = UPS.DataObjects.LogData.APITypes.ExcelUpload,
+                    dateTime = System.DateTime.Now,
+                    LogInformation = new UPS.DataObjects.LogData.LogInformation()
+                    {
+                        LogException = exception,
+                        LogRequest = JsonConvert.SerializeObject(excelDataObjects),
+                        LogResponse = null
+                    }
+                });
+
                 shipmentDataResponse.OperationExceptionMsg = exception.Message;
                 shipmentDataResponse.Success = true;
                 //AuditEventEntry.WriteEntry(new Exception(exception.Message));
@@ -296,6 +346,18 @@ namespace AtService.Controllers
             workflowDataRequest.ID = shipmentDataRequest.WFL_ID;
             workflowDataRequest.WFL_STA_TE = workflowstatus;
             workflowService.UpdateWorkflowStatusById(workflowDataRequest);
+
+            iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+            {
+                apiTypes = UPS.DataObjects.LogData.APITypes.EFCoreContext,
+                dateTime = System.DateTime.Now,
+                LogInformation = new UPS.DataObjects.LogData.LogInformation()
+                {
+                    LogException = null,
+                    LogRequest = JsonConvert.SerializeObject(shipmentDataRequest),
+                    LogResponse = JsonConvert.SerializeObject(shipmentDataResponse)
+                }
+            });
 
             return Ok(shipmentDataResponse);
         }
@@ -429,6 +491,19 @@ namespace AtService.Controllers
             workflowDataRequest.ID = _workflowID;
             workflowDataRequest.WFL_STA_TE = workflowstatus;
             workflowService.UpdateWorkflowStatusById(workflowDataRequest);
+
+            iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+            {
+                apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                dateTime = System.DateTime.Now,
+                LogInformation = new UPS.DataObjects.LogData.LogInformation()
+                {
+                    LogException = null,
+                    LogRequest = JsonConvert.SerializeObject(uIOrderRequestBodyDatas),
+                    LogResponse = JsonConvert.SerializeObject(createOrderShipmentResponse)
+                }
+            });
+
             return Ok(createOrderShipmentResponse);
         }
 
@@ -452,10 +527,35 @@ namespace AtService.Controllers
 
             if (getSFCancelOrderServiceResponse.Response)
             {
+                iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                {
+                    apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                    dateTime = System.DateTime.Now,
+                    LogInformation = new UPS.DataObjects.LogData.LogInformation()
+                    {
+                        LogException = null,
+                        LogRequest = JsonConvert.SerializeObject(sFOrderXMLRequest),
+                        LogResponse = JsonConvert.SerializeObject(getSFCancelOrderServiceResponse)
+                    }
+                });
+
                 return Ok(getSFCancelOrderServiceResponse.OrderResponse);
             }
             else
             {
+
+                iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                {
+                    apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                    dateTime = System.DateTime.Now,
+                    LogInformation = new UPS.DataObjects.LogData.LogInformation()
+                    {
+                        LogException = getSFCancelOrderServiceResponse.exception,
+                        LogRequest = JsonConvert.SerializeObject(sFOrderXMLRequest),
+                        LogResponse = null
+                    }
+                });
+
                 //AuditEventEntry.WriteEntry(new Exception(getSFCancelOrderServiceResponse.exception.ToString()));
                 return Ok(getSFCancelOrderServiceResponse.exception);
             }
@@ -572,16 +672,50 @@ namespace AtService.Controllers
                             workflowService.UpdateWorkflowStatusById(workflowDataRequest);
                         });
 
+                        iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                        {
+                            apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                            dateTime = System.DateTime.Now,
+                            LogInformation = new UPS.DataObjects.LogData.LogInformation()
+                            {
+                                LogException = null,
+                                LogRequest = JsonConvert.SerializeObject(QuincusResponse.QuincusReponseDataList),
+                                LogResponse = null
+                            }
+                        });
+
                         return Ok(QuincusResponse.QuincusReponseDataList);
                     }
                     else
                     {
+                        iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                        {
+                            apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                            dateTime = System.DateTime.Now,
+                            LogInformation = new UPS.DataObjects.LogData.LogInformation()
+                            {
+                                LogException = QuincusResponse.Exception,
+                                LogRequest = JsonConvert.SerializeObject(_shipmentDataRequest),
+                                LogResponse = null
+                            }
+                        });
                         return Ok(QuincusResponse.Exception);
                     }
 
                 }
                 else
                 {
+                    iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                    {
+                        apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                        dateTime = System.DateTime.Now,
+                        LogInformation = new UPS.DataObjects.LogData.LogInformation()
+                        {
+                            LogException = quincusTranslatedAddressResponse.exception,
+                            LogRequest = JsonConvert.SerializeObject(_shipmentDataRequest),
+                            LogResponse = null
+                        }
+                    });
                     return Ok(quincusTranslatedAddressResponse.exception);
                 }
 
@@ -590,61 +724,6 @@ namespace AtService.Controllers
             {
                 return Ok(quincusTokenDataResponse.exception);
             }
-        }
-
-        private static void GoToSleep(QuincusTranslatedAddressResponse quincusTranslatedAddressResponse)
-        {
-            int sleepEstimation = quincusTranslatedAddressResponse.RequestDataCount;
-
-            double sleepMode = 60000;
-
-            if (Enumerable.Range(1, 10).Contains(sleepEstimation))
-            {
-                sleepMode = sleepMode * 0.5;
-            }
-            else if (Enumerable.Range(11, 20).Contains(sleepEstimation))
-            {
-                sleepMode = sleepMode * 0.5;
-            }
-            else if (Enumerable.Range(21, 30).Contains(sleepEstimation))
-            {
-                sleepMode = sleepMode * 1.25;
-            }
-            else if (Enumerable.Range(31, 40).Contains(sleepEstimation))
-            {
-                sleepMode = sleepMode * 2;
-            }
-            else if (Enumerable.Range(41, 50).Contains(sleepEstimation))
-            {
-                sleepMode = sleepMode * 2.5;
-            }
-            else if (Enumerable.Range(51, 20).Contains(sleepEstimation))
-            {
-                sleepMode = sleepMode * 3;
-            }
-            else if (Enumerable.Range(61, 30).Contains(sleepEstimation))
-            {
-                sleepMode = sleepMode * 3.2;
-            }
-            else if (Enumerable.Range(71, 40).Contains(sleepEstimation))
-            {
-                sleepMode = sleepMode * 3.3;
-            }
-            else if (Enumerable.Range(81, 100).Contains(sleepEstimation))
-            {
-                sleepMode = sleepMode * 3.3;
-            }
-            else if (Enumerable.Range(101, 300).Contains(sleepEstimation))
-            {
-                sleepMode = sleepMode * 4;
-            }
-
-            if (sleepEstimation >= 301 && sleepEstimation <= 10000)
-            {
-                sleepMode = sleepMode * 5;
-            }
-
-            System.Threading.Thread.Sleep(Convert.ToInt32(sleepMode));
         }
 
         [Route("UpdateShipmentCode")]

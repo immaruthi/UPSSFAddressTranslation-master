@@ -43,7 +43,7 @@ namespace UPS.Application.CustomLogs
             LogInit();
             using (StreamWriter sw = File.AppendText(filePath))
             {
-                sw.WriteLine(JsonConvert.SerializeObject(logDataModel) + "," + System.Environment.NewLine);
+                sw.WriteLine(JsonConvert.SerializeObject(logDataModel) + ",");
             }
         }
 
