@@ -193,7 +193,7 @@
             string id = HttpContext.User.Claims.FirstOrDefault(x => x.Type == JwtConstant.UserId)?.Value;
 
             int userId = !string.IsNullOrEmpty(id) ? Convert.ToInt32(id) : 0;
-            ShipmentDataResponse shipmentDataResponse = shipmentService.UpdateShipmentAddressById(shipmentDataRequest);
+            ShipmentDataResponse shipmentDataResponse = _shipmentService.UpdateShipmentAddressById(shipmentDataRequest);
             if (shipmentDataResponse.Success && !string.IsNullOrEmpty(shipmentDataResponse.BeforeAddress))
             {
                 try
