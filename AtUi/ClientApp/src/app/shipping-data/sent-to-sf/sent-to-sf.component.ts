@@ -42,6 +42,7 @@ export class SentToSfComponent implements OnInit {
   public tableData: any[] = [];
   public excelMainData: any[] = [];
   filterText: string = '';
+  toggleSelectAll: string = 'Select All';
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
     private router: Router, public dialog: MatDialog, public dataService: DataService,
@@ -91,7 +92,12 @@ export class SentToSfComponent implements OnInit {
       this.selection.clear();
       this.filterText = '';
       this.applyFilter('');
+      this.toggleSelectAll = 'Select All';
     }, error => (this.errorMessage = <any>error));
+  }
+
+  getValidData(dataArray: any[]) {
+    return dataArray.filter(data => (data.smT_STA_NR !== 3));
   }
 
   applyFilter(filterValue: string) {
@@ -99,23 +105,54 @@ export class SentToSfComponent implements OnInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+    this.selection.clear();
+    this.toggleSelectAll = 'Select All';
   }
 
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.checkedData.length;
-    //const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+    const MainData: any[] = this.dataSource._pageData(this.dataSource.filteredData);
+    const ValidData: any[] = this.getValidData(MainData);
+    const checkedDataCount = ValidData.length;
+    var count: number = 0;
+    ValidData.forEach(row => {
+      if (this.selection.isSelected(row)) {
+        count = count + 1;
+      }
+    });
+
+    return checkedDataCount === count;
   }
 
   masterToggle() {
     this.mainData = [];
     this.checkedData = [];
-    this.dataSource.data.forEach(row => this.mainData.push(row));
-    this.checkedData = this.mainData.filter(data => (data.smT_STA_NR !== 3));
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.checkedData.forEach(row => this.selection.select(row));
+    //this.dataSource.data.forEach(row => this.mainData.push(row));
+    this.mainData = this.dataSource._pageData(this.dataSource.filteredData);
+    this.checkedData = this.getValidData(this.mainData);
+    this.isAllSelected() ? this.AllSelectedTrue() : this.AllSelectionFalse();
+  }
+
+  AllSelectedTrue() {
+    //this.selection.clear()
+    this.checkedData.forEach(row => this.selection.deselect(row));
+  }
+
+  AllSelectionFalse() {
+    //this.selection.clear(),
+    this.checkedData.forEach(row => this.selection.select(row));
+  }
+
+  toggleSelect() {
+    if (this.toggleSelectAll === 'Select All') {
+      this.selection.clear();
+      const dataSourceData: any[] = this.dataSource.filteredData;
+      const mainDataAll = this.getValidData(dataSourceData);
+      mainDataAll.forEach(row => this.selection.select(row));
+      this.toggleSelectAll = 'Deselect All'
+    } else {
+      this.selection.clear();
+      this.toggleSelectAll = 'Select All'
+    }
   }
 
   /** The label for the checkbox on the passed row */
@@ -168,7 +205,8 @@ export class SentToSfComponent implements OnInit {
         coD_TE: shipmentDetailToUpdate.coD_TE,
         pkG_NR_TE: shipmentDetailToUpdate.pkG_NR_TE,
         rcV_CPY_TE: shipmentDetailToUpdate.rcV_CPY_TE,
-        poD_RTN_SVC: shipmentDetailToUpdate.poD_RTN_SVC
+        poD_RTN_SVC: shipmentDetailToUpdate.poD_RTN_SVC,
+        is__ADR_TR_TE_Required: true
       }
     });
 
@@ -195,9 +233,10 @@ export class SentToSfComponent implements OnInit {
         this.shippingService.UpdateShippingAddress(details).subscribe((response:any) => {
           console.log(response)
 
-          shipmentDetails.shP_ADR_TR_TE = response.shipmentDataRequest.shP_ADR_TR_TE;;
-          shipmentDetails.coD_TE = response.shipmentDataRequest.coD_TE;
-          shipmentDetails.smT_STA_NR = response.shipmentDataRequest.smT_STA_NR;
+          shipmentDetailToUpdate.shP_ADR_TR_TE = response.shipmentDataRequest.shP_ADR_TR_TE;;
+          shipmentDetailToUpdate.coD_TE = response.shipmentDataRequest.coD_TE;
+          shipmentDetailToUpdate.smT_STA_NR = response.shipmentDataRequest.smT_STA_NR;
+          shipmentDetailToUpdate.smT_STA_TE = response.shipmentDataRequest.smT_STA_TE;
           shipmentDetailToUpdate.poD_RTN_SVC = response.shipmentDataRequest.poD_RTN_SVC;
           this.notificationService.openSuccessMessageNotification("Data Updated Successfully.");
         },

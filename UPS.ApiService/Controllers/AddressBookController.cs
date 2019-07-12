@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using UPS.DataObjects.AddressBook;
+using UPS.DataObjects.ADR_ADT_LG;
 using UPS.ServicesAsyncActions;
 
 namespace AtService.Controllers
@@ -14,9 +16,11 @@ namespace AtService.Controllers
     public class AddressBookController : ControllerBase
     {
         private IAddressBookService addressBookService;
-        public AddressBookController(IAddressBookService addressBookService)
+        private IAddressAuditLogAsync addressAuditLogService;
+        public AddressBookController(IAddressBookService addressBookService, IAddressAuditLogAsync addressAuditLogAsync)
         {
             this.addressBookService = addressBookService;
+            this.addressAuditLogService = addressAuditLogAsync;
         }
 
         /// <summary>
@@ -31,12 +35,41 @@ namespace AtService.Controllers
             return Ok(addressBooks);
         }
 
-        [Route("UpdateAddressBookById")]
+        [Route("UpdateAddressBookById/{Emp_Id}")]
         [HttpPost]
-        public IActionResult UpdateAddressBookById([FromBody] AddressBook addressBookData)
+        public IActionResult UpdateAddressBookById([FromBody] AddressBook addressBookData, int Emp_Id)
         {
             AddressBookResponse addressBookResponse = this.addressBookService.UpdateAddressBookById(addressBookData);
-            
+            if (addressBookResponse.Success && !string.IsNullOrEmpty(addressBookResponse.BeforeAddress))
+            {
+                try
+                {
+                    //AddressAuditLog Update
+                    AddressAuditLogRequest addressAuditLogRequest = new AddressAuditLogRequest();
+                    addressAuditLogRequest.SMT_ID = addressBookResponse.AddressBookData.ShipmentId;
+                    addressAuditLogRequest.CSG_ADR = addressBookResponse.AddressBookData.ConsigneeAddress;
+                    addressAuditLogRequest.BFR_ADR = addressBookResponse.BeforeAddress;
+                    addressAuditLogRequest.AFR_ADR = addressBookData.ConsigneeTranslatedAddress;
+                    addressAuditLogRequest.UPD_BY = Emp_Id;
+                    addressAuditLogRequest.UPD_FRM = "AddressBook";
+                    addressAuditLogRequest.UPD_DT = DateTime.Now;
+                    AddressAuditLogResponse addressAuditLogResponse = this.addressAuditLogService.Insert(addressAuditLogRequest);
+                    if (addressAuditLogResponse.Success)
+                    {
+                        // TO DO
+                    }
+                    else
+                    {
+                        // Log the error here
+                    }
+
+                }
+                catch (Exception ex)
+                {
+
+                }
+
+            }
             return Ok(addressBookResponse);
         }
 

@@ -36,6 +36,8 @@ namespace UPS.ServicesDataRepository
             {
                 AddressBook data = this.context.AddressBooks.Where(s => s.Id == addressBookData.Id).FirstOrDefault();
 
+                string beforeAddress = data.ConsigneeTranslatedAddress;
+
                 data.ConsigneeTranslatedAddress = addressBookData.ConsigneeTranslatedAddress;
                 data.ModifiedDate = DateTime.Now;
 
@@ -44,6 +46,11 @@ namespace UPS.ServicesDataRepository
                 this.context.SaveChanges();
                 addressBookResponse.AddressBookData = this.context.AddressBooks.Where(s => s.Id == addressBookData.Id).FirstOrDefault();
                 addressBookResponse.Success = true;
+                addressBookResponse.BeforeAddress = string.Empty;
+                if (!string.Equals(beforeAddress, data.ConsigneeTranslatedAddress))
+                {
+                    addressBookResponse.BeforeAddress = beforeAddress;
+                }
                 return addressBookResponse;
             }
             catch (Exception ex)

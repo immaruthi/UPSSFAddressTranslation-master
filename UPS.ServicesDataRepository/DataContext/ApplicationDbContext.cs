@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UPS.DataObjects.AddressBook;
 using UPS.DataObjects.ADR_ADT_LG;
+using UPS.DataObjects.CST_DTL;
 using UPS.DataObjects.Shipment;
 using UPS.DataObjects.SPC_LST;
 using UPS.DataObjects.UserData;
@@ -37,6 +38,7 @@ namespace UPS.ServicesDataRepository.DataContext
             builder.Entity<ShipperCompanyRequest>().ToTable("SPC-LST");
             builder.Entity<AddressBook>().ToTable("ADR-BK");
             builder.Entity<AddressAuditLogRequest>().ToTable("ADR-ADT-LG");
+            builder.Entity<CST_DTL>().ToTable("CST-DTL");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -70,6 +72,10 @@ namespace UPS.ServicesDataRepository.DataContext
         }
 
         public DbSet<AddressAuditLogRequest> AddressAuditLogRequests
+        {
+            get; set;
+        }
+        public DbSet<CST_DTL> CST_DTL
         {
             get; set;
         }
