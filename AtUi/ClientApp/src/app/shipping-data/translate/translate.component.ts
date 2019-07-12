@@ -182,7 +182,8 @@ export class TranslateComponent implements OnInit {
         coD_TE: shipmentDetailToUpdate.coD_TE,
         pkG_NR_TE: shipmentDetailToUpdate.pkG_NR_TE,
         rcV_CPY_TE: shipmentDetailToUpdate.rcV_CPY_TE,
-        poD_RTN_SVC: shipmentDetailToUpdate.poD_RTN_SVC
+        poD_RTN_SVC: shipmentDetailToUpdate.poD_RTN_SVC,
+        is__ADR_TR_TE_Required: ((shipmentDetailToUpdate.smT_STA_NR === 0) ? false : true)
       }
     });
 
