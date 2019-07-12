@@ -51,7 +51,7 @@ namespace AtService.Controllers
                     addressAuditLogRequest.UPD_BY = Emp_Id;
                     addressAuditLogRequest.UPD_FRM = "AddressBook";
                     addressAuditLogRequest.UPD_DT = DateTime.Now;
-                    AddressAuditLogResponse addressAuditLogResponse = addressAuditLogService.Insert(addressAuditLogRequest);
+                    AddressAuditLogResponse addressAuditLogResponse = this.addressAuditLogService.Insert(addressAuditLogRequest);
                     if (addressAuditLogResponse.Success)
                     {
                         // TO DO
