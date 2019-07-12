@@ -20,9 +20,38 @@ namespace UPS.ServicesDataRepository
 
         public List<AddressAuditLogRequest> GetAll()
         {
-            return this.context.AddressAuditLogRequests
-                    .OrderBy((AddressAuditLogRequest aal) => aal.ID)
-                    .ToList();
+            List<AddressAuditLogRequest> addressAuditLogRequests = new List<AddressAuditLogRequest>();
+            var auditListByName = from a in context.AddressAuditLogRequests
+                                  join us in context.UserData on (int?)a.UPD_BY equals us.ID
+                                  orderby a.ID descending
+                                  select new
+                                  {
+                                      a.ID,
+                                      a.SMT_ID,
+                                      a.CSG_ADR,
+                                      a.BFR_ADR,
+                                      a.AFR_ADR,
+                                      a.UPD_BY,
+                                      a.UPD_FRM,
+                                      a.UPD_DT,
+                                      UPD_BY_TE = us.USR_FST_NA + " " + us.USR_LST_NA
+                                  };
+            foreach (var aaloglist in auditListByName)
+            {
+                AddressAuditLogRequest addrauditlog = new AddressAuditLogRequest();
+                addrauditlog.ID = aaloglist.ID;
+                addrauditlog.SMT_ID = aaloglist.SMT_ID;
+                addrauditlog.CSG_ADR = aaloglist.CSG_ADR;
+                addrauditlog.BFR_ADR = aaloglist.BFR_ADR;
+                addrauditlog.AFR_ADR = aaloglist.AFR_ADR;
+                addrauditlog.UPD_BY = aaloglist.UPD_BY;
+                addrauditlog.UPD_FRM = aaloglist.UPD_FRM;
+                addrauditlog.UPD_DT = aaloglist.UPD_DT;
+                addrauditlog.UPD_BY_TE = aaloglist.UPD_BY_TE;
+                addressAuditLogRequests.Add(addrauditlog);
+            }
+
+            return addressAuditLogRequests;
         }
 
         public AddressAuditLogResponse Insert(AddressAuditLogRequest addressAuditLogRequest)

@@ -531,9 +531,9 @@
                             shipmentService.UpdateShipmentAddressByIds(shipmentDataRequestList);
 
                         //we need to update the workflow status
-                        int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);
+                        int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(wid);
                             WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
-                            workflowDataRequest.ID = _workflowID;
+                            workflowDataRequest.ID = wid;
                             workflowDataRequest.WFL_STA_TE = workflowstatus;
                             workflowService.UpdateWorkflowStatusById(workflowDataRequest);
                         });

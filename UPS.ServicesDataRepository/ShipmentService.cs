@@ -21,7 +21,7 @@ namespace UPS.ServicesDataRepository
         private IAddressBookService addressBookService;
         private IEntityValidationService entityValidationService;
 
-        public ShipmentService(ApplicationDbContext applicationDbContext, 
+        public ShipmentService(ApplicationDbContext applicationDbContext,
             IAddressBookService addressBookService,
             IEntityValidationService entityValidationService)
         {
@@ -274,16 +274,16 @@ namespace UPS.ServicesDataRepository
             ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
             try
             {
-                List<ShipmentDataRequest> validEntities = 
+                List<ShipmentDataRequest> validEntities =
                     this.entityValidationService.FilterValidEntity<ShipmentDataRequest>(shipmentDataRequest);
 
-                if (validEntities!=null && validEntities.Any())
+                if (validEntities != null && validEntities.Any())
                 {
                     context.BulkInsert(validEntities);
                     shipmentDataResponse.Shipments = shipmentDataRequest; //context.shipmentDataRequests.ToList();
                     shipmentDataResponse.Success = true;
                 }
-            
+
                 return shipmentDataResponse;
             }
             catch (Exception exception)
@@ -325,30 +325,33 @@ namespace UPS.ServicesDataRepository
         public int? SelectShipmentTotalStatusByWorkflowId(int wid)
         {
             int? result = 0;
-            decimal? i = 0;
-            decimal? count = 1;
-            decimal? avg = 0;
+            decimal? totalCount = 1;
             try
             {
                 optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
                 optionsBuilder.EnableSensitiveDataLogging(true);
 
-                using (var context = new ApplicationDbContext(optionsBuilder.Options))
+                int inprogressCount = this.context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid && ship.SMT_STA_NR == 1 || ship.SMT_STA_NR == 2).Count();
+                int completedCount = this.context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid && ship.SMT_STA_NR == 3).Count();
+                totalCount = this.context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid).Count();
+                if (completedCount == totalCount)
                 {
-                    i = context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid).Sum(s => s.SMT_STA_NR);
-                    count = context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid).Count();
-                    i = i ?? 0;
-                    count = count ?? 1;
-                    avg = i / count;
-                    avg = Math.Round(avg.Value);
-                    result = Convert.ToInt32(avg);
-                    return result ?? 0;
+                    result = 3;
+                }
+                else if (inprogressCount > 0)
+                {
+                    result = 2;
+                }
+                else
+                {
+                    result = 0;
                 }
             }
             catch
             {
                 return result;
             }
+            return result;
         }
 
         public ShipmentDataResponse UpdateShipmentAddressById(ShipmentDataRequest shipmentDataRequest)
@@ -379,7 +382,7 @@ namespace UPS.ServicesDataRepository
                     shipmentDataResponse.ShipmentDataRequest = context.shipmentDataRequests.Where(s => s.ID == shipmentDataRequest.ID).FirstOrDefault();
                     shipmentDataResponse.Success = true;
                     shipmentDataResponse.BeforeAddress = string.Empty;
-                    if(!string.Equals(beforeAddress, data.SHP_ADR_TR_TE))
+                    if (!string.Equals(beforeAddress, data.SHP_ADR_TR_TE))
                     {
                         shipmentDataResponse.BeforeAddress = beforeAddress;
                     }
@@ -601,9 +604,9 @@ namespace UPS.ServicesDataRepository
                             .FirstOrDefault(
                                 (AddressBook address) =>
                                     address.ConsigneeAddress.ToLower().Trim().Equals(
-                                    excelDataObject.S_address1.ToLower().Trim(),StringComparison.OrdinalIgnoreCase));
+                                    excelDataObject.S_address1.ToLower().Trim(), StringComparison.OrdinalIgnoreCase));
 
-                        if (translatedAddress!= null)
+                        if (translatedAddress != null)
                         {
                             shipmentDataRequest.SHP_ADR_TR_TE = translatedAddress.ConsigneeTranslatedAddress;
                             shipmentDataRequest.SMT_STA_NR = (int)Enums.ATStatus.Translated;
@@ -616,7 +619,7 @@ namespace UPS.ServicesDataRepository
                             shipmentDataRequest.SHP_ADR_TR_TE = string.Empty;
                             shipmentDataRequest.SMT_STA_NR = (int)Enums.ATStatus.Uploaded;
                             shipmentDataRequest.SMT_STA_TE = Convert.ToString(Enums.ATStatus.Uploaded);
-                       
+
                         }
 
                         shipmentDataRequest.SHP_CPY_NA = excelDataObject.S_shippercompany;

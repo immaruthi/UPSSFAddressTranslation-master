@@ -26,5 +26,8 @@ namespace UPS.DataObjects.ADR_ADT_LG
         public string UPD_FRM { get; set; }
         [Column("UPD-DT")]
         public DateTime? UPD_DT { get; set; }
+        [NotMapped]
+        [Column("UPD-BY-TE")]
+        public string UPD_BY_TE { get; set; }
     }
 }
