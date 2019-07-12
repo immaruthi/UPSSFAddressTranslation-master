@@ -30,7 +30,7 @@ export class LogGridComponent implements OnInit {
           {
             dateTime: data.dateTime,
             userID: data.userID,
-            apiTypes: data.apiTypes,
+            apiType: data.apiType,
             logRequest: data.logInformation.logRequest,
             logResponse: data.logInformation.logResponse,
             logException: data.logInformation.logException
