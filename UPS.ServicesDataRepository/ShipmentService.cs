@@ -376,6 +376,29 @@ namespace UPS.ServicesDataRepository
                     data.COD_TE = shipmentDataRequest.COD_TE;
                     data.POD_RTN_SVC = shipmentDataRequest.POD_RTN_SVC;
                     data.SMT_STA_NR = shipmentStaus;
+
+                    switch (shipmentStaus)
+                    {
+                        case 0:
+                            shipmentDataRequest.SMT_STA_TE = "Uploaded";
+                            break;
+                        case 1:
+                            shipmentDataRequest.SMT_STA_TE = "Curated";
+                            break;
+                        case 2:
+                            shipmentDataRequest.SMT_STA_TE = "Translated";
+                            break;
+                        case 3:
+                            shipmentDataRequest.SMT_STA_TE = "Completed";
+                            break;
+                        case 4:
+                            shipmentDataRequest.SMT_STA_TE = "Inactive";
+                            break;
+                        default:
+                            shipmentDataRequest.SMT_STA_TE = "Uploaded";
+                            break;
+                    }
+
                     context.shipmentDataRequests.Update(data);
                     context.Entry(shipmentDataRequest).State = EntityState.Detached;
                     context.SaveChanges();
