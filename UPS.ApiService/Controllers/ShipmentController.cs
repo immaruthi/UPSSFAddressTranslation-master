@@ -683,6 +683,15 @@
             }
             return shipmentDataResponse;
         }
+
+        [Route("GetAddressAuditLogData")]
+        [HttpGet]
+        public List<AddressAuditLogRequest> GetAddressAuditLogData()
+        {
+            //shipmentService = new ShipmentService();
+            List<AddressAuditLogRequest> addressAuditLogRequest = addressAuditLogService.GetAll();
+            return addressAuditLogRequest;
+        }
     }
 }
 

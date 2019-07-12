@@ -38,6 +38,7 @@ import { DialogService } from './services/dialog.service';
 import { ExcelService } from './services/ExcelExport';
 import { ShippingService } from './services/shipping.service';
 import { ShipperListService } from './services/ShipperListService';
+import { AuditingLogService } from './services/AuditingLogService';
 import { AddressBookService } from './services/AddressBookService';
 import { HttpService } from './shared/http.service';
 import { AuthenticationService } from './services/authentication.service';
@@ -74,6 +75,7 @@ import { AddressBookComponent } from './address-book/address-book.component';
 import { AddressBookEditModelComponent } from './address-book/address-book-edit-model/address-book-edit-model.component'
 import { LogGridComponent } from './log-grid/log-grid.component';
 import { AuditingLogComponent } from './auditing-log/auditing-log.component';
+import { LogFilesService } from './services/LogFilesService';
 
 @NgModule({
   declarations: [
@@ -129,6 +131,7 @@ import { AuditingLogComponent } from './auditing-log/auditing-log.component';
     DialogService,
     ShippingService,
     ShipperListService,
+    AuditingLogService,
     AddressBookService,
       HttpService,
     LoaderService,
@@ -150,7 +153,8 @@ import { AuditingLogComponent } from './auditing-log/auditing-log.component';
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
-    }
+    },
+    LogFilesService
     ],
   bootstrap: [AppComponent],
   entryComponents: [LoginComponent, AlertDialogComponent, SummaryDialogComponent, ConfirmationDialogComponent, AddressEditModelComponent,
