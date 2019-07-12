@@ -42,7 +42,7 @@
       </ng-container>
       <ng-container matColumnDef="upD_DT" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Updated Date </mat-header-cell>
-        <mat-cell *matCellDef="let element" class="cell"> {{element.upD_DT}} </mat-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.upD_DT | date: 'dd-MMM-yyyy HH:mm:ss'}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="upD_FRM" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Update From </mat-header-cell>
