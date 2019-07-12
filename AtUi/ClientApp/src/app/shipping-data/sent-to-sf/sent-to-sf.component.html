@@ -5,17 +5,24 @@
     </mat-form-field>
   </div><br />
   <div class="col-md-6 text-right">
-    <label *ngIf="filterText.length === 0">selected row count : {{selection.selected.length}}</label>
+    <label>Selected row count : {{selection.selected.length}}</label>
     <button mat-raised-button color="primary" (click)="sendToSF()"> Send To SF </button>
     <button mat-raised-button color="primary" (click)="delete()"> Delete </button>
     <button mat-raised-button color="primary" (click)="SFexportToExcel()"> Export to Excel </button>
   </div>
 </div>
-<mat-paginator #paginator
-               [pageSize]="10"
-               [pageSizeOptions]="[5, 10, 20, 50]"
-               [showFirstLastButtons]="true">
-</mat-paginator>
+<div class="row rowPaginator">
+  <div class="col-md-1">
+    <button mat-raised-button color="primary" (click)="toggleSelect()"> {{toggleSelectAll}} </button>
+  </div>
+  <div class="col-md-11">
+    <mat-paginator #paginator
+                   [pageSize]="10"
+                   [pageSizeOptions]="[5, 10, 20, 50, 100]"
+                   [showFirstLastButtons]="true">
+    </mat-paginator>
+  </div>
+</div>
 <div class="table-div">
   <div class="row">
       <mat-table class="table" [dataSource]="dataSource" matSort>

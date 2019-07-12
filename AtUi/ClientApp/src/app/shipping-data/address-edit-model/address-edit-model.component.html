@@ -16,7 +16,7 @@
       <input matInput placeholder="Receiving address" value="{{data.rcV_ADR_TE}}" [(ngModel)]="data.rcV_ADR_TE" name="rcV_ADR_TE" readonly>
     </mat-form-field><br />
     <mat-form-field class="example-full-width">
-      <input matInput class="form-control" placeholder="Translated address" value="{{data.shP_ADR_TR_TE}}" [(ngModel)]="data.shP_ADR_TR_TE" name="shP_ADR_TR_TE">
+      <input matInput class="form-control" placeholder="Translated address" value="{{data.shP_ADR_TR_TE}}" [(ngModel)]="data.shP_ADR_TR_TE" name="shP_ADR_TR_TE" [required]="data.is__ADR_TR_TE_Required">
     </mat-form-field><br />
     <div class="form">
       <mat-form-field class="example-full-width">
