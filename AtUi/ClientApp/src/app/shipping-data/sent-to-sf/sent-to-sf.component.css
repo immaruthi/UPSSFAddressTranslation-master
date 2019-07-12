@@ -35,6 +35,11 @@ mat-header-cell {
   font-weight: bold;
   color:white;
 }
+
+.rowPaginator {
+  background-color: white;
+}
+
 /*Select*/
 mat-cell:nth-child(1) {
   margin-left: 0px 15px 0px 15px;

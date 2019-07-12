@@ -34,8 +34,10 @@ export class UploadedDataComponent implements OnInit {
   public PODoptions = Constants.PODoptions;
   dataSource = new MatTableDataSource<Element>();
   public errorMessage: string;
+  public checkedData: any[] = [];
   selection = new SelectionModel<any>(true, []);
   filterText: string = '';
+  toggleSelectAll: string = 'Select All';
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
     private router: Router, private snackBar: MatSnackBar, private dialogService: DialogService,
@@ -82,6 +84,7 @@ export class UploadedDataComponent implements OnInit {
       this.selection.clear();
       this.filterText = '';
       this.applyFilter('');
+      this.toggleSelectAll = 'Select All';
     }, error => (this.errorMessage = <any>error));
   }
 
@@ -90,18 +93,50 @@ export class UploadedDataComponent implements OnInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+    this.selection.clear();
+    this.toggleSelectAll = 'Select All';
   }
 
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+    const ValidData: any[] = this.dataSource._pageData(this.dataSource.filteredData);
+    const checkedDataCount = ValidData.length;
+    var count: number = 0;
+    ValidData.forEach(row => {
+      if (this.selection.isSelected(row)) {
+        count = count + 1;
+      }
+    });
+
+    return checkedDataCount === count;
   }
 
   masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
+    this.checkedData = [];
+    //this.dataSource.data.forEach(row => this.mainData.push(row));
+    this.checkedData = this.dataSource._pageData(this.dataSource.filteredData);
+    this.isAllSelected() ? this.AllSelectedTrue() : this.AllSelectionFalse();
+  }
+
+  AllSelectedTrue() {
+    //this.selection.clear()
+    this.checkedData.forEach(row => this.selection.deselect(row));
+  }
+
+  AllSelectionFalse() {
+    //this.selection.clear(),
+    this.checkedData.forEach(row => this.selection.select(row));
+  }
+
+  toggleSelect() {
+    if (this.toggleSelectAll === 'Select All') {
+      this.selection.clear();
+      const mainDataAll = this.dataSource.filteredData;
+      mainDataAll.forEach(row => this.selection.select(row));
+      this.toggleSelectAll = 'Deselect All'
+    } else {
+      this.selection.clear();
+      this.toggleSelectAll = 'Select All'
+    }
   }
 
   /** The label for the checkbox on the passed row */
