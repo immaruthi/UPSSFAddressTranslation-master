@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
+import { LogFilesService } from '../services/LogFilesService';
 
 @Component({
   selector: 'app-log-grid',
@@ -7,38 +8,54 @@ import { MatTableDataSource, MatPaginator } from '@angular/material';
   styleUrls: ['./log-grid.component.css']
 })
 
-
-
-
-
 export class LogGridComponent implements OnInit {
-
-  logdata = [
-    { logDate: '2019-07-10T22:14:23.4497056+05:30', userId: 'Hydrogen', apiType: 4, logRequest: 'Test Log Request', logResponse: 'Test Lod Response', logException: 'System.Exception', message: 'Test Message, Data: null, InnerException: null, HelpURL: null, StackTraceString: null, RemoteStackTraceString: null, RemoteStackIndex: 0, ExceptionMethod: null, HResult: -2146233088, Source: null, WatsonBuckets: null' },
-    { logDate: '2019-07-10T22:14:23.4497056+05:30', userId: 'Helium', apiType: 4, logRequest: 'Test Log Request', logResponse: 'Test Lod Response', logException: 'System.Exception', message: 'Test Message, Data: null, InnerException: null, HelpURL: null, StackTraceString: null, RemoteStackTraceString: null, RemoteStackIndex: 0, ExceptionMethod: null, HResult: -2146233088, Source: null, WatsonBuckets: null' },
-    { logDate: '2019-07-10T22:14:23.4497056+05:30', userId: 'Lithium', apiType: 4, logRequest: 'Test Log Request', logResponse: 'Test Lod Response', logException: 'System.Exception', message: 'Test Message, Data: null, InnerException: null, HelpURL: null, StackTraceString: null, RemoteStackTraceString: null, RemoteStackIndex: 0, ExceptionMethod: null, HResult: -2146233088, Source: null, WatsonBuckets: null' },
-    { logDate: '2019-07-10T22:14:23.4497056+05:30', userId: 'Beryllium', apiType: 4, logRequest: 'Test Log Request', logResponse: 'Test Lod Response', logException: 'System.Exception', message: 'Test Message, Data: null, InnerException: null, HelpURL: null, StackTraceString: null, RemoteStackTraceString: null, RemoteStackIndex: 0, ExceptionMethod: null, HResult: -2146233088, Source: null, WatsonBuckets: null' },
-    { logDate: '2019-07-10T22:14:23.4497056+05:30', userId: 'Boron', apiType: 4, logRequest: 'Test Log Request', logResponse: 'Test Lod Response', logException: 'System.Exception', message: 'Test Message, Data: null, InnerException: null, HelpURL: null, StackTraceString: null, RemoteStackTraceString: null, RemoteStackIndex: 0, ExceptionMethod: null, HResult: -2146233088, Source: null, WatsonBuckets: null' },
-    { logDate: '2019-07-10T22:14:23.4497056+05:30', userId: 'Carbon', apiType: 4, logRequest: 'Test Log Request', logResponse: 'Test Lod Response', logException: 'System.Exception', message: 'Test Message, Data: null, InnerException: null, HelpURL: null, StackTraceString: null, RemoteStackTraceString: null, RemoteStackIndex: 0, ExceptionMethod: null, HResult: -2146233088, Source: null, WatsonBuckets: null' },
-    { logDate: '2019-07-10T22:14:23.4497056+05:30', userId: 'Nitrogen', apiType: 4, logRequest: 'Test Log Request', logResponse: 'Test Lod Response', logException: 'System.Exception', message: 'Test Message, Data: null, InnerException: null, HelpURL: null, StackTraceString: null, RemoteStackTraceString: null, RemoteStackIndex: 0, ExceptionMethod: null, HResult: -2146233088, Source: null, WatsonBuckets: null' },
-    { logDate: '2019-07-10T22:14:23.4497056+05:30', userId: 'Oxygen', apiType: 4, logRequest: 'Test Log Request', logResponse: 'Test Lod Response', logException: 'System.Exception', message: 'Test Message, Data: null, InnerException: null, HelpURL: null, StackTraceString: null, RemoteStackTraceString: null, RemoteStackIndex: 0, ExceptionMethod: null, HResult: -2146233088, Source: null, WatsonBuckets: null' },
-    { logDate: '2019-07-10T22:14:23.4497056+05:30', userId: 'Fluorine', apiType: 4, logRequest: 'Test Log Request', logResponse: 'Test Lod Response', logException: 'System.Exception', message: 'Test Message, Data: null, InnerException: null, HelpURL: null, StackTraceString: null, RemoteStackTraceString: null, RemoteStackIndex: 0, ExceptionMethod: null, HResult: -2146233088, Source: null, WatsonBuckets: null' },
-    { logDate: '2019-07-10T22:14:23.4497056+05:30', userId: 'Neon', apiType: 4, logRequest: 'Test Log Request', logResponse: 'Test Lod Response', logException: 'System.Exception', message: 'Test Message, Data: null, InnerException: null, HelpURL: null, StackTraceString: null, RemoteStackTraceString: null, RemoteStackIndex: 0, ExceptionMethod: null, HResult: -2146233088, Source: null, WatsonBuckets: null' },
-  ];
-
-  displayedColumns: string[] = ['logDate', 'userId', 'apiType', 'logRequest', 'logResponse','logException', 'message'];
+  logFilesList = [];
+  logGrid = [];
   dataSource = new MatTableDataSource<any>();
-  
-  constructor() { }
+  displayedColumns: string[] = ['logDate', 'userId', 'apiType', 'logRequest', 'logResponse', 'logException'];
+  search = true;
+  filterText: string = '';
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  ngOnInit() {
-    this.dataSource.data = this.logdata;
-    this.dataSource.paginator = this.paginator;
-
+  LoadLogFilesList() {
+    this.logService.GetLogFilesList().subscribe((result: any) => { this.logFilesList = result; });
   }
- 
+
+  onclicklogfile(filename: any) {
+    this.logService.GetLogGrid(filename).subscribe((result: any) => {
+      //this.logGrid = result;
+      for (let data of result) {
+        this.logGrid.push(
+          {
+            dateTime: data.dateTime,
+            userID: data.userID,
+            apiType: data.apiType,
+            logRequest: data.logInformation.logRequest,
+            logResponse: data.logInformation.logResponse,
+            logException: data.logInformation.logException
+          })
+      }
+      this.dataSource.data = this.logGrid;
+      this.search = false;
+    });    
+  }
+
+  applyFilter(filterValue: string) {
+    this.filterText = filterValue;
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
+
+  constructor(private logService: LogFilesService) { }  
+
+  ngOnInit() {
+    this.LoadLogFilesList();
+    this.dataSource.data = this.logGrid;
+    this.dataSource.paginator = this.paginator;
+    this.search = true;
+  } 
 }
 
 

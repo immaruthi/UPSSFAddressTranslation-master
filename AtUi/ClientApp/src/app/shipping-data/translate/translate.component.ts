@@ -222,7 +222,7 @@ export class TranslateComponent implements OnInit {
           shipmentDetailToUpdate.poD_RTN_SVC = response.shipmentDataRequest.poD_RTN_SVC;
           this.notificationService.openSuccessMessageNotification("Data Updated Successfully.");
         },
-          error => this.notificationService.openErrorMessageNotification("Error while updating data."))
+          error => this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText))
       }
     });
   }
@@ -270,11 +270,11 @@ export class TranslateComponent implements OnInit {
             this.notificationService.openErrorMessageNotification(response);
           }
         } else {
-          this.notificationService.openErrorMessageNotification("Error while Translating data.");
+          this.notificationService.openErrorMessageNotification("Invalid exception occured, please contact administrator.");
         }
       }
       ,
-      error => this.notificationService.openErrorMessageNotification("Error while Translating data.")
+      error => this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText)
     );
   }
 }

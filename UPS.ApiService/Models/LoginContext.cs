@@ -27,7 +27,7 @@ namespace AtService.Models
         }
         public UserDataResponse ValidateUser(String USR_ID_TE, String USR_PWD_TE)
         {
-            UserDataResponse userDataResponse = _userServices.SelectUserByUserIdAndPassword(USR_ID_TE, USR_PWD_TE);
+            UserDataResponse userDataResponse = _userServices.ValidateUser(USR_ID_TE, USR_PWD_TE);
             return userDataResponse;
 
         }

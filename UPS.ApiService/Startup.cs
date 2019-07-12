@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Text;
 using UPS.Quincus.APP.Request;
 using UPS.ServicesAsyncActions;
@@ -26,8 +28,7 @@ namespace UPS.AddressTranslationService
         }
 
         public IConfiguration Configuration { get; }
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+
         public void ConfigureServices(IServiceCollection services)
         {
             // ********************
@@ -41,6 +42,12 @@ namespace UPS.AddressTranslationService
             services.ContextSetup(Configuration);
 
             services.AddSingleton<IQuincusAddressTranslationRequest>(new QuincusAddressTranslationRequest() { endpoint = Configuration["Quincus:GeoCodeEndPoint"] });
+            /* Dependancy Injection */
+
+            services.AddTransient<IUserServicesAsync, UserServices>();
+            services.AddTransient<IUPSAuthenticationService, UPSAuthenticationService>();
+
+
             services.AddTransient<IAddressAuditLogAsync, AddressAuditLogService>();
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
 
@@ -58,10 +65,24 @@ namespace UPS.AddressTranslationService
              );
 
             services.AddElmah();
+            
             services.AddDbContext<ApplicationDbContext>(
                 option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.ConfigureJWTAuthentication(Configuration);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    var signingKey = Convert.FromBase64String(Configuration["Jwt:SigningKey"]);
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidAudience = Configuration["Jwt:Site"],
+                        ValidIssuer = Configuration["Jwt:Site"],
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(signingKey)
+                    };
+                });
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
@@ -72,6 +93,10 @@ namespace UPS.AddressTranslationService
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseCors(
+             options => options.WithOrigins(Configuration["CorsEnableDomain:Domain"]).AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials());
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -81,10 +106,7 @@ namespace UPS.AddressTranslationService
                 app.UseHsts();
             }
             app.UseElmah();
-            app.UseCors(
-                options => options.WithOrigins(Configuration["CorsEnableDomain:Domain"]).AllowAnyHeader()
-                           .AllowAnyMethod()
-                           .AllowCredentials());
+         
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();

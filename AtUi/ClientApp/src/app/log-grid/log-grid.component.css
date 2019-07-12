@@ -36,39 +36,15 @@ li{
   height: calc(100vh - 148px);
   overflow: auto;
 }
+mat-table{
+  width:100%;
+  min-width:2250px;
+}
 mat-row:nth-child(odd) {
   background: #F2F2F2;
 }
 mat-header-row {
   background-color: gray;
-}
-.mat-header-row {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  color: white;
-}
-mat-header-cell {
-  color: white;
-}
-
-mat-cell {
-  font-size: 12px;
-}
-
-mat-header-cell {
-  font-size: 14px;
-  font-weight: bold;
-  color: white;
-}
-  /*Date*/
-mat-header-cell:nth-child(1) {
-   margin-left: 0px 15px 0px 15px;
-   padding: 20px;
-   width: 150px;
-   flex: none;
-   font-size: 14px;
-   font-weight: bold;
 }
 /*Date*/
 mat-cell:nth-child(1) {
@@ -79,11 +55,12 @@ mat-cell:nth-child(1) {
   float: left;
   font-size: 12px;
 }
-/*User Id*/
-mat-header-cell:nth-child(2) {
+
+/*Date*/
+mat-header-cell:nth-child(1) {
   margin-left: 0px 15px 0px 15px;
   padding: 20px;
-  width: 120px;
+  width: 150px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
@@ -92,34 +69,36 @@ mat-header-cell:nth-child(2) {
 mat-cell:nth-child(2) {
   margin-left: 0px 15px 0px 15px;
   padding: 20px;
-  width: 120px;
+  width: 100px;
   flex: none;
   float: left;
   font-size: 12px;
 }
-/*App Name*/
-mat-header-cell:nth-child(3) {
+
+/*User Id*/
+mat-header-cell:nth-child(2) {
   margin-left: 0px 15px 0px 15px;
   padding: 20px;
-  width: 120px;
+  width: 100px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
 }
-/*App Name*/
+/*Application Name*/
 mat-cell:nth-child(3) {
   margin-left: 0px 15px 0px 15px;
   padding: 20px;
-  width: 120px;
+  width: 200px;
   flex: none;
   float: left;
   font-size: 12px;
 }
-/*Request*/
-mat-header-cell:nth-child(4) {
+
+/*Application Name*/
+mat-header-cell:nth-child(3) {
   margin-left: 0px 15px 0px 15px;
   padding: 20px;
-  width: 150px;
+  width: 200px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
@@ -128,16 +107,17 @@ mat-header-cell:nth-child(4) {
 mat-cell:nth-child(4) {
   margin-left: 0px 15px 0px 15px;
   padding: 20px;
-  width: 150px;
+  width: 600px;
   flex: none;
   float: left;
   font-size: 12px;
 }
-/*Response*/
-mat-header-cell:nth-child(5) {
+
+/*Request*/
+mat-header-cell:nth-child(4) {
   margin-left: 0px 15px 0px 15px;
   padding: 20px;
-  width: 150px;
+  width: 600px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
@@ -146,16 +126,17 @@ mat-header-cell:nth-child(5) {
 mat-cell:nth-child(5) {
   margin-left: 0px 15px 0px 15px;
   padding: 20px;
-  width: 150px;
+  width: 600px;
   flex: none;
   float: left;
   font-size: 12px;
 }
-/*Exception*/
-mat-header-cell:nth-child(6) {
+
+/*Response*/
+mat-header-cell:nth-child(5) {
   margin-left: 0px 15px 0px 15px;
   padding: 20px;
-  width: 150px;
+  width: 600px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
@@ -164,8 +145,18 @@ mat-header-cell:nth-child(6) {
 mat-cell:nth-child(6) {
   margin-left: 0px 15px 0px 15px;
   padding: 20px;
-  width: 150px;
+  width: 600px;
   flex: none;
   float: left;
   font-size: 12px;
+}
+
+/*Exception*/
+mat-header-cell:nth-child(6) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 600px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
 }

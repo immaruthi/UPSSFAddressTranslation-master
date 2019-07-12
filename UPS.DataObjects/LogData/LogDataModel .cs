@@ -20,6 +20,7 @@ namespace UPS.DataObjects.LogData
         public DateTime dateTime { get; set; }
 
         public APITypes apiTypes { get; set; }
+        public string apiType { get; set; }
 
         public LogInformation LogInformation { get; set; }
     }

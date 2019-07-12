@@ -14,5 +14,9 @@ namespace AtService.Models
 
         [Required]
         public string Password { get; set; }
+
+        [Required]
+        [MaxLength(10)]
+        public string UserName { get; set; }
     }
 }

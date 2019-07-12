@@ -2,6 +2,7 @@
 {
     using AtService.HeadController;
     using ExcelFileRead;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -31,6 +32,7 @@
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("AllowAtUIOrigin")]
+    [Authorize]
     public class ShipmentController : UPSController
     {
         public ICustomLog iCustomLog { get; set; }
@@ -71,13 +73,15 @@
         }
 
         private static int _workflowID = 0;
-        [Route("ExcelFileUpload/{Emp_Id}")]
+        [Route("ExcelFileUpload")]
         [HttpPost]
-        public async Task<ActionResult> ExcelFile(IList<IFormFile> excelFileName, int Emp_Id)
+      
+        public async Task<ActionResult> ExcelFile(IList<IFormFile> excelFileName)
         {
             ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
             try
             {
+                int userId = Convert.ToInt32(HttpContext.User.Claims.FirstOrDefault(x => x.Type == JwtConstant.UserId).Value);
                 ShipmentDataResponse result = null;
                 //string response = string.Empty;
                 if (excelFileName != null)
@@ -106,7 +110,7 @@
                             {
                                 var excelDataObject2 = JsonConvert.DeserializeObject<List<ExcelDataObject>>(excelExtensionReponse.ExcelExtensionReponseData);
                                 WorkflowController workflowController = new WorkflowController(this._hostingEnvironment, this._context, this._addressBookService, this._entityValidationService);
-                                WorkflowDataResponse response = ((WorkflowDataResponse)((ObjectResult)(workflowController.CreateWorkflow(file, Emp_Id)).Result).Value);
+                                WorkflowDataResponse response = ((WorkflowDataResponse)((ObjectResult)(workflowController.CreateWorkflow(file, userId)).Result).Value);
                                 _workflowID = response.Workflow.ID;
                                 result = _shipmentService.CreateShipments(excelDataObject2, _workflowID);
                                 if (result.Success)
@@ -126,7 +130,7 @@
                             {
                                 iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                                 {
-                                    apiTypes = UPS.DataObjects.LogData.APITypes.ExcelUpload,
+                                    apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes),7),
                                     dateTime = System.DateTime.Now,
                                     LogInformation = new UPS.DataObjects.LogData.LogInformation()
                                     {
@@ -144,6 +148,7 @@
                 iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                 {
                     apiTypes = UPS.DataObjects.LogData.APITypes.ExcelUpload,
+                    apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 7),
                     dateTime = System.DateTime.Now,
                     LogInformation = new UPS.DataObjects.LogData.LogInformation()
                     {
@@ -178,14 +183,17 @@
             return Ok(shipmentDataResponse);
         }
 
-        [Route("UpdateShipmentAddressById/{Emp_Id}")]
+        [Route("UpdateShipmentAddressById")]
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult> UpdateShipmentAddressById([FromBody] ShipmentDataRequest shipmentDataRequest, int Emp_Id)
+        public async Task<ActionResult> UpdateShipmentAddressById([FromBody] ShipmentDataRequest shipmentDataRequest)
         {
             //shipmentService = new ShipmentService();
-            ShipmentDataResponse shipmentDataResponse = _shipmentService.UpdateShipmentAddressById(shipmentDataRequest);
+            string id = HttpContext.User.Claims.FirstOrDefault(x => x.Type == JwtConstant.UserId)?.Value;
+
+            int userId = !string.IsNullOrEmpty(id) ? Convert.ToInt32(id) : 0;
+            ShipmentDataResponse shipmentDataResponse = shipmentService.UpdateShipmentAddressById(shipmentDataRequest);
             if (shipmentDataResponse.Success && !string.IsNullOrEmpty(shipmentDataResponse.BeforeAddress))
             {
                 try
@@ -196,7 +204,7 @@
                     addressAuditLogRequest.CSG_ADR = shipmentDataRequest.RCV_ADR_TE;
                     addressAuditLogRequest.BFR_ADR = shipmentDataResponse.BeforeAddress;
                     addressAuditLogRequest.AFR_ADR = shipmentDataResponse.ShipmentDataRequest.SHP_ADR_TR_TE;
-                    addressAuditLogRequest.UPD_BY = Emp_Id;
+                    addressAuditLogRequest.UPD_BY = userId;
                     addressAuditLogRequest.UPD_FRM = "Shipment";
                     addressAuditLogRequest.UPD_DT = DateTime.Now;
                     AddressAuditLogResponse addressAuditLogResponse = addressAuditLogService.Insert(addressAuditLogRequest);
@@ -227,6 +235,7 @@
             iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
             {
                 apiTypes = UPS.DataObjects.LogData.APITypes.EFCoreContext,
+                apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 6),
                 dateTime = System.DateTime.Now,
                 LogInformation = new UPS.DataObjects.LogData.LogInformation()
                 {
@@ -388,6 +397,7 @@
             iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
             {
                 apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
                 dateTime = System.DateTime.Now,
                 LogInformation = new UPS.DataObjects.LogData.LogInformation()
                 {
@@ -423,6 +433,7 @@
                 iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                 {
                     apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                    apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
                     dateTime = System.DateTime.Now,
                     LogInformation = new UPS.DataObjects.LogData.LogInformation()
                     {
@@ -440,6 +451,7 @@
                 iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                 {
                     apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                    apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
                     dateTime = System.DateTime.Now,
                     LogInformation = new UPS.DataObjects.LogData.LogInformation()
                     {
@@ -564,6 +576,7 @@
                         iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                         {
                             apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                            apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
                             dateTime = System.DateTime.Now,
                             LogInformation = new UPS.DataObjects.LogData.LogInformation()
                             {
@@ -580,6 +593,7 @@
                         iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                         {
                             apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                            apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
                             dateTime = System.DateTime.Now,
                             LogInformation = new UPS.DataObjects.LogData.LogInformation()
                             {
@@ -597,6 +611,7 @@
                     iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                     {
                         apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                        apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes),1),
                         dateTime = System.DateTime.Now,
                         LogInformation = new UPS.DataObjects.LogData.LogInformation()
                         {
@@ -690,6 +705,15 @@
                 //AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
             }
             return shipmentDataResponse;
+        }
+
+        [Route("GetAddressAuditLogData")]
+        [HttpGet]
+        public List<AddressAuditLogRequest> GetAddressAuditLogData()
+        {
+            //shipmentService = new ShipmentService();
+            List<AddressAuditLogRequest> addressAuditLogRequest = addressAuditLogService.GetAll();
+            return addressAuditLogRequest;
         }
     }
 }

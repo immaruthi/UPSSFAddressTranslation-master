@@ -63,6 +63,7 @@
                 {
                     dateTime = DateTime.Now,
                     apiTypes = DataObjects.LogData.APITypes.QuincusAPI_Token,
+                    apiType = "QuincusAPI_Token",
                     LogInformation = new DataObjects.LogData.LogInformation()
                     {
                         LogResponse = response,
@@ -80,6 +81,7 @@
                 {
                     dateTime = DateTime.Now,
                     apiTypes = DataObjects.LogData.APITypes.QuincusAPI_Token,
+                    apiType = "QuincusAPI_Token",
                     LogInformation = new DataObjects.LogData.LogInformation()
                     {
                         LogResponse = null,
@@ -160,6 +162,7 @@
                     {
                         dateTime = DateTime.Now,
                         apiTypes = DataObjects.LogData.APITypes.QuincusAPI_Translation,
+                        apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
                         LogInformation = new DataObjects.LogData.LogInformation()
                         {
                             LogResponse = response,
@@ -178,6 +181,7 @@
                 {
                     dateTime = DateTime.Now,
                     apiTypes = DataObjects.LogData.APITypes.QuincusAPI_Translation,
+                    apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
                     LogInformation = new DataObjects.LogData.LogInformation()
                     {
                         LogResponse = null,
@@ -296,6 +300,8 @@
                     {
                         dateTime = DateTime.Now,
                         apiTypes = DataObjects.LogData.APITypes.QuincusAPI_Batch,
+                        apiType = "QuincusAPI_Batch",
+
                         LogInformation = new DataObjects.LogData.LogInformation()
                         {
                             LogResponse = response,
@@ -313,6 +319,7 @@
                 {
                     dateTime = DateTime.Now,
                     apiTypes = DataObjects.LogData.APITypes.QuincusAPI_Batch,
+                    apiType = "QuincusAPI_Batch",
                     LogInformation = new DataObjects.LogData.LogInformation()
                     {
                         LogResponse = null,
