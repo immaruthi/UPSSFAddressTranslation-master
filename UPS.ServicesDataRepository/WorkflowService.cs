@@ -13,29 +13,57 @@ namespace UPS.ServicesDataRepository
 {
     public class WorkflowService : IWorkflowAsync
     {
+        private readonly ApplicationDbContext context;
+        private IAddressBookService addressBookService;
+        private IEntityValidationService entityValidationService;
         private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
+
         //public WorkflowDataResponse CreateWorkflow(WorkflowDataRequest workflowData)
         //{
         //}
+        public WorkflowService(ApplicationDbContext applicationDbContext,
+            IAddressBookService addressBookService,
+            IEntityValidationService entityValidationService)
+        {
+            this.context = applicationDbContext;
+            this.addressBookService = addressBookService;
+            this.entityValidationService = entityValidationService;
+            this.optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            this.optionsBuilder.EnableSensitiveDataLogging(true);
+        }
+
 
         public WorkflowDataResponse SelectWorkflows(USR user)
         {
             WorkflowDataResponse workflowtDataResponse = new WorkflowDataResponse();
-            optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-
-            using (var context = new ApplicationDbContext(optionsBuilder.Options))
+            try
             {
-                try
-                {
-                    workflowtDataResponse.Workflows = context.workflowDataRequests.Where(w => w.CRD_BY_NR == user.ID).ToList();
-                    workflowtDataResponse.Success = true;
-                    return workflowtDataResponse;
-                }
-                catch (Exception ex)
-                {
-                    workflowtDataResponse.Success = false;
-                    workflowtDataResponse.OperationException = ex;
-                }
+                workflowtDataResponse.Workflows = this.context.workflowDataRequests.Where(w => w.CRD_BY_NR == user.ID).ToList();
+                workflowtDataResponse.Success = true;
+                return workflowtDataResponse;
+            }
+            catch (Exception ex)
+            {
+                workflowtDataResponse.Success = false;
+                workflowtDataResponse.OperationException = ex;
+            }
+            return workflowtDataResponse;
+        }
+
+
+        public WorkflowDataResponse SelectWorkflowById(int Id)
+        {
+            WorkflowDataResponse workflowtDataResponse = new WorkflowDataResponse();
+            try
+            {
+                workflowtDataResponse.Workflow = this.context.workflowDataRequests.Where(w => w.ID == Id).FirstOrDefault();
+                workflowtDataResponse.Success = true;
+                return workflowtDataResponse;
+            }
+            catch (Exception ex)
+            {
+                workflowtDataResponse.Success = false;
+                workflowtDataResponse.OperationException = ex;
             }
             return workflowtDataResponse;
         }
@@ -43,30 +71,26 @@ namespace UPS.ServicesDataRepository
         public WorkflowDataResponse InsertWorkflow(WorkflowDataRequest workflowData)
         {
             WorkflowDataResponse workflowtDataResponse = new WorkflowDataResponse();
-            optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
-            using (var context = new ApplicationDbContext(optionsBuilder.Options))
+            try
             {
-                try
-                {
-                    WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
-                    workflowDataRequest.FLE_NA = workflowData.FLE_NA;
-                    workflowDataRequest.WFL_STA_TE = workflowData.WFL_STA_TE;
-                    workflowDataRequest.CRD_BY_NR = workflowData.CRD_BY_NR;
-                    workflowDataRequest.CRD_DT = DateTime.Now;
-                    //DateTime.ParseExact(DateTime.Now.ToShortDateString(), "yyyy-MM-dd HH:mm.ss.ffffff", CultureInfo.InvariantCulture);
-                    context.workflowDataRequests.Add(workflowDataRequest);
-                    context.Entry(workflowDataRequest).State = EntityState.Added;
-                    context.SaveChanges();
-                    workflowtDataResponse.Workflow = workflowDataRequest;
-                    workflowtDataResponse.Success = true;
-                    return workflowtDataResponse;
-                }
-                catch (Exception ex)
-                {
-                    workflowtDataResponse.Success = true;
-                    workflowtDataResponse.OperationException = ex;
-                }
+                WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
+                workflowDataRequest.FLE_NA = workflowData.FLE_NA;
+                workflowDataRequest.WFL_STA_TE = workflowData.WFL_STA_TE;
+                workflowDataRequest.CRD_BY_NR = workflowData.CRD_BY_NR;
+                workflowDataRequest.CRD_DT = DateTime.Now;
+                //DateTime.ParseExact(DateTime.Now.ToShortDateString(), "yyyy-MM-dd HH:mm.ss.ffffff", CultureInfo.InvariantCulture);
+                this.context.workflowDataRequests.Add(workflowDataRequest);
+                this.context.Entry(workflowDataRequest).State = EntityState.Added;
+                this.context.SaveChanges();
+                workflowtDataResponse.Workflow = workflowDataRequest;
+                workflowtDataResponse.Success = true;
+                return workflowtDataResponse;
+            }
+            catch (Exception ex)
+            {
+                workflowtDataResponse.Success = true;
+                workflowtDataResponse.OperationException = ex;
             }
             return workflowtDataResponse;
         }
@@ -76,25 +100,19 @@ namespace UPS.ServicesDataRepository
             WorkflowDataResponse workflowDataResponse = new WorkflowDataResponse();
             try
             {
-                optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();   
-                optionsBuilder.EnableSensitiveDataLogging(true);
-
-                using (var context = new ApplicationDbContext(optionsBuilder.Options))
+                WorkflowDataRequest data = this.context.workflowDataRequests.Where(s => s.ID == WorkflowDataRequest.ID).FirstOrDefault();
+                if (data != null)
                 {
-                    WorkflowDataRequest data = context.workflowDataRequests.Where(s => s.ID == WorkflowDataRequest.ID).FirstOrDefault();
-                    if(data != null)
-                    {
-                        data.ID = WorkflowDataRequest.ID;
-                        data.WFL_STA_TE = WorkflowDataRequest.WFL_STA_TE;
-                        context.workflowDataRequests.Update(data);
-                        context.Entry(WorkflowDataRequest).State = EntityState.Detached;
-                        context.SaveChanges();
-                        workflowDataResponse.Workflow = data;
-                        workflowDataResponse.Success = true;
-                        return workflowDataResponse;
-                    }
-                    workflowDataResponse.Success = false;
+                    data.ID = WorkflowDataRequest.ID;
+                    data.WFL_STA_TE = WorkflowDataRequest.WFL_STA_TE;
+                    this.context.workflowDataRequests.Update(data);
+                    this.context.Entry(WorkflowDataRequest).State = EntityState.Detached;
+                    this.context.SaveChanges();
+                    workflowDataResponse.Workflow = data;
+                    workflowDataResponse.Success = true;
+                    return workflowDataResponse;
                 }
+                workflowDataResponse.Success = false;
             }
             catch (Exception ex)
             {
@@ -109,18 +127,12 @@ namespace UPS.ServicesDataRepository
             WorkflowDataResponse workflowDataResponse = new WorkflowDataResponse();
             try
             {
-                optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-                optionsBuilder.EnableSensitiveDataLogging(true);
-
-                using (var context = new ApplicationDbContext(optionsBuilder.Options))
-                {
-                    WorkflowDataRequest data = context.workflowDataRequests.Where(s => s.ID == wid).FirstOrDefault();
-                    context.workflowDataRequests.Remove(data);
-                    context.Entry(data).State = EntityState.Deleted;
-                    context.SaveChanges();
-                    workflowDataResponse.Success = true;
-                    return workflowDataResponse;
-                }
+                WorkflowDataRequest data = this.context.workflowDataRequests.Where(s => s.ID == wid).FirstOrDefault();
+                this.context.workflowDataRequests.Remove(data);
+                this.context.Entry(data).State = EntityState.Deleted;
+                this.context.SaveChanges();
+                workflowDataResponse.Success = true;
+                return workflowDataResponse;
             }
             catch (Exception ex)
             {

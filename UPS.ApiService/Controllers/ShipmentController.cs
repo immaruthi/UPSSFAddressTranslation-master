@@ -26,6 +26,7 @@
     using UPS.ServicesAsyncActions;
     using UPS.ServicesDataRepository;
     using UPS.ServicesDataRepository.Common;
+    using UPS.ServicesDataRepository.DataContext;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -34,13 +35,15 @@
     {
         public ICustomLog iCustomLog { get; set; }
         private readonly IConfiguration configuration;
-        private readonly IHostingEnvironment hostingEnvironment;
-        private IAddressBookService addressBookService;
+        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly ApplicationDbContext _context;
+        private IEntityValidationService _entityValidationService;
+        private IAddressBookService _addressBookService;
         private ShipmentDataResponse shipmentDataResponse;
 
         //private ShipmentService shipmentService { get; set; }
-        private WorkflowService workflowService { get; set; }
-        private IShipmentAsync shipmentService { get; set; }
+        private WorkflowService _workflowService { get; set; }
+        private IShipmentAsync _shipmentService { get; set; }
         private IAddressAuditLogAsync addressAuditLogService { get; set; }
 
         private IQuincusAddressTranslationRequest _quincusAddressTranslationRequest { get; set; }
@@ -51,15 +54,19 @@
             IQuincusAddressTranslationRequest QuincusAddressTranslationRequest,
             IShipmentAsync shipmentAsync,
             IAddressBookService addressBookService,
-            IAddressAuditLogAsync addressAuditLogAsync
+            IAddressAuditLogAsync addressAuditLogAsync,
+            IEntityValidationService entityValidationService,
+            ApplicationDbContext applicationDbContext
             )
         {
             this.configuration = Configuration;
-            this.hostingEnvironment = HostingEnvironment;
-            shipmentService = shipmentAsync;
-            workflowService = new WorkflowService();
-            _quincusAddressTranslationRequest = QuincusAddressTranslationRequest;
-            this.addressBookService = addressBookService;
+            this._hostingEnvironment = HostingEnvironment;
+            this._shipmentService = shipmentAsync;
+            this._context = applicationDbContext;
+            this._addressBookService = addressBookService;
+            this._entityValidationService = entityValidationService;
+            this._workflowService = new WorkflowService(_context, _addressBookService,_entityValidationService);
+            this._quincusAddressTranslationRequest = QuincusAddressTranslationRequest;
             this.addressAuditLogService = addressAuditLogAsync;
         }
 
@@ -83,7 +90,7 @@
                         {
                             //string paths = hostingEnvironment.WebRootPath;
 
-                            var filePath = Path.Combine(hostingEnvironment.WebRootPath, file.FileName);
+                            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, file.FileName);
 
                             //var filePath = Path.Combine(@"D:\UserExcels", file.FileName);
                             using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -98,10 +105,10 @@
                             if (excelExtensionReponse.success)
                             {
                                 var excelDataObject2 = JsonConvert.DeserializeObject<List<ExcelDataObject>>(excelExtensionReponse.ExcelExtensionReponseData);
-                                WorkflowController workflowController = new WorkflowController();
+                                WorkflowController workflowController = new WorkflowController(this._hostingEnvironment, this._context, this._addressBookService, this._entityValidationService);
                                 WorkflowDataResponse response = ((WorkflowDataResponse)((ObjectResult)(workflowController.CreateWorkflow(file, Emp_Id)).Result).Value);
                                 _workflowID = response.Workflow.ID;
-                                result = shipmentService.CreateShipments(excelDataObject2, _workflowID);
+                                result = _shipmentService.CreateShipments(excelDataObject2, _workflowID);
                                 if (result.Success)
                                 {
                                     shipmentDataResponse.Success = true;
@@ -111,7 +118,7 @@
                                 {
                                     shipmentDataResponse.Success = false;
                                     shipmentDataResponse.OperationExceptionMsg = result.OperationExceptionMsg;
-                                    WorkflowService workflowService = new WorkflowService();
+                                    WorkflowService workflowService = new WorkflowService(_context,_addressBookService,_entityValidationService);
                                     workflowService.DeleteWorkflowById(_workflowID);
                                 }
                             }
@@ -163,7 +170,7 @@
         public async Task<ActionResult> UpdateShipmentStatusById([FromBody] ShipmentDataRequest shipmentDataRequest)
         {
             //shipmentService = new ShipmentService();
-            ShipmentDataResponse shipmentDataResponse = shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
+            ShipmentDataResponse shipmentDataResponse = _shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
             if (!shipmentDataResponse.Success)
             {
                 //AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
@@ -178,7 +185,7 @@
         public async Task<ActionResult> UpdateShipmentAddressById([FromBody] ShipmentDataRequest shipmentDataRequest, int Emp_Id)
         {
             //shipmentService = new ShipmentService();
-            ShipmentDataResponse shipmentDataResponse = shipmentService.UpdateShipmentAddressById(shipmentDataRequest);
+            ShipmentDataResponse shipmentDataResponse = _shipmentService.UpdateShipmentAddressById(shipmentDataRequest);
             if (shipmentDataResponse.Success && !string.IsNullOrEmpty(shipmentDataResponse.BeforeAddress))
             {
                 try
@@ -211,11 +218,11 @@
             }
 
             //we need to update the workflow status
-            int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(shipmentDataRequest.WFL_ID);
+            int? workflowstatus = _shipmentService.SelectShipmentTotalStatusByWorkflowId(shipmentDataRequest.WFL_ID);
             WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
             workflowDataRequest.ID = shipmentDataRequest.WFL_ID;
             workflowDataRequest.WFL_STA_TE = workflowstatus;
-            workflowService.UpdateWorkflowStatusById(workflowDataRequest);
+            _workflowService.UpdateWorkflowStatusById(workflowDataRequest);
 
             iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
             {
@@ -240,7 +247,23 @@
         public List<ShipmentDataRequest> GetShipmentData(int wid)
         {
             //shipmentService = new ShipmentService();
-            List<ShipmentDataRequest> shipmentDataRequests = shipmentService.GetShipment(wid);
+            List<ShipmentDataRequest> shipmentDataRequests = _shipmentService.GetShipment(wid);
+
+            //we need to update the workflow status
+            int? workflowstatus = _shipmentService.SelectShipmentTotalStatusByWorkflowId(wid);
+            WorkflowService workflowService = new WorkflowService(_context, _addressBookService, _entityValidationService);
+            WorkflowDataResponse workflowDataResponse = workflowService.SelectWorkflowById(wid);
+            if(workflowDataResponse.Success && workflowDataResponse.Workflow != null)
+            {
+                if(workflowstatus != workflowDataResponse.Workflow.WFL_STA_TE)
+                {
+                    WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
+                    workflowDataRequest.ID = wid;
+                    workflowDataRequest.WFL_STA_TE = workflowstatus;
+                    workflowService.UpdateWorkflowStatusById(workflowDataRequest);
+                }
+            }
+
             return shipmentDataRequests;
         }
 
@@ -248,7 +271,7 @@
         [HttpPost]
         public async Task<ActionResult> CreateOrderShipment([FromBody] List<UIOrderRequestBodyData> uIOrderRequestBodyDatas)
         {
-            string customerID = shipmentService.GetShipmentCustomCodesInformation().CST_ID;
+            string customerID = _shipmentService.GetShipmentCustomCodesInformation().CST_ID;
             _workflowID = uIOrderRequestBodyDatas[0].wfL_ID;
             CreateOrderShipmentResponse createOrderShipmentResponse = new CreateOrderShipmentResponse();
             createOrderShipmentResponse.FailedToProcessShipments = new List<string>();
@@ -344,7 +367,7 @@
                         shipmentDataRequest.SMT_STA_TE = "Completed";
                         _workflowID = orderRequest.wfL_ID;
 
-                        shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
+                        _shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
                     }
 
                     createOrderShipmentResponse.Response = true;
@@ -355,8 +378,8 @@
                 }
             }
             //we need to update the workflow status
-            int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);
-            WorkflowService workflowService = new WorkflowService();
+            int? workflowstatus = _shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);
+            WorkflowService workflowService = new WorkflowService(_context,_addressBookService,_entityValidationService);
             WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
             workflowDataRequest.ID = _workflowID;
             workflowDataRequest.WFL_STA_TE = workflowstatus;
@@ -437,7 +460,7 @@
         public async Task<ActionResult> DeleteShipments([FromBody] List<ShipmentDataRequest> shipmentDataRequests)
         {
             //ShipmentService shipmentService = new ShipmentService();
-            ShipmentDataResponse shipmentDataResponse = shipmentService.DeleteShipments(shipmentDataRequests);
+            ShipmentDataResponse shipmentDataResponse = _shipmentService.DeleteShipments(shipmentDataRequests);
             return Ok(shipmentDataResponse);
         }
 
@@ -498,7 +521,7 @@
                     if (QuincusResponse.ResponseStatus)
                     {
                         // Insert Address into AddressBook
-                        addressBookService.InsertAddress(QuincusResponse.QuincusReponseDataList);
+                        _addressBookService.InsertAddress(QuincusResponse.QuincusReponseDataList);
                         QuincusResponse.QuincusReponseDataList.ForEach(datalist =>
                         {
                             List<Geocode> geocodes = (List<Geocode>)((QuincusReponseData)datalist).geocode;
@@ -528,14 +551,14 @@
 
                                 shipmentDataRequestList.Add(shipmentDataRequest);
                             }
-                            shipmentService.UpdateShipmentAddressByIds(shipmentDataRequestList);
+                            _shipmentService.UpdateShipmentAddressByIds(shipmentDataRequestList);
 
                         //we need to update the workflow status
-                        int? workflowstatus = shipmentService.SelectShipmentTotalStatusByWorkflowId(wid);
+                        int? workflowstatus = _shipmentService.SelectShipmentTotalStatusByWorkflowId(wid);
                             WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
                             workflowDataRequest.ID = wid;
                             workflowDataRequest.WFL_STA_TE = workflowstatus;
-                            workflowService.UpdateWorkflowStatusById(workflowDataRequest);
+                            _workflowService.UpdateWorkflowStatusById(workflowDataRequest);
                         });
 
                         iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()

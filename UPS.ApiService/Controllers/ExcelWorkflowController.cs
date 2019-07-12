@@ -13,6 +13,7 @@ using UPS.ServicesDataRepository.DataContext;
 using UPS.ServicesDataRepository.OverrideDbContext;
 using System.Linq;
 using UPS.ServicesDataRepository;
+using UPS.ServicesAsyncActions;
 
 namespace AtService.Controllers
 {
@@ -23,17 +24,26 @@ namespace AtService.Controllers
     {
         private IHostingEnvironment _hostingEnvironment;
 
-        private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
+        private readonly ApplicationDbContext _context;
+        private IAddressBookService _addressBookService;
+        private IEntityValidationService _entityValidationService;
+        private DbContextOptionsBuilder<ApplicationDbContext> _optionsBuilder;
 
-        public ExcelWorkflowController(IHostingEnvironment hostingEnvironment)
+        public ExcelWorkflowController(IHostingEnvironment hostingEnvironment, ApplicationDbContext applicationDbContext,
+            IAddressBookService addressBookService,
+            IEntityValidationService entityValidationService)
         {
             _hostingEnvironment = hostingEnvironment;
+            _context = applicationDbContext;
+            _addressBookService = addressBookService;
+            _entityValidationService = entityValidationService;
+            _optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
         }
 
         [HttpGet("[action]")]
         public List<WorkflowDataRequest> getExcelData()
         {
-            WorkflowService workflowService = new WorkflowService();
+            WorkflowService workflowService = new WorkflowService(_context,_addressBookService,_entityValidationService);
             List<WorkflowDataRequest> workflowDataRequests = new List<WorkflowDataRequest>();
             workflowDataRequests = workflowService.getExcelData();
             return workflowDataRequests;
