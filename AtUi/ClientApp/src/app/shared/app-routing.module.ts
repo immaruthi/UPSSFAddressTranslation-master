@@ -15,12 +15,14 @@ import { AdminconfigComponent } from '../adminconfig/adminconfig.component';
 import { LogGridComponent } from '../log-grid/log-grid.component';
 import { AuditingLogComponent } from '../auditing-log/auditing-log.component';
 const routes: Routes = [
-  
+
+  { path: '', redirectTo: '/login', pathMatch: 'full', canActivate: [LoginGuard], },
   {
-    path: '',
+    path: 'login',
     component: LoginlayoutComponent,
     children: [
       { path: '', canActivate: [LoginGuard], component: LoginComponent, pathMatch: 'full' },
+     
     ]
   },
   {
