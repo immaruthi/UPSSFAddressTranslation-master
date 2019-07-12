@@ -295,7 +295,7 @@ namespace UPS.ServicesDataRepository
             decimal? totalCount = 1;
             try
             {
-                int inprogressCount = this.context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid && ship.SMT_STA_NR == 1 && ship.SMT_STA_NR == 2).Count();
+                int inprogressCount = this.context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid && ship.SMT_STA_NR == 1 || ship.SMT_STA_NR == 2).Count();
                 int completedCount = this.context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid && ship.SMT_STA_NR == 3).Count();
                 totalCount = this.context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid).Count();
                 if (completedCount == totalCount)
