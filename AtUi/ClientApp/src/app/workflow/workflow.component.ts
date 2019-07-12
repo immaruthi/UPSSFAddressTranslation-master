@@ -133,7 +133,7 @@ export class WorkflowComponent {
         },
         error =>
         {
-          this.notificationService.openErrorMessageNotification("Error while uploading file");
+          this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText);
           this.resetFileUpload();
         }
       );
