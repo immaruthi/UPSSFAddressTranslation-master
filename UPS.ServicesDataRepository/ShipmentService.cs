@@ -6,6 +6,7 @@ using EFCore.BulkExtensions;
 using ExcelFileRead;
 using Microsoft.EntityFrameworkCore;
 using UPS.DataObjects.AddressBook;
+using UPS.DataObjects.CST_DTL;
 using UPS.DataObjects.Shipment;
 using UPS.DataObjects.UserData;
 using UPS.ServicesAsyncActions;
@@ -28,32 +29,13 @@ namespace UPS.ServicesDataRepository
             this.context = applicationDbContext;
             this.addressBookService = addressBookService;
             this.entityValidationService = entityValidationService;
+            this.optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
         }
 
 
-        public string GetShipmentCustomCodesInformation()
+        public CST_DTL GetShipmentCustomCodesInformation()
         {
-            string customerID = string.Empty;
-
-            optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-
-            using (var ctx = new ApplicationDbContext(optionsBuilder.Options))
-            {
-                using (var command = ctx.Database.GetDbConnection().CreateCommand())
-                {
-                    command.CommandText = "SELECT [CST-ID] from [CST-DTL]";
-                    ctx.Database.OpenConnection();
-                    using (var result = command.ExecuteReader())
-                    {
-                        while (result.Read())
-                        {
-                            customerID = result.GetString(0);
-                        }
-                    }
-                }
-            }
-
-            return customerID;
+            return this.context.CST_DTL.FirstOrDefault();
         }
         public List<ShipmentDataRequest> GetShipment(int workflowID)
         {
