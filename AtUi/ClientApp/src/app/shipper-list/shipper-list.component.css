@@ -51,6 +51,26 @@ mat-header-row {
   color: white;
 }
 
+/*Postal Code*/
+mat-cell:nth-child(1) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 150px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Postal Code*/
+mat-header-cell:nth-child(1) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 150px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
 /*Shipping Address*/
 mat-cell:nth-child(7) {
   padding: 0px 15px 0px 15px;
