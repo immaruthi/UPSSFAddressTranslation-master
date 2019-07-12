@@ -153,7 +153,6 @@ import { LogFilesService } from './services/LogFilesService';
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
-    }
     },
     LogFilesService
     ],
