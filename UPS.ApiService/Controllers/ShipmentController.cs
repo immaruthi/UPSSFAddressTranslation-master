@@ -123,7 +123,7 @@
                             {
                                 iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                                 {
-                                    apiTypes = UPS.DataObjects.LogData.APITypes.ExcelUpload,
+                                    apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes),7),
                                     dateTime = System.DateTime.Now,
                                     LogInformation = new UPS.DataObjects.LogData.LogInformation()
                                     {
@@ -141,6 +141,7 @@
                 iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                 {
                     apiTypes = UPS.DataObjects.LogData.APITypes.ExcelUpload,
+                    apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 7),
                     dateTime = System.DateTime.Now,
                     LogInformation = new UPS.DataObjects.LogData.LogInformation()
                     {
@@ -227,6 +228,7 @@
             iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
             {
                 apiTypes = UPS.DataObjects.LogData.APITypes.EFCoreContext,
+                apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 6),
                 dateTime = System.DateTime.Now,
                 LogInformation = new UPS.DataObjects.LogData.LogInformation()
                 {
@@ -372,6 +374,7 @@
             iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
             {
                 apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
                 dateTime = System.DateTime.Now,
                 LogInformation = new UPS.DataObjects.LogData.LogInformation()
                 {
@@ -407,6 +410,7 @@
                 iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                 {
                     apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                    apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
                     dateTime = System.DateTime.Now,
                     LogInformation = new UPS.DataObjects.LogData.LogInformation()
                     {
@@ -424,6 +428,7 @@
                 iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                 {
                     apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                    apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
                     dateTime = System.DateTime.Now,
                     LogInformation = new UPS.DataObjects.LogData.LogInformation()
                     {
@@ -548,6 +553,7 @@
                         iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                         {
                             apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                            apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
                             dateTime = System.DateTime.Now,
                             LogInformation = new UPS.DataObjects.LogData.LogInformation()
                             {
@@ -564,6 +570,7 @@
                         iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                         {
                             apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                            apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
                             dateTime = System.DateTime.Now,
                             LogInformation = new UPS.DataObjects.LogData.LogInformation()
                             {
@@ -581,6 +588,7 @@
                     iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                     {
                         apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
+                        apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes),1),
                         dateTime = System.DateTime.Now,
                         LogInformation = new UPS.DataObjects.LogData.LogInformation()
                         {
