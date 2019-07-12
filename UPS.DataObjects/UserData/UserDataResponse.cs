@@ -10,5 +10,6 @@ namespace UPS.DataObjects.UserData
         public IEnumerable<USR> UserData { get; set; }
         public bool Success { get; set; }
         public Exception OperationException { get; set; }
+        public string Message { get; set; }
     }
 }

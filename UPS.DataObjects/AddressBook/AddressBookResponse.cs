@@ -10,5 +10,6 @@ namespace UPS.DataObjects.AddressBook
         public AddressBook AddressBookData { get; set; }
         public string OperatonExceptionMessage { get; set; }
         public bool Success { get; set; }
+        public string BeforeAddress { get; set; }
     }
 }

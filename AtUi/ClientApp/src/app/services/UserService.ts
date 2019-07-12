@@ -46,38 +46,28 @@ export class UserService {
   }
 
   getAllWorkflows(user:any) {
-    const params = new HttpParams()
-      .set('Emp_Id', user)
-
-    return this.httpClient.get(environment.LOCAL_API_URL + `api/ExcelWorkflow/getExcelData`, { params })
+   
+    return this.httpClient.get(environment.LOCAL_API_URL + `api/ExcelWorkflow/getExcelData`)
   }
   postFile(fileToUpload: File, user: any): Observable<Object> {
     let Emp_Id = user;
     //const endpoint = 'api/ExcelWorkflow/UploadExcel';
     //const endpoint = 'https://atservicetest.azurewebsites.net/api/Shipment/ExcelFileUpload';
-    const endpoint = environment.LOCAL_API_URL + 'api/Shipment/ExcelFileUpload/' + user;
+    const endpoint = environment.LOCAL_API_URL + 'api/Shipment/ExcelFileUpload';
     const formData: FormData = new FormData();
     let headers = new HttpHeaders();
+
+    headers = headers.append('fileupload', 'fileupload');
     headers.append('Content-Type', 'multipart/form-data');
     headers.append('Accept', 'application/json');
     //let options = new RequestOptions({ headers: headers });
-    formData.append('excelFileName', fileToUpload, fileToUpload.name);
+    formData.append('excelFileName', fileToUpload);
     let fileList = new List<File>([fileToUpload]);
-    return this.httpClient.post(endpoint, formData)
+    return this.httpClient.post(endpoint, formData, { headers: headers })
       .map((response: Response) => {
         console.log(response);
         return response;
       });
   }
-
-  //logout service method
-  logout() {
-    localStorage.removeItem("Emp_Id");
-    localStorage.removeItem("pwd");
-    
-
-
-  }
-
 
 }

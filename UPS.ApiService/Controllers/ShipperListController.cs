@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UPS.DataObjects.SPC_LST;
@@ -11,6 +12,7 @@ namespace AtService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ShipperListController : ControllerBase
     {
         private ShipperCompnayService shipperCompnayService { get; set; }

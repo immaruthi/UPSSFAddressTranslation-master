@@ -5,8 +5,9 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/map'; 
+import 'rxjs/add/operator/map';
 import { DialogService } from '../services/dialog.service';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,10 @@ export class LoginComponent {
   }
 
 
-  constructor(private userService: UserService, private router: Router, private formBuilder: FormBuilder, private dialogService: DialogService) {
+  constructor(private userService: UserService,
+    private router: Router, private formBuilder: FormBuilder, private dialogService: DialogService,
+    private _authService: AuthenticationService
+  ) {
 
   }
 
@@ -51,98 +55,38 @@ export class LoginComponent {
   onSubmit(userid, password) {
     this.submitted = true;
 
-    // stop here if form is invalid
-    //if (this.registerForm.invalid) {
-    //  return;
-    //}
-
-
     if (userid == "") {
       this.dialogService.openAlertDialog('Please Enter User Id');
     }
     else if (password == "") {
       this.dialogService.openAlertDialog('Please Enter Your Password');
     }
-
-
     else {
 
-      //check userid
-      //this.userService.ValidateUserId(name)
-      //  .subscribe((data: boolean) => {
-      //    this.userIsExists = data;
+      this._authService.login(userid, password).subscribe(
+        (response: any) => {
+          if (response == true) {
+            this.router.navigate(['/workflow']);
+          }
+          else {
+            this.dialogService.openAlertDialog('Please provide valid credentials');
+          }
 
-      //    if (data) {
-      this.userService.ValidateUser(userid, password)
-        .subscribe((data: any) => {
-                this.isExists = data.success;
-
-                if (this.isExists) {
-                  //this.router.navigate(['/counter', name]);
-                  this.router.navigate(['/workflow']);
-                  this.setSession(userid, password, data.user.id);
-
-
-                }
-                else {
-                  this.dialogService.openAlertDialog('Please provide valid credentials');
-                }
-
-              });
-
-          //}
-          //else {
-          //  this.dialogService.openAlertDialog('Please Check The UserName Entered');
-          //}
-
-        //});
-
-
+        },
+        error => {
+          debugger;
+          if (error.status == 401)
+          this.dialogService.openAlertDialog('Please provide valid credentials');
+        }
+      );
+    
     }
-
-
-
-
-
-    /*
-
-   //code check userid and password
-
-   this.userService.ValidateUser(name, password)
-     .subscribe((data: boolean) => {
-       this.isExists = data;
-
-       if (this.isExists) {
-         //this.router.navigate(['/counter', name]);
-         this.router.navigate(['/counter']);
-         this.setSession(name, password);
-
-         console.log(name + "in homecomponent");
-
-       }
-else{
-         alert('Please check User Id and Password');
-}
-
-     });  
-
-*/
-
-  }
-
-
-  //adding data to localstorage
-  private setSession(userid, password, user) {
-    localStorage.setItem('Emp_Id', userid);
-    localStorage.setItem("pwd", password);
-    localStorage.setItem("userid", user);
   }
 
   private logout() {
-    localStorage.removeItem("userid");
-    localStorage.removeItem("password");
-    localStorage.removeItem("Emp_Id");
+    this._authService.logout();
+   
   }
-  }
+}
 
 
