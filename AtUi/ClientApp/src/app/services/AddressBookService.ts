@@ -15,6 +15,7 @@ export class AddressBookService {
   }
 
   public updateAddressBook(data: any): Observable<any> {
-    return this.httpService.makePostRequest('api/AddressBook/UpdateAddressBookById', data);
+    var user = localStorage.getItem("userid");
+    return this.httpService.makePostRequest('api/AddressBook/UpdateAddressBookById/' + user, data);
   }
 }
