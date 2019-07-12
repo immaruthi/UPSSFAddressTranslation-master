@@ -23,7 +23,6 @@ namespace UPS.AddressTranslationService.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("AllowAtUIOrigin")]
-    [Authorize]
     public class ValuesController : UPSController
     {
 
@@ -39,8 +38,6 @@ namespace UPS.AddressTranslationService.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            string userIdText = HttpContext.User.Claims.FirstOrDefault(x => x.Type == JwtConstant.UserIdText).Value;
-            string Id = HttpContext.User.Claims.FirstOrDefault(x => x.Type == JwtConstant.UserId).Value;
             iCustomLog.AddLogEntry(new DataObjects.LogData.LogDataModel()
             {
                 apiTypes = DataObjects.LogData.APITypes.AddressBookSetup,
@@ -53,7 +50,7 @@ namespace UPS.AddressTranslationService.Controllers
                 }
             });
 
-            return new string[] { "value1", "value2", "UserId:" + Id, "UserIdText:" + userIdText };
+            return new string[] { "value1", "value2" };
         }
 
         [HttpGet("[action]")]

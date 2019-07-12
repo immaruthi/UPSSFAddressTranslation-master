@@ -9,8 +9,7 @@ export class AuthGuard implements CanActivate {
   currentUser: any = JSON.parse(localStorage.getItem('currentUser'));
 
   canActivate(): boolean {
-    debugger;
-    if (this.currentUser != null || this.currentUser.token!= null) {
+    if (this.currentUser != null && this.currentUser.token!= null) {
       return true;
     }
     else if (this.currentUser == null || this.currentUser.token == null) {
