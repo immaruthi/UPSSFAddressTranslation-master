@@ -6,6 +6,8 @@ using UPS.DataObjects.LogData;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace UPS.Application.CustomLogs
 {
@@ -55,6 +57,44 @@ namespace UPS.Application.CustomLogs
         public void AddLogEntry(LogDataModel logDataModel)
         {
             LogEntry(logDataModel);
+        }
+
+        public static string[] GetLogFiles()
+        {
+
+            List<string> fileNames = new List<string>();
+
+            Directory.GetFiles(HostingEnvironment.WebRootPath, "*.txt",
+                                         SearchOption.TopDirectoryOnly).ToList().ForEach(filename =>
+                                         {
+                                             fileNames.Add(Path.GetFileName(filename));
+                                         });
+            
+            return fileNames.ToArray();
+        }
+
+        public static LogDataModel[] GetLogFileDataFromFileName(string filePath)
+        {
+
+            string jsonText = File.ReadAllText(filePath.ToString());
+
+            jsonText = "[" + jsonText + "]";
+
+
+            var logDataModels = JsonConvert.DeserializeObject<LogDataModel[]>(jsonText);
+
+
+            return logDataModels;
+        }
+
+        public string[] GetLogFileList()
+        {
+            return GetLogFiles();
+        }
+
+        public LogDataModel[] ReadLogFileData(string filename)
+        {
+            return GetLogFileDataFromFileName(Path.Combine(HostingEnvironment.WebRootPath, filename));
         }
     }
 }

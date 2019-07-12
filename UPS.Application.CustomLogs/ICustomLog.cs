@@ -9,5 +9,9 @@ namespace UPS.Application.CustomLogs
     public interface ICustomLog:IAction
     {
         void AddLogEntry(LogDataModel logDataModel);
+
+        string[] GetLogFileList();
+
+        LogDataModel[] ReadLogFileData(string filePath);
     }
 }
