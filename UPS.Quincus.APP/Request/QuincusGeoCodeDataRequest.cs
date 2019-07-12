@@ -1,4 +1,6 @@
-﻿namespace UPS.Quincus.APP.Request
+﻿using System.Collections.Generic;
+
+namespace UPS.Quincus.APP.Request
 {
     public class QuincusGeoCodeDataRequest
     {
@@ -6,6 +8,6 @@
 
         public QuincusTokenData quincusTokenData { get; set; }
 
-        public string id { get; set; }
+        public List<string> batchIDList { get; set; }
     }
 }

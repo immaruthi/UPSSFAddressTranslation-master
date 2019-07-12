@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AtService.Models;
+﻿using AtService.Extensions;
+using ElmahCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -15,12 +10,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using UPS.Quincus.APP.Common;
+using System;
+using System.Text;
 using UPS.Quincus.APP.Request;
 using UPS.ServicesAsyncActions;
 using UPS.ServicesDataRepository;
+using UPS.ServicesDataRepository.Common;
 using UPS.ServicesDataRepository.DataContext;
-using UPS.ServicesDataRepository.OverrideDbContext;
 
 namespace UPS.AddressTranslationService
 {
@@ -43,11 +39,7 @@ namespace UPS.AddressTranslationService
                 c.AddPolicy("AllowAtUIOrigin", options => options.WithOrigins(Configuration["CorsEnableDomain:Domain"]));
             });
 
-            DBConnectionContext.getconnection(Configuration);
-            MapProxy.webProxyURI = Configuration["webProxy:URL"];
-            MapProxy.webProxyUsername = Configuration["webProxy:Username"];
-            MapProxy.webProxyPassword = Configuration["webProxy:Password"];
-            MapProxy.WebProxyEnable = Configuration["webProxy:Enable"];
+            services.ContextSetup(Configuration);
 
             services.AddSingleton<IQuincusAddressTranslationRequest>(new QuincusAddressTranslationRequest() { endpoint = Configuration["Quincus:GeoCodeEndPoint"] });
             /* Dependancy Injection */
@@ -56,9 +48,24 @@ namespace UPS.AddressTranslationService
             services.AddTransient<IUPSAuthenticationService, UPSAuthenticationService>();
 
 
+            services.AddTransient<IAddressAuditLogAsync, AddressAuditLogService>();
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            services.AddTransient<IShipmentAsync, ShipmentService>();
+            services.AddTransient<IAddressBookService, AddressBookService>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IEntityValidationService, EntityValidationServic>();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Core API", Description = "Swagger Core API" });
+                c.OperationFilter<FormFileSwaggerFilter>();
+            }
+
+             );
+
+            services.AddElmah();
+            
             services.AddDbContext<ApplicationDbContext>(
                 option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -78,12 +85,18 @@ namespace UPS.AddressTranslationService
                 });
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+            services.IocSetup();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-
+            app.UseCors(
+             options => options.WithOrigins(Configuration["CorsEnableDomain:Domain"]).AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials());
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -92,15 +105,20 @@ namespace UPS.AddressTranslationService
             {
                 app.UseHsts();
             }
-            app.UseCors(
-                options => options.WithOrigins(Configuration["CorsEnableDomain:Domain"]).AllowAnyHeader()
-                           .AllowAnyMethod()
-                           .AllowCredentials());
+            app.UseElmah();
+         
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Core API");
 
+            }
+            );
+
+            app.AddLogFile(env, Configuration);
         }
-
     }
 }

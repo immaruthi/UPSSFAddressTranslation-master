@@ -27,6 +27,16 @@ namespace UPS.AddressTranslationService.Controllers
         private WorkflowService workflowService {get; set; }
         private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
 
+        [HttpGet("[action]")]
+        public List<WorkflowDataRequest> getExcelData()
+        {
+            WorkflowService workflowService = new WorkflowService();
+            List<WorkflowDataRequest> workflowDataRequests = new List<WorkflowDataRequest>();
+            workflowDataRequests = workflowService.getExcelData();
+            return workflowDataRequests;
+        }
+
+
         [Route("CreateWorkflow")]
         [HttpPost]
         public ActionResult<WorkflowDataResponse> CreateWorkflow(IFormFile fromFile, int Emp_Id)

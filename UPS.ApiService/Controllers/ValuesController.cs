@@ -11,6 +11,8 @@ using UPS.ServicesDataRepository;
 using UPS.Application.CustomLogs;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
+using AtService.CustomConatiner;
+using AtService.HeadController;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using UPS.ServicesDataRepository.Common;
 
@@ -22,18 +24,62 @@ namespace UPS.AddressTranslationService.Controllers
     [ApiController]
     [EnableCors("AllowAtUIOrigin")]
     [Authorize]
-    public class ValuesController : Controller
+    public class ValuesController : UPSController
     {
+
+        //public ValuesController()
+        //{
+        //    IoCContainer.BuildUp(this);
+        //}
+
+        public ICustomLog iCustomLog { get; set; }
+
         // GET: api/<controller>
         //[Authorize(AuthenticationSchemes = "JwtBearer")]
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            string userIdText = HttpContext.User.Claims.FirstOrDefault(x => x.Type ==JwtConstant.UserIdText).Value;
+            string userIdText = HttpContext.User.Claims.FirstOrDefault(x => x.Type == JwtConstant.UserIdText).Value;
             string Id = HttpContext.User.Claims.FirstOrDefault(x => x.Type == JwtConstant.UserId).Value;
+            iCustomLog.AddLogEntry(new DataObjects.LogData.LogDataModel()
+            {
+                apiTypes = DataObjects.LogData.APITypes.AddressBookSetup,
+                dateTime = System.DateTime.Now,
+                LogInformation = new DataObjects.LogData.LogInformation()
+                {
+                    LogException = new Exception("Test Exception"),
+                    LogRequest = "Test Request",
+                    LogResponse = "Test Response"
+                }
+            });
 
-            return new string[] { "value1", "value2", "UserId:"+ Id, "UserIdText:"+ userIdText };
+            return new string[] { "value1", "value2", "UserId:" + Id, "UserIdText:" + userIdText };
         }
 
+        [HttpGet("[action]")]
+        public bool ValidateUser(String userId, String password)
+        {
+            return true; 
+        }
+
+        [HttpGet("[action]")]
+        public bool ValidateUserId(String userId)
+        {
+            //LoginContext context = HttpContext.RequestServices.GetService(typeof(RMG.Models.LoginContext)) as LoginContext;
+            return true;//context.ValidateUserId(userId);
+        }
+        [HttpGet("[action]")]
+        public LoginData getLoginData(string Emp_Id)
+        {
+            //LoginDataContext context = HttpContext.RequestServices.GetService(typeof(RMG.Models.LoginDataContext)) as LoginDataContext;
+
+            LoginData loginData = new LoginData()
+            {
+                Emp_Id = Emp_Id,
+                Last_Login_Date = System.DateTime.Now.ToString()
+            };
+
+            return loginData;//context.getLoginData(Emp_Id);
+        }
     }
 }

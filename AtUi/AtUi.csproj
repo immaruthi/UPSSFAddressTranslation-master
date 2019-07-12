@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="elmah" Version="1.2.2" />
+    <PackageReference Include="ElmahCore" Version="1.2.5" />
     <PackageReference Include="ElmahCore.Sql" Version="1.2.5" />
     <PackageReference Include="EntityFramework.SqlServerCompact" Version="6.2.0" />
     <PackageReference Include="EntityFrameworkCore.SqlServerCompact40.Core" Version="2.2.0.7" />
@@ -26,6 +27,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
     <PackageReference Include="MySql.Data" Version="8.0.16" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -88,6 +90,12 @@
     <TypeScriptCompile Include="ClientApp\src\app\shared\MaterialModule.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\workflow\workflow.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\workflow\workflow.component.spec.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

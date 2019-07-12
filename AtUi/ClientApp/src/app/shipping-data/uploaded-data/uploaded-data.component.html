@@ -9,7 +9,11 @@
     <button mat-raised-button color="primary" (click)="delete()"> Delete </button>
   </div>
 </div>
-<br />
+<mat-paginator #paginator
+               [pageSize]="10"
+               [pageSizeOptions]="[5, 10, 20]"
+               [showFirstLastButtons]="true">
+</mat-paginator>
 <div class="table-div">
   <mat-table class="table" [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="select" class="container">
@@ -124,8 +128,4 @@
     <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
   </mat-table>
 </div>
-<mat-paginator #paginator
-               [pageSize]="10"
-               [pageSizeOptions]="[5, 10, 20]"
-               [showFirstLastButtons]="true">
-</mat-paginator>
+

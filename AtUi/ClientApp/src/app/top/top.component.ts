@@ -15,10 +15,8 @@ import { LoginData } from '../models/LoginData';
 export class TopComponent implements OnInit {
   userName: string;
   loginfo: string;
-  constructor(private _authService: AuthenticationService,
-    private router: Router) {
-
-  }
+  isHandset$: any;
+    constructor(private _authService: AuthenticationService,private userService: UserService, private router: Router) { }
   log_info: LoginData;
   logout() {
     this._authService.logout();

@@ -1,0 +1,154 @@
+<div class="row">
+  <div class="col-md-6">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="filterText" placeholder="Filter">
+    </mat-form-field>
+  </div>
+</div>
+<mat-paginator #paginator
+               [pageSize]="10"
+               [pageSizeOptions]="[5, 10, 20, 50, 100]"
+               [showFirstLastButtons]="true">
+</mat-paginator>
+<div class="table-div">
+    <mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="actions" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Action </mat-header-cell>
+        <mat-cell *matCellDef="let row; let i=index;" class="cell">
+          <button mat-icon-button (click)="startEdit(i,row)">
+            <span><i class="material-icons">edit</i></span>
+          </button>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="shipmentId" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Shipment ID </mat-header-cell>
+        <mat-cell *matCellDef="let element, let i = index" class="cell"> {{element.shipmentId}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="batchId" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Batch ID </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.batchId}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="organization" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Organization </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.organization}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="statusCode" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Status Code </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.statusCode}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="consigneeAddressId" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Consignee Address ID </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.consigneeAddressId}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="consigneeAddress" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Consignee Address </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.consigneeAddress}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="consigneeTranslatedAddress" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Consignee Translated Address </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.consigneeTranslatedAddress}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="address_One" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Address 1 </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.address_One}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="address_Two" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Address 2 </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.address_Two}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="address_Three" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Address 3 </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.address_Three}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="address_Four" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Address 4 </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.address_Four}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="road" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Road </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.road}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="city" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> City </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.city}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="region" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Region </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.region}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="country" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Country </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.country}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="addressTypeFlag" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Address Type </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.addressTypeFlag}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="longitude" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Longitude </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.longitude}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="latitude" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Latitude </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.latitude}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="geoCode" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Geo Code </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.geoCode}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="geoCodeError" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Geo Code Error </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.geoCodeError}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="buldingNumber" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Bulding Number </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.buldingNumber}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="buildingName" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Building Name </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.buildingName}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="unit" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Unit </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.unit}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="area" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Area </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.area}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="bat_Id" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Batch ID </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.bat_Id}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="postalCode" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Postal Code </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.postalCode}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="confidence" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Confidence </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.confidence}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="semanticCheck" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Semantic Check </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.semanticCheck}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="accuracy" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Accuracy </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.accuracy}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="verifyMatch" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Verify Match </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.verifyMatch}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="createdDate" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Created Date </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.createdDate | date: 'MMMM dd, yyyy hh:mm a'}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="modifiedDate" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Modified Date </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.modifiedDate | date: 'MMMM dd, yyyy hh:mm a'}} </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
+    </mat-table>
+</div>

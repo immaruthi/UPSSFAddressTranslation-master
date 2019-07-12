@@ -1,0 +1,76 @@
+<div class="pageroute">
+  <div class="grid">
+    <mat-paginator #paginator
+                   [pageSize]="10"
+                   [pageSizeOptions]="[5, 10, 25, 100]">
+    </mat-paginator>
+    <div class="table-div">
+      <mat-table [dataSource]="dataSource">
+        <!-- Position Column -->
+        <ng-container matColumnDef="logDate">
+          <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+          <mat-cell *matCellDef="let log"> {{log.logDate | date: 'dd-MMM-yyyy HH:mm:ss'}} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="userId">
+          <mat-header-cell *matHeaderCellDef> User Id </mat-header-cell>
+          <mat-cell *matCellDef="let log"> {{log.userId}} </mat-cell>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="apiType">
+          <mat-header-cell *matHeaderCellDef> Application Name </mat-header-cell>
+          <mat-cell *matCellDef="let log"> {{log.apiType}} </mat-cell>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="logRequest">
+          <mat-header-cell *matHeaderCellDef> Request </mat-header-cell>
+          <mat-cell *matCellDef="let log"> {{log.logRequest}} </mat-cell>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="logResponse">
+          <mat-header-cell *matHeaderCellDef> Response </mat-header-cell>
+          <mat-cell *matCellDef="let log"> {{log.logResponse}} </mat-cell>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="logException">
+          <mat-header-cell *matHeaderCellDef> Exception </mat-header-cell>
+          <mat-cell *matCellDef="let log"> {{log.logException}} </mat-cell>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="message">
+          <mat-header-cell *matHeaderCellDef> Message </mat-header-cell>
+          <mat-cell *matCellDef="let log"> {{log.message}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+    </div>
+  </div>
+  <div class="rightnavbar">
+    <ul style="list-style:none;">
+      <li><a href="#">11-Jul-2019</a></li>
+      <li><a href="#">11-Jul-2019</a></li>
+      <li><a href="#">11-Jul-2019</a></li>
+      <li><a href="#">11-Jul-2019</a></li>
+      <li><a href="#">11-Jul-2019</a></li>
+      <li><a href="#">11-Jul-2019</a></li>
+      <li><a href="#">11-Jul-2019</a></li>
+      <li><a href="#">11-Jul-2019</a></li>
+      <li><a href="#">11-Jul-2019</a></li>
+      <li><a href="#">11-Jul-2019</a></li>
+      <li><a href="#">11-Jul-2019</a></li>
+      <li><a href="#">11-Jul-2019</a></li>
+      <li><a href="#">11-Jul-2019</a></li>
+      <li><a href="#">11-Jul-2019</a></li>
+      <li><a href="#">11-Jul-2019</a></li>
+      <li><a href="#">11-Jul-2019</a></li>
+    </ul>
+  </div>
+</div>

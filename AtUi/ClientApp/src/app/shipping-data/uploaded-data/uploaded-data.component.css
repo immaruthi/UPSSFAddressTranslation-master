@@ -1,6 +1,6 @@
 .table-div {
   width: 100%;
-  height: 435px;
+  height: calc(100vh - 325px);
   overflow: auto;
 }
 

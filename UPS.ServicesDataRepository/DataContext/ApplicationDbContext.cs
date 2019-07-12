@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UPS.DataObjects.AddressBook;
+using UPS.DataObjects.ADR_ADT_LG;
 using UPS.DataObjects.Shipment;
 using UPS.DataObjects.SPC_LST;
 using UPS.DataObjects.UserData;
@@ -28,29 +30,19 @@ namespace UPS.ServicesDataRepository.DataContext
                 new { Id = "1", Name = "Admin", NormalizedName = "ADMIN" },
                 new { Id = "2", Name = "Customer", NormalizedName = "Customer" }
                 );
+
             builder.Entity<ShipmentDataRequest>().ToTable("SMT-DTL-FRM-XL");
             builder.Entity<USR>().ToTable("USR");
             builder.Entity<WorkflowDataRequest>().ToTable("WR-FLW");
             builder.Entity<ShipperCompanyRequest>().ToTable("SPC-LST");
+            builder.Entity<AddressBook>().ToTable("ADR-BK");
+            builder.Entity<AddressAuditLogRequest>().ToTable("ADR-ADT-LG");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(DBConnectionContext.connectionString);
         }
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (!optionsBuilder.IsConfigured)
-        //    {
-        //        IConfigurationRoot configuration = new ConfigurationBuilder()
-        //        .SetBasePath(Directory.GetCurrentDirectory())
-        //        .AddJsonFile("appsettings.json")
-        //        .Build();
-        //        var connectionString = configuration.GetConnectionString("DbCoreConnectionString");
-        //        optionsBuilder.UseSqlServer(connectionString);
-        //    }
-        //}
-
         public DbSet<USR> UserData
         {
             get;
@@ -68,6 +60,16 @@ namespace UPS.ServicesDataRepository.DataContext
         }
 
         public DbSet<ShipperCompanyRequest> shipperCompanyRequests
+        {
+            get; set;
+        }
+
+        public DbSet<AddressBook> AddressBooks
+        {
+            get; set;
+        }
+
+        public DbSet<AddressAuditLogRequest> AddressAuditLogRequests
         {
             get; set;
         }
