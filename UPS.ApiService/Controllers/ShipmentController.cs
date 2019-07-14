@@ -46,6 +46,7 @@
         //private ShipmentService shipmentService { get; set; }
         private WorkflowService _workflowService { get; set; }
         private IShipmentAsync _shipmentService { get; set; }
+        private IShipperCompanyAsync _shipperCompanyService { get; set; }
         private IAddressAuditLogAsync addressAuditLogService { get; set; }
 
         private IQuincusAddressTranslationRequest _quincusAddressTranslationRequest { get; set; }
@@ -58,7 +59,8 @@
             IAddressBookService addressBookService,
             IAddressAuditLogAsync addressAuditLogAsync,
             IEntityValidationService entityValidationService,
-            ApplicationDbContext applicationDbContext
+            ApplicationDbContext applicationDbContext,
+            IShipperCompanyAsync shipperCompanyAsync
             )
         {
             this.configuration = Configuration;
@@ -70,6 +72,7 @@
             this._workflowService = new WorkflowService(_context, _addressBookService,_entityValidationService);
             this._quincusAddressTranslationRequest = QuincusAddressTranslationRequest;
             this.addressAuditLogService = addressAuditLogAsync;
+            this._shipperCompanyService = shipperCompanyAsync;
         }
 
         private static int _workflowID = 0;
@@ -680,8 +683,7 @@
         [HttpGet]
         public ShipmentDataResponse GetMatchedShipmentsWithShipperCompanies(int wid)
         {
-            ShipperCompnayService shipperCompanyService = new ShipperCompnayService();
-            shipmentDataResponse = shipperCompanyService.SelectMatchedShipmentsWithShipperCompanies(wid);
+            shipmentDataResponse = this._shipperCompanyService.SelectMatchedShipmentsWithShipperCompanies(wid);
             if (!shipmentDataResponse.Success)
             {
                 //AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
@@ -698,8 +700,7 @@
         [HttpGet]
         public ShipmentDataResponse GetCompletedShipments(int wid)
         {
-            ShipperCompnayService shipperCompanyService = new ShipperCompnayService();
-            shipmentDataResponse = shipperCompanyService.SelectCompletedShipments(wid);
+            shipmentDataResponse = this._shipperCompanyService.SelectCompletedShipments(wid);
             if (!shipmentDataResponse.Success)
             {
                 //AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
