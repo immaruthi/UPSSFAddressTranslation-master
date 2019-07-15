@@ -33,19 +33,20 @@ namespace UPS.ServicesDataRepository.DataContext
                 );
 
             builder.Entity<ShipmentDataRequest>().ToTable("SMT-DTL-FRM-XL");
-            builder.Entity<USR>().ToTable("USR");
+            builder.Entity<User>().ToTable("USR");
             builder.Entity<WorkflowDataRequest>().ToTable("WR-FLW");
-            builder.Entity<ShipperCompanyRequest>().ToTable("SPC-LST");
+            builder.Entity<ShipperCompanyList>().ToTable("SPC-LST");
             builder.Entity<AddressBook>().ToTable("ADR-BK");
             builder.Entity<AddressAuditLogRequest>().ToTable("ADR-ADT-LG");
             builder.Entity<CST_DTL>().ToTable("CST-DTL");
+            builder.Entity<UserCityMapping>().ToTable("USR-CTY-MPG");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(DBConnectionContext.connectionString);
         }
-        public DbSet<USR> UserData
+        public DbSet<User> UserData
         {
             get;
             set;
@@ -61,7 +62,7 @@ namespace UPS.ServicesDataRepository.DataContext
             get; set;
         }
 
-        public DbSet<ShipperCompanyRequest> shipperCompanyRequests
+        public DbSet<ShipperCompanyList> shipperCompanyRequests
         {
             get; set;
         }
@@ -76,6 +77,11 @@ namespace UPS.ServicesDataRepository.DataContext
             get; set;
         }
         public DbSet<CST_DTL> CST_DTL
+        {
+            get; set;
+        }
+
+        public DbSet<UserCityMapping> UserCityMapping
         {
             get; set;
         }

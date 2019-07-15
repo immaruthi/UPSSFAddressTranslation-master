@@ -112,6 +112,10 @@
         <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Extra Service </mat-header-cell>
         <mat-cell *matCellDef="let element" class="cell"> {{PODoptions[element?.poD_RTN_SVC!=null ?element.poD_RTN_SVC:0].value}} </mat-cell>
       </ng-container>
+      <ng-container hidden matColumnDef="spC_CST_ID_TE" class="container">
+        <mat-header-cell hidden *matHeaderCellDef class="header-cell" mat-sort-header> Customer ID </mat-header-cell>
+        <mat-cell hidden *matCellDef="let element" class="cell"> {{element.spC_CST_ID_TE}} </mat-cell>
+      </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
     </mat-table>

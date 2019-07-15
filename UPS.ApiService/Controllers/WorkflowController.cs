@@ -73,7 +73,7 @@ namespace UPS.AddressTranslationService.Controllers
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult> GetWorkflowData([FromBody] USR user)
+        public async Task<ActionResult> GetWorkflowData([FromBody] User user)
         {
             _optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 

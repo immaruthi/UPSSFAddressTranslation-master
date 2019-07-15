@@ -34,7 +34,7 @@ namespace UPS.ServicesDataRepository
                                       a.UPD_BY,
                                       a.UPD_FRM,
                                       a.UPD_DT,
-                                      UPD_BY_TE = us.USR_FST_NA + " " + us.USR_LST_NA
+                                      UPD_BY_TE = us.FirstName + " " + us.LastName
                                   };
             foreach (var aaloglist in auditListByName)
             {
