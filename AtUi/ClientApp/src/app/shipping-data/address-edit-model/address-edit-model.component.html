@@ -29,7 +29,7 @@
       <mat-form-field class="example-full-width">
         <mat-label>Extra Service</mat-label>
         <mat-select [(ngModel)]="data.poD_RTN_SVC" name="poD_RTN_SVC">
-          <mat-option *ngFor="let option of PODoptions" [value]="option.key">
+          <mat-option *ngFor="let option of PODoptions" value="{{option.key}}">
             {{option.value}}
           </mat-option>
         </mat-select>

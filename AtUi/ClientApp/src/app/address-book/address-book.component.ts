@@ -102,8 +102,6 @@ export class AddressBookComponent implements OnInit {
         }
 
         this.addressBookService.updateAddressBook(details).subscribe((response: any) => {
-          console.log(response)
-
           if (response) {
             if (response.success === true) {
               addressBookDetails.consigneeTranslatedAddress = response.addressBookData.consigneeTranslatedAddress;
@@ -113,11 +111,11 @@ export class AddressBookComponent implements OnInit {
               this.notificationService.openErrorMessageNotification(response.OperatonExceptionMessage);
             }
           } else {
-            this.notificationService.openErrorMessageNotification("Error while updating data.")
+            this.notificationService.openErrorMessageNotification("Invalid exception occured, please contact administrator.");
           }
 
         },
-          error => this.notificationService.openErrorMessageNotification("Error while updating data."))
+          error => this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText))
       }
     });
   }
