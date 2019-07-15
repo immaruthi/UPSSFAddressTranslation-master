@@ -52,7 +52,7 @@ namespace UPS.AddressTranslationService
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
 
             services.AddTransient<IShipmentAsync, ShipmentService>();
-            services.AddTransient<IShipperCompanyAsync, ShipperCompnayService>();
+            services.AddTransient<IShipperCompanyAsync, ShipperCompanyService>();
             services.AddTransient<IAddressBookService, AddressBookService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IEntityValidationService, EntityValidationServic>();
