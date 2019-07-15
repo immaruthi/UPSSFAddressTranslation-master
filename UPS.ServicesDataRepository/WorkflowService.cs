@@ -33,7 +33,7 @@ namespace UPS.ServicesDataRepository
         }
 
 
-        public WorkflowDataResponse SelectWorkflows(USR user)
+        public WorkflowDataResponse SelectWorkflows(User user)
         {
             WorkflowDataResponse workflowtDataResponse = new WorkflowDataResponse();
             try
@@ -159,7 +159,7 @@ namespace UPS.ServicesDataRepository
                                        wf.CRD_BY_NR,
                                        wf.CRD_DT,
                                        wf.UDT_DT,
-                                       USR_FST_NA = us.USR_FST_NA + " " + us.USR_LST_NA,
+                                       USR_FST_NA = us.FirstName + " " + us.LastName,
                                    };
                 foreach (var wfList in workflowList)
                 {

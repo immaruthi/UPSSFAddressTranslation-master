@@ -6,7 +6,7 @@ using System.Text;
 
 namespace UPS.DataObjects.SPC_LST
 {
-    public class ShipperCompanyRequest
+    public class ShipperCompanyList
     {
         [Key]
         [Column("ID")]

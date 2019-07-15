@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
     using NLog.Targets.Wrappers;
     using UPS.DataObjects.Shipment;
@@ -11,12 +12,12 @@
     using UPS.ServicesDataRepository.Common;
     using UPS.ServicesDataRepository.DataContext;
 
-    public class ShipperCompnayService : IShipperCompanyAsync
+    public class ShipperCompanyService : IShipperCompanyAsync
     {
         private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
         private readonly ApplicationDbContext context;
         private ShipperCompanyResponse response;
-        public ShipperCompnayService(ApplicationDbContext applicationDbContext)
+        public ShipperCompanyService(ApplicationDbContext applicationDbContext)
         {
             this.context = applicationDbContext;
             this.optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
@@ -386,7 +387,7 @@ s.WFL_ID == workflowID
             return shipperCompanyResponse;
         }
 
-        public ShipperCompanyResponse InsertShipper(ShipperCompanyRequest shipperCompanyRequest)
+        public ShipperCompanyResponse InsertShipper(ShipperCompanyList shipperCompanyRequest)
         {
 
             try
@@ -403,11 +404,11 @@ s.WFL_ID == workflowID
             return this.response;
         }
 
-        public ShipperCompanyResponse UpdateShipper(ShipperCompanyRequest shipperCompanyRequest)
+        public ShipperCompanyResponse UpdateShipper(ShipperCompanyList shipperCompanyRequest)
         {
             try
             {
-                ShipperCompanyRequest data = this.context.shipperCompanyRequests.Where(s => s.ID == shipperCompanyRequest.ID).FirstOrDefault();
+                ShipperCompanyList data = this.context.shipperCompanyRequests.Where(s => s.ID == shipperCompanyRequest.ID).FirstOrDefault();
                 this.context.Update(shipperCompanyRequest);
                 this.context.SaveChanges();
                 this.response.ShipperCompany = shipperCompanyRequest;
@@ -420,11 +421,11 @@ s.WFL_ID == workflowID
             return this.response;
         }
 
-        public ShipperCompanyResponse DeleteShipper(ShipperCompanyRequest shipperCompanyRequest)
+        public ShipperCompanyResponse DeleteShipper(ShipperCompanyList shipperCompanyRequest)
         {
             try
             {
-                ShipperCompanyRequest data = this.context.shipperCompanyRequests.Where(s => s.ID == shipperCompanyRequest.ID).FirstOrDefault();
+                ShipperCompanyList data = this.context.shipperCompanyRequests.Where(s => s.ID == shipperCompanyRequest.ID).FirstOrDefault();
                 this.context.Remove(shipperCompanyRequest);
                 this.context.SaveChanges();
                 this.response.ShipperCompany = shipperCompanyRequest;
@@ -435,6 +436,20 @@ s.WFL_ID == workflowID
                 this.response.OperatonExceptionMessage = ex.Message;
             }
             return this.response;
+        }
+
+        public async  Task<List<string>> GetShipmentCompanyCities()
+        {
+            List<string> cities =
+                await this.context.shipperCompanyRequests
+                        .Select(
+                            (ShipperCompanyList shipperList) =>
+                                shipperList.SPC_CTY_TE)
+                        .Distinct()
+                        .OrderBy(city=>city)
+                        .ToListAsync();
+
+            return cities;
         }
     }
 }
