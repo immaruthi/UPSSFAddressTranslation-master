@@ -68,7 +68,7 @@ export class LogGridComponent implements OnInit {
             'Exception': data.logException,
           })
       }
-      this.excelService.exportAsExcelFile(this.excelMainData, 'SendToSF');
+      this.excelService.exportAsExcelFile(this.excelMainData, 'Log_Report@');
     } else {
       this.dialogService.openAlertDialog('No data for export.');
     }
