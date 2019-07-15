@@ -44,7 +44,7 @@ namespace UPS.AddressTranslationService
             services.AddSingleton<IQuincusAddressTranslationRequest>(new QuincusAddressTranslationRequest() { endpoint = Configuration["Quincus:GeoCodeEndPoint"] });
             /* Dependancy Injection */
 
-            services.AddTransient<IUserServicesAsync, UserServices>();
+            services.AddTransient<IUserService, UserService>();
             services.AddTransient<IUPSAuthenticationService, UPSAuthenticationService>();
 
 
@@ -52,11 +52,12 @@ namespace UPS.AddressTranslationService
             services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
 
             services.AddTransient<IShipmentAsync, ShipmentService>();
-            services.AddTransient<IShipperCompanyAsync, ShipperCompnayService>();
+            services.AddTransient<IShipperCompanyAsync, ShipperCompanyService>();
             services.AddTransient<IAddressBookService, AddressBookService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IEntityValidationService, EntityValidationServic>();
-
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IShipperCompanyAsync, ShipperCompanyService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Core API", Description = "Swagger Core API" });

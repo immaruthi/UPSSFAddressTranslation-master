@@ -35,7 +35,7 @@ namespace AtService.Controllers
 
         [Route("CreateShipmentList")]
         [HttpPost]
-        public async Task<ActionResult> CreateShipmentList([FromBody] ShipperCompanyRequest shipperCompanyRequest)
+        public async Task<ActionResult> CreateShipmentList([FromBody] ShipperCompanyList shipperCompanyRequest)
         {
             ShipperCompanyResponse shipperCompanyResponse = _shipperCompnayService.InsertShipper(shipperCompanyRequest);
             try
@@ -59,7 +59,7 @@ namespace AtService.Controllers
 
         [Route("UpdateShipperListById")]
         [HttpPost]
-        public async Task<ActionResult> UpdateShipperListById([FromBody] ShipperCompanyRequest shipperCompanyRequest)
+        public async Task<ActionResult> UpdateShipmentListById([FromBody] ShipperCompanyList shipperCompanyRequest)
         {
             ShipperCompanyResponse shipperCompanyResponse = _shipperCompnayService.UpdateShipper(shipperCompanyRequest);
             try
@@ -83,7 +83,7 @@ namespace AtService.Controllers
 
         [Route("DeleteShipperListById")]
         [HttpPost]
-        public async Task<ActionResult> DeleteShipperListById([FromBody] ShipperCompanyRequest shipperCompanyRequest)
+        public async Task<ActionResult> DeleteShipmentListById([FromBody] ShipperCompanyList shipperCompanyRequest)
         {
             ShipperCompanyResponse shipperCompanyResponse = _shipperCompnayService.DeleteShipper(shipperCompanyRequest);
             try
@@ -103,6 +103,14 @@ namespace AtService.Controllers
             }
 
             return Ok(shipperCompanyResponse);
+        }
+
+        [HttpGet]
+        [Route("cities")]
+        public async Task<ActionResult> GetShipmentCompanyCities()
+        {
+            List<string> cities = await this._shipperCompnayService.GetShipmentCompanyCities();
+            return Ok(cities);
         }
     }
 }

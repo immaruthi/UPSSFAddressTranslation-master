@@ -29,12 +29,12 @@ namespace UPS.ServicesDataRepository
             UserDataResponse userDataResponse = new UserDataResponse();
             try
             {
-                USR user =
+                User user =
                     await context.UserData
                     .FirstOrDefaultAsync(
-                        (USR usr) =>
-                            usr.USR_ID_TE.ToLower() == USR_ID_TE.ToLower() 
-                            && usr.USR_PWD_TE == USR_PWD_TE);
+                        (User usr) =>
+                            usr.UserId.ToLower() == USR_ID_TE.ToLower() 
+                            && usr.Password == USR_PWD_TE);
                    
                 userDataResponse.Success = false;
                 if (user != null)
