@@ -38,5 +38,7 @@ namespace UPS.DataObjects.SPC_LST
 
         [Column("SPC-SLIC-NR")]
         public int? SPC_SLIC_NR { get; set; }
+        [Column("SPC-CST-ID-TE")]
+        public string SPC_CST_ID_TE { get; set; }
     }
 }
