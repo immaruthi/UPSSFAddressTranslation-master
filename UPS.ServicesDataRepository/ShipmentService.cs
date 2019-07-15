@@ -477,12 +477,13 @@ namespace UPS.ServicesDataRepository
             return shipmentDataResponse;
         }
 
-        public ShipmentDataResponse CreateShipments(List<ExcelDataObject> excelDataObjects, int workflowID)
+        public ShipmentDataResponse CreateShipments(List<ExcelDataObject> excelDataObjects, int workflowID, out int? workflowStatus)
         {
             ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
+            workflowStatus = 0;
             try
             {
-                List<ShipmentDataRequest> shipmentDataRequest = ExtractShipmentDataRequest(excelDataObjects, workflowID);
+                List<ShipmentDataRequest> shipmentDataRequest = ExtractShipmentDataRequest(excelDataObjects, workflowID,out workflowStatus);
                 shipmentDataResponse = CreateShipments(shipmentDataRequest);
                 shipmentDataResponse.Success = true;
                 return shipmentDataResponse;
@@ -496,10 +497,11 @@ namespace UPS.ServicesDataRepository
             return shipmentDataResponse;
         }
 
-        private List<ShipmentDataRequest> ExtractShipmentDataRequest(List<ExcelDataObject> excelDataObjects, int workflowID)
+        private List<ShipmentDataRequest> ExtractShipmentDataRequest(List<ExcelDataObject> excelDataObjects, int workflowID, out int? workflowStatus)
         {
             List<ShipmentDataRequest> shipmentData = new List<ShipmentDataRequest>();
             List<AddressBook> addressBooks = this.addressBookService.GetAddressBooks();
+            int? wfStatus = 0;
             //foreach (ExcelDataObject excelDataObject in excelDataObjects)
             excelDataObjects.ForEach(excelDataObject =>
             {
@@ -580,6 +582,7 @@ namespace UPS.ServicesDataRepository
                         {
                             shipmentDataRequest.SHP_ADR_TR_TE = translatedAddress.ConsigneeTranslatedAddress;
                             shipmentDataRequest.SMT_STA_NR = (int)Enums.ATStatus.Translated;
+                            wfStatus = shipmentDataRequest.SMT_STA_NR;
                             shipmentDataRequest.SMT_STA_TE = Convert.ToString(Enums.ATStatus.Translated);
                             shipmentDataRequest.CON_NR = translatedAddress.Confidence;
                             shipmentDataRequest.ACY_TE = translatedAddress.Accuracy;
@@ -636,7 +639,7 @@ namespace UPS.ServicesDataRepository
                 }
 
             });
-
+            workflowStatus = wfStatus;
             return shipmentData;
         }
     }
