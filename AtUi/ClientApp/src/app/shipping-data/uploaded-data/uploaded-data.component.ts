@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 import { MatStepperTab } from '../../shared/enums.service';
 import { DialogService } from '../../services/dialog.service';
 import { NotificationService } from '../../services/NotificationService';
-import { ExcelService } from '../../services/ExcelExport
+import { ExcelService } from '../../services/ExcelExport';
 
 @Component({
   selector: 'app-uploaded-data',
