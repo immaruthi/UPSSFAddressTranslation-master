@@ -248,7 +248,7 @@ export class SentToSfComponent implements OnInit {
   SFexportToExcel() {
     this.tableData = [];
     this.excelMainData = [];
-    this.tableData = this.dataSource.data;
+    this.tableData = this.dataSource.sortData(this.dataSource.filteredData, this.dataSource.sort);
     if (this.tableData.length > 0) {
       for (let data of this.tableData) {
         this.excelMainData.push(

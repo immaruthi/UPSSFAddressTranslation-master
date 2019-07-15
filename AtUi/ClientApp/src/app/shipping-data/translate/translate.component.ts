@@ -12,6 +12,7 @@ import { DialogService } from '../../services/dialog.service';
 import { Observable } from 'rxjs';
 import { MatStepperTab } from '../../shared/enums.service';
 import { NotificationService } from '../../services/NotificationService';
+import { ExcelService } from '../../services/ExcelExport';
 
 @Component({
   selector: 'app-translate',
@@ -38,6 +39,8 @@ export class TranslateComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
   public mainData: any[] = [];
   public checkedData: any[] = [];
+  public tableData: any[] = [];
+  public excelMainData: any[] = [];
   public dataForTranslate: any[] = [];
   filterText: string = '';
   toggleSelectAll: string = 'Select All';
@@ -47,6 +50,7 @@ export class TranslateComponent implements OnInit {
     public dataService: DataService,
     private snackBar: MatSnackBar,
     private dialogService: DialogService,
+    private excelService: ExcelService,
     private notificationService: NotificationService) {
   }
 
@@ -276,5 +280,43 @@ export class TranslateComponent implements OnInit {
       ,
       error => this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText)
     );
+  }
+
+  exportToExcel() {
+    this.tableData = [];
+    this.excelMainData = [];
+    this.tableData = this.dataSource.sortData(this.dataSource.filteredData, this.dataSource.sort);
+    if (this.tableData.length > 0) {
+      for (let data of this.tableData) {
+        this.excelMainData.push(
+          {
+            'Workflow ID': data.wfL_ID,
+            'SHP Status': this.shipmentStatusList[data.smT_STA_NR === null ? 4 : data.smT_STA_NR].value,
+            'Package Number': data.pkG_NR_TE,
+            'Receiving Company': data.rcV_CPY_TE,
+            'Receiving Address': data.rcV_ADR_TE,
+            'Translated Address': data.shP_ADR_TR_TE,
+            'Confidence': data.coN_NR,
+            'Accuracy': data.acY_TE,
+            'Receiving City': data.dsT_CTY_TE,
+            'Receiving Postal Code': data.dsT_PSL_TE,
+            'Consignee Contact': data.csG_CTC_TE,
+            'Consignee Phone': data.pH_NR,
+            'Specification': data.fsT_INV_LN_DES_TE,
+            'SHP Company Name': data.shP_CPY_NA,
+            'SHP Address': data.shP_ADR_TE,
+            'SHP Contact': data.shP_CTC_TE,
+            'SHP Phone': data.shP_PH_TE,
+            'Origin City': data.orG_CTY_TE,
+            'Origin Postal code': data.orG_PSL_CD,
+            'IMP SLC': data.imP_SLC_TE,
+            'COD': data.coD_TE,
+            'Extra Service': this.PODoptions[data.poD_RTN_SVC === null ? 0 : data.poD_RTN_SVC].value,
+          })
+      }
+      this.excelService.exportAsExcelFile(this.excelMainData, 'Translate');
+    } else {
+      this.dialogService.openAlertDialog('No data for export.');
+    }
   }
 }
