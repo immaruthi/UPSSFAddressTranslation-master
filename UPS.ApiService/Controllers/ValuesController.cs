@@ -38,7 +38,7 @@ namespace UPS.AddressTranslationService.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            iCustomLog.AddLogEntry(new DataObjects.LogData.LogDataModel()
+            Task.Run(()=>iCustomLog.AddLogEntry(new DataObjects.LogData.LogDataModel()
             {
                 apiTypes = DataObjects.LogData.APITypes.AddressBookSetup,
                 dateTime = System.DateTime.Now,
@@ -48,7 +48,7 @@ namespace UPS.AddressTranslationService.Controllers
                     LogRequest = "Test Request",
                     LogResponse = "Test Response"
                 }
-            });
+            }));
 
             return new string[] { "value1", "value2" };
         }
