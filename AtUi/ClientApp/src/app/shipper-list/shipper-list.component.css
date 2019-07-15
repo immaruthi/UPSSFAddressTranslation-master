@@ -1,0 +1,126 @@
+.table-div {
+  width: 100%;
+  height: calc(100vh - 177.5px);
+  overflow: auto;
+}
+
+mat-table {
+  width: 100%;
+  min-width: 100px;
+  padding: 0;
+}
+
+mat-row {
+  padding: 0;
+  margin: 0% 1% 0% 0%;
+}
+
+mat-header-row {
+  padding: 0;
+}
+
+mat-cell {
+  padding: 0px 15px 0px 15px;
+  width: 150px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+mat-header-cell {
+  padding: 0px 15px 0px 15px;
+  width: 150px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+}
+
+mat-row:nth-child(odd) {
+  background: #F2F2F2;
+}
+
+mat-header-row {
+  background-color: gray;
+}
+
+.mat-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  color: white;
+}
+
+/*Postal Code*/
+mat-cell:nth-child(1) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 150px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Postal Code*/
+mat-header-cell:nth-child(1) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 150px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Shipping Address*/
+mat-cell:nth-child(7) {
+  padding: 0px 15px 0px 15px;
+  width: 325px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Shipping Address*/
+mat-header-cell:nth-child(7) {
+  padding: 0px 15px 0px 15px;
+  width: 325px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Shipping Company*/
+mat-cell:nth-child(4) {
+  padding: 0px 15px 0px 15px;
+  width: 200px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Shipping Company*/
+mat-header-cell:nth-child(4) {
+  padding: 0px 15px 0px 15px;
+  width: 200px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Sending Contact*/
+mat-cell:nth-child(6) {
+  padding: 0px 15px 0px 15px;
+  width: 200px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Sending Contact*/
+mat-header-cell:nth-child(6) {
+  padding: 0px 15px 0px 15px;
+  width: 200px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}

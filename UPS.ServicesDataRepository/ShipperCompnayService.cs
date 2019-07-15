@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.EntityFrameworkCore;
+    using NLog.Targets.Wrappers;
     using UPS.DataObjects.Shipment;
     using UPS.DataObjects.SPC_LST;
     using UPS.ServicesAsyncActions;
@@ -13,6 +14,15 @@
     public class ShipperCompnayService : IShipperCompanyAsync
     {
         private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
+        private readonly ApplicationDbContext context;
+        private ShipperCompanyResponse response;
+        public ShipperCompnayService(ApplicationDbContext applicationDbContext)
+        {
+            this.context = applicationDbContext;
+            this.optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            this.response = new ShipperCompanyResponse();
+            this.response.Success = true;
+        }
 
         public ShipmentDataResponse SelectMatchedShipmentsWithShipperCompanies(int workflowID)
 
@@ -29,10 +39,11 @@
                     var anonymousList =
                         (
                             from s in context.shipmentDataRequests
-                            join c in context.shipperCompanyRequests on s.DST_PSL_TE equals c.SPC_PSL_CD_TE where 
-                            s.WFL_ID == workflowID 
-                            && (s.SMT_STA_NR == (int)Enums.ATStatus.Translated
-                            || s.SMT_STA_NR == (int)Enums.ATStatus.Curated)
+                            join c in context.shipperCompanyRequests on s.DST_PSL_TE equals c.SPC_PSL_CD_TE
+                            where
+s.WFL_ID == workflowID
+&& (s.SMT_STA_NR == (int)Enums.ATStatus.Translated
+|| s.SMT_STA_NR == (int)Enums.ATStatus.Curated)
                             orderby s.ID
                             select new
                             {
@@ -82,7 +93,7 @@
                                 s.SVL_NR,
                                 s.WGT_UNT_TE,
                                 s.POD_RTN_SVC
-                            }).ToList();2154479016
+                            }).ToList();
 
                     foreach (var shipmentData in anonymousList)
                     {
@@ -164,7 +175,7 @@
                     mappedShipAndShipperCompanyResponse.Shipments = shipmentDataRequests;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 mappedShipAndShipperCompanyResponse.Success = false;
                 mappedShipAndShipperCompanyResponse.OperationExceptionMsg = ex.Message;
@@ -187,7 +198,7 @@
                     var anonymousList =
                         (
                             from s in context.shipmentDataRequests
-                            join c in context.shipperCompanyRequests on s.DST_PSL_TE equals c.SPC_PSL_CD_TE where s.WFL_ID == workflowID
+                            join c in context.shipperCompanyRequests on s.DST_PSL_TE equals c.SPC_PSL_CD_TE
                             where s.WFL_ID == workflowID
                             && s.SMT_STA_NR == ((int)Enums.ATStatus.Completed)
                             orderby s.ID
@@ -351,6 +362,79 @@
                 }
             }
             return shipperCompanyResponse;
+        }
+
+        public ShipperCompanyResponse GetShipperList()
+        {
+            ShipperCompanyResponse shipperCompanyResponse = new ShipperCompanyResponse();
+            optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+            using (var context = new ApplicationDbContext(optionsBuilder.Options))
+            {
+                try
+                {
+                    shipperCompanyResponse.ShipperCompanies = context.shipperCompanyRequests.ToList();
+                    shipperCompanyResponse.Success = true;
+                    return shipperCompanyResponse;
+                }
+                catch (Exception ex)
+                {
+                    shipperCompanyResponse.Success = false;
+                    shipperCompanyResponse.OperatonExceptionMessage = ex.Message;
+                }
+            }
+            return shipperCompanyResponse;
+        }
+
+        public ShipperCompanyResponse InsertShipper(ShipperCompanyRequest shipperCompanyRequest)
+        {
+
+            try
+            {
+                this.context.Add(shipperCompanyRequest);
+                this.context.SaveChanges();
+                this.response.ShipperCompany = shipperCompanyRequest;
+            }
+            catch (Exception ex)
+            {
+                this.response.Success = false;
+                this.response.OperatonExceptionMessage = ex.Message;
+            }
+            return this.response;
+        }
+
+        public ShipperCompanyResponse UpdateShipper(ShipperCompanyRequest shipperCompanyRequest)
+        {
+            try
+            {
+                ShipperCompanyRequest data = this.context.shipperCompanyRequests.Where(s => s.ID == shipperCompanyRequest.ID).FirstOrDefault();
+                this.context.Update(shipperCompanyRequest);
+                this.context.SaveChanges();
+                this.response.ShipperCompany = shipperCompanyRequest;
+            }
+            catch(Exception ex)
+            {
+                this.response.Success = false;
+                this.response.OperatonExceptionMessage = ex.Message;
+            }
+            return this.response;
+        }
+
+        public ShipperCompanyResponse DeleteShipper(ShipperCompanyRequest shipperCompanyRequest)
+        {
+            try
+            {
+                ShipperCompanyRequest data = this.context.shipperCompanyRequests.Where(s => s.ID == shipperCompanyRequest.ID).FirstOrDefault();
+                this.context.Remove(shipperCompanyRequest);
+                this.context.SaveChanges();
+                this.response.ShipperCompany = shipperCompanyRequest;
+            }
+            catch (Exception ex)
+            {
+                this.response.Success = false;
+                this.response.OperatonExceptionMessage = ex.Message;
+            }
+            return this.response;
         }
     }
 }

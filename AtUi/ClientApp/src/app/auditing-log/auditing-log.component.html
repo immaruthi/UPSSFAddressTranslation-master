@@ -1,0 +1,55 @@
+<div class="row">
+  <div class="col-md-6">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="filterText" placeholder="Filter">
+    </mat-form-field>
+  </div>
+  <!--<div class="col-md-6 text-right">
+    <button mat-raised-button color="primary" (click)="addNew()"> Add New </button>
+  </div>-->
+</div>
+<mat-paginator #paginator
+               [pageSize]="10"
+               [pageSizeOptions]="[5, 10, 20, 50, 100]"
+               [showFirstLastButtons]="true">
+</mat-paginator>
+<div class="table-div">
+  <div class="row">
+    <mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="S_No" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> S.No </mat-header-cell>
+        <mat-cell *matCellDef="let element, let i = index" class="cell"> {{i+1}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="smT_ID" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Shipment ID </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.smT_ID}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="csG_ADR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Consignee Address </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.csG_ADR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="bfR_ADR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Previous Address </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.bfR_ADR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="afR_ADR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Modified Address </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.afR_ADR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="upD_BY_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Updated By </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.upD_BY_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="upD_DT" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Updated Date </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.upD_DT | date: 'dd-MMM-yyyy HH:mm:ss'}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="upD_FRM" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Update From </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.upD_FRM}} </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
+    </mat-table>
+  </div>
+</div>

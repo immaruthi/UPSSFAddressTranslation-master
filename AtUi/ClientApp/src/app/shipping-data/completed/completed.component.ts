@@ -38,6 +38,7 @@ export class CompletedComponent implements OnInit {
   public checkedData: any[] = [];
   public tableData: any[] = [];
   public excelMainData: any[] = [];
+  filterText: string = '';
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
     private router: Router, public dialog: MatDialog, public dataService: DataService,
@@ -83,11 +84,13 @@ export class CompletedComponent implements OnInit {
       this.dataSource.data = this.ResponseData;
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-
+      this.filterText = '';
+      this.applyFilter('');
     }, error => (this.errorMessage = <any>error));
   }
 
   applyFilter(filterValue: string) {
+    this.filterText = filterValue;
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
@@ -102,7 +105,7 @@ export class CompletedComponent implements OnInit {
         this.excelMainData.push(
           {
             'Workflow ID': data.wfL_ID,
-            'SHP Status': this.shipmentStatusList[data.smT_STA_NR].value,
+            'SHP Status': this.shipmentStatusList[data.smT_STA_NR === null ? 4 : data.smT_STA_NR].value,
             'Package Number': data.pkG_NR_TE,
             'Receiving Company': data.rcV_CPY_TE,
             'Receiving Address': data.rcV_ADR_TE,
@@ -120,7 +123,7 @@ export class CompletedComponent implements OnInit {
             'Origin Postal code': data.orG_PSL_CD,
             'IMP SLC': data.imP_SLC_TE,
             'COD': data.coD_TE,
-            'Extra Service': this.PODoptions[data.poD_RTN_SVC].value,
+            'Extra Service': this.PODoptions[data.poD_RTN_SVC === null ? 0 : data.poD_RTN_SVC].value,
             'Payment Method': data.pyM_MTD,
             'Express Type': data.exP_TYP,
             'Slic': data.spC_SLIC_NR

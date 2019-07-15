@@ -11,5 +11,9 @@ namespace UPS.ServicesAsyncActions
         ShipmentDataResponse SelectMatchedShipmentsWithShipperCompanies(int workflowID);
         ShipmentDataResponse SelectCompletedShipments(int workflowID);
         ShipperCompanyResponse SelectShipperCompanies();
+        ShipperCompanyResponse GetShipperList();
+        ShipperCompanyResponse InsertShipper(ShipperCompanyRequest shipperCompanyRequest);
+        ShipperCompanyResponse UpdateShipper(ShipperCompanyRequest shipperCompanyRequest);
+        ShipperCompanyResponse DeleteShipper(ShipperCompanyRequest shipperCompanyRequest);
     }
 }

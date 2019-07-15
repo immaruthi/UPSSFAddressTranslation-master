@@ -32,13 +32,15 @@ export class TranslateComponent implements OnInit {
   public ResponseData: any[] = [];
   public WorkflowID: any;
   public shipmentStatusList = Constants.ShipmentStatusList;
-  public PODoptions= Constants.PODoptions;
+  public PODoptions = Constants.PODoptions;
   dataSource = new MatTableDataSource<Element>();
   public errorMessage: string;
   selection = new SelectionModel<any>(true, []);
   public mainData: any[] = [];
   public checkedData: any[] = [];
   public dataForTranslate: any[] = [];
+  filterText: string = '';
+  toggleSelectAll: string = 'Select All';
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
     private router: Router, public dialog: MatDialog,
@@ -56,12 +58,11 @@ export class TranslateComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  ngOnInit() {   
+  ngOnInit() {
     this.WorkflowID = this.activatedRoute.snapshot.params.WorkflowID;
-    this.eventsSubscription = this.events.subscribe((event:any) =>
-    {
+    this.eventsSubscription = this.events.subscribe((event: any) => {
       let selectedTabIndex = event.selectedIndex;
-      if (this.WorkflowID && selectedTabIndex == MatStepperTab.TranslatedTab ) {
+      if (this.WorkflowID && selectedTabIndex == MatStepperTab.TranslatedTab) {
         this.getTranslateData(this.WorkflowID)
       }
     });
@@ -81,30 +82,69 @@ export class TranslateComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.selection.clear();
+      this.filterText = '';
+      this.applyFilter('');
+      this.toggleSelectAll = 'Select All';
     }, error => (this.errorMessage = <any>error));
   }
 
+  getValidData(dataArray: any[]) {
+    return dataArray.filter(data => !(data.smT_STA_NR === 2 || data.smT_STA_NR === 3 || (data.smT_STA_NR === 1 && data.coN_NR != null && data.acY_TE != null)));
+  }
+
   applyFilter(filterValue: string) {
+    this.filterText = filterValue;
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+    this.selection.clear();
+    this.toggleSelectAll = 'Select All';
   }
 
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.checkedData.length;
-    return numSelected === numRows;
+    const MainData: any[] = this.dataSource._pageData(this.dataSource.filteredData);
+    const ValidData: any[] = this.getValidData(MainData);
+    const checkedDataCount = ValidData.length;
+    var count: number = 0;
+    ValidData.forEach(row => {
+      if (this.selection.isSelected(row)) {
+        count = count + 1;
+      }
+    });
+
+    return checkedDataCount === count;
   }
 
   masterToggle() {
     this.mainData = [];
     this.checkedData = [];
     //this.dataSource.data.forEach(row => this.mainData.push(row));
-    this.mainData = this.dataSource._pageData(this.dataSource.data);
-    this.checkedData = this.mainData.filter(data => (data.smT_STA_NR !== 2 && data.smT_STA_NR !== 3));
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.checkedData.forEach(row => this.selection.select(row));
+    this.mainData = this.dataSource._pageData(this.dataSource.filteredData);
+    this.checkedData = this.getValidData(this.mainData);
+    this.isAllSelected() ? this.AllSelectedTrue() : this.AllSelectionFalse();
+  }
+
+  AllSelectedTrue() {
+    //this.selection.clear()
+    this.checkedData.forEach(row => this.selection.deselect(row));
+  }
+
+  AllSelectionFalse() {
+    //this.selection.clear(),
+    this.checkedData.forEach(row => this.selection.select(row));
+  }
+
+  toggleSelect() {
+    if (this.toggleSelectAll === 'Select All') {
+      this.selection.clear();
+      const dataSourceData: any[] = this.dataSource.filteredData;
+      const mainDataAll = this.getValidData(dataSourceData);
+      mainDataAll.forEach(row => this.selection.select(row));
+      this.toggleSelectAll = 'Deselect All'
+    } else {
+      this.selection.clear();
+      this.toggleSelectAll = 'Select All'
+    }
   }
 
   /** The label for the checkbox on the passed row */
@@ -117,12 +157,12 @@ export class TranslateComponent implements OnInit {
 
   rowChecked(event: Event, row: any) {
     event.stopPropagation();
-    if (!this.selection.isSelected(row)) {
-      if (this.selection.selected.length >= 100) {
-        this.dialogService.openAlertDialog('Maximum allowed Shipments for Translation: 100 and You have selected: ' + this.selection.selected.length);
-        this.selection.toggle(row);
-      }
-    }
+    //if (!this.selection.isSelected(row)) {
+    //  if (this.selection.selected.length >= 200) {
+    //    this.dialogService.openAlertDialog('Maximum allowed Shipments for Translation: 200 and You have selected: ' + this.selection.selected.length);
+    //    this.selection.toggle(row);
+    //  }
+    //}
   }
 
   /** Method to Translate the Data*/
@@ -130,8 +170,8 @@ export class TranslateComponent implements OnInit {
     const checkedCount = this.selection.selected.length;
     if (checkedCount <= 0) {
       this.dialogService.openAlertDialog('Please select minimum one row to Translate.');
-    } else if (checkedCount > 100) {
-      this.dialogService.openAlertDialog('Maximum allowed Shipments for Translation: 100 and You have selected: ' + this.selection.selected.length);
+    //} else if (checkedCount > 200) {
+    //  this.dialogService.openAlertDialog('Maximum allowed Shipments for Translation: 200 and You have selected: ' + this.selection.selected.length);
     } else {
       const data = this.selection.selected;
       this.dataTranslate(data);
@@ -148,7 +188,8 @@ export class TranslateComponent implements OnInit {
         coD_TE: shipmentDetailToUpdate.coD_TE,
         pkG_NR_TE: shipmentDetailToUpdate.pkG_NR_TE,
         rcV_CPY_TE: shipmentDetailToUpdate.rcV_CPY_TE,
-        poD_RTN_SVC: shipmentDetailToUpdate.poD_RTN_SVC
+        poD_RTN_SVC: shipmentDetailToUpdate.poD_RTN_SVC,
+        is__ADR_TR_TE_Required: ((shipmentDetailToUpdate.smT_STA_NR === 0) ? false : true)
       }
     });
 
@@ -168,7 +209,8 @@ export class TranslateComponent implements OnInit {
           COD_TE: updatedDetails.coD_TE,
           WFL_ID: shipmentDetails.wfL_ID,
           ID: shipmentDetails.id,
-          POD_RTN_SVC: updatedDetails.poD_RTN_SVC
+          POD_RTN_SVC: updatedDetails.poD_RTN_SVC,
+          RCV_ADR_TE: shipmentDetails.rcV_ADR_TE
         }
 
         this.shippingService.UpdateShippingAddress(details).subscribe((response: any) => {
@@ -176,10 +218,11 @@ export class TranslateComponent implements OnInit {
           shipmentDetailToUpdate.shP_ADR_TR_TE = response.shipmentDataRequest.shP_ADR_TR_TE;
           shipmentDetailToUpdate.coD_TE = response.shipmentDataRequest.coD_TE;
           shipmentDetailToUpdate.smT_STA_NR = response.shipmentDataRequest.smT_STA_NR;
+          shipmentDetailToUpdate.smT_STA_TE = response.shipmentDataRequest.smT_STA_TE;
           shipmentDetailToUpdate.poD_RTN_SVC = response.shipmentDataRequest.poD_RTN_SVC;
           this.notificationService.openSuccessMessageNotification("Data Updated Successfully.");
         },
-          error => this.notificationService.openErrorMessageNotification("Error while updating data."))
+          error => this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText))
       }
     });
   }
@@ -201,40 +244,37 @@ export class TranslateComponent implements OnInit {
     this.shippingService.sendDataForTranslate(this.dataForTranslate).subscribe(
       (response: any) => {
         if (response) {
-
-          if (response.geocode.length > 0) {
+          if (response.length > 0) {
             var EmptyCount: number = 0;
-            var NACount: number = 0;
             var SuccessCount: number = 0;
-
-            for (let geocode of response.geocode) {
-              if (geocode.translated_adddress === ' ') {
-                EmptyCount = EmptyCount + 1;
-              } else if (geocode.translated_adddress === 'NA') {
-                NACount = NACount + 1;
-              } else {
-                SuccessCount = SuccessCount + 1;
+            for (let res of response) {
+              if (res.geocode) {
+                for (let geocode of res.geocode) {
+                  if (geocode.translated_adddress === '' || geocode.translated_adddress === null) {
+                    EmptyCount = EmptyCount + 1;
+                  } else {
+                    SuccessCount = SuccessCount + 1;
+                  }
+                }
               }
             }
-
             const data = {
               emptyCount: EmptyCount,
-              nACount: NACount,
               successCount: SuccessCount,
               screenFrom: 'Translate'
             }
             this.dialogService.openSummaryDialog(data);
+            this.getTranslateData(this.WorkflowID);
+            this.selection.clear();
+          } else {
+            this.notificationService.openErrorMessageNotification(response);
           }
-
-          //this.notificationService.openSuccessMessageNotification("Shipment Address(es) Translated Successfully.");
-          this.getTranslateData(this.WorkflowID);
-          this.selection.clear();
         } else {
-          this.notificationService.openErrorMessageNotification("Error while Translating data.");
+          this.notificationService.openErrorMessageNotification("Invalid exception occured, please contact administrator.");
         }
       }
       ,
-      error => this.notificationService.openErrorMessageNotification("Error while Translating data.")
+      error => this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText)
     );
   }
 }
