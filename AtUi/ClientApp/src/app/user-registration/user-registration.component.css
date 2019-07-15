@@ -1,0 +1,30 @@
+.routepage {
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc( 100vh - 64px );
+  padding: 4% 0% 4% 0%;
+}
+.regform {
+  margin: auto;
+  padding: 2% 4% 4% 4%;
+  align-items: center;
+  flex: 1 1 auto;
+  border: 0.8px #a6a9ad solid;
+  border-radius: 8px;
+  min-width: 300px;
+  width:35%;
+  min-height:525px;
+  height:100%;
+}
+mat-form-field{
+  width:100%;
+}
+h2 {
+  font-weight: 700;
+  color: #351C15 !important;
+  text-align: center !important;
+}
+.line {
+  border-top: 2px solid #FFB500;
+}

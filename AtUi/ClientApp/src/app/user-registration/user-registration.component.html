@@ -1,0 +1,47 @@
+<div class="routepage">
+  <mat-card class="regform">
+    <h2>User Registration</h2><hr class="line" />
+    <form [formGroup]="userRegForm">
+      <mat-form-field>
+        <input matInput placeholder="First Name" formControlName="firstName">
+        <mat-error *ngIf="hasError('firstName', 'required')">First Name is required</mat-error>
+        <mat-error *ngIf="hasError('firstName', 'maxlength')">First Name should not exceed 50 Characters</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Last Name" formControlName="lastName">
+        <mat-error *ngIf="hasError('lastName', 'required')">Last Name is required</mat-error>
+        <mat-error *ngIf="hasError('lastName', 'maxlength')">Last Name should not exceed 50 Characters</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Email Id" formControlName="emailId">
+        <mat-error *ngIf="hasError('emailId', 'required')">Email Id is required</mat-error>
+        <mat-error *ngIf="hasError('emailId', 'pattern')">Please Enter a Valid Email</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'" formControlName="password">
+        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="hasError('password', 'required')">Password is required</mat-error>
+        <mat-error *ngIf="hasError('password', 'maxlength')">Password should not exceed 50 Characters</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="User Id" formControlName="userId">
+        <mat-error *ngIf="hasError('userId', 'required')">User Id is required</mat-error>
+        <mat-error *ngIf="hasError('userId', 'maxlength')">User Id should not exceed 10 Characters</mat-error>
+        <mat-error *ngIf="hasError('userId', 'minlength')">User Id should be more than 7 Characters</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>City</mat-label>
+        <mat-select multiple formControlName="city">
+          <mat-option *ngFor="let city of cities" [value]="city">
+            {{city}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="hasError('city', 'required')">City is required</mat-error>
+      </mat-form-field>
+    </form>
+    <br />
+    <button style="float:right" mat-stroked-button color="primary">Submit</button>
+  </mat-card>
+</div>
