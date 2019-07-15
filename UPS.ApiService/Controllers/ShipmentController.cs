@@ -355,7 +355,6 @@
 
                         xmlDocument.LoadXml(getSFCreateOrderServiceResponse.OrderResponse);
 
-                       
                         if (xmlDocumentShipmentResponseParser.Contains("8019"))
                         {
                             createOrderShipmentResponse.FailedToProcessShipments.Add("Customer order number(" + orderRequest.pkG_NR_TE + ") is already confirmed");
