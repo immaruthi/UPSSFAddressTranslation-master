@@ -271,7 +271,7 @@ export class TranslateComponent implements OnInit {
             this.getTranslateData(this.WorkflowID);
             this.selection.clear();
           } else {
-            this.notificationService.openErrorMessageNotification(response);
+            this.notificationService.openErrorMessageNotification("Invalid exception occured, please contact administrator.");
           }
         } else {
           this.notificationService.openErrorMessageNotification("Invalid exception occured, please contact administrator.");

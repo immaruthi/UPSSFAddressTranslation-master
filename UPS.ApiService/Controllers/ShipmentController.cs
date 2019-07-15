@@ -287,7 +287,7 @@
         [HttpPost]
         public async Task<ActionResult> CreateOrderShipment([FromBody] List<UIOrderRequestBodyData> uIOrderRequestBodyDatas)
         {
-            string customerID = _shipmentService.GetShipmentCustomCodesInformation().CST_ID;
+            string customerID = uIOrderRequestBodyDatas[0].spC_CST_ID_TE;//_shipmentService.GetShipmentCustomCodesInformation().CST_ID;
             _workflowID = uIOrderRequestBodyDatas[0].wfL_ID;
             CreateOrderShipmentResponse createOrderShipmentResponse = new CreateOrderShipmentResponse();
             createOrderShipmentResponse.FailedToProcessShipments = new List<string>();
@@ -303,7 +303,7 @@
                 XMLMessage = "<Request lang=\"zh-CN\" service=\"OrderService\">";
                 XMLMessage += "<Head>" + configuration["SFExpress:Access Number"] + "</Head>";
                 XMLMessage += "<Body>";
-                XMLMessage += "<Order orderid=\"" + orderRequest.pkG_NR_TE + "\" custid=\"" + customerID + "\"";
+                XMLMessage += "<Order orderid=\"" + orderRequest.pkG_NR_TE + "\" custid=\"" + orderRequest.spC_CST_ID_TE + "\"";
                 XMLMessage += " parcel_quantity=\"" + orderRequest.pcS_QTY_NR + "\"";
                 XMLMessage += " total_net_weight=\"" + orderRequest.pkG_WGT_DE + "\"";
                 XMLMessage += " j_company=\"" + orderRequest.shP_CPY_NA + "\"";
@@ -511,7 +511,8 @@
                         id = _.ID,
                         rcV_ADR_TE = _.RCV_ADR_TE,
                         dsT_CTY_TE = _.DST_CTY_TE,
-                        wfL_ID = _.WFL_ID
+                        wfL_ID = _.WFL_ID,
+                        pkG_NR_TE = _.PKG_NR_TE
                     }).ToList();
 
                 this._quincusAddressTranslationRequest.shipmentWorkFlowRequests = shipmentWorkFlowRequests;
@@ -548,8 +549,10 @@
 
                             foreach (Geocode geocode in geocodes)
                             {
+
+                            
                                 ShipmentDataRequest shipmentDataRequest =
-                                _shipmentDataRequest.FirstOrDefault(_ => _.ID == Convert.ToInt32(geocode.id));
+                                _shipmentDataRequest.FirstOrDefault(_ => _.PKG_NR_TE == geocode.id);
                                 shipmentDataRequest.SHP_ADR_TR_TE = geocode.translated_adddress;
                                 shipmentDataRequest.ACY_TE = geocode.accuracy;
                                 shipmentDataRequest.CON_NR = geocode.confidence;
