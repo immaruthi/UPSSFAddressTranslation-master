@@ -42,7 +42,7 @@ namespace UPS.ServicesDataRepository.DataContext
 
 
 
-        public DbSet<USR> UserData
+        public DbSet<User> UserData
         {
             get;
             set;

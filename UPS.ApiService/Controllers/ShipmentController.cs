@@ -115,11 +115,15 @@
                                 WorkflowController workflowController = new WorkflowController(this._hostingEnvironment, this._context, this._addressBookService, this._entityValidationService);
                                 WorkflowDataResponse response = ((WorkflowDataResponse)((ObjectResult)(workflowController.CreateWorkflow(file, userId)).Result).Value);
                                 _workflowID = response.Workflow.ID;
-                                result = _shipmentService.CreateShipments(excelDataObject2, _workflowID);
+                                result = _shipmentService.CreateShipments(excelDataObject2, _workflowID, out int? workflowStatus);
                                 if (result.Success)
                                 {
                                     shipmentDataResponse.Success = true;
                                     shipmentDataResponse.Shipments = result.Shipments;
+                                    WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
+                                    workflowDataRequest.ID = _workflowID;
+                                    workflowDataRequest.WFL_STA_TE = workflowStatus;
+                                    _workflowService.UpdateWorkflowStatusById(workflowDataRequest);
                                 }
                                 else
                                 {
@@ -351,10 +355,6 @@
 
                         xmlDocument.LoadXml(getSFCreateOrderServiceResponse.OrderResponse);
 
-                        string xmlAttributeCollectionError = xmlDocument.GetElementsByTagName("ERROR")[0].Attributes[0].InnerText;
-
-
-
                         if (xmlDocumentShipmentResponseParser.Contains("8019"))
                         {
                             createOrderShipmentResponse.FailedToProcessShipments.Add("Customer order number(" + orderRequest.pkG_NR_TE + ") is already confirmed");
@@ -365,7 +365,11 @@
                         }
                         else
                         {
-                            createOrderShipmentResponse.FailedToProcessShipments.Add("Error Code ( " + xmlAttributeCollectionError + " ) -> " + orderRequest.pkG_NR_TE);
+                            createOrderShipmentResponse.FailedToProcessShipments.Add(
+                                string.Format("Order ID -> {0} : Error Code -> {1} : Error Information -> {2} ",
+                                orderRequest.pkG_NR_TE,
+                                xmlDocument.GetElementsByTagName("ERROR")[0].Attributes[0].InnerText,
+                                xmlDocument.GetElementsByTagName("ERROR")[0].InnerXml));
                         }
                     }
                     else

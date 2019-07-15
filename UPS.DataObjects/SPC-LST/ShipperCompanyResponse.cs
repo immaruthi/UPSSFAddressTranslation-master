@@ -6,8 +6,8 @@ namespace UPS.DataObjects.SPC_LST
 {
     public class ShipperCompanyResponse
     {
-        public IEnumerable<ShipperCompanyRequest> ShipperCompanies { get; set; }
-        public ShipperCompanyRequest ShipperCompany { get; set; }
+        public IEnumerable<ShipperCompanyList> ShipperCompanies { get; set; }
+        public ShipperCompanyList ShipperCompany { get; set; }
         public string OperatonExceptionMessage { get; set; }
         public bool Success { get; set; }
     }

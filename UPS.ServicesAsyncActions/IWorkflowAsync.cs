@@ -8,7 +8,7 @@ namespace UPS.ServicesAsyncActions
 {
     public interface IWorkflowAsync
     {
-        WorkflowDataResponse SelectWorkflows(USR user);
+        WorkflowDataResponse SelectWorkflows(User user);
         WorkflowDataResponse InsertWorkflow(WorkflowDataRequest workflowData);
 
         //WorkflowDataResponse GetWorkflowData(int shipid);

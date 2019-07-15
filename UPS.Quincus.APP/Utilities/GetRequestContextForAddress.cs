@@ -13,7 +13,6 @@ namespace UPS.Quincus.APP.Utilities
         public static List<string> GetAddressStringFromRequest(List<ShipmentWorkFlowRequest> shipmentWorkFlowRequests)
         {
             List<string> addressesSearlizationList = new List<string>();
-            int randomNumber = new Random().Next(1000);
             
             if (shipmentWorkFlowRequests.Count > 0)
             {
@@ -23,7 +22,7 @@ namespace UPS.Quincus.APP.Utilities
                 shipmentWorkFlowRequests.ForEach(Quinc =>
                 {
                     QuincusAddressRequestDataObject quincusAddressRequestDataObject = new QuincusAddressRequestDataObject();
-                    quincusAddressRequestDataObject.id = Quinc.id.ToString();
+                    quincusAddressRequestDataObject.id = Quinc.pkG_NR_TE.ToString();
                     quincusAddressRequestDataObject.recipient = string.Empty;
                     quincusAddressRequestDataObject.address = Quinc.rcV_ADR_TE;
                     quincusAddressRequestDataObject.addressline1 = string.Empty;
