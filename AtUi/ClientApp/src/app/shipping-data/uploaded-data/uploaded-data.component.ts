@@ -175,9 +175,9 @@ export class UploadedDataComponent implements OnInit {
         this.getUploadedData(this.WorkflowID);
         this.notificationService.openSuccessMessageNotification("Deleted Successfully");
       } else {
-        this.notificationService.openErrorMessageNotification("Error while Deleting data.");
+        this.notificationService.openErrorMessageNotification("Invalid exception occured, please contact administrator.");
       }
     },
-      error => this.notificationService.openErrorMessageNotification("Error while Deleting data."));
+      error => this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText));
   }
 }
