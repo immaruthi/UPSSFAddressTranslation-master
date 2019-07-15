@@ -42,10 +42,13 @@
                             from s in context.shipmentDataRequests
                             join c in context.shipperCompanyRequests on s.DST_PSL_TE equals c.SPC_PSL_CD_TE
                             where
-s.WFL_ID == workflowID
-&& (s.SMT_STA_NR == (int)Enums.ATStatus.Translated
-|| s.SMT_STA_NR == (int)Enums.ATStatus.Curated)
-                            orderby s.ID
+                                s.WFL_ID == workflowID
+                                &&  
+                                (
+                                        s.SMT_STA_NR == (int)Enums.ATStatus.Translated
+                                    ||  s.SMT_STA_NR == (int)Enums.ATStatus.Curated
+                                )
+                                orderby s.ID
                             select new
                             {
                                 s.ID,
@@ -93,7 +96,8 @@ s.WFL_ID == workflowID
                                 SPC_SLIC_NR = c.SPC_SLIC_NR,
                                 s.SVL_NR,
                                 s.WGT_UNT_TE,
-                                s.POD_RTN_SVC
+                                s.POD_RTN_SVC,
+                                c.SPC_CST_ID_TE
                             }).ToList();
 
                     foreach (var shipmentData in anonymousList)
@@ -168,6 +172,7 @@ s.WFL_ID == workflowID
                         shipmentDataRequest.CON_NR = shipmentData.CON_NR;
                         shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
                         shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
+                        shipmentDataRequest.SPC_CST_ID_TE = shipmentData.SPC_CST_ID_TE;
 
                         shipmentDataRequests.Add(shipmentDataRequest);
                     }
@@ -250,7 +255,8 @@ s.WFL_ID == workflowID
                                 SPC_SLIC_NR = c.SPC_SLIC_NR,
                                 s.SVL_NR,
                                 s.WGT_UNT_TE,
-                                s.POD_RTN_SVC
+                                s.POD_RTN_SVC,
+                                c.SPC_CST_ID_TE
                             }).ToList();
 
                     foreach (var shipmentData in anonymousList)
@@ -325,6 +331,7 @@ s.WFL_ID == workflowID
                         shipmentDataRequest.CON_NR = shipmentData.CON_NR;
                         shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
                         shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
+                        shipmentDataRequest.SPC_CST_ID_TE = shipmentData.SPC_CST_ID_TE;
 
                         shipmentDataRequests.Add(shipmentDataRequest);
                     }
@@ -413,7 +420,7 @@ s.WFL_ID == workflowID
                 this.context.SaveChanges();
                 this.response.ShipperCompany = shipperCompanyRequest;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 this.response.Success = false;
                 this.response.OperatonExceptionMessage = ex.Message;

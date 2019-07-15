@@ -115,11 +115,15 @@
                                 WorkflowController workflowController = new WorkflowController(this._hostingEnvironment, this._context, this._addressBookService, this._entityValidationService);
                                 WorkflowDataResponse response = ((WorkflowDataResponse)((ObjectResult)(workflowController.CreateWorkflow(file, userId)).Result).Value);
                                 _workflowID = response.Workflow.ID;
-                                result = _shipmentService.CreateShipments(excelDataObject2, _workflowID);
+                                result = _shipmentService.CreateShipments(excelDataObject2, _workflowID, out int? workflowStatus);
                                 if (result.Success)
                                 {
                                     shipmentDataResponse.Success = true;
                                     shipmentDataResponse.Shipments = result.Shipments;
+                                    WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
+                                    workflowDataRequest.ID = _workflowID;
+                                    workflowDataRequest.WFL_STA_TE = workflowStatus;
+                                    _workflowService.UpdateWorkflowStatusById(workflowDataRequest);
                                 }
                                 else
                                 {

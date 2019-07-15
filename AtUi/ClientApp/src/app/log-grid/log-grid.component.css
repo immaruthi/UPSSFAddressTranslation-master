@@ -33,7 +33,7 @@ li{
 }
 .table-div {
   width: 100%;
-  height: calc(100vh - 148px);
+  height: calc(100vh - 137px);
   overflow: auto;
 }
 mat-table{
@@ -45,6 +45,13 @@ mat-row:nth-child(odd) {
 }
 mat-header-row {
   background-color: gray;
+}
+
+.mat-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  color: white;
 }
 /*Date*/
 mat-cell:nth-child(1) {

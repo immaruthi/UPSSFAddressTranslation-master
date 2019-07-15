@@ -57,7 +57,7 @@ namespace AtService.Controllers
             return Ok(shipperCompanyResponse);
         }
 
-        [Route("UpdateShipmentListById")]
+        [Route("UpdateShipperListById")]
         [HttpPost]
         public async Task<ActionResult> UpdateShipmentListById([FromBody] ShipperCompanyList shipperCompanyRequest)
         {
@@ -81,7 +81,7 @@ namespace AtService.Controllers
             return Ok(shipperCompanyResponse);
         }
 
-        [Route("DeleteShipmentListById")]
+        [Route("DeleteShipperListById")]
         [HttpPost]
         public async Task<ActionResult> DeleteShipmentListById([FromBody] ShipperCompanyList shipperCompanyRequest)
         {
