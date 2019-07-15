@@ -190,7 +190,7 @@ export class SentToSfComponent implements OnInit {
           this.dialogService.openSummaryDialog(data);
         }
       }, error =>
-        this.notificationService.openErrorMessageNotification("Error while sending data to SF.")
+        this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText)
       );
     }
   }
@@ -240,7 +240,7 @@ export class SentToSfComponent implements OnInit {
           shipmentDetailToUpdate.poD_RTN_SVC = response.shipmentDataRequest.poD_RTN_SVC;
           this.notificationService.openSuccessMessageNotification("Data Updated Successfully.");
         },
-          error => this.notificationService.openErrorMessageNotification("Error while updating data."))
+          error => this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText))
       }
     });
   }
@@ -248,7 +248,7 @@ export class SentToSfComponent implements OnInit {
   SFexportToExcel() {
     this.tableData = [];
     this.excelMainData = [];
-    this.tableData = this.dataSource.data;
+    this.tableData = this.dataSource.sortData(this.dataSource.filteredData, this.dataSource.sort);
     if (this.tableData.length > 0) {
       for (let data of this.tableData) {
         this.excelMainData.push(
@@ -312,9 +312,9 @@ export class SentToSfComponent implements OnInit {
         this.getDataForSendToSF(this.WorkflowID);
         this.notificationService.openSuccessMessageNotification("Deleted Successfully");
       } else {
-        this.notificationService.openErrorMessageNotification("Error while Deleting data.");
+        this.notificationService.openErrorMessageNotification("Invalid exception occured, please contact administrator.");
       }
     },
-      error => this.notificationService.openErrorMessageNotification("Error while Deleting data."));
+      error => this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText));
   }
 }

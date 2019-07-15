@@ -9,12 +9,7 @@ import { LoaderService } from '../shared/loader/loader.service';
 import { List } from 'linq-typescript';
 import { Constants } from '../shared/Constants';
 import { NotificationService } from '../services/NotificationService';
-
-
-
-/**
- * @title Table with pagination
- */
+import { WorkflowService } from '../services/WorkflowService';
 
 @Component({
   selector: 'workflow',
@@ -27,7 +22,6 @@ export class WorkflowComponent {
   arrayBuffer: any;
   file: File;
   fileToUpload: File = null;
-  //displayedColumns = ['position', 'name', 'weight', 'symbol'];
   displayedColumns = ['id', 'usR_FST_NA', 'flE_NA', 'wfL_STA_TE_TEXT', 'crD_DT'];
   dataSource = new MatTableDataSource<Element>();
   filterText: string;
@@ -39,23 +33,18 @@ export class WorkflowComponent {
      { key: 2, value: 'Uploaded' }
 ]; // create an empty array
 
-
-
   constructor(
-    private userService: UserService,
     private _loaderService: LoaderService,
     private snackBar: MatSnackBar,
-    private notificationService: NotificationService) {
+      private notificationService: NotificationService,
+      private workflowService: WorkflowService
+  ) {
 
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  /**
-  * Set the paginator after the view init since this component will
-  * be able to query its view for the initialized paginator.
-  */
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -68,7 +57,7 @@ export class WorkflowComponent {
 
   getWorkflowDetails() {
     var user = localStorage.getItem("Emp_Id");
-    this.userService.getAllWorkflows(user)
+    this.workflowService.GetAllWorkflow()
       .subscribe((data: any) => {
 
         this.dataSource.data = data;
@@ -116,9 +105,7 @@ export class WorkflowComponent {
     }
     else {
       this.isValidFile = true;
-      var user = localStorage.getItem("userid");
-  
-      this.userService.postFile(this.fileToUpload, user)
+      this.workflowService.UploadFile(this.fileToUpload)
         .subscribe((response: any) => {
           if (response.success === true) {
             this.getWorkflowDetails();
@@ -133,7 +120,7 @@ export class WorkflowComponent {
         },
         error =>
         {
-          this.notificationService.openErrorMessageNotification("Error while uploading file");
+          this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText);
           this.resetFileUpload();
         }
       );

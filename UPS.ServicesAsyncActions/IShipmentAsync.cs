@@ -1,6 +1,8 @@
-﻿using System;
+﻿using ExcelFileRead;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using UPS.DataObjects.CST_DTL;
 using UPS.DataObjects.Shipment;
 
 namespace UPS.ServicesAsyncActions
@@ -16,7 +18,7 @@ namespace UPS.ServicesAsyncActions
         ShipmentDataResponse UpdateShipmentAddressById(ShipmentDataRequest shipmentDataRequest);
         int? SelectShipmentTotalStatusByWorkflowId(int wid);
         void UpdateShipmentAddressByIds(List<ShipmentDataRequest> shipmentDataRequest);
-
-        string GetShipmentCustomCodesInformation();
+        ShipmentDataResponse CreateShipments(List<ExcelDataObject> excelDataObjects, int workflowID, out int? workflowStatus);
+        CST_DTL GetShipmentCustomCodesInformation();
     }
 }

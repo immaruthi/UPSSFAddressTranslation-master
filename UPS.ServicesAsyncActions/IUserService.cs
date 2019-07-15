@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using UPS.DataObjects.UserData;
 
 namespace UPS.ServicesAsyncActions
 {
-    public interface IUserServicesAsync
+    public interface IUserService
     {
-        int CreateUser(USR userData);
+        string CreateUser(User userData);
 
-        int DeleteUser(USR userData);
+        int DeleteUser(User userData);
 
         UserDataResponse GetUserData();
 
-        UserDataResponse UpdateUser(USR userData);
+        UserDataResponse UpdateUser(User userData);
     }
 }

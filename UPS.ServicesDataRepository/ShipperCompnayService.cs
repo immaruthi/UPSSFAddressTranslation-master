@@ -3,16 +3,27 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
+    using NLog.Targets.Wrappers;
     using UPS.DataObjects.Shipment;
     using UPS.DataObjects.SPC_LST;
     using UPS.ServicesAsyncActions;
     using UPS.ServicesDataRepository.Common;
     using UPS.ServicesDataRepository.DataContext;
 
-    public class ShipperCompnayService : IShipperCompanyAsync
+    public class ShipperCompanyService : IShipperCompanyAsync
     {
         private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
+        private readonly ApplicationDbContext context;
+        private ShipperCompanyResponse response;
+        public ShipperCompanyService(ApplicationDbContext applicationDbContext)
+        {
+            this.context = applicationDbContext;
+            this.optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            this.response = new ShipperCompanyResponse();
+            this.response.Success = true;
+        }
 
         public ShipmentDataResponse SelectMatchedShipmentsWithShipperCompanies(int workflowID)
 
@@ -30,8 +41,9 @@
                         (
                             from s in context.shipmentDataRequests
                             join c in context.shipperCompanyRequests on s.DST_PSL_TE equals c.SPC_PSL_CD_TE
-                            where s.WFL_ID == workflowID 
-                                && 
+                            where
+                                s.WFL_ID == workflowID
+                                &&  
                                 (
                                         s.SMT_STA_NR == (int)Enums.ATStatus.Translated
                                     ||  s.SMT_STA_NR == (int)Enums.ATStatus.Curated
@@ -169,7 +181,7 @@
                     mappedShipAndShipperCompanyResponse.Shipments = shipmentDataRequests;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 mappedShipAndShipperCompanyResponse.Success = false;
                 mappedShipAndShipperCompanyResponse.OperationExceptionMsg = ex.Message;
@@ -192,7 +204,7 @@
                     var anonymousList =
                         (
                             from s in context.shipmentDataRequests
-                            join c in context.shipperCompanyRequests on s.DST_PSL_TE equals c.SPC_PSL_CD_TE where s.WFL_ID == workflowID
+                            join c in context.shipperCompanyRequests on s.DST_PSL_TE equals c.SPC_PSL_CD_TE
                             where s.WFL_ID == workflowID
                             && s.SMT_STA_NR == ((int)Enums.ATStatus.Completed)
                             orderby s.ID
@@ -358,6 +370,93 @@
                 }
             }
             return shipperCompanyResponse;
+        }
+
+        public ShipperCompanyResponse GetShipperList()
+        {
+            ShipperCompanyResponse shipperCompanyResponse = new ShipperCompanyResponse();
+            optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+
+            using (var context = new ApplicationDbContext(optionsBuilder.Options))
+            {
+                try
+                {
+                    shipperCompanyResponse.ShipperCompanies = context.shipperCompanyRequests.ToList();
+                    shipperCompanyResponse.Success = true;
+                    return shipperCompanyResponse;
+                }
+                catch (Exception ex)
+                {
+                    shipperCompanyResponse.Success = false;
+                    shipperCompanyResponse.OperatonExceptionMessage = ex.Message;
+                }
+            }
+            return shipperCompanyResponse;
+        }
+
+        public ShipperCompanyResponse InsertShipper(ShipperCompanyList shipperCompanyRequest)
+        {
+
+            try
+            {
+                this.context.Add(shipperCompanyRequest);
+                this.context.SaveChanges();
+                this.response.ShipperCompany = shipperCompanyRequest;
+            }
+            catch (Exception ex)
+            {
+                this.response.Success = false;
+                this.response.OperatonExceptionMessage = ex.Message;
+            }
+            return this.response;
+        }
+
+        public ShipperCompanyResponse UpdateShipper(ShipperCompanyList shipperCompanyRequest)
+        {
+            try
+            {
+                ShipperCompanyList data = this.context.shipperCompanyRequests.Where(s => s.ID == shipperCompanyRequest.ID).FirstOrDefault();
+                this.context.Update(shipperCompanyRequest);
+                this.context.SaveChanges();
+                this.response.ShipperCompany = shipperCompanyRequest;
+            }
+            catch (Exception ex)
+            {
+                this.response.Success = false;
+                this.response.OperatonExceptionMessage = ex.Message;
+            }
+            return this.response;
+        }
+
+        public ShipperCompanyResponse DeleteShipper(ShipperCompanyList shipperCompanyRequest)
+        {
+            try
+            {
+                ShipperCompanyList data = this.context.shipperCompanyRequests.Where(s => s.ID == shipperCompanyRequest.ID).FirstOrDefault();
+                this.context.Remove(shipperCompanyRequest);
+                this.context.SaveChanges();
+                this.response.ShipperCompany = shipperCompanyRequest;
+            }
+            catch (Exception ex)
+            {
+                this.response.Success = false;
+                this.response.OperatonExceptionMessage = ex.Message;
+            }
+            return this.response;
+        }
+
+        public async  Task<List<string>> GetShipmentCompanyCities()
+        {
+            List<string> cities =
+                await this.context.shipperCompanyRequests
+                        .Select(
+                            (ShipperCompanyList shipperList) =>
+                                shipperList.SPC_CTY_TE)
+                        .Distinct()
+                        .OrderBy(city=>city)
+                        .ToListAsync();
+
+            return cities;
         }
     }
 }

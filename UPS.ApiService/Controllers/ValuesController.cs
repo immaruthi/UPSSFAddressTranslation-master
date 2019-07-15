@@ -11,6 +11,10 @@ using UPS.ServicesDataRepository;
 using UPS.Application.CustomLogs;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
+using AtService.CustomConatiner;
+using AtService.HeadController;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using UPS.ServicesDataRepository.Common;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,23 +23,32 @@ namespace UPS.AddressTranslationService.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("AllowAtUIOrigin")]
-    public class ValuesController : Controller
+    public class ValuesController : UPSController
     {
+
+        //public ValuesController()
+        //{
+        //    IoCContainer.BuildUp(this);
+        //}
+
+        public ICustomLog iCustomLog { get; set; }
+
         // GET: api/<controller>
         //[Authorize(AuthenticationSchemes = "JwtBearer")]
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            AuditEventEntry.WriteEntry(new Exception("This is test Message"));
-            //SqlConnection connection = new SqlConnection(DBConnectionContext.connectionString);
-
-            //connection.Open();
-
-            //SqlDataAdapter sqlDataAdapter = new SqlDataAdapter("select * from [ADR-BK]", connection);
-
-            //DataSet ds = new DataSet();
-
-            //sqlDataAdapter.Fill(ds);
+            iCustomLog.AddLogEntry(new DataObjects.LogData.LogDataModel()
+            {
+                apiTypes = DataObjects.LogData.APITypes.AddressBookSetup,
+                dateTime = System.DateTime.Now,
+                LogInformation = new DataObjects.LogData.LogInformation()
+                {
+                    LogException = new Exception("Test Exception"),
+                    LogRequest = "Test Request",
+                    LogResponse = "Test Response"
+                }
+            });
 
             return new string[] { "value1", "value2" };
         }
@@ -43,13 +56,8 @@ namespace UPS.AddressTranslationService.Controllers
         [HttpGet("[action]")]
         public bool ValidateUser(String userId, String password)
         {
-            //LoginContext context = HttpContext.RequestServices.GetService(typeof(RMG.Models.LoginContext)) as LoginContext;
-            return true; //context.ValidateUser(userId, password);
+            return true; 
         }
-
-
-        
-
 
         [HttpGet("[action]")]
         public bool ValidateUserId(String userId)
@@ -70,35 +78,5 @@ namespace UPS.AddressTranslationService.Controllers
 
             return loginData;//context.getLoginData(Emp_Id);
         }
-
-        // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<controller>
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-
-
-
-
-
     }
 }

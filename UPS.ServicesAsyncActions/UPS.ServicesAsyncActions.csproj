@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ExcelFileRead\ExcelFileRead.csproj" />
     <ProjectReference Include="..\UPS.DataObjects\UPS.DataObjects.csproj" />
   </ItemGroup>
 

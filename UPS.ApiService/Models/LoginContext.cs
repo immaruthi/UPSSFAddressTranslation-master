@@ -14,8 +14,8 @@ namespace AtService.Models
     public class LoginContext
     {
         public string ConnectionString { get; set; }
-        private UserServices _userServices { get; set; }
-        public LoginContext(string connectionString, UserServices userServices)
+        private UserService _userServices { get; set; }
+        public LoginContext(string connectionString, UserService userServices)
         {
             this.ConnectionString = connectionString;
             _userServices = userServices;
@@ -25,12 +25,12 @@ namespace AtService.Models
         {
             return new MySqlConnection(ConnectionString);
         }
-        public UserDataResponse ValidateUser(String USR_ID_TE, String USR_PWD_TE)
-        {
-            UserDataResponse userDataResponse = _userServices.SelectUserByUserIdAndPassword(USR_ID_TE, USR_PWD_TE);
-            return userDataResponse;
+        //public UserDataResponse ValidateUser(String USR_ID_TE, String USR_PWD_TE)
+        //{
+        //    UserDataResponse userDataResponse = _userServices.ValidateUser(USR_ID_TE, USR_PWD_TE);
+        //    return userDataResponse;
 
-        }
+        //}
 
         //public bool ValidateUserId(String Emp_Id)
         //{
