@@ -1,14 +1,12 @@
 <div class="pageroute">
   <div class="grid" [hidden]="search">
+    <button mat-raised-button color="primary" (click)="LogsexportToExcel()" style="float:right;">Export</button>
     <div class="col-md-6">
       <mat-form-field>
         <input matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="filterText" placeholder="Filter">
       </mat-form-field>
     </div>
-    <mat-paginator #paginator
-                   [pageSize]="10"
-                   [pageSizeOptions]="[5, 10, 25, 100]">
-    </mat-paginator>
+    <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     <div class="table-div">
       <mat-table [dataSource]="dataSource">
         <!-- Date Column -->

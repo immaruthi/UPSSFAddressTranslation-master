@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { LogFilesService } from '../services/LogFilesService';
+import { ExcelService } from '../services/ExcelExport';
+import { DialogService } from '../services/dialog.service';
 
 @Component({
   selector: 'app-log-grid',
@@ -15,6 +17,8 @@ export class LogGridComponent implements OnInit {
   displayedColumns: string[] = ['logDate', 'userId', 'apiType', 'logRequest', 'logResponse', 'logException'];
   search = true;
   filterText: string = '';
+  tableData;
+  excelMainData;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -48,7 +52,29 @@ export class LogGridComponent implements OnInit {
     this.dataSource.filter = filterValue;
   }
 
-  constructor(private logService: LogFilesService) { }  
+  LogsexportToExcel() {
+    this.tableData = [];
+    this.excelMainData = [];
+    this.tableData = this.dataSource.data;
+    if (this.tableData.length > 0) {
+      for (let data of this.tableData) {
+        this.excelMainData.push(
+          {
+            'Date': data.dateTime,
+            'User Id': data.userID,
+            'Application Name': data.apiType,
+            'Request': data.logRequest,
+            'Response': data.logResponse,
+            'Exception': data.logException,
+          })
+      }
+      this.excelService.exportAsExcelFile(this.excelMainData, 'SendToSF');
+    } else {
+      this.dialogService.openAlertDialog('No data for export.');
+    }
+  }
+
+  constructor(private logService: LogFilesService, private excelService: ExcelService, private dialogService: DialogService) { }  
 
   ngOnInit() {
     this.LoadLogFilesList();
