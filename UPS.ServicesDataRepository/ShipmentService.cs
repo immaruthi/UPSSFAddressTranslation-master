@@ -368,28 +368,30 @@ namespace UPS.ServicesDataRepository
                 if (!string.Equals(beforeAddress, data.SHP_ADR_TR_TE))
                 {
                     shipmentDataResponse.BeforeAddress = beforeAddress;
-
-                    var matchedShipments = this.context.shipmentDataRequests.Where(s => s.RCV_ADR_TE == shipmentDataRequest.RCV_ADR_TE).ToList();
-                    if (matchedShipments.Any())
+                    if(shipmentDataRequest.RCV_ADR_TE != null)
                     {
-                        matchedShipments.ForEach(shipment =>
+                        var matchedShipments = this.context.shipmentDataRequests.Where(s => s.RCV_ADR_TE == shipmentDataRequest.RCV_ADR_TE).ToList();
+                        if (matchedShipments.Any())
                         {
-                            shipment.SHP_ADR_TR_TE = data.SHP_ADR_TR_TE;
-                            shipment.SMT_STA_NR = shipmentStaus;
-                        }); 
+                            matchedShipments.ForEach(shipment =>
+                            {
+                                shipment.SHP_ADR_TR_TE = data.SHP_ADR_TR_TE;
+                                shipment.SMT_STA_NR = shipmentStaus;
+                            });
 
-                        this.context.BulkUpdate(matchedShipments);
-                    }
+                            this.context.BulkUpdate(matchedShipments);
+                        }
 
 
-                    List<AddressBook> addressBookElements = this.context.AddressBooks.Where(s => s.ConsigneeAddress == shipmentDataRequest.RCV_ADR_TE).ToList();
+                        List<AddressBook> addressBookElements = this.context.AddressBooks.Where(s => s.ConsigneeAddress == shipmentDataRequest.RCV_ADR_TE).ToList();
 
-                    if (addressBookElements.Any())
-                    {
-                        addressBookElements.FirstOrDefault().ConsigneeTranslatedAddress = data.SHP_ADR_TR_TE;
-                        addressBookElements.FirstOrDefault().ModifiedDate = DateTime.Parse(DateTime.Now.ToString()).ToLocalTime();
+                        if (addressBookElements.Any())
+                        {
+                            addressBookElements.FirstOrDefault().ConsigneeTranslatedAddress = data.SHP_ADR_TR_TE;
+                            addressBookElements.FirstOrDefault().ModifiedDate = DateTime.Parse(DateTime.Now.ToString()).ToLocalTime();
 
-                        this.context.BulkUpdate(addressBookElements);
+                            this.context.BulkUpdate(addressBookElements);
+                        }
                     }
                 }
                 return shipmentDataResponse;

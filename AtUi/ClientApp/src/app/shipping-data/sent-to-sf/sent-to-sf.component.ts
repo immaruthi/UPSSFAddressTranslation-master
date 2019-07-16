@@ -239,7 +239,8 @@ export class SentToSfComponent implements OnInit {
           COD_TE: updatedDetails.coD_TE,
           WFL_ID: shipmentDetails.wfL_ID,
           ID: shipmentDetails.id,
-          POD_RTN_SVC: updatedDetails.poD_RTN_SVC
+          POD_RTN_SVC: updatedDetails.poD_RTN_SVC,
+          RCV_ADR_TE: updatedDetails.rcV_ADR_TE
         }
 
         this.shippingService.UpdateShippingAddress(details).subscribe((response:any) => {
