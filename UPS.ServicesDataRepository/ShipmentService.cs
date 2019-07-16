@@ -368,6 +368,12 @@ namespace UPS.ServicesDataRepository
                 if (!string.Equals(beforeAddress, data.SHP_ADR_TR_TE))
                 {
                     shipmentDataResponse.BeforeAddress = beforeAddress;
+                    var matchedShipments = this.context.shipmentDataRequests.Where(s => s.RCV_ADR_TE == shipmentDataRequest.RCV_ADR_TE).ToList();
+                    if(matchedShipments.Any())
+                    {
+                        matchedShipments.ForEach(shipment => shipment.SHP_ADR_TR_TE = data.SHP_ADR_TR_TE);
+                        this.context.BulkUpdate(matchedShipments);
+                    }
                 }
                 return shipmentDataResponse;
             }
