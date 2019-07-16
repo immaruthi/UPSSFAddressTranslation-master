@@ -372,7 +372,12 @@ namespace UPS.ServicesDataRepository
                     var matchedShipments = this.context.shipmentDataRequests.Where(s => s.RCV_ADR_TE == shipmentDataRequest.RCV_ADR_TE).ToList();
                     if (matchedShipments.Any())
                     {
-                        matchedShipments.ForEach(shipment => shipment.SHP_ADR_TR_TE = data.SHP_ADR_TR_TE);
+                        matchedShipments.ForEach(shipment =>
+                        {
+                            shipment.SHP_ADR_TR_TE = data.SHP_ADR_TR_TE;
+                            shipment.SMT_STA_NR = shipmentStaus;
+                        });
+
                         this.context.BulkUpdate(matchedShipments);
                     }
                 }
