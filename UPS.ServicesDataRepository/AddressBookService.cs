@@ -97,7 +97,7 @@ namespace UPS.ServicesDataRepository
                                  City = geocode?.city,
                                  Confidence = geocode?.confidence,
                                  ConsigneeAddress = address?.address,
-                                 ConsigneeAddressId = address?.id != null ? Convert.ToInt32(address?.id) : -1,//
+                                 ConsigneeAddressId = address?.id != null ? address?.id : "-1",//
                                  ConsigneeTranslatedAddress = geocode?.translated_adddress,
                                  Country = geocode?.country,
                                  CreatedDate = DateTime.Now,
@@ -110,7 +110,7 @@ namespace UPS.ServicesDataRepository
                                  Region = geocode?.region,
                                  Road = geocode?.road,
                                  SemanticCheck = geocode?.semantic_check,
-                                 ShipmentId = address?.id != null ? Convert.ToInt32(address?.id) : -1,
+                                 ShipmentId = null, //address?.id != null ? Convert.ToInt32(address?.id) : -1,
                                  StatusCode = quincusReponseData?.status_code,
                                  Unit = geocode?.unit,
                                  VerifyMatch = geocode?.verify_match
