@@ -13,9 +13,9 @@
         <mat-error *ngIf="hasError('lastName', 'maxlength')">Last Name should not exceed 50 Characters</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <input matInput placeholder="Email Id" formControlName="emailId">
-        <mat-error *ngIf="hasError('emailId', 'required')">Email Id is required</mat-error>
-        <mat-error *ngIf="hasError('emailId', 'pattern')">Please Enter a Valid Email</mat-error>
+        <input matInput placeholder="Email Id" formControlName="email">
+        <mat-error *ngIf="hasError('email', 'required')">Email Id is required</mat-error>
+        <mat-error *ngIf="hasError('email', 'pattern')">Please Enter a Valid Email</mat-error>
       </mat-form-field>
       <mat-form-field>
         <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'" formControlName="password">
@@ -33,15 +33,15 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>City</mat-label>
-        <mat-select multiple formControlName="city">
+        <mat-select multiple formControlName="cities">
           <mat-option *ngFor="let city of cities" [value]="city">
             {{city}}
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="hasError('city', 'required')">City is required</mat-error>
+        <mat-error *ngIf="hasError('cities', 'required')">City is required</mat-error>
       </mat-form-field>
     </form>
     <br />
-    <button style="float:right" mat-stroked-button color="primary">Submit</button>
+    <button style="float:right" mat-stroked-button color="primary" (click)="onSubmit()" [disabled]="!this.userRegForm.valid">Submit</button>
   </mat-card>
 </div>

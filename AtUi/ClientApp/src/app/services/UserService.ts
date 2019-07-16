@@ -70,4 +70,10 @@ export class UserService {
       });
   }
 
+  CreateNewUser(data: any): Observable<any> {
+    return this.httpService.makePostRequest('api/User/create', data);
+  }
+  GetAllCities(): Observable<any> {
+    return this.httpService.makeGetRequest('api/ShipperList/cities');
+  }
 }
