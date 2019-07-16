@@ -98,7 +98,8 @@ export class AddressBookComponent implements OnInit {
 
         const details = {
           id: addressBookDetails.id,
-          consigneeTranslatedAddress: updatedDetails.ConsigneeTranslatedAddress
+          consigneeTranslatedAddress: updatedDetails.ConsigneeTranslatedAddress,
+          consigneeAddress: updatedDetails.ConsigneeAddress
         }
 
         this.addressBookService.updateAddressBook(details).subscribe((response: any) => {
