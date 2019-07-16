@@ -13,6 +13,7 @@ import { Observable } from 'rxjs';
 import { ExcelService } from '../../services/ExcelExport';
 import { MatStepperTab } from '../../shared/enums.service';
 import { NotificationService } from '../../services/NotificationService';
+import { SFErrors } from '../../shared/SFErrorCodes';
 
 
 @Component({
@@ -176,11 +177,22 @@ export class SentToSfComponent implements OnInit {
           const FailedCount = response.failedToProcessShipments.length;
           const FailedList = response.failedToProcessShipments;
 
+          var FailedMainList = [];
+          for (let List of FailedList) {
+            const FailedDetails = List.split(":", 3);
+            const PKGNR = FailedDetails[0];
+            const ErrorCode = FailedDetails[1];
+            const ErrorEN = SFErrors[ErrorCode] ? SFErrors[ErrorCode] : 'Unspecified Error';
+            const ErrorCH = FailedDetails[2];
+            //FailedMainList.push(PKGNR + ' ' + ErrorCode + ' ' + ErrorEN);
+            FailedMainList.push({ 'PKGNR': PKGNR, 'ErrorCode': ErrorCode, 'ErrorEN': ErrorEN});
+          }
+
           const data = {
             successCount: SuccessCount,
             successList: SuccessList,
             failedCount: FailedCount,
-            failedList: FailedList,
+            failedList: FailedMainList,
             screenFrom: 'SendToSF'
           }
           if (response.processedShipments.length > 0) {
