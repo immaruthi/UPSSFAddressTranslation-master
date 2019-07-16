@@ -51,7 +51,6 @@
         public object exP_TYP { get; set; }
         public string coD_TE { get; set; }
         public string poD_RTN_SVC { get; set; }
-        public string spC_CST_ID_TE { get; set; }
 
     }
 

@@ -69,7 +69,7 @@
             this._context = applicationDbContext;
             this._addressBookService = addressBookService;
             this._entityValidationService = entityValidationService;
-            this._workflowService = new WorkflowService(_context, _addressBookService, _entityValidationService);
+            this._workflowService = new WorkflowService(_context, _addressBookService,_entityValidationService);
             this._quincusAddressTranslationRequest = QuincusAddressTranslationRequest;
             this.addressAuditLogService = addressAuditLogAsync;
             this._shipperCompanyService = shipperCompanyAsync;
@@ -78,7 +78,7 @@
         private static int _workflowID = 0;
         [Route("ExcelFileUpload")]
         [HttpPost]
-
+      
         public async Task<ActionResult> ExcelFile(IList<IFormFile> excelFileName)
         {
             ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
@@ -129,15 +129,15 @@
                                 {
                                     shipmentDataResponse.Success = false;
                                     shipmentDataResponse.OperationExceptionMsg = result.OperationExceptionMsg;
-                                    WorkflowService workflowService = new WorkflowService(_context, _addressBookService, _entityValidationService);
+                                    WorkflowService workflowService = new WorkflowService(_context,_addressBookService,_entityValidationService);
                                     workflowService.DeleteWorkflowById(_workflowID);
                                 }
                             }
                             else
                             {
-                                iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                                Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                                 {
-                                    apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 7),
+                                    apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes),7),
                                     dateTime = System.DateTime.Now,
                                     LogInformation = new UPS.DataObjects.LogData.LogInformation()
                                     {
@@ -145,14 +145,14 @@
                                         LogRequest = "Excel Uploaded",
                                         LogResponse = JsonConvert.SerializeObject(excelExtensionReponse)
                                     }
-                                });
+                                }));
                                 return Ok(excelExtensionReponse);
                             }
                         }
                     }
                 }
 
-                iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                 {
                     apiTypes = UPS.DataObjects.LogData.APITypes.ExcelUpload,
                     apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 7),
@@ -163,7 +163,7 @@
                         LogRequest = "Excel Uploaded",
                         LogResponse = JsonConvert.SerializeObject(shipmentDataResponse)
                     }
-                });
+                }));
 
                 return Ok(shipmentDataResponse);
             }
@@ -239,7 +239,7 @@
             workflowDataRequest.WFL_STA_TE = workflowstatus;
             _workflowService.UpdateWorkflowStatusById(workflowDataRequest);
 
-            iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+            Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
             {
                 apiTypes = UPS.DataObjects.LogData.APITypes.EFCoreContext,
                 apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 6),
@@ -250,7 +250,7 @@
                     LogRequest = JsonConvert.SerializeObject(shipmentDataRequest),
                     LogResponse = JsonConvert.SerializeObject(shipmentDataResponse)
                 }
-            });
+            }));
 
             return Ok(shipmentDataResponse);
         }
@@ -269,9 +269,9 @@
             int? workflowstatus = _shipmentService.SelectShipmentTotalStatusByWorkflowId(wid);
             WorkflowService workflowService = new WorkflowService(_context, _addressBookService, _entityValidationService);
             WorkflowDataResponse workflowDataResponse = workflowService.SelectWorkflowById(wid);
-            if (workflowDataResponse.Success && workflowDataResponse.Workflow != null)
+            if(workflowDataResponse.Success && workflowDataResponse.Workflow != null)
             {
-                if (workflowstatus != workflowDataResponse.Workflow.WFL_STA_TE)
+                if(workflowstatus != workflowDataResponse.Workflow.WFL_STA_TE)
                 {
                     WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
                     workflowDataRequest.ID = wid;
@@ -287,7 +287,7 @@
         [HttpPost]
         public async Task<ActionResult> CreateOrderShipment([FromBody] List<UIOrderRequestBodyData> uIOrderRequestBodyDatas)
         {
-            string customerID = uIOrderRequestBodyDatas[0].spC_CST_ID_TE;//_shipmentService.GetShipmentCustomCodesInformation().CST_ID;
+            string customerID = _shipmentService.GetShipmentCustomCodesInformation().CST_ID;
             _workflowID = uIOrderRequestBodyDatas[0].wfL_ID;
             CreateOrderShipmentResponse createOrderShipmentResponse = new CreateOrderShipmentResponse();
             createOrderShipmentResponse.FailedToProcessShipments = new List<string>();
@@ -303,7 +303,7 @@
                 XMLMessage = "<Request lang=\"zh-CN\" service=\"OrderService\">";
                 XMLMessage += "<Head>" + configuration["SFExpress:Access Number"] + "</Head>";
                 XMLMessage += "<Body>";
-                XMLMessage += "<Order orderid=\"" + orderRequest.pkG_NR_TE + "\" custid=\"" + orderRequest.spC_CST_ID_TE + "\"";
+                XMLMessage += "<Order orderid=\"" + orderRequest.pkG_NR_TE + "\" custid=\"" + customerID + "\"";
                 XMLMessage += " parcel_quantity=\"" + orderRequest.pcS_QTY_NR + "\"";
                 XMLMessage += " total_net_weight=\"" + orderRequest.pkG_WGT_DE + "\"";
                 XMLMessage += " j_company=\"" + orderRequest.shP_CPY_NA + "\"";
@@ -395,13 +395,13 @@
             }
             //we need to update the workflow status
             int? workflowstatus = _shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);
-            WorkflowService workflowService = new WorkflowService(_context, _addressBookService, _entityValidationService);
+            WorkflowService workflowService = new WorkflowService(_context,_addressBookService,_entityValidationService);
             WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
             workflowDataRequest.ID = _workflowID;
             workflowDataRequest.WFL_STA_TE = workflowstatus;
             workflowService.UpdateWorkflowStatusById(workflowDataRequest);
 
-            iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+            Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
             {
                 apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
                 apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
@@ -412,7 +412,7 @@
                     LogRequest = JsonConvert.SerializeObject(uIOrderRequestBodyDatas),
                     LogResponse = JsonConvert.SerializeObject(createOrderShipmentResponse)
                 }
-            });
+            }));
 
             return Ok(createOrderShipmentResponse);
         }
@@ -455,7 +455,7 @@
             else
             {
 
-                iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                 {
                     apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
                     apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
@@ -466,7 +466,7 @@
                         LogRequest = JsonConvert.SerializeObject(sFOrderXMLRequest),
                         LogResponse = null
                     }
-                });
+                }));
 
                 //AuditEventEntry.WriteEntry(new Exception(getSFCancelOrderServiceResponse.exception.ToString()));
                 return Ok(getSFCancelOrderServiceResponse.exception);
@@ -511,8 +511,7 @@
                         id = _.ID,
                         rcV_ADR_TE = _.RCV_ADR_TE,
                         dsT_CTY_TE = _.DST_CTY_TE,
-                        wfL_ID = _.WFL_ID,
-                        pkG_NR_TE = _.PKG_NR_TE
+                        wfL_ID = _.WFL_ID
                     }).ToList();
 
                 this._quincusAddressTranslationRequest.shipmentWorkFlowRequests = shipmentWorkFlowRequests;
@@ -549,10 +548,8 @@
 
                             foreach (Geocode geocode in geocodes)
                             {
-
-
                                 ShipmentDataRequest shipmentDataRequest =
-                                _shipmentDataRequest.FirstOrDefault(_ => _.PKG_NR_TE == geocode.id);
+                                _shipmentDataRequest.FirstOrDefault(_ => _.ID == Convert.ToInt32(geocode.id));
                                 shipmentDataRequest.SHP_ADR_TR_TE = geocode.translated_adddress;
                                 shipmentDataRequest.ACY_TE = geocode.accuracy;
                                 shipmentDataRequest.CON_NR = geocode.confidence;
@@ -575,15 +572,15 @@
                             }
                             _shipmentService.UpdateShipmentAddressByIds(shipmentDataRequestList);
 
-                            //we need to update the workflow status
-                            int? workflowstatus = _shipmentService.SelectShipmentTotalStatusByWorkflowId(wid);
+                        //we need to update the workflow status
+                        int? workflowstatus = _shipmentService.SelectShipmentTotalStatusByWorkflowId(wid);
                             WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
                             workflowDataRequest.ID = wid;
                             workflowDataRequest.WFL_STA_TE = workflowstatus;
                             _workflowService.UpdateWorkflowStatusById(workflowDataRequest);
                         });
 
-                        iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                        Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                         {
                             apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
                             apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
@@ -594,13 +591,13 @@
                                 LogRequest = JsonConvert.SerializeObject(QuincusResponse.QuincusReponseDataList),
                                 LogResponse = null
                             }
-                        });
+                        }));
 
                         return Ok(QuincusResponse.QuincusReponseDataList);
                     }
                     else
                     {
-                        iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                        Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                         {
                             apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
                             apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
@@ -611,17 +608,17 @@
                                 LogRequest = JsonConvert.SerializeObject(_shipmentDataRequest),
                                 LogResponse = null
                             }
-                        });
+                        }));
                         return Ok(QuincusResponse.Exception);
                     }
 
                 }
                 else
                 {
-                    iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                    Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                     {
                         apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
-                        apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
+                        apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes),1),
                         dateTime = System.DateTime.Now,
                         LogInformation = new UPS.DataObjects.LogData.LogInformation()
                         {
@@ -629,7 +626,7 @@
                             LogRequest = JsonConvert.SerializeObject(_shipmentDataRequest),
                             LogResponse = null
                         }
-                    });
+                    }));
                     return Ok(quincusTranslatedAddressResponse.exception);
                 }
 
