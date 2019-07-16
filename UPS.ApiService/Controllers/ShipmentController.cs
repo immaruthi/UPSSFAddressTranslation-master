@@ -355,22 +355,22 @@
 
                         xmlDocument.LoadXml(getSFCreateOrderServiceResponse.OrderResponse);
 
-                        if (xmlDocumentShipmentResponseParser.Contains("8019"))
-                        {
-                            createOrderShipmentResponse.FailedToProcessShipments.Add("Customer order number(" + orderRequest.pkG_NR_TE + ") is already confirmed");
-                        }
-                        else if (xmlDocumentShipmentResponseParser.Contains("8016"))
-                        {
-                            createOrderShipmentResponse.FailedToProcessShipments.Add("Repeat order numbers ( " + orderRequest.pkG_NR_TE + " )");
-                        }
-                        else
-                        {
+                        //if (xmlDocumentShipmentResponseParser.Contains("8019"))
+                        //{
+                        //    createOrderShipmentResponse.FailedToProcessShipments.Add("Customer order number(" + orderRequest.pkG_NR_TE + ") is already confirmed");
+                        //}
+                        //else if (xmlDocumentShipmentResponseParser.Contains("8016"))
+                        //{
+                        //    createOrderShipmentResponse.FailedToProcessShipments.Add("Repeat order numbers ( " + orderRequest.pkG_NR_TE + " )");
+                        //}
+                        //else
+                        //{
                             createOrderShipmentResponse.FailedToProcessShipments.Add(
-                                string.Format("Order ID -> {0} : Error Code -> {1} : Error Information -> {2} ",
+                                string.Format("{0}:{1}:{2}",
                                 orderRequest.pkG_NR_TE,
                                 xmlDocument.GetElementsByTagName("ERROR")[0].Attributes[0].InnerText,
                                 xmlDocument.GetElementsByTagName("ERROR")[0].InnerXml));
-                        }
+                        //}
                     }
                     else
                     {
