@@ -4,9 +4,11 @@
       <input matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="filterText" placeholder="Filter">
     </mat-form-field>
   </div>
-  <!--<div class="col-md-6 text-right">
-    <button mat-raised-button color="primary" (click)="addNew()"> Add New </button>
-  </div>-->
+  <div class="col-md-6 text-right">
+    <button mat-icon-button (click)="addNew()">
+      <span class="glyphicon glyphicon-plus"></span>
+    </button>
+  </div>
 </div>
 <mat-paginator #paginator
                [pageSize]="10"
