@@ -82,7 +82,7 @@ namespace UPS.ServicesDataRepository
                     {
                         IsAcive = true,
                         RoleId = user.Role,
-                        UserId = userInfo.ID,
+                        UserId = userInfo.ID??0,
                     }
                 };
 
