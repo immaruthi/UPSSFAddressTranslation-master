@@ -50,7 +50,7 @@
                                         s.SMT_STA_NR == (int)Enums.ATStatus.Translated
                                     ||  s.SMT_STA_NR == (int)Enums.ATStatus.Curated
                                 )
-                                && mappedCities.Contains(c.SPC_CTY_TE.ToUpper())
+                                //&& mappedCities.Contains(c.SPC_CTY_TE.ToUpper())
                             orderby s.ID
                             select new
                             {
