@@ -32,10 +32,9 @@ namespace UPS.AddressTranslationService.Controllers
         //}
 
         public ICustomLog iCustomLog { get; set; }
-
-        // GET: api/<controller>
-        //[Authorize(AuthenticationSchemes = "JwtBearer")]
+        
         [HttpGet]
+        //[Authorize(Roles = Constants.Role.Admin)]
         public IEnumerable<string> Get()
         {
             Task.Run(()=>iCustomLog.AddLogEntry(new DataObjects.LogData.LogDataModel()
