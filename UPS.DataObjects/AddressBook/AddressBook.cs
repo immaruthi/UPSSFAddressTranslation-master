@@ -25,7 +25,7 @@ namespace UPS.DataObjects.AddressBook
         [StringLength(50)]
         public string StatusCode { get; set; }
         [Column("CSG-ADR-ID")]
-        public int? ConsigneeAddressId { get; set; }
+        public string ConsigneeAddressId { get; set; }
         [Column("CSG-ADR")]
         [StringLength(500)]
         public string ConsigneeAddress { get; set; }
