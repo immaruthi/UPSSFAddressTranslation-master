@@ -41,5 +41,8 @@ namespace UPS.DataObjects.UserData
         public string UserId { get; set; }
         [NotMapped]
         public List<string> Cities { get; set; }
+
+        [NotMapped]
+        public int Role { get; set; }
     }
 }
