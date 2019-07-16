@@ -9,6 +9,7 @@ using UPS.DataObjects.AddressBook;
 using UPS.DataObjects.Common;
 using UPS.ServicesAsyncActions;
 using UPS.ServicesDataRepository.DataContext;
+using UPS.ServicesDataRepository.Common;
 
 namespace UPS.ServicesDataRepository
 {
@@ -50,6 +51,18 @@ namespace UPS.ServicesDataRepository
                 if (!string.Equals(beforeAddress, data.ConsigneeTranslatedAddress))
                 {
                     addressBookResponse.BeforeAddress = beforeAddress;
+
+                    var matchedShipments = this.context.shipmentDataRequests.Where(s => s.RCV_ADR_TE == addressBookData.ConsigneeAddress).ToList();
+                    if (matchedShipments.Any())
+                    {
+                        matchedShipments.ForEach(shipment =>
+                        {
+                            shipment.SHP_ADR_TR_TE = data.ConsigneeTranslatedAddress;
+                            shipment.SMT_STA_NR = (int)Enums.ATStatus.Curated;
+                        });
+
+                        this.context.BulkUpdate(matchedShipments);
+                    }
                 }
                 return addressBookResponse;
             }
