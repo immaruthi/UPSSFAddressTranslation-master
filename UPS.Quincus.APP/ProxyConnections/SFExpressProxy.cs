@@ -40,7 +40,7 @@
                 Dictionary<String, String> map = new Dictionary<string, string>();
                 map.Add("xml", sFCreateOrderServiceRequest.RequestOrderXMLMessage);
                 map.Add("verifyCode", base64VeirificatioCode);
-                map.Add("checkCode", sFCreateOrderServiceRequest.Checkword);
+                map.Add("checkCode", sFCreateOrderServiceRequest.Checkcode);
 
                 IEnumerable<KeyValuePair<string, string>> keyValuePairs = new List<KeyValuePair<string, string>>();
                 keyValuePairs = map;
@@ -100,7 +100,7 @@
 
             try
             {
-                string toVerifyText = sFCancelOrderServiceRequest.RequestOrderXMLMessage + sFCancelOrderServiceRequest.AccessNumber;
+                string toVerifyText = sFCancelOrderServiceRequest.RequestOrderXMLMessage + sFCancelOrderServiceRequest.Checkword;
 
                 System.Security.Cryptography.MD5 hs = System.Security.Cryptography.MD5.Create();
 

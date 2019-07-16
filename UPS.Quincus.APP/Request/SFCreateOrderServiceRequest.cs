@@ -68,6 +68,8 @@
 
         public string RequestURI { get; set; }
 
+        public string Checkcode { get; set; }
+
     }
 
     public class SFCancelOrderServiceRequest

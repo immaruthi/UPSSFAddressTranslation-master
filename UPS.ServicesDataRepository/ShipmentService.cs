@@ -376,9 +376,20 @@ namespace UPS.ServicesDataRepository
                         {
                             shipment.SHP_ADR_TR_TE = data.SHP_ADR_TR_TE;
                             shipment.SMT_STA_NR = shipmentStaus;
-                        });
+                        }); 
 
                         this.context.BulkUpdate(matchedShipments);
+                    }
+
+
+                    List<AddressBook> addressBookElements = this.context.AddressBooks.Where(s => s.ConsigneeAddress == shipmentDataRequest.RCV_ADR_TE).ToList();
+
+                    if (addressBookElements.Any())
+                    {
+                        addressBookElements.FirstOrDefault().ConsigneeTranslatedAddress = data.SHP_ADR_TR_TE;
+                        addressBookElements.FirstOrDefault().ModifiedDate = DateTime.Parse(DateTime.Now.ToString()).ToLocalTime();
+
+                        this.context.BulkUpdate(addressBookElements);
                     }
                 }
                 return shipmentDataResponse;

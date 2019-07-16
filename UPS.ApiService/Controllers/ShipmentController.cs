@@ -336,6 +336,7 @@
                     BaseURI = configuration["SFExpress:Base URI"],
                     Checkword = configuration["SFExpress:Checkword"],
                     RequestURI = configuration["SFExpress:Place Order URI"],
+                    Checkcode = configuration["SFExpress:CheckCode"],
                     RequestOrderXMLMessage = XMLMessage,
 
                 };
