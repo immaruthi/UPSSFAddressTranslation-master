@@ -37,7 +37,7 @@ const routes: Routes = [
       { path: 'logs', canActivate: [AuthGuard], component: LogGridComponent },
       { path: 'auditinglog', canActivate: [AuthGuard], component: AuditingLogComponent },
       { path: 'home', canActivate: [AuthGuard], component: WorkflowComponent },
-      { path: 'userReg', canActivate: [AuthGuard], component: UserRegistrationComponent }
+      { path: 'user/registration', canActivate: [AuthGuard], component: UserRegistrationComponent }
     ]
   },
   //{path: 'notauthorized', component: NotauthorizedComponent},
