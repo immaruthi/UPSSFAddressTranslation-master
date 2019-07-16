@@ -29,7 +29,7 @@
             //string verifyText = sFCreateOrderServiceRequest.Checkword;
             try
             {
-                string toVerifyText = sFCreateOrderServiceRequest.RequestOrderXMLMessage + sFCreateOrderServiceRequest.AccessNumber;
+                string toVerifyText = sFCreateOrderServiceRequest.RequestOrderXMLMessage + sFCreateOrderServiceRequest.Checkword;
 
                 System.Security.Cryptography.MD5 hs = System.Security.Cryptography.MD5.Create();
 
