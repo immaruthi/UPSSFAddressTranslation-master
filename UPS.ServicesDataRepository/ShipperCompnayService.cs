@@ -8,6 +8,7 @@
     using NLog.Targets.Wrappers;
     using UPS.DataObjects.Shipment;
     using UPS.DataObjects.SPC_LST;
+    using UPS.DataObjects.UserData;
     using UPS.ServicesAsyncActions;
     using UPS.ServicesDataRepository.Common;
     using UPS.ServicesDataRepository.DataContext;
@@ -25,7 +26,7 @@
             this.response.Success = true;
         }
 
-        public ShipmentDataResponse SelectMatchedShipmentsWithShipperCompanies(int workflowID)
+        public ShipmentDataResponse SelectMatchedShipmentsWithShipperCompanies(int workflowID, int userId)
 
         {
             ShipmentDataResponse mappedShipAndShipperCompanyResponse = new ShipmentDataResponse();
@@ -36,6 +37,7 @@
 
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
                 {
+                  List<string> mappedCities =  GetCityByUserId(userId);
                     shipmentDataRequests = new List<ShipmentDataRequest>();
                     var anonymousList =
                         (
@@ -43,12 +45,13 @@
                             join c in context.shipperCompanyRequests on s.DST_PSL_TE equals c.SPC_PSL_CD_TE
                             where
                                 s.WFL_ID == workflowID
-                                &&  
+                                &&
                                 (
                                         s.SMT_STA_NR == (int)Enums.ATStatus.Translated
                                     ||  s.SMT_STA_NR == (int)Enums.ATStatus.Curated
                                 )
-                                orderby s.ID
+                                && mappedCities.Contains(c.SPC_CTY_TE.ToUpper())
+                            orderby s.ID
                             select new
                             {
                                 s.ID,
@@ -189,6 +192,19 @@
             }
             return mappedShipAndShipperCompanyResponse;
         }
+
+        private List<string> GetCityByUserId(int userId)
+        {
+            return this.context.UserCityMapping
+                    .Where(
+                        (UserCityMapping city) => 
+                            city.UserId == userId)
+                    .Select(
+                        (UserCityMapping cityMapping) =>
+                            cityMapping.City.ToUpper()).
+                    ToList();
+        }
+
         public ShipmentDataResponse SelectCompletedShipments(int workflowID)
 
         {
