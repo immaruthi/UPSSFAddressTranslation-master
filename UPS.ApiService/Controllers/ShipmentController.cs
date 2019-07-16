@@ -135,6 +135,7 @@
                             }
                             else
                             {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                                 Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                                 {
                                     apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes),7),
@@ -146,12 +147,14 @@
                                         LogResponse = JsonConvert.SerializeObject(excelExtensionReponse)
                                     }
                                 }));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                                 return Ok(excelExtensionReponse);
                             }
                         }
                     }
                 }
 
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                 {
                     apiTypes = UPS.DataObjects.LogData.APITypes.ExcelUpload,
@@ -164,6 +167,7 @@
                         LogResponse = JsonConvert.SerializeObject(shipmentDataResponse)
                     }
                 }));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
                 return Ok(shipmentDataResponse);
             }
@@ -239,6 +243,7 @@
             workflowDataRequest.WFL_STA_TE = workflowstatus;
             _workflowService.UpdateWorkflowStatusById(workflowDataRequest);
 
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
             {
                 apiTypes = UPS.DataObjects.LogData.APITypes.EFCoreContext,
@@ -251,6 +256,7 @@
                     LogResponse = JsonConvert.SerializeObject(shipmentDataResponse)
                 }
             }));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             return Ok(shipmentDataResponse);
         }
@@ -401,6 +407,9 @@
             workflowDataRequest.WFL_STA_TE = workflowstatus;
             workflowService.UpdateWorkflowStatusById(workflowDataRequest);
 
+
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
             {
                 apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
@@ -413,6 +422,7 @@
                     LogResponse = JsonConvert.SerializeObject(createOrderShipmentResponse)
                 }
             }));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             return Ok(createOrderShipmentResponse);
         }
@@ -437,7 +447,8 @@
 
             if (getSFCancelOrderServiceResponse.Response)
             {
-                iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                Task.Run(() => iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                 {
                     apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
                     apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
@@ -448,13 +459,15 @@
                         LogRequest = JsonConvert.SerializeObject(sFOrderXMLRequest),
                         LogResponse = JsonConvert.SerializeObject(getSFCancelOrderServiceResponse)
                     }
-                });
+                }));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
                 return Ok(getSFCancelOrderServiceResponse.OrderResponse);
             }
             else
             {
 
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                 {
                     apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
@@ -467,6 +480,7 @@
                         LogResponse = null
                     }
                 }));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
                 //AuditEventEntry.WriteEntry(new Exception(getSFCancelOrderServiceResponse.exception.ToString()));
                 return Ok(getSFCancelOrderServiceResponse.exception);
@@ -583,6 +597,7 @@
                             _workflowService.UpdateWorkflowStatusById(workflowDataRequest);
                         });
 
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                         Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                         {
                             apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
@@ -595,11 +610,13 @@
                                 LogResponse = null
                             }
                         }));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
                         return Ok(QuincusResponse.QuincusReponseDataList);
                     }
                     else
                     {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                         Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                         {
                             apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
@@ -612,12 +629,14 @@
                                 LogResponse = null
                             }
                         }));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                         return Ok(QuincusResponse.Exception);
                     }
 
                 }
                 else
                 {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                     Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                     {
                         apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
@@ -630,6 +649,7 @@
                             LogResponse = null
                         }
                     }));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                     return Ok(quincusTranslatedAddressResponse.exception);
                 }
 

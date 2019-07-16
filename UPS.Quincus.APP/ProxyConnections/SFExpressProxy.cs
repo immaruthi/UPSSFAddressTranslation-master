@@ -29,7 +29,7 @@
             //string verifyText = sFCreateOrderServiceRequest.Checkword;
             try
             {
-                string toVerifyText = sFCreateOrderServiceRequest.RequestOrderXMLMessage + sFCreateOrderServiceRequest.AccessNumber;
+                string toVerifyText = sFCreateOrderServiceRequest.RequestOrderXMLMessage + sFCreateOrderServiceRequest.Checkword;
 
                 System.Security.Cryptography.MD5 hs = System.Security.Cryptography.MD5.Create();
 
@@ -75,6 +75,7 @@
             catch(Exception exception)
             {
                 getSFCreateOrderServiceResponse.exception = exception;
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 Task.Run(() => iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                 {
                     apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
@@ -87,6 +88,7 @@
                         LogResponse = null
                     }
                 }));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             }
 
             return getSFCreateOrderServiceResponse;
@@ -145,6 +147,7 @@
             catch (Exception exception)
             {
                 getSFCancelOrderServiceResponse.exception = exception;
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 Task.Run(() => iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                 {
                     apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
@@ -157,6 +160,7 @@
                         LogResponse = null
                     }
                 }));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             }
 
             return getSFCancelOrderServiceResponse;
