@@ -5,4 +5,5 @@ export class UserReg {
   password: string;
   userId: string;
   cities: string;
+  role: number;
 }
