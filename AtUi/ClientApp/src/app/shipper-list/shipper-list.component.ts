@@ -6,6 +6,7 @@ import { ShipperListService } from '../services/ShipperListService';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../services/data.service';
 import { Observable } from 'rxjs';
+import { ShipperListModelComponent } from './shipper-list-model/shipper-list-model.component';
 
 @Component({
   selector: 'app-shipper-list',
@@ -15,7 +16,7 @@ import { Observable } from 'rxjs';
 export class ShipperListComponent implements OnInit {
 
   displayedColumns =
-    ['spC_PSL_CD_TE', 'spC_CTY_TE', 'spC_CTR_TE', 'spC_CPY_TE', 'spC_NA', 'spC_SND_PTY_CTC_TE', 'spC_ADR_TE', 'spC_CTC_PH','spC_SLIC_NR',];
+    ['actions', 'spC_PSL_CD_TE', 'spC_CTY_TE', 'spC_CTR_TE', 'spC_CPY_TE', 'spC_NA', 'spC_SND_PTY_CTC_TE', 'spC_ADR_TE', 'spC_CTC_PH', 'spC_SLIC_NR', 'spC_CST_ID_TE'];
 
   private eventsSubscription: any;
   @Input() events: Observable<void>;
@@ -74,6 +75,24 @@ export class ShipperListComponent implements OnInit {
   }
 
   addNew() {
+    const dialogRef = this.dialog.open(ShipperListModelComponent, { data: { New: true } });
 
+  }
+
+  startEdit(i: number, shipperData: any) {
+    let ShipperDetails = shipperData;
+    const dialogRef = this.dialog.open(ShipperListModelComponent, {
+      data: {
+        PostalCode: shipperData.spC_PSL_CD_TE,
+        City: shipperData.spC_CTY_TE,
+        Centre: shipperData.spC_CTR_TE,
+        ShippingCompany: shipperData.spC_CPY_TE,
+        ShippingName: shipperData.spC_NA,
+        SendingPartyContact: shipperData.spC_SND_PTY_CTC_TE,
+        ShippingAddress: shipperData.spC_ADR_TE,
+        Contact: shipperData.spC_CTC_PH,
+        SLICNumber: shipperData.spC_SLIC_NR
+      }
+    })
   }
 }

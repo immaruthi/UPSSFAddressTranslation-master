@@ -76,6 +76,7 @@ import { AddressBookEditModelComponent } from './address-book/address-book-edit-
 import { LogGridComponent } from './log-grid/log-grid.component';
 import { AuditingLogComponent } from './auditing-log/auditing-log.component';
 import { LogFilesService } from './services/LogFilesService';
+import { ShipperListModelComponent } from './shipper-list/shipper-list-model/shipper-list-model.component';
 
 @NgModule({
   declarations: [
@@ -111,7 +112,8 @@ import { LogFilesService } from './services/LogFilesService';
     AddressBookComponent,
     AddressBookEditModelComponent,
     LogGridComponent,
-    AuditingLogComponent
+    AuditingLogComponent,
+    ShipperListModelComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -158,7 +160,7 @@ import { LogFilesService } from './services/LogFilesService';
     ],
   bootstrap: [AppComponent],
   entryComponents: [LoginComponent, AlertDialogComponent, SummaryDialogComponent, ConfirmationDialogComponent, AddressEditModelComponent,
-    AddressBookEditModelComponent]
+    AddressBookEditModelComponent, ShipperListModelComponent]
 
 })
 export class AppModule { }

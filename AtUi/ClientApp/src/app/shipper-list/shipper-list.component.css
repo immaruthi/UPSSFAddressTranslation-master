@@ -6,7 +6,7 @@
 
 mat-table {
   width: 100%;
-  min-width: 1650px;
+  min-width: 1800px;
   padding: 0;
 }
 
@@ -51,10 +51,30 @@ mat-header-row {
   color: white;
 }
 
-/*Postal Code*/
+/*Action*/
 mat-cell:nth-child(1) {
   margin-left: 0px 15px 0px 15px;
   padding: 20px;
+  width: 100px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Action*/
+mat-header-cell:nth-child(1) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 100px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Postal Code*/
+mat-cell:nth-child(2) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
   width: 150px;
   flex: none;
   float: left;
@@ -62,7 +82,7 @@ mat-cell:nth-child(1) {
 }
 
 /*Postal Code*/
-mat-header-cell:nth-child(1) {
+mat-header-cell:nth-child(2) {
   margin-left: 0px 15px 0px 15px;
   padding: 20px;
   width: 150px;
@@ -72,7 +92,7 @@ mat-header-cell:nth-child(1) {
 }
 
 /*Shipping Address*/
-mat-cell:nth-child(7) {
+mat-cell:nth-child(8) {
   padding: 0px 15px 0px 15px;
   width: 325px;
   flex: none;
@@ -81,7 +101,7 @@ mat-cell:nth-child(7) {
 }
 
 /*Shipping Address*/
-mat-header-cell:nth-child(7) {
+mat-header-cell:nth-child(8) {
   padding: 0px 15px 0px 15px;
   width: 325px;
   flex: none;
@@ -90,7 +110,7 @@ mat-header-cell:nth-child(7) {
 }
 
 /*Shipping Company*/
-mat-cell:nth-child(4) {
+mat-cell:nth-child(5) {
   padding: 0px 15px 0px 15px;
   width: 200px;
   flex: none;
@@ -99,7 +119,7 @@ mat-cell:nth-child(4) {
 }
 
 /*Shipping Company*/
-mat-header-cell:nth-child(4) {
+mat-header-cell:nth-child(5) {
   padding: 0px 15px 0px 15px;
   width: 200px;
   flex: none;
@@ -108,7 +128,7 @@ mat-header-cell:nth-child(4) {
 }
 
 /*Sending Contact*/
-mat-cell:nth-child(6) {
+mat-cell:nth-child(7) {
   padding: 0px 15px 0px 15px;
   width: 200px;
   flex: none;
@@ -117,7 +137,7 @@ mat-cell:nth-child(6) {
 }
 
 /*Sending Contact*/
-mat-header-cell:nth-child(6) {
+mat-header-cell:nth-child(7) {
   padding: 0px 15px 0px 15px;
   width: 200px;
   flex: none;
