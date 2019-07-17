@@ -88,10 +88,10 @@ namespace UPS.Application.CustomLogs
             jsonText = "[" + jsonText + "]";
 
 
-            var logDataModels = JsonConvert.DeserializeObject<LogDataModel[]>(jsonText);
+            var logDataModels = JsonConvert.DeserializeObject<LogDataModel[]>(jsonText).OrderByDescending(date => date.dateTime);
 
 
-            return logDataModels;
+            return logDataModels.ToArray();
         }
 
         public string[] GetLogFileList()
