@@ -556,7 +556,7 @@ namespace UPS.ServicesDataRepository
 
                         //shipmentDataRequest.DIM_WGT_DE = null; //Convert.ToDecimal(excelDataObject.S_dimwei);
                         shipmentDataRequest.DST_CTY_TE = excelDataObject.S_dstcity;
-                        shipmentDataRequest.DST_PSL_TE = excelDataObject.S_dstpsl;
+                        shipmentDataRequest.DST_PSL_TE = excelDataObject.S_dstpsl != null && excelDataObject.S_dstpsl.Contains('.') ? excelDataObject.S_dstpsl.Split('.')[0] : excelDataObject.S_dstpsl;
                         shipmentDataRequest.EXP_SLC_CD = excelDataObject.S_expslic;
                         shipmentDataRequest.EXP_TYP = "顺丰即日";//excelDataObject.S_expslic;
                         shipmentDataRequest.IMP_NR = excelDataObject.S_impr;
@@ -611,6 +611,7 @@ namespace UPS.ServicesDataRepository
                             shipmentDataRequest.SMT_STA_TE = Convert.ToString(Enums.ATStatus.Translated);
                             shipmentDataRequest.CON_NR = translatedAddress.Confidence;
                             shipmentDataRequest.ACY_TE = translatedAddress.Accuracy;
+                            shipmentDataRequest.TranslationScore = translatedAddress.TranslationScore;
                         }
                         else
                         {

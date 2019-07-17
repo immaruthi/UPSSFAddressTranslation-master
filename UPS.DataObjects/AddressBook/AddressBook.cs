@@ -7,7 +7,7 @@ using System.Text;
 namespace UPS.DataObjects.AddressBook
 {
     [Table("ADR-BK")]
-   public class AddressBook
+    public class AddressBook
     {
         [Key]
         [Column("ID")]
@@ -15,7 +15,7 @@ namespace UPS.DataObjects.AddressBook
         [Column("SMT-ID")]
         public int? ShipmentId { get; set; }
         [Column("BAT-ID-TE")]
-       
+
         public string BatchId { get; set; }
         [Column("ORG-TE")]
         [StringLength(50)]
@@ -32,7 +32,7 @@ namespace UPS.DataObjects.AddressBook
         [Column("CSG-ADR-TR")]
         [StringLength(500)]
         public string ConsigneeTranslatedAddress { get; set; }
-     
+
         [Column("CSG-AD1-TE")]
         [StringLength(200)]
         public string Address_One { get; set; }
@@ -104,6 +104,9 @@ namespace UPS.DataObjects.AddressBook
         public DateTime? CreatedDate { get; set; }
         [Column("MDF-DT")]
         public DateTime? ModifiedDate { get; set; }
-    
+        [Column("TR-SCR-NR")]
+        [StringLength(50)]
+        public string TranslationScore{get;set;}
+
     }
 }
