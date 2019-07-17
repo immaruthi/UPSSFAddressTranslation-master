@@ -452,9 +452,8 @@
             try
             {
                 this.context.BulkDelete(shipperCompanyRequests);
-                this.context.Entry(shipperCompanyRequests).State = EntityState.Detached;
-                this.context.SaveChanges();
                 this.response.ShipperCompanies = shipperCompanyRequests;
+                this.response.Success = true;
             }
             catch (Exception ex)
             {
