@@ -59,9 +59,9 @@ namespace AtService.Controllers
 
         [Route("UpdateShipperListById")]
         [HttpPost]
-        public async Task<ActionResult> UpdateShipmentListById([FromBody] ShipperCompanyList shipperCompanyRequest)
+        public async Task<ActionResult> UpdateShipmentListById([FromBody] List<ShipperCompanyList> shipperCompanyRequests)
         {
-            ShipperCompanyResponse shipperCompanyResponse = _shipperCompnayService.UpdateShipper(shipperCompanyRequest);
+            ShipperCompanyResponse shipperCompanyResponse = _shipperCompnayService.UpdateShipper(shipperCompanyRequests);
             try
             {
                 if (shipperCompanyResponse.Success)

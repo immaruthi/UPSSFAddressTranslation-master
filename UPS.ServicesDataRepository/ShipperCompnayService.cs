@@ -417,26 +417,26 @@
             return this.response;
         }
 
-        public ShipperCompanyResponse UpdateShipper(ShipperCompanyList shipperCompanyRequest)
+        public ShipperCompanyResponse UpdateShipper(List<ShipperCompanyList> shipperCompanyRequest)
         {
             try
             {
-                ShipperCompanyList data = this.context.shipperCompanyRequests.Where(s => s.ID == shipperCompanyRequest.ID).FirstOrDefault();
-                data.ID = shipperCompanyRequest.ID;
-                data.SPC_ADR_TE = shipperCompanyRequest.SPC_ADR_TE;
-                data.SPC_CPY_TE = shipperCompanyRequest.SPC_CPY_TE;
-                data.SPC_CST_ID_TE = shipperCompanyRequest.SPC_CST_ID_TE;
-                data.SPC_CTC_PH = shipperCompanyRequest.SPC_CTC_PH;
-                data.SPC_CTR_TE = shipperCompanyRequest.SPC_CTR_TE;
-                data.SPC_CTY_TE = shipperCompanyRequest.SPC_CTY_TE;
-                data.SPC_NA = shipperCompanyRequest.SPC_NA;
-                data.SPC_PSL_CD_TE = shipperCompanyRequest.SPC_PSL_CD_TE;
-                data.SPC_SLIC_NR = shipperCompanyRequest.SPC_SLIC_NR;
-                data.SPC_SND_PTY_CTC_TE = shipperCompanyRequest.SPC_SND_PTY_CTC_TE;
-                this.context.shipperCompanyRequests.Update(data);
-                this.context.Entry(shipperCompanyRequest).State = EntityState.Detached;
-                this.context.SaveChanges();
-                this.response.ShipperCompany = this.context.shipperCompanyRequests.Where(s => s.ID == shipperCompanyRequest.ID).FirstOrDefault();
+                //ShipperCompanyList data = this.context.shipperCompanyRequests.Where(s => s.ID == shipperCompanyRequest.ID).FirstOrDefault();
+                //data.ID = shipperCompanyRequest.ID;
+                //data.SPC_ADR_TE = shipperCompanyRequest.SPC_ADR_TE;
+                //data.SPC_CPY_TE = shipperCompanyRequest.SPC_CPY_TE;
+                //data.SPC_CST_ID_TE = shipperCompanyRequest.SPC_CST_ID_TE;
+                //data.SPC_CTC_PH = shipperCompanyRequest.SPC_CTC_PH;
+                //data.SPC_CTR_TE = shipperCompanyRequest.SPC_CTR_TE;
+                //data.SPC_CTY_TE = shipperCompanyRequest.SPC_CTY_TE;
+                //data.SPC_NA = shipperCompanyRequest.SPC_NA;
+                //data.SPC_PSL_CD_TE = shipperCompanyRequest.SPC_PSL_CD_TE;
+                //data.SPC_SLIC_NR = shipperCompanyRequest.SPC_SLIC_NR;
+                //data.SPC_SND_PTY_CTC_TE = shipperCompanyRequest.SPC_SND_PTY_CTC_TE;
+                this.context.BulkUpdate(shipperCompanyRequest);
+                //this.context.Entry(shipperCompanyRequest).State = EntityState.Detached;
+                //this.context.SaveChanges();
+                this.response.ShipperCompanies = shipperCompanyRequest;
                 this.response.Success = true;
             }
             catch (Exception ex)
