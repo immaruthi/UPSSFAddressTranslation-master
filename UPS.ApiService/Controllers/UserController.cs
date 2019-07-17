@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Http;
 using UPS.DataObjects.UserData;
@@ -23,6 +24,7 @@ namespace AtService.Controllers
         /// <returns></returns>
         
         [HttpPost]
+        [Authorize(Roles = Constants.Role.Admin)]
         [Route("create")]
         public IActionResult CreatedUser(User user)
         {

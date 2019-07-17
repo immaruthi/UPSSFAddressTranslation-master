@@ -14,6 +14,13 @@ export class AuthInterceptor implements HttpInterceptor {
       let currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
       if (currentUser != null && currentUser.token) {
+        debugger;
+        let jwt = currentUser.token;
+      let jwtData = jwt.split('.')[1]
+      let decodedJwtJsonData = window.atob(jwtData)
+      let decodedJwtData = JSON.parse(decodedJwtJsonData);
+      let roles = decodedJwtData.roles; 
+
         request = request.clone({
           setHeaders: {
             Authorization: `Bearer ${currentUser.token}`,

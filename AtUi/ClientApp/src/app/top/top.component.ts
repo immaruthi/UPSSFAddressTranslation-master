@@ -24,6 +24,11 @@ export class TopComponent implements OnInit {
   }
   ngOnInit() {
     let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    let jwt = currentUser.token;
+    let jwtData = jwt.split('.')[1]
+    let decodedJwtJsonData = window.atob(jwtData)
+    let decodedJwtData = JSON.parse(decodedJwtJsonData);
+    let roles = decodedJwtData.roles;
     this.userName = currentUser != null ? currentUser.UserName : '';
   }
 }
