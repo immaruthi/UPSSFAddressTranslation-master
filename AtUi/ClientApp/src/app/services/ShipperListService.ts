@@ -12,4 +12,16 @@ export class ShipperListService {
   public getShipperListData(): Observable<any> {
     return this.httpService.makeGetRequest('api/ShipperList/GetShipmentList');
   }
+
+  public updateShipperList(data: any): Observable<any> {
+    return this.httpService.makePostRequest('', data);
+  }
+
+  public addShipperData(data: any): Observable<any> {
+    return this.httpService.makePostRequest('', data);
+  }
+
+  public deleteShipperList(data: any): Observable<any> {
+    return this.httpService.makePostRequest('', data);
+  }
 }

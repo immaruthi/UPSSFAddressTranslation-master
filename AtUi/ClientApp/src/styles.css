@@ -119,6 +119,13 @@ mat-flat-button {
   font-size: 20px;
 }
 
+.pageTitle {
+  text-align: center;
+  background-color: khaki;
+  font-weight: bold;
+  font-style: italic;
+}
+
 /*.mat-header-row {
   background: #f2f2f2;
 
