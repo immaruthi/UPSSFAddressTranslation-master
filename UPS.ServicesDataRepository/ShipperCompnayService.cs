@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using EFCore.BulkExtensions;
     using Microsoft.EntityFrameworkCore;
     using NLog.Targets.Wrappers;
     using UPS.DataObjects.Shipment;
@@ -434,15 +435,14 @@
             return this.response;
         }
 
-        public ShipperCompanyResponse DeleteShipper(ShipperCompanyList shipperCompanyRequest)
+        public ShipperCompanyResponse DeleteShipper(List<ShipperCompanyList> shipperCompanyRequests)
         {
             try
             {
-                ShipperCompanyList data = this.context.shipperCompanyRequests.Where(s => s.ID == shipperCompanyRequest.ID).FirstOrDefault();
-                this.context.Remove(shipperCompanyRequest);
-                this.context.Entry(shipperCompanyRequest).State = EntityState.Detached;
+                this.context.BulkDelete(shipperCompanyRequests);
+                this.context.Entry(shipperCompanyRequests).State = EntityState.Detached;
                 this.context.SaveChanges();
-                this.response.ShipperCompany = shipperCompanyRequest;
+                this.response.ShipperCompanies = shipperCompanyRequests;
             }
             catch (Exception ex)
             {
