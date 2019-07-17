@@ -14,7 +14,6 @@ export class AuthInterceptor implements HttpInterceptor {
       let currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
       if (currentUser != null && currentUser.token) {
-        debugger;
         let jwt = currentUser.token;
       let jwtData = jwt.split('.')[1]
       let decodedJwtJsonData = window.atob(jwtData)
