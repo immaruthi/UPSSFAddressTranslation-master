@@ -37,7 +37,7 @@ export class LogGridComponent implements OnInit {
             apiType: data.apiType,
             logRequest: data.logInformation.logRequest,
             logResponse: data.logInformation.logResponse,
-            logException: data.logInformation.logException
+            logException: data.logInformation.logException ? data.logInformation.logException.message : ''
           })
       }
       this.dataSource.data = this.logGrid;

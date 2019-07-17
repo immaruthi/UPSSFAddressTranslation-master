@@ -5,7 +5,7 @@
     <div>
       <span class="content-span full-width">Processed Shipments to SF : {{data.message.successCount}}</span>
       <br />
-      <div class="table-responsive">
+      <div *ngIf="data.message.successList.length > 0" class="table-responsive">
         <table class="table">
           <thead>
             <tr>
@@ -26,18 +26,22 @@
     <div>
       <span class="content-span full-width">Failed Shipments to SF : {{data.message.failedCount}}</span>
       <br />
-      <div class="table-responsive">
+      <div *ngIf="data.message.failedList.length > 0" class="table-responsive">
         <table class="table">
           <thead>
             <tr>
               <th>S.No</th>
-              <th>Details</th>
+              <th>Package Number</th>
+              <th>Error Code</th>
+              <th>Error Description</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let FailList of data.message.failedList; let i = index">
               <td> {{i+1}} </td>
-              <td> {{FailList}} </td>
+              <td> {{FailList.PKGNR}} </td>
+              <td> {{FailList.ErrorCode}} </td>
+              <td> {{FailList.ErrorEN}} </td>
             </tr>
           </tbody>
         </table>

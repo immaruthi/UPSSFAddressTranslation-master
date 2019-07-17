@@ -31,7 +31,7 @@ namespace AtService.Controllers
         }
 
         [Route("ReadFileData")]
-        [HttpGet("[action]")]
+        [HttpGet]
         public async Task<ActionResult> ReadLogFileData(string filePath)
         {
             return Ok(iCustomLog.ReadLogFileData(filePath));

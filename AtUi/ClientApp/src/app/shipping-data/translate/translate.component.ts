@@ -219,11 +219,12 @@ export class TranslateComponent implements OnInit {
 
         this.shippingService.UpdateShippingAddress(details).subscribe((response: any) => {
           console.log(response)
-          shipmentDetailToUpdate.shP_ADR_TR_TE = response.shipmentDataRequest.shP_ADR_TR_TE;
-          shipmentDetailToUpdate.coD_TE = response.shipmentDataRequest.coD_TE;
-          shipmentDetailToUpdate.smT_STA_NR = response.shipmentDataRequest.smT_STA_NR;
-          shipmentDetailToUpdate.smT_STA_TE = response.shipmentDataRequest.smT_STA_TE;
-          shipmentDetailToUpdate.poD_RTN_SVC = response.shipmentDataRequest.poD_RTN_SVC;
+          //shipmentDetailToUpdate.shP_ADR_TR_TE = response.shipmentDataRequest.shP_ADR_TR_TE;
+          //shipmentDetailToUpdate.coD_TE = response.shipmentDataRequest.coD_TE;
+          //shipmentDetailToUpdate.smT_STA_NR = response.shipmentDataRequest.smT_STA_NR;
+          //shipmentDetailToUpdate.smT_STA_TE = response.shipmentDataRequest.smT_STA_TE;
+          //shipmentDetailToUpdate.poD_RTN_SVC = response.shipmentDataRequest.poD_RTN_SVC;
+          this.getTranslateData(this.WorkflowID);
           this.notificationService.openSuccessMessageNotification("Data Updated Successfully.");
         },
           error => this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText))
@@ -271,7 +272,7 @@ export class TranslateComponent implements OnInit {
             this.getTranslateData(this.WorkflowID);
             this.selection.clear();
           } else {
-            this.notificationService.openErrorMessageNotification(response);
+            this.notificationService.openErrorMessageNotification("Invalid exception occured, please contact administrator.");
           }
         } else {
           this.notificationService.openErrorMessageNotification("Invalid exception occured, please contact administrator.");

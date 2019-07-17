@@ -29,14 +29,21 @@ namespace UPS.Application.CustomLogs
 
         private static void LogInit()
         {
-            filePath = Path.Combine(HostingEnvironment.WebRootPath, string.Format(Configuration["APILogger:logFileName"], System.DateTime.Now.ToString("yyyyMMdd")));
-
-            if (!File.Exists(filePath))
+            try
             {
-                using (FileStream fs = File.Create(filePath))
-                {
+                filePath = Path.Combine(HostingEnvironment.WebRootPath, string.Format(Configuration["APILogger:logFileName"], System.DateTime.Now.ToString("yyyyMMdd")));
 
+                if (!File.Exists(filePath))
+                {
+                    using (FileStream fs = File.Create(filePath))
+                    {
+
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                WriteEntry(ex);
             }
         }
 

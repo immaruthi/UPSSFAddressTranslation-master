@@ -52,6 +52,8 @@
         public string coD_TE { get; set; }
         public string poD_RTN_SVC { get; set; }
 
+        public string spC_CST_ID_TE { get; set; }
+
     }
 
     public class SFCreateOrderServiceRequest
@@ -65,6 +67,8 @@
         public string BaseURI { get; set; }
 
         public string RequestURI { get; set; }
+
+        public string Checkcode { get; set; }
 
     }
 
