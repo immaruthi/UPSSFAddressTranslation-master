@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using EFCore.BulkExtensions;
-using ExcelFileRead;
-using Microsoft.EntityFrameworkCore;
-using UPS.DataObjects.AddressBook;
-using UPS.DataObjects.CST_DTL;
-using UPS.DataObjects.Shipment;
-using UPS.DataObjects.UserData;
-using UPS.ServicesAsyncActions;
-using UPS.ServicesDataRepository.Common;
-using UPS.ServicesDataRepository.DataContext;
-
-namespace UPS.ServicesDataRepository
+﻿namespace UPS.ServicesDataRepository
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using EFCore.BulkExtensions;
+    using ExcelFileRead;
+    using Microsoft.EntityFrameworkCore;
+    using UPS.DataObjects.AddressBook;
+    using UPS.DataObjects.CST_DTL;
+    using UPS.DataObjects.Shipment;
+    using UPS.ServicesAsyncActions;
+    using UPS.ServicesDataRepository.Common;
+    using UPS.ServicesDataRepository.DataContext;
+
     public class ShipmentService : IShipmentAsync
     {
         private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
