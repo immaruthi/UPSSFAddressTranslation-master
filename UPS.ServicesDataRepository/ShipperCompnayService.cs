@@ -21,6 +21,7 @@
         {
             this.context = applicationDbContext;
             this.optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            this.optionsBuilder.EnableSensitiveDataLogging(true);
             this.response = new ShipperCompanyResponse();
             this.response.Success = true;
         }
@@ -97,7 +98,8 @@
                                 s.SVL_NR,
                                 s.WGT_UNT_TE,
                                 s.POD_RTN_SVC,
-                                c.SPC_CST_ID_TE
+                                c.SPC_CST_ID_TE,
+                                s.TR_SCR_NR
                             }).ToList();
 
                     foreach (var shipmentData in anonymousList)
@@ -173,6 +175,7 @@
                         shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
                         shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
                         shipmentDataRequest.SPC_CST_ID_TE = shipmentData.SPC_CST_ID_TE;
+                        shipmentDataRequest.TR_SCR_NR = shipmentData.TR_SCR_NR;
 
                         shipmentDataRequests.Add(shipmentDataRequest);
                     }
@@ -256,7 +259,8 @@
                                 s.SVL_NR,
                                 s.WGT_UNT_TE,
                                 s.POD_RTN_SVC,
-                                c.SPC_CST_ID_TE
+                                c.SPC_CST_ID_TE,
+                                s.TR_SCR_NR
                             }).ToList();
 
                     foreach (var shipmentData in anonymousList)
@@ -332,6 +336,7 @@
                         shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
                         shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
                         shipmentDataRequest.SPC_CST_ID_TE = shipmentData.SPC_CST_ID_TE;
+                        shipmentDataRequest.TR_SCR_NR = shipmentData.TR_SCR_NR;
 
                         shipmentDataRequests.Add(shipmentDataRequest);
                     }
@@ -418,6 +423,7 @@
                 ShipperCompanyList data = this.context.shipperCompanyRequests.Where(s => s.ID == shipperCompanyRequest.ID).FirstOrDefault();
                 this.context.Update(shipperCompanyRequest);
                 this.context.SaveChanges();
+                this.context.Entry(shipperCompanyRequest).State = EntityState.Detached;
                 this.response.ShipperCompany = shipperCompanyRequest;
             }
             catch (Exception ex)
@@ -434,6 +440,7 @@
             {
                 ShipperCompanyList data = this.context.shipperCompanyRequests.Where(s => s.ID == shipperCompanyRequest.ID).FirstOrDefault();
                 this.context.Remove(shipperCompanyRequest);
+                this.context.Entry(shipperCompanyRequest).State = EntityState.Detached;
                 this.context.SaveChanges();
                 this.response.ShipperCompany = shipperCompanyRequest;
             }

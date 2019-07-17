@@ -99,7 +99,8 @@ namespace UPS.ServicesDataRepository
                             s.SPC_SLIC_NR,
                             s.SVL_NR,
                             s.WGT_UNT_TE,
-                            s.POD_RTN_SVC
+                            s.POD_RTN_SVC,
+                            s.TR_SCR_NR
                         }).ToList();
 
                 foreach (var shipmentData in anonymousList)
@@ -174,6 +175,7 @@ namespace UPS.ServicesDataRepository
                     shipmentDataRequest.CON_NR = shipmentData.CON_NR;
                     shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
                     shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
+                    shipmentDataRequest.TR_SCR_NR = shipmentData.TR_SCR_NR;
 
                     shipmentDataRequests.Add(shipmentDataRequest);
                 }
@@ -234,6 +236,7 @@ namespace UPS.ServicesDataRepository
             shipmentDataRequest.CON_NR = shipmentData.CON_NR;
             shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
             shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
+            shipmentDataRequest.TR_SCR_NR = shipmentData.TR_SCR_NR;
             this.context.shipmentDataRequests.Add(shipmentDataRequest);
             this.context.Entry(shipmentDataRequest).State = EntityState.Added;
             this.context.SaveChanges();
