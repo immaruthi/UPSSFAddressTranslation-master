@@ -140,25 +140,26 @@ export class ShipperListComponent implements OnInit {
           return;
         }
 
-        //const details = {
-        //  ID: ShipperDetails.id,
-        //  SPC_PSL_CD_TE: updatedDetails.PostalCode,
-        //  SPC_CTY_TE: updatedDetails.City
-        //  SPC_CTR_TE: updatedDetails.Centre
-        //  SPC_CPY_TE: updatedDetails.ConsigneeAddress
-        //  SPC_NA: updatedDetails.ConsigneeAddress
-        //  SPC_SND_PTY_CTC_TE: updatedDetails.ConsigneeAddress
-        //  SPC_ADR_TE: updatedDetails.ConsigneeAddress
-        //  SPC_CTC_PH: updatedDetails.ConsigneeAddress
-        //  SPC_SLIC_NR: updatedDetails.ConsigneeAddress
-        //  SPC_CST_ID_TE: updatedDetails.ConsigneeAddress
-        //}
+        const details = {
+          ID: ShipperDetails.id,
+          SPC_PSL_CD_TE: updatedDetails.PostalCode,
+          SPC_CTY_TE: updatedDetails.City,
+          SPC_CTR_TE: updatedDetails.Centre,
+          SPC_CPY_TE: updatedDetails.ShippingCompany,
+          SPC_NA: updatedDetails.ShippingName,
+          SPC_SND_PTY_CTC_TE: updatedDetails.SendingPartyContact,
+          SPC_ADR_TE: updatedDetails.ShippingAddress,
+          SPC_CTC_PH: updatedDetails.Contact,
+          SPC_SLIC_NR: updatedDetails.SLICNumber,
+          SPC_CST_ID_TE: updatedDetails.CustomerID
+        }
 
         this.shipperListService.updateShipperList(details).subscribe((response: any) => {
+          debugger;
           if (response) {
             if (response.success === true) {
-              ShipperDetails.consigneeTranslatedAddress = response.addressBookData.consigneeTranslatedAddress;
-              ShipperDetails.modifiedDate = response.addressBookData.modifiedDate;
+              //ShipperDetails.consigneeTranslatedAddress = response.addressBookData.consigneeTranslatedAddress;
+              //ShipperDetails.modifiedDate = response.addressBookData.modifiedDate;
               this.notificationService.openSuccessMessageNotification("Data Updated Successfully.");
             } else {
               this.notificationService.openErrorMessageNotification(response.OperatonExceptionMessage);

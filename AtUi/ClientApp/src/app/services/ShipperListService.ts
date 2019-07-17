@@ -14,7 +14,7 @@ export class ShipperListService {
   }
 
   public updateShipperList(data: any): Observable<any> {
-    return this.httpService.makePostRequest('', data);
+    return this.httpService.makePostRequest('api/ShipperList/UpdateShipperListById', data);
   }
 
   public addShipperData(data: any): Observable<any> {
