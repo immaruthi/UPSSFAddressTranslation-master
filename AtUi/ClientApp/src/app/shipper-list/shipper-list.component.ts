@@ -107,6 +107,7 @@ export class ShipperListComponent implements OnInit {
     let ShipperDetails = shipperData;
     const dialogRef = this.dialog.open(ShipperListModelComponent, {
       data: {
+        ID: shipperData.id,
         PostalCode: shipperData.spC_PSL_CD_TE,
         City: shipperData.spC_CTY_TE,
         Centre: shipperData.spC_CTR_TE,
@@ -154,12 +155,20 @@ export class ShipperListComponent implements OnInit {
           SPC_CST_ID_TE: updatedDetails.CustomerID
         }
 
-        this.shipperListService.updateShipperList(details).subscribe((response: any) => {
+        this.shipperListService.updateShipperList([details]).subscribe((response: any) => {
           debugger;
           if (response) {
             if (response.success === true) {
-              //ShipperDetails.consigneeTranslatedAddress = response.addressBookData.consigneeTranslatedAddress;
-              //ShipperDetails.modifiedDate = response.addressBookData.modifiedDate;
+              shipperData.spC_PSL_CD_TE = response.shipperCompany.spC_PSL_CD_TE,
+                shipperData.spC_CTY_TE = response.shipperCompany.spC_CTY_TE,
+                shipperData.spC_CTR_TE = response.shipperCompany.spC_CTR_TE,
+                shipperData.spC_CPY_TE = response.shipperCompany.spC_CPY_TE,
+                shipperData.spC_NA = response.shipperCompany.spC_NA,
+                shipperData.spC_SND_PTY_CTC_TE = response.shipperCompany.spC_SND_PTY_CTC_TE,
+                shipperData.spC_ADR_TE = response.shipperCompany.spC_ADR_TE,
+                shipperData.spC_CTC_PH = response.shipperCompany.spC_CTC_PH,
+                shipperData.spC_SLIC_NR = response.shipperCompany.spC_SLIC_NR,
+                shipperData.spC_CST_ID_TE = response.shipperCompany.spC_CST_ID_TE
               this.notificationService.openSuccessMessageNotification("Data Updated Successfully.");
             } else {
               this.notificationService.openErrorMessageNotification(response.OperatonExceptionMessage);
