@@ -76,7 +76,12 @@ mat-header-row {
 }
 
 .glyphicon.glyphicon-plus-sign {
-  font-size: 45px;
+  font-size: 40px;
+  color: #351C15;
+}
+
+.glyphicon.glyphicon-trash {
+  font-size: 30px;
   color: #351C15;
 }
 

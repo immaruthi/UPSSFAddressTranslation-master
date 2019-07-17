@@ -8,6 +8,7 @@ import { DataService } from '../services/data.service';
 import { Observable } from 'rxjs';
 import { ShipperListModelComponent } from './shipper-list-model/shipper-list-model.component';
 import { NotificationService } from '../services/NotificationService';
+import { DialogService } from '../services/dialog.service';
 
 @Component({
   selector: 'app-shipper-list',
@@ -29,7 +30,7 @@ export class ShipperListComponent implements OnInit {
   filterText: string = '';
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
-    public dialog: MatDialog, public dataService: DataService,
+    public dialog: MatDialog, public dataService: DataService, private dialogService: DialogService,
     private shipperListService: ShipperListService, private notificationService: NotificationService) {
   }
 
@@ -99,8 +100,40 @@ export class ShipperListComponent implements OnInit {
   }
 
   addNew() {
-    const dialogRef = this.dialog.open(ShipperListModelComponent, { data: { New: true } });
+    const dialogRef = this.dialog.open(ShipperListModelComponent, { data: { NEW: true} });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        let NewDetails = this.dataService.getDialogData();
+
+        const data = {
+          SPC_PSL_CD_TE: NewDetails.PostalCode,
+          SPC_CTY_TE: NewDetails.City,
+          SPC_CTR_TE: NewDetails.Centre,
+          SPC_CPY_TE: NewDetails.ShippingCompany,
+          SPC_NA: NewDetails.ShippingName,
+          SPC_SND_PTY_CTC_TE: NewDetails.SendingPartyContact,
+          SPC_ADR_TE: NewDetails.ShippingAddress,
+          SPC_CTC_PH: NewDetails.Contact,
+          SPC_SLIC_NR: NewDetails.SLICNumber,
+          SPC_CST_ID_TE: NewDetails.CustomerID
+        }
+        this.shipperListService.addShipperData(data).subscribe((response: any) => {
+          if (response) {
+            if (response.success === true) {
+              this.notificationService.openSuccessMessageNotification("Data Added Successfully.");
+              this.getShipperListData();
+            } else {
+              this.notificationService.openErrorMessageNotification(response.operatonExceptionMessage);
+            }
+          } else {
+            this.notificationService.openErrorMessageNotification("Invalid exception occured, please contact administrator.");
+          }
+
+        },
+          error => this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText))
+      }
+    });
   }
 
   startEdit(i: number, shipperData: any) {
@@ -117,7 +150,8 @@ export class ShipperListComponent implements OnInit {
         ShippingAddress: shipperData.spC_ADR_TE,
         Contact: shipperData.spC_CTC_PH,
         SLICNumber: shipperData.spC_SLIC_NR,
-        CustomerID: shipperData.spC_CST_ID_TE
+        CustomerID: shipperData.spC_CST_ID_TE,
+        NEW: false,
       }
     });
 
@@ -156,22 +190,21 @@ export class ShipperListComponent implements OnInit {
         }
 
         this.shipperListService.updateShipperList([details]).subscribe((response: any) => {
-          debugger;
           if (response) {
             if (response.success === true) {
-              shipperData.spC_PSL_CD_TE = response.shipperCompany.spC_PSL_CD_TE,
-                shipperData.spC_CTY_TE = response.shipperCompany.spC_CTY_TE,
-                shipperData.spC_CTR_TE = response.shipperCompany.spC_CTR_TE,
-                shipperData.spC_CPY_TE = response.shipperCompany.spC_CPY_TE,
-                shipperData.spC_NA = response.shipperCompany.spC_NA,
-                shipperData.spC_SND_PTY_CTC_TE = response.shipperCompany.spC_SND_PTY_CTC_TE,
-                shipperData.spC_ADR_TE = response.shipperCompany.spC_ADR_TE,
-                shipperData.spC_CTC_PH = response.shipperCompany.spC_CTC_PH,
-                shipperData.spC_SLIC_NR = response.shipperCompany.spC_SLIC_NR,
-                shipperData.spC_CST_ID_TE = response.shipperCompany.spC_CST_ID_TE
+              shipperData.spC_PSL_CD_TE = response.shipperCompanies[0].spC_PSL_CD_TE,
+                shipperData.spC_CTY_TE = response.shipperCompanies[0].spC_CTY_TE,
+                shipperData.spC_CTR_TE = response.shipperCompanies[0].spC_CTR_TE,
+                shipperData.spC_CPY_TE = response.shipperCompanies[0].spC_CPY_TE,
+                shipperData.spC_NA = response.shipperCompanies[0].spC_NA,
+                shipperData.spC_SND_PTY_CTC_TE = response.shipperCompanies[0].spC_SND_PTY_CTC_TE,
+                shipperData.spC_ADR_TE = response.shipperCompanies[0].spC_ADR_TE,
+                shipperData.spC_CTC_PH = response.shipperCompanies[0].spC_CTC_PH,
+                shipperData.spC_SLIC_NR = response.shipperCompanies[0].spC_SLIC_NR,
+                shipperData.spC_CST_ID_TE = response.shipperCompanies[0].spC_CST_ID_TE
               this.notificationService.openSuccessMessageNotification("Data Updated Successfully.");
             } else {
-              this.notificationService.openErrorMessageNotification(response.OperatonExceptionMessage);
+              this.notificationService.openErrorMessageNotification(response.operatonExceptionMessage);
             }
           } else {
             this.notificationService.openErrorMessageNotification("Invalid exception occured, please contact administrator.");
@@ -181,5 +214,35 @@ export class ShipperListComponent implements OnInit {
           error => this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText))
       }
     });
+  }
+
+  delete() {
+    const checkedCount = this.selection.selected.length;
+    if (checkedCount <= 0) {
+      this.dialogService.openAlertDialog('Please select minimum one row to Delete.');
+    } else {
+      const dialogRef = this.dialogService.openConfirmationDialog('Are you sure, you want to delete all the selected records ?');
+
+      dialogRef.afterClosed().subscribe(data => {
+        if (data === true) {
+          const dataForDelete = this.selection.selected; // Any changes can do here for sending array
+          this.deleteShipmentData(dataForDelete);
+        } else {
+
+        }
+      })
+    }
+  }
+
+  deleteShipmentData(data: any) {
+    this.shipperListService.deleteShipperList(data).subscribe((response: any) => {
+      if (response != null && response.success === true) {
+        this.getShipperListData();
+        this.notificationService.openSuccessMessageNotification("Deleted Successfully");
+      } else {
+        this.notificationService.openErrorMessageNotification("Invalid exception occured, please contact administrator.");
+      }
+    },
+      error => this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText));
   }
 }

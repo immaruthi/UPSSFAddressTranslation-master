@@ -1,3 +1,7 @@
+<div>
+  <h1 *ngIf="data.NEW === true"> Add New Shipper Data</h1>
+  <h1 *ngIf="data.NEW === false"> Edit Shipper Data</h1>
+</div>
 <mat-dialog-content class="container">
   <form (ngSubmit)="submit" #formControl="ngForm" class="example-form">
     <mat-form-field class="example-full-width">

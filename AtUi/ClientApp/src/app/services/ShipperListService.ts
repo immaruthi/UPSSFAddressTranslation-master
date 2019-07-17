@@ -18,10 +18,10 @@ export class ShipperListService {
   }
 
   public addShipperData(data: any): Observable<any> {
-    return this.httpService.makePostRequest('', data);
+    return this.httpService.makePostRequest('api/ShipperList/CreateShipmentList', data);
   }
 
   public deleteShipperList(data: any): Observable<any> {
-    return this.httpService.makePostRequest('', data);
+    return this.httpService.makePostRequest('api/ShipperList/DeleteShipperListById', data);
   }
 }

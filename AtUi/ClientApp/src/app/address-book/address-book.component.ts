@@ -109,7 +109,7 @@ export class AddressBookComponent implements OnInit {
               addressBookDetails.modifiedDate = response.addressBookData.modifiedDate;
               this.notificationService.openSuccessMessageNotification("Data Updated Successfully.");
             } else {
-              this.notificationService.openErrorMessageNotification(response.OperatonExceptionMessage);
+              this.notificationService.openErrorMessageNotification(response.operatonExceptionMessage);
             }
           } else {
             this.notificationService.openErrorMessageNotification("Invalid exception occured, please contact administrator.");
