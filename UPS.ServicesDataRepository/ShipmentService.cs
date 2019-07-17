@@ -611,6 +611,7 @@ namespace UPS.ServicesDataRepository
                             shipmentDataRequest.SMT_STA_TE = Convert.ToString(Enums.ATStatus.Translated);
                             shipmentDataRequest.CON_NR = translatedAddress.Confidence;
                             shipmentDataRequest.ACY_TE = translatedAddress.Accuracy;
+                            shipmentDataRequest.TranslationScore = translatedAddress.TranslationScore;
                         }
                         else
                         {
