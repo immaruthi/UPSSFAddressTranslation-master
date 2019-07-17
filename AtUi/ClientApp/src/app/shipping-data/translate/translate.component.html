@@ -86,6 +86,11 @@
         <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Translated Address </mat-header-cell>
         <mat-cell *matCellDef="let element" class="cell"> {{element.shP_ADR_TR_TE}} </mat-cell>
       </ng-container>
+
+      <ng-container matColumnDef="translation_score" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Translation Score </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.translationScore}} </mat-cell>
+      </ng-container>
       <ng-container matColumnDef="shP_CTC_TE" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> SHP Contact </mat-header-cell>
         <mat-cell *matCellDef="let element" class="cell"> {{element.shP_CTC_TE}} </mat-cell>
@@ -142,6 +147,7 @@
         <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Consignee Phone </mat-header-cell>
         <mat-cell *matCellDef="let element" class="cell"> {{element.pH_NR}} </mat-cell>
       </ng-container>
+
       <ng-container matColumnDef="poD_RTN_SVC" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Extra Service </mat-header-cell>
         <mat-cell *matCellDef="let element" class="cell"> {{PODoptions[element?.poD_RTN_SVC!=null ?element.poD_RTN_SVC:0].value}} </mat-cell>
