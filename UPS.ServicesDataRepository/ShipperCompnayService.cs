@@ -422,10 +422,10 @@
             try
             {
                 ShipperCompanyList data = this.context.shipperCompanyRequests.Where(s => s.ID == shipperCompanyRequest.ID).FirstOrDefault();
-                this.context.Update(shipperCompanyRequest);
+                this.context.Update(data);
                 this.context.SaveChanges();
-                this.context.Entry(shipperCompanyRequest).State = EntityState.Detached;
-                this.response.ShipperCompany = shipperCompanyRequest;
+                this.context.Entry(data).State = EntityState.Detached;
+                this.response.ShipperCompany = data;
             }
             catch (Exception ex)
             {
