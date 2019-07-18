@@ -155,7 +155,19 @@
 
                     quincusTranslatedAddressResponse.ResponseData.Add(JsonConvert.DeserializeObject<GetBatchResponseForAddressTranslation>(response));
                     quincusTranslatedAddressResponse.Response = true;
+                    quincusTranslatedAddressResponse.ResponseData.ForEach(record =>
+                    {
+                        record.addresses.ForEach(address =>
+                        {
+                            address.rcV_CPY_TE =
+                              Convert.ToString(
+                                  quincusAddressTranslationRequest.shipmentWorkFlowRequests
+                                  .FirstOrDefault(_ =>
+                                    Convert.ToString(_.pkG_NR_TE) == address.id)
+                                  .rcV_CPY_TE);
+                        });
 
+                    });
 
 
                     AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()

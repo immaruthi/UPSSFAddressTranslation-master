@@ -539,7 +539,8 @@
                         rcV_ADR_TE = _.RCV_ADR_TE,
                         dsT_CTY_TE = _.DST_CTY_TE,
                         wfL_ID = _.WFL_ID,
-                        pkG_NR_TE = _.PKG_NR_TE
+                        pkG_NR_TE = _.PKG_NR_TE,
+                        rcV_CPY_TE = _.RCV_CPY_TE
                     }).ToList();
 
                 this._quincusAddressTranslationRequest.shipmentWorkFlowRequests = shipmentWorkFlowRequests;
@@ -553,22 +554,31 @@
 
                     List<string> batchIds = new List<string>();
 
+                    Dictionary<string, string> shipmentDetailsDictionary = new Dictionary<string, string>();
                     quincusTranslatedAddressResponse.ResponseData.ForEach(batches =>
                     {
                         batchIds.Add(batches.batch_id);
+
+                        batches.addresses.ForEach(address =>
+                        {
+                            shipmentDetailsDictionary.Add(address.id, address.rcV_CPY_TE);
+                        });
+                       
                     });
 
                     var QuincusResponse = QuincusService.GetGeoCodeReponseFromQuincus(new UPS.Quincus.APP.Request.QuincusGeoCodeDataRequest()
                     {
                         endpoint = configuration["Quincus:GeoCodeEndPoint"],
                         batchIDList = batchIds,
-                        quincusTokenData = quincusTokenDataResponse.quincusTokenData
+                        quincusTokenData = quincusTokenDataResponse.quincusTokenData,
+                        ShipmentDetailsDictionary = shipmentDetailsDictionary
                     });
 
                     if (QuincusResponse.ResponseStatus)
                     {
+                        
                         // Insert Address into AddressBook
-                        _addressBookService.InsertAddress(QuincusResponse.QuincusReponseDataList);
+                        _addressBookService.InsertAddress(QuincusResponse.QuincusReponseDataList,shipmentDetailsDictionary);
                         QuincusResponse.QuincusReponseDataList.ForEach(datalist =>
                         {
                             List<Geocode> geocodes = (List<Geocode>)((QuincusReponseData)datalist).geocode;
