@@ -248,7 +248,7 @@
                             s.SVL_NR,
                             s.WGT_UNT_TE,
                             s.POD_RTN_SVC,
-                            s.TR_SCR_NR
+                            s.TranslationScore
                         }).ToList();
 
                 foreach (var shipmentData in anonymousList)
@@ -323,7 +323,7 @@
                     shipmentDataRequest.CON_NR = shipmentData.CON_NR;
                     shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
                     shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
-                    shipmentDataRequest.TR_SCR_NR = shipmentData.TR_SCR_NR;
+                    shipmentDataRequest.TranslationScore = shipmentData.TranslationScore;
 
                     shipmentDataRequests.Add(shipmentDataRequest);
                 }
