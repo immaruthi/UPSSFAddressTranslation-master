@@ -99,7 +99,7 @@
                             s.SVL_NR,
                             s.WGT_UNT_TE,
                             s.POD_RTN_SVC,
-                            s.TR_SCR_NR
+                            s.TranslationScore
                         }).ToList();
 
                 foreach (var shipmentData in anonymousList)
@@ -174,7 +174,7 @@
                     shipmentDataRequest.CON_NR = shipmentData.CON_NR;
                     shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
                     shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
-                    shipmentDataRequest.TR_SCR_NR = shipmentData.TR_SCR_NR;
+                    shipmentDataRequest.TranslationScore = shipmentData.TranslationScore;
 
                     shipmentDataRequests.Add(shipmentDataRequest);
                 }
@@ -384,7 +384,7 @@
             shipmentDataRequest.CON_NR = shipmentData.CON_NR;
             shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
             shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
-            shipmentDataRequest.TR_SCR_NR = shipmentData.TR_SCR_NR;
+            shipmentDataRequest.TranslationScore = shipmentData.TranslationScore;
             this.context.shipmentDataRequests.Add(shipmentDataRequest);
             this.context.Entry(shipmentDataRequest).State = EntityState.Added;
             this.context.SaveChanges();
@@ -785,6 +785,7 @@
                             shipmentDataRequest.SMT_STA_TE = Convert.ToString(Enums.ATStatus.Translated);
                             shipmentDataRequest.CON_NR = translatedAddress.Confidence;
                             shipmentDataRequest.ACY_TE = translatedAddress.Accuracy;
+                            shipmentDataRequest.TranslationScore = translatedAddress.TranslationScore;
                         }
                         else
                         {

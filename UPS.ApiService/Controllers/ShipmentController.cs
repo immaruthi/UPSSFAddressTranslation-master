@@ -583,7 +583,7 @@
                                 shipmentDataRequest.SHP_ADR_TR_TE = geocode.translated_adddress;
                                 shipmentDataRequest.ACY_TE = geocode.accuracy;
                                 shipmentDataRequest.CON_NR = geocode.confidence;
-                                shipmentDataRequest.TR_SCR_NR = geocode.translation_score_number;
+                                shipmentDataRequest.TranslationScore = geocode.translation_score;
 
                                 if (
                                             !string.IsNullOrEmpty(geocode.translated_adddress)
