@@ -96,24 +96,6 @@ mat-header-cell:nth-child(1) {
 }
 
 /*Consignee Address*/
-mat-cell:nth-child(3) {
-  padding: 0px 15px 0px 15px;
-  width: 300px;
-  flex: none;
-  float: left;
-  font-size: 12px;
-}
-
-/*Consignee Address*/
-mat-header-cell:nth-child(3) {
-  padding: 0px 15px 0px 15px;
-  width: 300px;
-  flex: none;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-/*Consignee Translated Address*/
 mat-cell:nth-child(4) {
   padding: 0px 15px 0px 15px;
   width: 300px;
@@ -122,7 +104,7 @@ mat-cell:nth-child(4) {
   font-size: 12px;
 }
 
-/*Consignee Translated Address*/
+/*Consignee Address*/
 mat-header-cell:nth-child(4) {
   padding: 0px 15px 0px 15px;
   width: 300px;
@@ -131,25 +113,25 @@ mat-header-cell:nth-child(4) {
   font-weight: bold;
 }
 
-/*Created Date*/
-mat-cell:nth-child(8) {
+/*Consignee Translated Address*/
+mat-cell:nth-child(5) {
   padding: 0px 15px 0px 15px;
-  width: 180px;
+  width: 300px;
   flex: none;
   float: left;
   font-size: 12px;
 }
 
-/*Created Date*/
-mat-header-cell:nth-child(8) {
+/*Consignee Translated Address*/
+mat-header-cell:nth-child(5) {
   padding: 0px 15px 0px 15px;
-  width: 180px;
+  width: 300px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
 }
 
-/*Modified Date*/
+/*Created Date*/
 mat-cell:nth-child(9) {
   padding: 0px 15px 0px 15px;
   width: 180px;
@@ -158,8 +140,26 @@ mat-cell:nth-child(9) {
   font-size: 12px;
 }
 
-/*Modified Date*/
+/*Created Date*/
 mat-header-cell:nth-child(9) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Modified Date*/
+mat-cell:nth-child(10) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Modified Date*/
+mat-header-cell:nth-child(10) {
   padding: 0px 15px 0px 15px;
   width: 180px;
   flex: none;

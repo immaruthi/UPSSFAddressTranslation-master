@@ -21,7 +21,7 @@ export class AddressBookComponent implements OnInit {
   //  ['spC_PSL_CD_TE', 'spC_CTY_TE', 'spC_CTR_TE', 'spC_CPY_TE', 'spC_NA', 'spC_SND_PTY_CTC_TE', 'spC_ADR_TE', 'spC_CTC_PH', 'spC_SLIC_NR',];
 
   displayedColumns =
-    ['actions', 'consigneeAddressId', 'consigneeAddress', 'consigneeTranslatedAddress', 'translation_score',
+    ['actions', 'consigneeAddressId','consigneeCompany', 'consigneeAddress', 'consigneeTranslatedAddress', 'translation_score',
       'confidence', 'accuracy', 'createdDate', 'modifiedDate', 'organization', 'batchId', 'statusCode', 'address_One', 'address_Two',
       'address_Three', 'address_Four', 'road', 'city', 'region', 'country', 'addressTypeFlag', 'longitude',
       'latitude', 'geoCode', 'geoCodeError', 'buldingNumber', 'buildingName', 'unit', 'area', 'bat_Id',

@@ -27,6 +27,9 @@ namespace UPS.DataObjects.Common
         public string addressline3 { get; set; }
         public string addressline4 { get; set; }
         public string address_type_flag { get; set; }
+
+        //Custom field 
+        public string rcV_CPY_TE { get; set; }
     }
 
     public class Geocode
