@@ -209,7 +209,7 @@ export class TranslateComponent implements OnInit {
         }
 
         const details = {
-          SHP_ADR_TR_TE: updatedDetails.shP_ADR_TR_TE,
+          SHP_ADR_TR_TE: updatedDetails.shP_ADR_TR_TE.trim(),
           COD_TE: updatedDetails.coD_TE,
           WFL_ID: shipmentDetails.wfL_ID,
           ID: shipmentDetails.id,
