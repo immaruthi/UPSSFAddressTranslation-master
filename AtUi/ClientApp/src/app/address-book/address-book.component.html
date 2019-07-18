@@ -22,8 +22,8 @@
         </button>
       </mat-cell>
     </ng-container>
-    <ng-container matColumnDef="consigneeCompanyName" class="container">
-      <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Consignee Company Name </mat-header-cell>
+    <ng-container matColumnDef="consigneeCompany" class="container">
+      <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Consignee Company </mat-header-cell>
       <mat-cell *matCellDef="let element, let i = index" class="cell"> {{element.consigneeCompany}} </mat-cell>
     </ng-container>
     <ng-container matColumnDef="batchId" class="container">
@@ -42,10 +42,10 @@
       <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Consignee Address ID </mat-header-cell>
       <mat-cell *matCellDef="let element" class="cell"> {{element.consigneeAddressId}} </mat-cell>
     </ng-container>
-    <ng-container matColumnDef="consigneeCompany" class="container">
+    <!--<ng-container matColumnDef="consigneeCompany" class="container">
       <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Consignee Company </mat-header-cell>
       <mat-cell *matCellDef="let element" class="cell"> {{element.consigneeCompany}} </mat-cell>
-    </ng-container>
+    </ng-container>-->
     <ng-container matColumnDef="consigneeAddress" class="container">
       <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Consignee Address </mat-header-cell>
       <mat-cell *matCellDef="let element" class="cell"> {{element.consigneeAddress}} </mat-cell>
