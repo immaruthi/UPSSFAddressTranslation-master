@@ -76,14 +76,14 @@ mat-header-row {
 }
 
 /*Action*/
-  mat-cell:nth-child(1) {
-    margin-left: 0px 15px 0px 15px;
-    padding: 20px;
-    width: 100px;
-    flex: none;
-    float: left;
-    font-size: 12px;
-  }
+mat-cell:nth-child(1) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 100px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
 
 /*Action*/
 mat-header-cell:nth-child(1) {
