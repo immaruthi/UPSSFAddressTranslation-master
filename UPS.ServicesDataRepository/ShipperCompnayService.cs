@@ -100,7 +100,7 @@
                                 s.WGT_UNT_TE,
                                 s.POD_RTN_SVC,
                                 c.SPC_CST_ID_TE,
-                                s.TR_SCR_NR
+                                s.TranslationScore
                             }).ToList();
 
                     foreach (var shipmentData in anonymousList)
@@ -176,7 +176,7 @@
                         shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
                         shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
                         shipmentDataRequest.SPC_CST_ID_TE = shipmentData.SPC_CST_ID_TE;
-                        shipmentDataRequest.TR_SCR_NR = shipmentData.TR_SCR_NR;
+                        shipmentDataRequest.TranslationScore = shipmentData.TranslationScore;
 
                         shipmentDataRequests.Add(shipmentDataRequest);
                     }
@@ -261,7 +261,7 @@
                                 s.WGT_UNT_TE,
                                 s.POD_RTN_SVC,
                                 c.SPC_CST_ID_TE,
-                                s.TR_SCR_NR
+                                s.TranslationScore
                             }).ToList();
 
                     foreach (var shipmentData in anonymousList)
@@ -337,7 +337,7 @@
                         shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
                         shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
                         shipmentDataRequest.SPC_CST_ID_TE = shipmentData.SPC_CST_ID_TE;
-                        shipmentDataRequest.TR_SCR_NR = shipmentData.TR_SCR_NR;
+                        shipmentDataRequest.TranslationScore = shipmentData.TranslationScore;
 
                         shipmentDataRequests.Add(shipmentDataRequest);
                     }
