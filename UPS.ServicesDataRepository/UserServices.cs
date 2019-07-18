@@ -22,6 +22,7 @@ namespace UPS.ServicesDataRepository
             this.context = context;
             this.entityValidationService = entityValidationService;
         }
+
         public string CreateUser(User user)
         {
             string responseMessage = string.Empty;
@@ -47,7 +48,7 @@ namespace UPS.ServicesDataRepository
                                 user.Cities != null
                                 && user.Cities.Any())
                             {
-                                responseMessage = AddUserCities(user, userInfo);
+                                responseMessage = AddUserCities(user, userInfo.ID);
                             }
                           
                         }
@@ -82,7 +83,7 @@ namespace UPS.ServicesDataRepository
                     {
                         IsAcive = true,
                         RoleId = user.Role,
-                        UserId = userInfo.ID??0,
+                        UserId = userInfo.ID,
                     }
                 };
 
@@ -97,7 +98,7 @@ namespace UPS.ServicesDataRepository
            
         }
 
-        private string AddUserCities(User user, User userInfo)
+        private string AddUserCities(User user, int userId)
         {
             try
             {
@@ -107,7 +108,7 @@ namespace UPS.ServicesDataRepository
                     UserCityMapping userCityMapping =
                     new UserCityMapping()
                     {
-                        UserId = userInfo.ID ?? -1,
+                        UserId = userId,
                         City = city,
                         CreatedDate = DateTime.Now,
                         State = true
@@ -138,15 +139,94 @@ namespace UPS.ServicesDataRepository
             throw new NotImplementedException();
         }
 
-        public UserDataResponse GetUserData()
+        public async Task<List<User>> GetAllUser()
         {
-            throw new NotImplementedException();
+            List<UserCityMapping> userCityMappings = this.context.UserCityMapping.ToList();
+
+            List<User> users =
+                await
+                    (from user in this.context.UserData
+                     from roles in this.context.UserRoles
+                         .Where(role => role.UserId == user.ID).DefaultIfEmpty()
+                     select new User()
+                     {
+                         ID = user.ID,
+                         FirstName = user.FirstName,
+                         LastName = user.LastName,
+                         Email = user.Email,
+                         UserId = user.UserId,
+                         CreatedBy = user.CreatedBy,
+                         CreatedDate = user.CreatedDate,
+                         UpdatedBy = user.UpdatedBy,
+                         UpdatedDate = user.UpdatedDate,
+                         IsActive = user.IsActive,
+                         Role = roles == null ? 0 : roles.RoleId,
+                         Cities = userCityMappings
+                                  .Where(_ => _.UserId == user.ID)
+                                  .Select(_ => _.City).ToList()
+
+                     }).ToListAsync();
+
+            return users;
+        }
+        private void UpdateUserCities(User user)
+        {
+            try
+            {
+                List<UserCityMapping> existingCityMapping =
+                    this.context.UserCityMapping
+                    .Where(_ => _.UserId == user.ID) 
+                    .ToList();
+
+                this.context.BulkDelete(existingCityMapping);
+
+                this.AddUserCities(user, user.ID);
+
+            }
+            catch (Exception exception)
+            {
+              
+            }
+
+        }
+        public async Task<int> UpdateUser(User user, int loggedUserId)
+        {
+            User existingUser =
+              await this.context.UserData
+                        .FirstOrDefaultAsync(
+                            (User usr) =>
+                            usr.ID == user.ID);
+
+            if (existingUser != null)
+            {
+                existingUser.FirstName = user.FirstName;
+                existingUser.LastName = user.LastName;
+                existingUser.Email = user.Email;
+                existingUser.UpdatedBy = loggedUserId;
+                existingUser.UpdatedDate = DateTime.Now;
+
+                this.context.BulkUpdateAsync(new List<User>() { existingUser });
+
+                UserRole userRole =
+                    this.context.UserRoles
+                     .FirstOrDefault(
+                        (UserRole role) => role.UserId == user.ID);
+
+                if (!(userRole != null && userRole.RoleId == user.Role))
+                {
+                    userRole.RoleId = user.Role;
+                    this.context.BulkUpdateAsync(new List<UserRole>() { userRole });
+
+                }
+
+                this.UpdateUserCities(user);
+            }
+
+            return existingUser.ID;
         }
 
-        public UserDataResponse UpdateUser(User userData)
+        public UserDataResponse GetUserData()
         {
-            string connectionString = AtServicesContext.ConnectionString;
-
             throw new NotImplementedException();
         }
     }

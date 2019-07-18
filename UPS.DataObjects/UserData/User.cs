@@ -10,7 +10,7 @@ namespace UPS.DataObjects.UserData
     {
         [Key]
         [Column("ID")]
-        public int? ID { get; set; }
+        public int ID { get; set; }
         [Column("USR-FST-NA")]
         [StringLength(50)]
         public string FirstName { get; set; }
