@@ -126,7 +126,8 @@ namespace UPS.ServicesDataRepository
                                  ShipmentId = null, //address?.id != null ? Convert.ToInt32(address?.id) : -1,
                                  StatusCode = quincusReponseData?.status_code,
                                  Unit = geocode?.unit,
-                                 VerifyMatch = geocode?.verify_match
+                                 VerifyMatch = geocode?.verify_match,
+                                 TranslationScore = geocode?.translation_score
                              }).ToList();
 
                         List<AddressBook> validEntity = this.entityValidationService.FilterValidEntity<AddressBook>(addressBooks);

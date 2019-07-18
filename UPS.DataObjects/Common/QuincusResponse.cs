@@ -54,7 +54,7 @@ namespace UPS.DataObjects.Common
         public string corrected_postcode { get; set; }
         public string translated_adddress { get; set; }
         public string corrected_house_number { get; set; }
-        public string translation_score_number { get; set; }
+        public string translation_score { get; set; }
     }
 
     public class QuincusReponseData
