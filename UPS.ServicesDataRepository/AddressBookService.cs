@@ -157,8 +157,8 @@ namespace UPS.ServicesDataRepository
                            !this.context.AddressBooks
                                .Select(
                                (AddressBook x) =>
-                                   x.ConsigneeAddress.ToLower()).ToList()
-                               .Contains(ad.address.ToLower()))
+                                   x.ConsigneeAddress.Replace(" ","").ToLower().Trim()).ToList()
+                                   .Contains(ad.address.Replace(" ", "").ToLower().Trim()))
                     .GroupBy(_=>_.address)
                     .Select(x=>x.First())
                     .ToList();
