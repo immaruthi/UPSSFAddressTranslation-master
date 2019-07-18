@@ -21,7 +21,7 @@ export class AddressBookComponent implements OnInit {
   //  ['spC_PSL_CD_TE', 'spC_CTY_TE', 'spC_CTR_TE', 'spC_CPY_TE', 'spC_NA', 'spC_SND_PTY_CTC_TE', 'spC_ADR_TE', 'spC_CTC_PH', 'spC_SLIC_NR',];
 
   displayedColumns =
-    ['actions', 'shipmentId', 'consigneeAddressId', 'consigneeAddress', 'consigneeTranslatedAddress',
+    ['actions', 'shipmentId', 'consigneeAddressId', 'consigneeAddress', 'consigneeTranslatedAddress', 'translation_score',
       'confidence', 'accuracy', 'createdDate', 'modifiedDate', 'organization', 'batchId', 'statusCode', 'address_One', 'address_Two',
       'address_Three', 'address_Four', 'road', 'city', 'region', 'country', 'addressTypeFlag', 'longitude',
       'latitude', 'geoCode', 'geoCodeError', 'buldingNumber', 'buildingName', 'unit', 'area', 'bat_Id',
@@ -98,7 +98,8 @@ export class AddressBookComponent implements OnInit {
 
         const details = {
           id: addressBookDetails.id,
-          consigneeTranslatedAddress: updatedDetails.ConsigneeTranslatedAddress
+          consigneeTranslatedAddress: updatedDetails.ConsigneeTranslatedAddress,
+          consigneeAddress: updatedDetails.ConsigneeAddress
         }
 
         this.addressBookService.updateAddressBook(details).subscribe((response: any) => {

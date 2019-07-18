@@ -22,7 +22,7 @@ import { ExcelService } from '../../services/ExcelExport';
 
 export class TranslateComponent implements OnInit {
   displayedColumns =
-    ['select', 'actions', 'wfL_ID', 'smT_STA_NR', 'pkG_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'coN_NR', 'acY_TE',
+    ['select', 'actions', 'wfL_ID', 'smT_STA_NR', 'pkG_NR_TE', 'rcV_CPY_TE', 'rcV_ADR_TE', 'shP_ADR_TR_TE', 'translation_score', 'coN_NR', 'acY_TE',
       'dsT_CTY_TE', 'dsT_PSL_TE', 'csG_CTC_TE', 'pH_NR', 'fsT_INV_LN_DES_TE', 'shP_CPY_NA', 'shP_ADR_TE', 'shP_CTC_TE', 'shP_PH_TE',
       'orG_CTY_TE', 'orG_PSL_CD', 'imP_SLC_TE', 'coD_TE', 'poD_RTN_SVC'
     ];
@@ -219,11 +219,12 @@ export class TranslateComponent implements OnInit {
 
         this.shippingService.UpdateShippingAddress(details).subscribe((response: any) => {
           console.log(response)
-          shipmentDetailToUpdate.shP_ADR_TR_TE = response.shipmentDataRequest.shP_ADR_TR_TE;
-          shipmentDetailToUpdate.coD_TE = response.shipmentDataRequest.coD_TE;
-          shipmentDetailToUpdate.smT_STA_NR = response.shipmentDataRequest.smT_STA_NR;
-          shipmentDetailToUpdate.smT_STA_TE = response.shipmentDataRequest.smT_STA_TE;
-          shipmentDetailToUpdate.poD_RTN_SVC = response.shipmentDataRequest.poD_RTN_SVC;
+          //shipmentDetailToUpdate.shP_ADR_TR_TE = response.shipmentDataRequest.shP_ADR_TR_TE;
+          //shipmentDetailToUpdate.coD_TE = response.shipmentDataRequest.coD_TE;
+          //shipmentDetailToUpdate.smT_STA_NR = response.shipmentDataRequest.smT_STA_NR;
+          //shipmentDetailToUpdate.smT_STA_TE = response.shipmentDataRequest.smT_STA_TE;
+          //shipmentDetailToUpdate.poD_RTN_SVC = response.shipmentDataRequest.poD_RTN_SVC;
+          this.getTranslateData(this.WorkflowID);
           this.notificationService.openSuccessMessageNotification("Data Updated Successfully.");
         },
           error => this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText))

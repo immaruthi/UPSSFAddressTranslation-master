@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Net.Http;
 using UPS.DataObjects.UserData;
 using UPS.ServicesAsyncActions;
+using UPS.ServicesDataRepository.Common;
 
 namespace AtService.Controllers
 {
@@ -20,11 +24,17 @@ namespace AtService.Controllers
         /// <returns></returns>
         
         [HttpPost]
+        [Authorize(Roles = Constants.Role.Admin)]
         [Route("create")]
         public IActionResult CreatedUser(User user)
         {
             string userResponse = this.userService.CreateUser(user);
-            return Ok(userResponse);
+            
+            JsonResult response = new JsonResult(userResponse);
+            response.StatusCode =
+                userResponse.Equals(ResponseConstant.Validation_Error) || userResponse.Equals(ResponseConstant.Create_Error)
+                ?(int)HttpStatusCode.InternalServerError: (int)HttpStatusCode.OK;
+            return response;
         }
     }
 }

@@ -2,15 +2,20 @@
 {
     public static class Enums
     {
-       public enum ATStatus
+        public enum ATStatus
         {
             Uploaded = 0,
             Curated = 1,
             Translated = 2,
             Completed = 3,
-            Inactive =4
+            Inactive = 4
         }
-        
+
+        public enum Roles
+        {
+            Admin = 1,
+            OperationUser = 2
+        }
     }
 
 }

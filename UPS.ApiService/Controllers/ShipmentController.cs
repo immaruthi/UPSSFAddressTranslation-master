@@ -135,7 +135,8 @@
                             }
                             else
                             {
-                                iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                                Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                                 {
                                     apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes),7),
                                     dateTime = System.DateTime.Now,
@@ -145,14 +146,16 @@
                                         LogRequest = "Excel Uploaded",
                                         LogResponse = JsonConvert.SerializeObject(excelExtensionReponse)
                                     }
-                                });
+                                }));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                                 return Ok(excelExtensionReponse);
                             }
                         }
                     }
                 }
 
-                iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                 {
                     apiTypes = UPS.DataObjects.LogData.APITypes.ExcelUpload,
                     apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 7),
@@ -163,7 +166,8 @@
                         LogRequest = "Excel Uploaded",
                         LogResponse = JsonConvert.SerializeObject(shipmentDataResponse)
                     }
-                });
+                }));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
                 return Ok(shipmentDataResponse);
             }
@@ -213,7 +217,7 @@
                     addressAuditLogRequest.AFR_ADR = shipmentDataResponse.ShipmentDataRequest.SHP_ADR_TR_TE;
                     addressAuditLogRequest.UPD_BY = userId;
                     addressAuditLogRequest.UPD_FRM = "Shipment";
-                    addressAuditLogRequest.UPD_DT = DateTime.Now;
+                    addressAuditLogRequest.UPD_DT = DateTime.Parse(DateTime.Now.ToString()).ToLocalTime();
                     AddressAuditLogResponse addressAuditLogResponse = addressAuditLogService.Insert(addressAuditLogRequest);
                     if (addressAuditLogResponse.Success)
                     {
@@ -239,7 +243,8 @@
             workflowDataRequest.WFL_STA_TE = workflowstatus;
             _workflowService.UpdateWorkflowStatusById(workflowDataRequest);
 
-            iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
             {
                 apiTypes = UPS.DataObjects.LogData.APITypes.EFCoreContext,
                 apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 6),
@@ -250,7 +255,8 @@
                     LogRequest = JsonConvert.SerializeObject(shipmentDataRequest),
                     LogResponse = JsonConvert.SerializeObject(shipmentDataResponse)
                 }
-            });
+            }));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             return Ok(shipmentDataResponse);
         }
@@ -330,6 +336,7 @@
                     BaseURI = configuration["SFExpress:Base URI"],
                     Checkword = configuration["SFExpress:Checkword"],
                     RequestURI = configuration["SFExpress:Place Order URI"],
+                    Checkcode = configuration["SFExpress:CheckCode"],
                     RequestOrderXMLMessage = XMLMessage,
 
                 };
@@ -355,22 +362,22 @@
 
                         xmlDocument.LoadXml(getSFCreateOrderServiceResponse.OrderResponse);
 
-                        if (xmlDocumentShipmentResponseParser.Contains("8019"))
-                        {
-                            createOrderShipmentResponse.FailedToProcessShipments.Add("Customer order number(" + orderRequest.pkG_NR_TE + ") is already confirmed");
-                        }
-                        else if (xmlDocumentShipmentResponseParser.Contains("8016"))
-                        {
-                            createOrderShipmentResponse.FailedToProcessShipments.Add("Repeat order numbers ( " + orderRequest.pkG_NR_TE + " )");
-                        }
-                        else
-                        {
+                        //if (xmlDocumentShipmentResponseParser.Contains("8019"))
+                        //{
+                        //    createOrderShipmentResponse.FailedToProcessShipments.Add("Customer order number(" + orderRequest.pkG_NR_TE + ") is already confirmed");
+                        //}
+                        //else if (xmlDocumentShipmentResponseParser.Contains("8016"))
+                        //{
+                        //    createOrderShipmentResponse.FailedToProcessShipments.Add("Repeat order numbers ( " + orderRequest.pkG_NR_TE + " )");
+                        //}
+                        //else
+                        //{
                             createOrderShipmentResponse.FailedToProcessShipments.Add(
-                                string.Format("Order ID -> {0} : Error Code -> {1} : Error Information -> {2} ",
+                                string.Format("{0}:{1}:{2}",
                                 orderRequest.pkG_NR_TE,
                                 xmlDocument.GetElementsByTagName("ERROR")[0].Attributes[0].InnerText,
                                 xmlDocument.GetElementsByTagName("ERROR")[0].InnerXml));
-                        }
+                        //}
                     }
                     else
                     {
@@ -401,7 +408,10 @@
             workflowDataRequest.WFL_STA_TE = workflowstatus;
             workflowService.UpdateWorkflowStatusById(workflowDataRequest);
 
-            iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
             {
                 apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
                 apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
@@ -412,7 +422,8 @@
                     LogRequest = JsonConvert.SerializeObject(uIOrderRequestBodyDatas),
                     LogResponse = JsonConvert.SerializeObject(createOrderShipmentResponse)
                 }
-            });
+            }));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             return Ok(createOrderShipmentResponse);
         }
@@ -437,7 +448,8 @@
 
             if (getSFCancelOrderServiceResponse.Response)
             {
-                iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                Task.Run(() => iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                 {
                     apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
                     apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
@@ -448,14 +460,16 @@
                         LogRequest = JsonConvert.SerializeObject(sFOrderXMLRequest),
                         LogResponse = JsonConvert.SerializeObject(getSFCancelOrderServiceResponse)
                     }
-                });
+                }));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
                 return Ok(getSFCancelOrderServiceResponse.OrderResponse);
             }
             else
             {
 
-                iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                 {
                     apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
                     apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
@@ -466,7 +480,8 @@
                         LogRequest = JsonConvert.SerializeObject(sFOrderXMLRequest),
                         LogResponse = null
                     }
-                });
+                }));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
                 //AuditEventEntry.WriteEntry(new Exception(getSFCancelOrderServiceResponse.exception.ToString()));
                 return Ok(getSFCancelOrderServiceResponse.exception);
@@ -556,6 +571,7 @@
                                 shipmentDataRequest.SHP_ADR_TR_TE = geocode.translated_adddress;
                                 shipmentDataRequest.ACY_TE = geocode.accuracy;
                                 shipmentDataRequest.CON_NR = geocode.confidence;
+                                shipmentDataRequest.TR_SCR_NR = geocode.translation_score;
 
                                 if (
                                             !string.IsNullOrEmpty(geocode.translated_adddress)
@@ -583,7 +599,8 @@
                             _workflowService.UpdateWorkflowStatusById(workflowDataRequest);
                         });
 
-                        iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                        Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                         {
                             apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
                             apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
@@ -594,13 +611,15 @@
                                 LogRequest = JsonConvert.SerializeObject(QuincusResponse.QuincusReponseDataList),
                                 LogResponse = null
                             }
-                        });
+                        }));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
                         return Ok(QuincusResponse.QuincusReponseDataList);
                     }
                     else
                     {
-                        iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                        Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                         {
                             apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
                             apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
@@ -611,14 +630,16 @@
                                 LogRequest = JsonConvert.SerializeObject(_shipmentDataRequest),
                                 LogResponse = null
                             }
-                        });
+                        }));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                         return Ok(QuincusResponse.Exception);
                     }
 
                 }
                 else
                 {
-                    iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                    Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                     {
                         apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
                         apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes),1),
@@ -629,7 +650,8 @@
                             LogRequest = JsonConvert.SerializeObject(_shipmentDataRequest),
                             LogResponse = null
                         }
-                    });
+                    }));
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                     return Ok(quincusTranslatedAddressResponse.exception);
                 }
 
@@ -688,9 +710,16 @@
 
         [Route("GetMatchedShipmentsWithShipperCompanies")]
         [HttpGet]
-        public ShipmentDataResponse GetMatchedShipmentsWithShipperCompanies(int wid)
+        public IActionResult GetMatchedShipmentsWithShipperCompanies(int wid)
         {
-            shipmentDataResponse = this._shipperCompanyService.SelectMatchedShipmentsWithShipperCompanies(wid);
+            string id = HttpContext.User.Claims.FirstOrDefault(x => x.Type == JwtConstant.UserId)?.Value;
+            if (string.IsNullOrEmpty(id))
+            {
+                return Unauthorized();
+            }
+
+            int userId = Convert.ToInt32(id);
+            shipmentDataResponse = this._shipperCompanyService.SelectMatchedShipmentsWithShipperCompanies(wid, userId);
             if (!shipmentDataResponse.Success)
             {
                 //AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
@@ -700,7 +729,7 @@
             //    var json = JsonConvert.SerializeObject(shipmentDataResponse.Shipments).ToString();
             //    AuditEventEntry.WriteEntry(new Exception(json));
             //}
-            return shipmentDataResponse;
+            return Ok(shipmentDataResponse);
         }
 
         [Route("GetCompletedShipments")]

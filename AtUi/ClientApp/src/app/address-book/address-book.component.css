@@ -30,7 +30,7 @@
 
 mat-table {
   width: 100%;
-  min-width: 5400px;
+  min-width: 5500px;
   padding: 0;
 }
 
@@ -132,24 +132,6 @@ mat-header-cell:nth-child(5) {
 }
 
 /*Created Date*/
-mat-cell:nth-child(8) {
-  padding: 0px 15px 0px 15px;
-  width: 180px;
-  flex: none;
-  float: left;
-  font-size: 12px;
-}
-
-/*Created Date*/
-mat-header-cell:nth-child(8) {
-  padding: 0px 15px 0px 15px;
-  width: 180px;
-  flex: none;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-/*Modified Date*/
 mat-cell:nth-child(9) {
   padding: 0px 15px 0px 15px;
   width: 180px;
@@ -158,8 +140,26 @@ mat-cell:nth-child(9) {
   font-size: 12px;
 }
 
-/*Modified Date*/
+/*Created Date*/
 mat-header-cell:nth-child(9) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Modified Date*/
+mat-cell:nth-child(10) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Modified Date*/
+mat-header-cell:nth-child(10) {
   padding: 0px 15px 0px 15px;
   width: 180px;
   flex: none;

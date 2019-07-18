@@ -134,9 +134,16 @@ namespace UPS.DataObjects.Shipment
         [Column("POD-RTN-SVC")]
         [StringLength(10)]
         public string POD_RTN_SVC { get; set;}
+
+        [Column("TR-SCR-NR")]
+        [StringLength(50)]
+        public string TranslationScore { get; set; }
         [NotMapped]
         public string SMT_STA_TE { get; set; }
         [NotMapped]
         public string SPC_CST_ID_TE { get; set; }
+        [Column("TR-SCR-NR")]
+        [StringLength(50)]
+        public string TR_SCR_NR { get; set; }
     }
 }

@@ -13,6 +13,7 @@ import { Observable } from 'rxjs';
 import { ExcelService } from '../../services/ExcelExport';
 import { MatStepperTab } from '../../shared/enums.service';
 import { NotificationService } from '../../services/NotificationService';
+import { SFErrors } from '../../shared/SFErrorCodes';
 
 
 @Component({
@@ -176,11 +177,22 @@ export class SentToSfComponent implements OnInit {
           const FailedCount = response.failedToProcessShipments.length;
           const FailedList = response.failedToProcessShipments;
 
+          var FailedMainList = [];
+          for (let List of FailedList) {
+            const FailedDetails = List.split(":", 3);
+            const PKGNR = FailedDetails[0];
+            const ErrorCode = FailedDetails[1];
+            const ErrorEN = SFErrors[ErrorCode] ? SFErrors[ErrorCode] : 'Unspecified Error';
+            const ErrorCH = FailedDetails[2];
+            //FailedMainList.push(PKGNR + ' ' + ErrorCode + ' ' + ErrorEN);
+            FailedMainList.push({ 'PKGNR': PKGNR, 'ErrorCode': ErrorCode, 'ErrorEN': ErrorEN});
+          }
+
           const data = {
             successCount: SuccessCount,
             successList: SuccessList,
             failedCount: FailedCount,
-            failedList: FailedList,
+            failedList: FailedMainList,
             screenFrom: 'SendToSF'
           }
           if (response.processedShipments.length > 0) {
@@ -227,17 +239,19 @@ export class SentToSfComponent implements OnInit {
           COD_TE: updatedDetails.coD_TE,
           WFL_ID: shipmentDetails.wfL_ID,
           ID: shipmentDetails.id,
-          POD_RTN_SVC: updatedDetails.poD_RTN_SVC
+          POD_RTN_SVC: updatedDetails.poD_RTN_SVC,
+          RCV_ADR_TE: updatedDetails.rcV_ADR_TE
         }
 
         this.shippingService.UpdateShippingAddress(details).subscribe((response:any) => {
           console.log(response)
 
-          shipmentDetailToUpdate.shP_ADR_TR_TE = response.shipmentDataRequest.shP_ADR_TR_TE;;
-          shipmentDetailToUpdate.coD_TE = response.shipmentDataRequest.coD_TE;
-          shipmentDetailToUpdate.smT_STA_NR = response.shipmentDataRequest.smT_STA_NR;
-          shipmentDetailToUpdate.smT_STA_TE = response.shipmentDataRequest.smT_STA_TE;
-          shipmentDetailToUpdate.poD_RTN_SVC = response.shipmentDataRequest.poD_RTN_SVC;
+          //shipmentDetailToUpdate.shP_ADR_TR_TE = response.shipmentDataRequest.shP_ADR_TR_TE;;
+          //shipmentDetailToUpdate.coD_TE = response.shipmentDataRequest.coD_TE;
+          //shipmentDetailToUpdate.smT_STA_NR = response.shipmentDataRequest.smT_STA_NR;
+          //shipmentDetailToUpdate.smT_STA_TE = response.shipmentDataRequest.smT_STA_TE;
+          //shipmentDetailToUpdate.poD_RTN_SVC = response.shipmentDataRequest.poD_RTN_SVC;
+          this.getDataForSendToSF(this.WorkflowID);
           this.notificationService.openSuccessMessageNotification("Data Updated Successfully.");
         },
           error => this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText))

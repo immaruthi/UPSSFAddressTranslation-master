@@ -38,11 +38,18 @@ namespace UPS.ServicesDataRepository
 
                         if (
                             userInfo != null
-                            && userInfo.ID > 0
-                            && user.Cities != null
-                            && user.Cities.Any())
+                            && userInfo.ID > 0)
+
                         {
-                            responseMessage = AddUserCities(user, userInfo);
+                           responseMessage = AddRoleForUser(user, userInfo);
+
+                            if (
+                                user.Cities != null
+                                && user.Cities.Any())
+                            {
+                                responseMessage = AddUserCities(user, userInfo);
+                            }
+                          
                         }
                     }
                     catch (Exception exception)
@@ -63,6 +70,31 @@ namespace UPS.ServicesDataRepository
             
 
             return responseMessage;
+        }
+
+        private string AddRoleForUser(User user, User userInfo)
+        {
+            try
+            {
+                List<UserRole> userRole =
+                new List<UserRole>{
+                    new UserRole()
+                    {
+                        IsAcive = true,
+                        RoleId = user.Role,
+                        UserId = userInfo.ID??0,
+                    }
+                };
+
+                this.context.BulkInsert(userRole);
+
+                return ResponseConstant.User_Create_Success;
+            }
+            catch (Exception exception)
+            {
+                return string.Format(ResponseConstant.Create_Error, "Roles");
+            }
+           
         }
 
         private string AddUserCities(User user, User userInfo)

@@ -9,13 +9,13 @@ namespace UPS.ServicesAsyncActions
 {
     public interface IShipperCompanyAsync
     {
-        ShipmentDataResponse SelectMatchedShipmentsWithShipperCompanies(int workflowID);
+        ShipmentDataResponse SelectMatchedShipmentsWithShipperCompanies(int workflowID, int userId=0);
         ShipmentDataResponse SelectCompletedShipments(int workflowID);
         ShipperCompanyResponse SelectShipperCompanies();
         ShipperCompanyResponse GetShipperList();
         ShipperCompanyResponse InsertShipper(ShipperCompanyList shipperCompanyRequest);
-        ShipperCompanyResponse UpdateShipper(ShipperCompanyList shipperCompanyRequest);
-        ShipperCompanyResponse DeleteShipper(ShipperCompanyList shipperCompanyRequest);
+        ShipperCompanyResponse UpdateShipper(List<ShipperCompanyList> shipperCompanyRequests);
+        ShipperCompanyResponse DeleteShipper(List<ShipperCompanyList> shipperCompanyRequests);
         Task<List<string>> GetShipmentCompanyCities();
         
     }

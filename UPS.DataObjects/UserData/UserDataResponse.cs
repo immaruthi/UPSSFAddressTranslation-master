@@ -11,5 +11,6 @@ namespace UPS.DataObjects.UserData
         public bool Success { get; set; }
         public Exception OperationException { get; set; }
         public string Message { get; set; }
+
     }
 }

@@ -59,9 +59,9 @@ namespace AtService.Controllers
 
         [Route("UpdateShipperListById")]
         [HttpPost]
-        public async Task<ActionResult> UpdateShipmentListById([FromBody] ShipperCompanyList shipperCompanyRequest)
+        public async Task<ActionResult> UpdateShipmentListById([FromBody] List<ShipperCompanyList> shipperCompanyRequests)
         {
-            ShipperCompanyResponse shipperCompanyResponse = _shipperCompnayService.UpdateShipper(shipperCompanyRequest);
+            ShipperCompanyResponse shipperCompanyResponse = _shipperCompnayService.UpdateShipper(shipperCompanyRequests);
             try
             {
                 if (shipperCompanyResponse.Success)
@@ -83,9 +83,9 @@ namespace AtService.Controllers
 
         [Route("DeleteShipperListById")]
         [HttpPost]
-        public async Task<ActionResult> DeleteShipmentListById([FromBody] ShipperCompanyList shipperCompanyRequest)
+        public async Task<ActionResult> DeleteShipmentListById([FromBody] List<ShipperCompanyList> shipperCompanyRequests)
         {
-            ShipperCompanyResponse shipperCompanyResponse = _shipperCompnayService.DeleteShipper(shipperCompanyRequest);
+            ShipperCompanyResponse shipperCompanyResponse = _shipperCompnayService.DeleteShipper(shipperCompanyRequests);
             try
             {
                 if (shipperCompanyResponse.Success)

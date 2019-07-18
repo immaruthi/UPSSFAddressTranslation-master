@@ -39,6 +39,8 @@ namespace UPS.ServicesDataRepository
                 userDataResponse.Success = false;
                 if (user != null)
                 {
+                    int? role = this.context.UserRoles.FirstOrDefault(_ => _.UserId == user.ID)?.RoleId;
+                    user.Role = role ??(int)Enums.Roles.OperationUser;
                     userDataResponse.Success = true;
                     userDataResponse.Message = "Valid User";
                 }
@@ -59,7 +61,7 @@ namespace UPS.ServicesDataRepository
             return userDataResponse;
         }
 
-        public string GenerateValidationToken(string userIdText, int? Id)
+        public string GenerateValidationToken(string userIdText,int role, int? Id)
         {
             var signingKey = Convert.FromBase64String(configuration[JwtConstant.SigningKey]);
             var expiryDuration = int.Parse(configuration[JwtConstant.ExpiryInMinutes]);
@@ -75,7 +77,8 @@ namespace UPS.ServicesDataRepository
                     new ClaimsIdentity(new List<Claim>
                     {
                         new Claim(JwtConstant.UserIdText, userIdText),
-                        new Claim(JwtConstant.UserId,Convert.ToString(Id))
+                        new Claim(JwtConstant.UserId,Convert.ToString(Id)),
+                        new Claim(JwtConstant.Role,role==1?Constants.Role.Admin:Constants.Role.User)
                     }),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(signingKey), SecurityAlgorithms.HmacSha256Signature)
             };
