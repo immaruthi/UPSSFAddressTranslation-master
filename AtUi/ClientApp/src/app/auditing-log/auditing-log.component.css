@@ -1,6 +1,6 @@
 .table-div {
   width: 100%;
-  height: calc(100vh - 177.5px);
+  height: calc(100vh - 214px);
   overflow: auto;
 }
 
@@ -49,6 +49,14 @@ mat-header-row {
   top: 0;
   z-index: 1;
   color: white;
+}
+
+.dateSelect {
+  width: 120px;
+}
+
+.mat_datepicker_toggle {
+  font-size: 30px;
 }
 
 /*Shipment ID*/
@@ -120,6 +128,24 @@ mat-cell:nth-child(4) {
 mat-header-cell:nth-child(4) {
   padding: 0px 15px 0px 15px;
   width: 325px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Updated Date*/
+mat-cell:nth-child(6) {
+  padding: 0px 15px 0px 15px;
+  width: 200px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Updated Date*/
+mat-header-cell:nth-child(6) {
+  padding: 0px 15px 0px 15px;
+  width: 200px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
