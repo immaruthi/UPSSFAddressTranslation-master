@@ -47,6 +47,10 @@ mat-header-row {
   background-color: gray;
 }
 
+.mat-row {
+  align-items:unset;
+}
+
 .mat-header-row {
   position: sticky;
   top: 0;
