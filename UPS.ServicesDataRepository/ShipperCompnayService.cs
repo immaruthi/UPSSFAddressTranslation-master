@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using EFCore.BulkExtensions;
     using Microsoft.EntityFrameworkCore;
     using NLog.Targets.Wrappers;
     using UPS.DataObjects.Shipment;
@@ -22,6 +23,7 @@
         {
             this.context = applicationDbContext;
             this.optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            this.optionsBuilder.EnableSensitiveDataLogging(true);
             this.response = new ShipperCompanyResponse();
             this.response.Success = true;
         }
@@ -100,7 +102,8 @@
                                 s.SVL_NR,
                                 s.WGT_UNT_TE,
                                 s.POD_RTN_SVC,
-                                c.SPC_CST_ID_TE
+                                c.SPC_CST_ID_TE,
+                                s.TR_SCR_NR
                             }).ToList();
 
                     foreach (var shipmentData in anonymousList)
@@ -176,6 +179,7 @@
                         shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
                         shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
                         shipmentDataRequest.SPC_CST_ID_TE = shipmentData.SPC_CST_ID_TE;
+                        shipmentDataRequest.TR_SCR_NR = shipmentData.TR_SCR_NR;
 
                         shipmentDataRequests.Add(shipmentDataRequest);
                     }
@@ -272,7 +276,8 @@
                                 s.SVL_NR,
                                 s.WGT_UNT_TE,
                                 s.POD_RTN_SVC,
-                                c.SPC_CST_ID_TE
+                                c.SPC_CST_ID_TE,
+                                s.TR_SCR_NR
                             }).ToList();
 
                     foreach (var shipmentData in anonymousList)
@@ -348,6 +353,7 @@
                         shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
                         shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
                         shipmentDataRequest.SPC_CST_ID_TE = shipmentData.SPC_CST_ID_TE;
+                        shipmentDataRequest.TR_SCR_NR = shipmentData.TR_SCR_NR;
 
                         shipmentDataRequests.Add(shipmentDataRequest);
                     }
@@ -427,14 +433,27 @@
             return this.response;
         }
 
-        public ShipperCompanyResponse UpdateShipper(ShipperCompanyList shipperCompanyRequest)
+        public ShipperCompanyResponse UpdateShipper(List<ShipperCompanyList> shipperCompanyRequest)
         {
             try
             {
-                ShipperCompanyList data = this.context.shipperCompanyRequests.Where(s => s.ID == shipperCompanyRequest.ID).FirstOrDefault();
-                this.context.Update(shipperCompanyRequest);
-                this.context.SaveChanges();
-                this.response.ShipperCompany = shipperCompanyRequest;
+                //ShipperCompanyList data = this.context.shipperCompanyRequests.Where(s => s.ID == shipperCompanyRequest.ID).FirstOrDefault();
+                //data.ID = shipperCompanyRequest.ID;
+                //data.SPC_ADR_TE = shipperCompanyRequest.SPC_ADR_TE;
+                //data.SPC_CPY_TE = shipperCompanyRequest.SPC_CPY_TE;
+                //data.SPC_CST_ID_TE = shipperCompanyRequest.SPC_CST_ID_TE;
+                //data.SPC_CTC_PH = shipperCompanyRequest.SPC_CTC_PH;
+                //data.SPC_CTR_TE = shipperCompanyRequest.SPC_CTR_TE;
+                //data.SPC_CTY_TE = shipperCompanyRequest.SPC_CTY_TE;
+                //data.SPC_NA = shipperCompanyRequest.SPC_NA;
+                //data.SPC_PSL_CD_TE = shipperCompanyRequest.SPC_PSL_CD_TE;
+                //data.SPC_SLIC_NR = shipperCompanyRequest.SPC_SLIC_NR;
+                //data.SPC_SND_PTY_CTC_TE = shipperCompanyRequest.SPC_SND_PTY_CTC_TE;
+                this.context.BulkUpdate(shipperCompanyRequest);
+                //this.context.Entry(shipperCompanyRequest).State = EntityState.Detached;
+                //this.context.SaveChanges();
+                this.response.ShipperCompanies = shipperCompanyRequest;
+                this.response.Success = true;
             }
             catch (Exception ex)
             {
@@ -444,14 +463,13 @@
             return this.response;
         }
 
-        public ShipperCompanyResponse DeleteShipper(ShipperCompanyList shipperCompanyRequest)
+        public ShipperCompanyResponse DeleteShipper(List<ShipperCompanyList> shipperCompanyRequests)
         {
             try
             {
-                ShipperCompanyList data = this.context.shipperCompanyRequests.Where(s => s.ID == shipperCompanyRequest.ID).FirstOrDefault();
-                this.context.Remove(shipperCompanyRequest);
-                this.context.SaveChanges();
-                this.response.ShipperCompany = shipperCompanyRequest;
+                this.context.BulkDelete(shipperCompanyRequests);
+                this.response.ShipperCompanies = shipperCompanyRequests;
+                this.response.Success = true;
             }
             catch (Exception ex)
             {

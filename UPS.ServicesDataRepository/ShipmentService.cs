@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using EFCore.BulkExtensions;
-using ExcelFileRead;
-using Microsoft.EntityFrameworkCore;
-using UPS.DataObjects.AddressBook;
-using UPS.DataObjects.CST_DTL;
-using UPS.DataObjects.Shipment;
-using UPS.DataObjects.UserData;
-using UPS.ServicesAsyncActions;
-using UPS.ServicesDataRepository.Common;
-using UPS.ServicesDataRepository.DataContext;
-
-namespace UPS.ServicesDataRepository
+﻿namespace UPS.ServicesDataRepository
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using EFCore.BulkExtensions;
+    using ExcelFileRead;
+    using Microsoft.EntityFrameworkCore;
+    using UPS.DataObjects.AddressBook;
+    using UPS.DataObjects.CST_DTL;
+    using UPS.DataObjects.Shipment;
+    using UPS.ServicesAsyncActions;
+    using UPS.ServicesDataRepository.Common;
+    using UPS.ServicesDataRepository.DataContext;
+
     public class ShipmentService : IShipmentAsync
     {
         private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
@@ -99,7 +97,8 @@ namespace UPS.ServicesDataRepository
                             s.SPC_SLIC_NR,
                             s.SVL_NR,
                             s.WGT_UNT_TE,
-                            s.POD_RTN_SVC
+                            s.POD_RTN_SVC,
+                            s.TR_SCR_NR
                         }).ToList();
 
                 foreach (var shipmentData in anonymousList)
@@ -174,6 +173,7 @@ namespace UPS.ServicesDataRepository
                     shipmentDataRequest.CON_NR = shipmentData.CON_NR;
                     shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
                     shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
+                    shipmentDataRequest.TR_SCR_NR = shipmentData.TR_SCR_NR;
 
                     shipmentDataRequests.Add(shipmentDataRequest);
                 }
@@ -234,6 +234,7 @@ namespace UPS.ServicesDataRepository
             shipmentDataRequest.CON_NR = shipmentData.CON_NR;
             shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
             shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
+            shipmentDataRequest.TR_SCR_NR = shipmentData.TR_SCR_NR;
             this.context.shipmentDataRequests.Add(shipmentDataRequest);
             this.context.Entry(shipmentDataRequest).State = EntityState.Added;
             this.context.SaveChanges();
@@ -295,7 +296,7 @@ namespace UPS.ServicesDataRepository
             decimal? totalCount = 1;
             try
             {
-                int inprogressCount = this.context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid && ship.SMT_STA_NR == 1 || ship.SMT_STA_NR == 2).Count();
+                int inprogressCount = this.context.shipmentDataRequests.Where(ship => (ship.WFL_ID == wid && ship.SMT_STA_NR == 1) || (ship.WFL_ID == wid && ship.SMT_STA_NR == 2)).Count();
                 int completedCount = this.context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid && ship.SMT_STA_NR == 3).Count();
                 totalCount = this.context.shipmentDataRequests.Where(ship => ship.WFL_ID == wid).Count();
                 if (completedCount == totalCount)

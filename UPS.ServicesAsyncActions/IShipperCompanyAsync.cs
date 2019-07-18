@@ -14,8 +14,8 @@ namespace UPS.ServicesAsyncActions
         ShipperCompanyResponse SelectShipperCompanies();
         ShipperCompanyResponse GetShipperList();
         ShipperCompanyResponse InsertShipper(ShipperCompanyList shipperCompanyRequest);
-        ShipperCompanyResponse UpdateShipper(ShipperCompanyList shipperCompanyRequest);
-        ShipperCompanyResponse DeleteShipper(ShipperCompanyList shipperCompanyRequest);
+        ShipperCompanyResponse UpdateShipper(List<ShipperCompanyList> shipperCompanyRequests);
+        ShipperCompanyResponse DeleteShipper(List<ShipperCompanyList> shipperCompanyRequests);
         Task<List<string>> GetShipmentCompanyCities();
         
     }
