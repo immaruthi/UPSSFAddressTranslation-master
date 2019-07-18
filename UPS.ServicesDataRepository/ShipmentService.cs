@@ -9,6 +9,7 @@
     using UPS.DataObjects.AddressBook;
     using UPS.DataObjects.CST_DTL;
     using UPS.DataObjects.Shipment;
+    using UPS.DataObjects.WR_FLW;
     using UPS.ServicesAsyncActions;
     using UPS.ServicesDataRepository.Common;
     using UPS.ServicesDataRepository.DataContext;
@@ -464,6 +465,9 @@
             ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
             try
             {
+                int? workflowID = shipmentDataRequest?.FirstOrDefault().WFL_ID;
+                int shipmentCount = 0;
+
                 foreach (ShipmentDataRequest request in shipmentDataRequest)
                 {
                     ShipmentDataRequest data = this.context.shipmentDataRequests.Where(s => s.ID == request.ID).FirstOrDefault();
@@ -471,6 +475,26 @@
                     this.context.Entry(request).State = EntityState.Detached;
                     this.context.SaveChanges();
                 }
+
+                if (workflowID.HasValue)
+                {
+                    shipmentCount = this.context.shipmentDataRequests.Where(ship => ship.WFL_ID == workflowID).Count();
+                }
+
+                if (shipmentCount == 0)
+                {
+                    WorkflowService workflowService = new WorkflowService(this.context, this.addressBookService, this.entityValidationService);
+                    WorkflowDataResponse workflowDataResponse = workflowService.DeleteWorkflowById(workflowID.Value);
+                    if(workflowDataResponse.Success)
+                    {
+                        shipmentDataResponse.HasWorkflow = false;
+                    }
+                }
+                else
+                {
+                    shipmentDataResponse.HasWorkflow = true;
+                }
+
                 shipmentDataResponse.Success = true;
                 return shipmentDataResponse;
             }
