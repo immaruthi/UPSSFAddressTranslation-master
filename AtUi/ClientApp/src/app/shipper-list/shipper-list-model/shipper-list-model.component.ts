@@ -55,7 +55,7 @@ export class ShipperListModelComponent {
        }
 
       const details = {
-        ID: this.data.id,
+        ID: this.data.ID,
         SPC_PSL_CD_TE: this.data.PostalCode,
         SPC_CTY_TE: this.data.City,
         SPC_CTR_TE: this.data.Centre,
