@@ -104,6 +104,9 @@ namespace UPS.DataObjects.AddressBook
         public DateTime? CreatedDate { get; set; }
         [Column("MDF-DT")]
         public DateTime? ModifiedDate { get; set; }
-    
+        [Column("TR-SCR-NR")]
+        [StringLength(50)]
+        public string TranslationScore { get; set; }
+
     }
 }
