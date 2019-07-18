@@ -127,7 +127,7 @@ namespace UPS.ServicesDataRepository
                                  StatusCode = quincusReponseData?.status_code,
                                  Unit = geocode?.unit,
                                  VerifyMatch = geocode?.verify_match,
-                                 TranslationScore = geocode?.translation_score
+                                 TR_SCR_NR = geocode?.translation_score
                              }).ToList();
 
                         List<AddressBook> validEntity = this.entityValidationService.FilterValidEntity<AddressBook>(addressBooks);
