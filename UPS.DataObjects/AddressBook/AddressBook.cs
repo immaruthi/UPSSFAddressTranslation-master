@@ -108,5 +108,9 @@ namespace UPS.DataObjects.AddressBook
         [StringLength(50)]
         public string TranslationScore{get;set;}
 
+        [Column("CSG-CPY-NA")]
+        [StringLength(50)]
+        public string ConsigneeCompany { get; set; }
+
     }
 }

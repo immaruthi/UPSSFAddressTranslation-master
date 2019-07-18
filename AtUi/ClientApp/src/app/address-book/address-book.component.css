@@ -95,6 +95,24 @@ mat-header-cell:nth-child(1) {
   font-weight: bold;
 }
 
+/*Consignee Company Name*/
+mat-cell:nth-child(2) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Consignee Company Name*/
+mat-header-cell:nth-child(2) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
 /*Consignee Address*/
 mat-cell:nth-child(3) {
   padding: 0px 15px 0px 15px;
@@ -131,8 +149,26 @@ mat-header-cell:nth-child(4) {
   font-weight: bold;
 }
 
+/*Translation Score*/
+mat-cell:nth-child(7) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Translation Score*/
+mat-header-cell:nth-child(7) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
 /*Created Date*/
-mat-cell:nth-child(8) {
+mat-cell:nth-child(10) {
   padding: 0px 15px 0px 15px;
   width: 180px;
   flex: none;
@@ -141,7 +177,7 @@ mat-cell:nth-child(8) {
 }
 
 /*Created Date*/
-mat-header-cell:nth-child(8) {
+mat-header-cell:nth-child(10) {
   padding: 0px 15px 0px 15px;
   width: 180px;
   flex: none;
@@ -150,7 +186,7 @@ mat-header-cell:nth-child(8) {
 }
 
 /*Modified Date*/
-mat-cell:nth-child(9) {
+mat-cell:nth-child(11) {
   padding: 0px 15px 0px 15px;
   width: 180px;
   flex: none;
@@ -159,9 +195,27 @@ mat-cell:nth-child(9) {
 }
 
 /*Modified Date*/
-mat-header-cell:nth-child(9) {
+mat-header-cell:nth-child(11) {
   padding: 0px 15px 0px 15px;
   width: 180px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Batch ID*/
+mat-cell:nth-child(13) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Batch ID*/
+mat-header-cell:nth-child(13) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
   flex: none;
   font-size: 14px;
   font-weight: bold;

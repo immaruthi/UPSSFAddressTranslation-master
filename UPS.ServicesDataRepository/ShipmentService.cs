@@ -774,8 +774,8 @@
                             addressBooks
                             .FirstOrDefault(
                                 (AddressBook address) =>
-                                    address.ConsigneeAddress.ToLower().Trim().Equals(
-                                    excelDataObject.S_address1.ToLower().Trim(), StringComparison.OrdinalIgnoreCase));
+                                    address.ConsigneeAddress.Replace(" ","").ToLower().Trim().Equals(
+                                    excelDataObject.S_address1.Replace(" ", "").ToLower().Trim(), StringComparison.OrdinalIgnoreCase));
 
                         if (translatedAddress != null)
                         {
