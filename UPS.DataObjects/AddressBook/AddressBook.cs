@@ -106,7 +106,7 @@ namespace UPS.DataObjects.AddressBook
         public DateTime? ModifiedDate { get; set; }
         [Column("TR-SCR-NR")]
         [StringLength(50)]
-        public string TR_SCR_NR { get; set; }
+        public string TranslationScore{get;set;}
 
     }
 }
