@@ -283,6 +283,32 @@
             return shipmentDataRequests;
         }
 
+        //private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
+        [Route("GetAllShipmentData")]
+        [HttpGet]
+        public List<ShipmentDataRequest> GetAllShipmentData(int wid)
+        {
+            //shipmentService = new ShipmentService();
+            List<ShipmentDataRequest> shipmentDataRequests = _shipmentService.GetAllShipment(wid);
+
+            //we need to update the workflow status
+            int? workflowstatus = _shipmentService.SelectShipmentTotalStatusByWorkflowId(wid);
+            WorkflowService workflowService = new WorkflowService(_context, _addressBookService, _entityValidationService);
+            WorkflowDataResponse workflowDataResponse = workflowService.SelectWorkflowById(wid);
+            if (workflowDataResponse.Success && workflowDataResponse.Workflow != null)
+            {
+                if (workflowstatus != workflowDataResponse.Workflow.WFL_STA_TE)
+                {
+                    WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
+                    workflowDataRequest.ID = wid;
+                    workflowDataRequest.WFL_STA_TE = workflowstatus;
+                    workflowService.UpdateWorkflowStatusById(workflowDataRequest);
+                }
+            }
+
+            return shipmentDataRequests;
+        }
+
         [Route("CreateOrderShipment")]
         [HttpPost]
         public async Task<ActionResult> CreateOrderShipment([FromBody] List<UIOrderRequestBodyData> uIOrderRequestBodyDatas)

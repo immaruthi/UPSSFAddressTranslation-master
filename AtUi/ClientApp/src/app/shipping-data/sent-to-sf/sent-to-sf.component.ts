@@ -323,7 +323,11 @@ export class SentToSfComponent implements OnInit {
   deleteData(data: any) {
     this.shippingService.deleteUploadedData(data).subscribe((response: any) => {
       if (response != null && response.success === true) {
-        this.getDataForSendToSF(this.WorkflowID);
+        if (response.hasWorkflow === false) {
+          this.router.navigate(['/workflow']);
+        } else {
+          this.getDataForSendToSF(this.WorkflowID);
+        }
         this.notificationService.openSuccessMessageNotification("Deleted Successfully");
       } else {
         this.notificationService.openErrorMessageNotification("Invalid exception occured, please contact administrator.");
