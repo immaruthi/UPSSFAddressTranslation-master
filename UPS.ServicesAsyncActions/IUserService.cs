@@ -12,8 +12,9 @@ namespace UPS.ServicesAsyncActions
 
         int DeleteUser(User userData);
 
+        Task<List<User>> GetAllUser();
+        Task<int> UpdateUser(User user, int loggedUserId);
         UserDataResponse GetUserData();
-
-        UserDataResponse UpdateUser(User userData);
+        
     }
 }
