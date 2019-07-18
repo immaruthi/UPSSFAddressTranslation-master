@@ -114,7 +114,7 @@ mat-header-cell:nth-child(2) {
 }
 
 /*Consignee Address*/
-mat-cell:nth-child(4) {
+mat-cell:nth-child(3) {
   padding: 0px 15px 0px 15px;
   width: 300px;
   flex: none;
@@ -123,6 +123,24 @@ mat-cell:nth-child(4) {
 }
 
 /*Consignee Address*/
+mat-header-cell:nth-child(3) {
+  padding: 0px 15px 0px 15px;
+  width: 300px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Consignee Translated Address*/
+mat-cell:nth-child(4) {
+  padding: 0px 15px 0px 15px;
+  width: 300px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Consignee Translated Address*/
 mat-header-cell:nth-child(4) {
   padding: 0px 15px 0px 15px;
   width: 300px;
@@ -131,26 +149,8 @@ mat-header-cell:nth-child(4) {
   font-weight: bold;
 }
 
-/*Consignee Translated Address*/
-mat-cell:nth-child(5) {
-  padding: 0px 15px 0px 15px;
-  width: 300px;
-  flex: none;
-  float: left;
-  font-size: 12px;
-}
-
-/*Consignee Translated Address*/
-mat-header-cell:nth-child(5) {
-  padding: 0px 15px 0px 15px;
-  width: 300px;
-  flex: none;
-  font-size: 14px;
-  font-weight: bold;
-}
-
 /*Translation Score*/
-mat-cell:nth-child(5) {
+mat-cell:nth-child(7) {
   padding: 0px 15px 0px 15px;
   width: 180px;
   flex: none;
@@ -159,7 +159,7 @@ mat-cell:nth-child(5) {
 }
 
 /*Translation Score*/
-mat-header-cell:nth-child(5) {
+mat-header-cell:nth-child(7) {
   padding: 0px 15px 0px 15px;
   width: 180px;
   flex: none;
@@ -168,24 +168,6 @@ mat-header-cell:nth-child(5) {
 }
 
 /*Created Date*/
-mat-cell:nth-child(9) {
-  padding: 0px 15px 0px 15px;
-  width: 180px;
-  flex: none;
-  float: left;
-  font-size: 12px;
-}
-
-/*Created Date*/
-mat-header-cell:nth-child(9) {
-  padding: 0px 15px 0px 15px;
-  width: 180px;
-  flex: none;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-/*Modified Date*/
 mat-cell:nth-child(10) {
   padding: 0px 15px 0px 15px;
   width: 180px;
@@ -194,7 +176,7 @@ mat-cell:nth-child(10) {
   font-size: 12px;
 }
 
-/*Modified Date*/
+/*Created Date*/
 mat-header-cell:nth-child(10) {
   padding: 0px 15px 0px 15px;
   width: 180px;
@@ -203,8 +185,26 @@ mat-header-cell:nth-child(10) {
   font-weight: bold;
 }
 
-/*Batch ID*/
+/*Modified Date*/
 mat-cell:nth-child(11) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Modified Date*/
+mat-header-cell:nth-child(11) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Batch ID*/
+mat-cell:nth-child(13) {
   padding: 0px 15px 0px 15px;
   width: 250px;
   flex: none;
@@ -213,7 +213,7 @@ mat-cell:nth-child(11) {
 }
 
 /*Batch ID*/
-mat-header-cell:nth-child(11) {
+mat-header-cell:nth-child(13) {
   padding: 0px 15px 0px 15px;
   width: 250px;
   flex: none;
