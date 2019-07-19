@@ -21,11 +21,11 @@ export class AddressBookComponent implements OnInit {
   //  ['spC_PSL_CD_TE', 'spC_CTY_TE', 'spC_CTR_TE', 'spC_CPY_TE', 'spC_NA', 'spC_SND_PTY_CTC_TE', 'spC_ADR_TE', 'spC_CTC_PH', 'spC_SLIC_NR',];
 
   displayedColumns =
-    ['actions', 'shipmentId', 'consigneeAddressId', 'consigneeAddress', 'consigneeTranslatedAddress', 'translation_score',
+    ['actions', 'consigneeCompany', 'consigneeAddress', 'consigneeTranslatedAddress', 'city', 'postalCode', 'translationScore',
       'confidence', 'accuracy', 'createdDate', 'modifiedDate', 'organization', 'batchId', 'statusCode', 'address_One', 'address_Two',
-      'address_Three', 'address_Four', 'road', 'city', 'region', 'country', 'addressTypeFlag', 'longitude',
-      'latitude', 'geoCode', 'geoCodeError', 'buldingNumber', 'buildingName', 'unit', 'area', 'bat_Id',
-      'postalCode', 'semanticCheck', 'verifyMatch'];
+      'address_Three', 'address_Four', 'road', 'region', 'country', 'addressTypeFlag', 'longitude',
+      'latitude', 'geoCode', 'geoCodeError', 'buldingNumber', 'buildingName', 'unit', 'area',
+      'semanticCheck', 'verifyMatch'];
 
   public ResponseData: AddressBookData[] = [];
   dataSource = new MatTableDataSource<AddressBookData>();
@@ -98,7 +98,7 @@ export class AddressBookComponent implements OnInit {
 
         const details = {
           id: addressBookDetails.id,
-          consigneeTranslatedAddress: updatedDetails.ConsigneeTranslatedAddress,
+          consigneeTranslatedAddress: updatedDetails.ConsigneeTranslatedAddress.trim(),
           consigneeAddress: updatedDetails.ConsigneeAddress
         }
 
@@ -109,7 +109,7 @@ export class AddressBookComponent implements OnInit {
               addressBookDetails.modifiedDate = response.addressBookData.modifiedDate;
               this.notificationService.openSuccessMessageNotification("Data Updated Successfully.");
             } else {
-              this.notificationService.openErrorMessageNotification(response.OperatonExceptionMessage);
+              this.notificationService.openErrorMessageNotification(response.operatonExceptionMessage);
             }
           } else {
             this.notificationService.openErrorMessageNotification("Invalid exception occured, please contact administrator.");

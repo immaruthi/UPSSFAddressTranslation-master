@@ -185,7 +185,7 @@ export class SentToSfComponent implements OnInit {
             const ErrorEN = SFErrors[ErrorCode] ? SFErrors[ErrorCode] : 'Unspecified Error';
             const ErrorCH = FailedDetails[2];
             //FailedMainList.push(PKGNR + ' ' + ErrorCode + ' ' + ErrorEN);
-            FailedMainList.push({ 'PKGNR': PKGNR, 'ErrorCode': ErrorCode, 'ErrorEN': ErrorEN});
+            FailedMainList.push({ 'PKGNR': PKGNR, 'ErrorCode': ErrorCode, 'ErrorEN': ErrorEN, 'ErrorCH': ErrorCH});
           }
 
           const data = {
@@ -235,7 +235,7 @@ export class SentToSfComponent implements OnInit {
         }
 
         const details = {
-          SHP_ADR_TR_TE: updatedDetails.shP_ADR_TR_TE,
+          SHP_ADR_TR_TE: updatedDetails.shP_ADR_TR_TE.trim(),
           COD_TE: updatedDetails.coD_TE,
           WFL_ID: shipmentDetails.wfL_ID,
           ID: shipmentDetails.id,
@@ -323,7 +323,11 @@ export class SentToSfComponent implements OnInit {
   deleteData(data: any) {
     this.shippingService.deleteUploadedData(data).subscribe((response: any) => {
       if (response != null && response.success === true) {
-        this.getDataForSendToSF(this.WorkflowID);
+        if (response.hasWorkflow === false) {
+          this.router.navigate(['/workflow']);
+        } else {
+          this.getDataForSendToSF(this.WorkflowID);
+        }
         this.notificationService.openSuccessMessageNotification("Deleted Successfully");
       } else {
         this.notificationService.openErrorMessageNotification("Invalid exception occured, please contact administrator.");

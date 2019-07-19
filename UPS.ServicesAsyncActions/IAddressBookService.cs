@@ -8,7 +8,7 @@ namespace UPS.ServicesAsyncActions
 {
    public interface IAddressBookService
     {
-        void InsertAddress(List<QuincusReponseData> quincusReponseData);
+        void InsertAddress(List<QuincusReponseData> quincusReponseData,Dictionary<string, string> shipmentDetails);
         List<AddressBook> GetAddressBooks();
         AddressBookResponse UpdateAddressBookById(AddressBook addressBookData);
     }

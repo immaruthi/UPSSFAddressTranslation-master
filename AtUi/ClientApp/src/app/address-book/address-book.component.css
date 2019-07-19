@@ -24,7 +24,7 @@
 
 .table-div {
   width: 100%;
-  height: calc(100vh - 177.5px);
+  height: calc(100vh - 214px);
   overflow: auto;
 }
 
@@ -76,14 +76,14 @@ mat-header-row {
 }
 
 /*Action*/
-  mat-cell:nth-child(1) {
-    margin-left: 0px 15px 0px 15px;
-    padding: 20px;
-    width: 100px;
-    flex: none;
-    float: left;
-    font-size: 12px;
-  }
+mat-cell:nth-child(1) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 100px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
 
 /*Action*/
 mat-header-cell:nth-child(1) {
@@ -95,7 +95,43 @@ mat-header-cell:nth-child(1) {
   font-weight: bold;
 }
 
+/*Consignee Company Name*/
+mat-cell:nth-child(2) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Consignee Company Name*/
+mat-header-cell:nth-child(2) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
 /*Consignee Address*/
+mat-cell:nth-child(3) {
+  padding: 0px 15px 0px 15px;
+  width: 300px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Consignee Address*/
+mat-header-cell:nth-child(3) {
+  padding: 0px 15px 0px 15px;
+  width: 300px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Consignee Translated Address*/
 mat-cell:nth-child(4) {
   padding: 0px 15px 0px 15px;
   width: 300px;
@@ -104,7 +140,7 @@ mat-cell:nth-child(4) {
   font-size: 12px;
 }
 
-/*Consignee Address*/
+/*Consignee Translated Address*/
 mat-header-cell:nth-child(4) {
   padding: 0px 15px 0px 15px;
   width: 300px;
@@ -113,26 +149,8 @@ mat-header-cell:nth-child(4) {
   font-weight: bold;
 }
 
-/*Consignee Translated Address*/
-mat-cell:nth-child(5) {
-  padding: 0px 15px 0px 15px;
-  width: 300px;
-  flex: none;
-  float: left;
-  font-size: 12px;
-}
-
-/*Consignee Translated Address*/
-mat-header-cell:nth-child(5) {
-  padding: 0px 15px 0px 15px;
-  width: 300px;
-  flex: none;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-/*Created Date*/
-mat-cell:nth-child(9) {
+/*Translation Score*/
+mat-cell:nth-child(7) {
   padding: 0px 15px 0px 15px;
   width: 180px;
   flex: none;
@@ -140,8 +158,8 @@ mat-cell:nth-child(9) {
   font-size: 12px;
 }
 
-/*Created Date*/
-mat-header-cell:nth-child(9) {
+/*Translation Score*/
+mat-header-cell:nth-child(7) {
   padding: 0px 15px 0px 15px;
   width: 180px;
   flex: none;
@@ -149,7 +167,7 @@ mat-header-cell:nth-child(9) {
   font-weight: bold;
 }
 
-/*Modified Date*/
+/*Created Date*/
 mat-cell:nth-child(10) {
   padding: 0px 15px 0px 15px;
   width: 180px;
@@ -158,10 +176,46 @@ mat-cell:nth-child(10) {
   font-size: 12px;
 }
 
-/*Modified Date*/
+/*Created Date*/
 mat-header-cell:nth-child(10) {
   padding: 0px 15px 0px 15px;
   width: 180px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Modified Date*/
+mat-cell:nth-child(11) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Modified Date*/
+mat-header-cell:nth-child(11) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Batch ID*/
+mat-cell:nth-child(13) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Batch ID*/
+mat-header-cell:nth-child(13) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
   flex: none;
   font-size: 14px;
   font-weight: bold;

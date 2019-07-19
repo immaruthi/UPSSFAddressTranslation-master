@@ -76,6 +76,7 @@ import { AddressBookEditModelComponent } from './address-book/address-book-edit-
 import { LogGridComponent } from './log-grid/log-grid.component';
 import { AuditingLogComponent } from './auditing-log/auditing-log.component';
 import { LogFilesService } from './services/LogFilesService';
+import { ShipperListModelComponent } from './shipper-list/shipper-list-model/shipper-list-model.component';
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
 import { AddUserComponent } from './user-registration/add-user/add-user.component';
 import { EditUserComponent } from './user-registration/edit-user/edit-user.component';
@@ -118,6 +119,7 @@ import { EditUserComponent } from './user-registration/edit-user/edit-user.compo
     UserRegistrationComponent,
     AddUserComponent,
     EditUserComponent
+    ShipperListModelComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -164,7 +166,7 @@ import { EditUserComponent } from './user-registration/edit-user/edit-user.compo
     ],
   bootstrap: [AppComponent],
   entryComponents: [LoginComponent, AlertDialogComponent, SummaryDialogComponent, ConfirmationDialogComponent, AddressEditModelComponent,
-    AddressBookEditModelComponent, AddUserComponent, EditUserComponent]
+    AddressBookEditModelComponent, ShipperListModelComponent, AddUserComponent, EditUserComponent]
 
 })
 export class AppModule { }

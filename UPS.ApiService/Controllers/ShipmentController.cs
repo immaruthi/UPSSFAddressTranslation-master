@@ -289,6 +289,32 @@
             return shipmentDataRequests;
         }
 
+        //private DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder;
+        [Route("GetAllShipmentData")]
+        [HttpGet]
+        public List<ShipmentDataRequest> GetAllShipmentData(int wid)
+        {
+            //shipmentService = new ShipmentService();
+            List<ShipmentDataRequest> shipmentDataRequests = _shipmentService.GetAllShipment(wid);
+
+            //we need to update the workflow status
+            int? workflowstatus = _shipmentService.SelectShipmentTotalStatusByWorkflowId(wid);
+            WorkflowService workflowService = new WorkflowService(_context, _addressBookService, _entityValidationService);
+            WorkflowDataResponse workflowDataResponse = workflowService.SelectWorkflowById(wid);
+            if (workflowDataResponse.Success && workflowDataResponse.Workflow != null)
+            {
+                if (workflowstatus != workflowDataResponse.Workflow.WFL_STA_TE)
+                {
+                    WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
+                    workflowDataRequest.ID = wid;
+                    workflowDataRequest.WFL_STA_TE = workflowstatus;
+                    workflowService.UpdateWorkflowStatusById(workflowDataRequest);
+                }
+            }
+
+            return shipmentDataRequests;
+        }
+
         [Route("CreateOrderShipment")]
         [HttpPost]
         public async Task<ActionResult> CreateOrderShipment([FromBody] List<UIOrderRequestBodyData> uIOrderRequestBodyDatas)
@@ -527,7 +553,8 @@
                         rcV_ADR_TE = _.RCV_ADR_TE,
                         dsT_CTY_TE = _.DST_CTY_TE,
                         wfL_ID = _.WFL_ID,
-                        pkG_NR_TE = _.PKG_NR_TE
+                        pkG_NR_TE = _.PKG_NR_TE,
+                        rcV_CPY_TE = _.RCV_CPY_TE
                     }).ToList();
 
                 this._quincusAddressTranslationRequest.shipmentWorkFlowRequests = shipmentWorkFlowRequests;
@@ -541,22 +568,31 @@
 
                     List<string> batchIds = new List<string>();
 
+                    Dictionary<string, string> shipmentDetailsDictionary = new Dictionary<string, string>();
                     quincusTranslatedAddressResponse.ResponseData.ForEach(batches =>
                     {
                         batchIds.Add(batches.batch_id);
+
+                        batches.addresses.ForEach(address =>
+                        {
+                            shipmentDetailsDictionary.Add(address.id, address.rcV_CPY_TE);
+                        });
+                       
                     });
 
                     var QuincusResponse = QuincusService.GetGeoCodeReponseFromQuincus(new UPS.Quincus.APP.Request.QuincusGeoCodeDataRequest()
                     {
                         endpoint = configuration["Quincus:GeoCodeEndPoint"],
                         batchIDList = batchIds,
-                        quincusTokenData = quincusTokenDataResponse.quincusTokenData
+                        quincusTokenData = quincusTokenDataResponse.quincusTokenData,
+                        ShipmentDetailsDictionary = shipmentDetailsDictionary
                     });
 
                     if (QuincusResponse.ResponseStatus)
                     {
+                        
                         // Insert Address into AddressBook
-                        _addressBookService.InsertAddress(QuincusResponse.QuincusReponseDataList);
+                        _addressBookService.InsertAddress(QuincusResponse.QuincusReponseDataList,shipmentDetailsDictionary);
                         QuincusResponse.QuincusReponseDataList.ForEach(datalist =>
                         {
                             List<Geocode> geocodes = (List<Geocode>)((QuincusReponseData)datalist).geocode;
@@ -571,6 +607,7 @@
                                 shipmentDataRequest.SHP_ADR_TR_TE = geocode.translated_adddress;
                                 shipmentDataRequest.ACY_TE = geocode.accuracy;
                                 shipmentDataRequest.CON_NR = geocode.confidence;
+                                shipmentDataRequest.TranslationScore = geocode.translation_score;
 
                                 if (
                                             !string.IsNullOrEmpty(geocode.translated_adddress)

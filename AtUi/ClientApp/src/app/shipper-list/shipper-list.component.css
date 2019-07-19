@@ -1,12 +1,36 @@
+::ng-deep snack-bar-container.custom-class-success {
+  background: #F2F2F2;
+  position: absolute;
+  top: 50px;
+  right: 16px;
+}
+
+::ng-deep .custom-class-success .mat-simple-snackbar {
+  color: #339900 !important;
+  font-weight: bold;
+}
+
+::ng-deep snack-bar-container.custom-class-error {
+  background: #F2F2F2;
+  position: absolute;
+  top: 50px;
+  right: 16px;
+}
+
+::ng-deep .custom-class-error .mat-simple-snackbar {
+  color: red !important;
+  font-weight: bold;
+}
+
 .table-div {
   width: 100%;
-  height: calc(100vh - 177.5px);
+  height: calc(100vh - 214px);
   overflow: auto;
 }
 
 mat-table {
   width: 100%;
-  min-width: 100px;
+  min-width: 1930px;
   padding: 0;
 }
 
@@ -51,10 +75,64 @@ mat-header-row {
   color: white;
 }
 
-/*Postal Code*/
+.glyphicon.glyphicon-plus-sign {
+  font-size: 40px;
+  color: #351C15;
+}
+
+.glyphicon.glyphicon-trash {
+  font-size: 30px;
+  color: #351C15;
+}
+
+.addNew {
+  padding-right: 40px;
+}
+
+/*Select*/
 mat-cell:nth-child(1) {
   margin-left: 0px 15px 0px 15px;
   padding: 20px;
+  width: 70px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Select*/
+mat-header-cell:nth-child(1) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 70px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Action*/
+mat-cell:nth-child(2) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 100px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Action*/
+mat-header-cell:nth-child(2) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 100px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Postal Code*/
+mat-cell:nth-child(3) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
   width: 150px;
   flex: none;
   float: left;
@@ -62,7 +140,7 @@ mat-cell:nth-child(1) {
 }
 
 /*Postal Code*/
-mat-header-cell:nth-child(1) {
+mat-header-cell:nth-child(3) {
   margin-left: 0px 15px 0px 15px;
   padding: 20px;
   width: 150px;
@@ -72,7 +150,7 @@ mat-header-cell:nth-child(1) {
 }
 
 /*Shipping Address*/
-mat-cell:nth-child(7) {
+mat-cell:nth-child(9) {
   padding: 0px 15px 0px 15px;
   width: 325px;
   flex: none;
@@ -81,7 +159,7 @@ mat-cell:nth-child(7) {
 }
 
 /*Shipping Address*/
-mat-header-cell:nth-child(7) {
+mat-header-cell:nth-child(9) {
   padding: 0px 15px 0px 15px;
   width: 325px;
   flex: none;
@@ -90,24 +168,6 @@ mat-header-cell:nth-child(7) {
 }
 
 /*Shipping Company*/
-mat-cell:nth-child(4) {
-  padding: 0px 15px 0px 15px;
-  width: 200px;
-  flex: none;
-  float: left;
-  font-size: 12px;
-}
-
-/*Shipping Company*/
-mat-header-cell:nth-child(4) {
-  padding: 0px 15px 0px 15px;
-  width: 200px;
-  flex: none;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-/*Sending Contact*/
 mat-cell:nth-child(6) {
   padding: 0px 15px 0px 15px;
   width: 200px;
@@ -116,8 +176,26 @@ mat-cell:nth-child(6) {
   font-size: 12px;
 }
 
-/*Sending Contact*/
+/*Shipping Company*/
 mat-header-cell:nth-child(6) {
+  padding: 0px 15px 0px 15px;
+  width: 200px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Sending Contact*/
+mat-cell:nth-child(8) {
+  padding: 0px 15px 0px 15px;
+  width: 200px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Sending Contact*/
+mat-header-cell:nth-child(8) {
   padding: 0px 15px 0px 15px;
   width: 200px;
   flex: none;

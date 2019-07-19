@@ -74,7 +74,7 @@ namespace UPS.ServicesDataRepository
             return addressBookResponse;
         }
 
-        public void InsertAddress(List<QuincusReponseData> quincusReponseDataList)
+        public void InsertAddress(List<QuincusReponseData> quincusReponseDataList,Dictionary<string,string> shipmentDetails)
         {
             try
             {
@@ -127,7 +127,8 @@ namespace UPS.ServicesDataRepository
                                  StatusCode = quincusReponseData?.status_code,
                                  Unit = geocode?.unit,
                                  VerifyMatch = geocode?.verify_match,
-                                 TranslationScore = geocode?.translation_score
+                                 TranslationScore = geocode?.translation_score,
+                                 ConsigneeCompany = shipmentDetails.ContainsKey(address.id) ? shipmentDetails[address.id] : string.Empty
                              }).ToList();
 
                         List<AddressBook> validEntity = this.entityValidationService.FilterValidEntity<AddressBook>(addressBooks);
@@ -156,8 +157,8 @@ namespace UPS.ServicesDataRepository
                            !this.context.AddressBooks
                                .Select(
                                (AddressBook x) =>
-                                   x.ConsigneeAddress.ToLower()).ToList()
-                               .Contains(ad.address.ToLower()))
+                                   x.ConsigneeAddress.Replace(" ","").ToLower().Trim()).ToList()
+                                   .Contains(ad.address.Replace(" ", "").ToLower().Trim()))
                     .GroupBy(_=>_.address)
                     .Select(x=>x.First())
                     .ToList();
