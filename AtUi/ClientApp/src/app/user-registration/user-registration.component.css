@@ -1,21 +1,20 @@
 .routepage {
   width: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   height: calc( 100vh - 64px );
-  padding: 3% 0% 3% 0%;
+  padding: 0%;
+  display:inline-block;
+
 }
 .regform {
-  margin: auto;
+  float:left;
   padding: 2% 4% 4% 4%;
   align-items: center;
   flex: 1 1 auto;
   border: 0.8px #a6a9ad solid;
-  border-radius: 8px;
   min-width: 300px;
-  width:35%;
-  min-height:580px;
-  height:100%;
+  min-height:100%;
+  width:30%;
 }
 mat-form-field{
   width:100%;
@@ -27,4 +26,171 @@ h2 {
 }
 .line {
   border-top: 2px solid #FFB500;
+}
+.col-md-1{
+  min-height: 56px;
+  background-color:white;
+  padding:1%;
+}
+.grid {
+  float: right;
+  width: 70%;
+  max-height: calc(100vh - 64px);
+}
+.table-div {
+  width: 100%;
+  max-height: calc(100vh - 120px);
+  overflow:auto;
+}
+mat-table{
+  min-width: 1240px;
+}
+mat-row {
+  padding: 0;
+  margin: 0%;
+}
+
+mat-header-row {
+  padding: 0;
+}
+
+mat-cell {
+  float: left;
+  font-size: 12px;
+}
+
+mat-header-cell {
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+}
+/*edit*/
+mat-cell:nth-child(1) {
+  padding:2px 0px 0px 5px;
+  width: 80px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*edit*/
+mat-header-cell:nth-child(1) {
+  width: 80px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*FirstName*/
+mat-cell:nth-child(2) {
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*FirstName*/
+mat-header-cell:nth-child(2) {
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*LastName*/
+mat-cell:nth-child(3) {
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*LastName*/
+mat-header-cell:nth-child(3) {
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Email*/
+mat-cell:nth-child(4) {
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Email*/
+mat-header-cell:nth-child(4) {
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*UserID*/
+mat-cell:nth-child(5) {
+  width: 180px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*UserID*/
+mat-header-cell:nth-child(5) {
+  width: 180px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Cities*/
+mat-cell:nth-child(6) {
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Cities*/
+mat-header-cell:nth-child(6) {
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+/*Role*/
+mat-cell:nth-child(7) {
+  width: 150px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Role*/
+mat-header-cell:nth-child(7) {
+  width: 150px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+mat-row:nth-child(odd) {
+  background: #F2F2F2;
+}
+
+mat-header-row {
+  background-color: gray;
+}
+
+.mat-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  color: white;
+}
+
+mat-cell {
+  font-size: 12px;
 }
