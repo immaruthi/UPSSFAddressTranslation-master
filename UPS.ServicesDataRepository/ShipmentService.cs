@@ -772,7 +772,7 @@
 
                         AddressBook translatedAddress =
                             addressBooks
-                            .FirstOrDefault(
+                            ?.FirstOrDefault(
                                 (AddressBook address) =>
                                     address.ConsigneeAddress.Replace(" ","").ToLower().Trim().Equals(
                                     excelDataObject.S_address1.Replace(" ", "").ToLower().Trim(), StringComparison.OrdinalIgnoreCase));
