@@ -1,4 +1,5 @@
 export class UserReg {
+  ID: string;
   firstName: string;
   lastName: string;
   email: string;
