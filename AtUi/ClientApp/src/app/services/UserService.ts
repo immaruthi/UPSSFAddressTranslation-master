@@ -86,7 +86,6 @@ export class UserService {
   }
 
   userRegForm: FormGroup = new FormGroup({
-    id: new FormControl(''),
     firstName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
     lastName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
     email: new FormControl('', [Validators.required, Validators.email, Validators.maxLength(50)]),
@@ -97,28 +96,25 @@ export class UserService {
   });
 
   userRegeditForm: FormGroup = new FormGroup({
-    id: new FormControl(''),
+    ID: new FormControl(''),
     firstName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
     lastName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
     email: new FormControl('', [Validators.required, Validators.email, Validators.maxLength(50)]),
-    userId: new FormControl('', [Validators.required, Validators.maxLength(10), Validators.minLength(7)]),
     cities: new FormControl('', [Validators.required]),
     role: new FormControl('', [Validators.required]),
   });
 
   onEdit(user) {
-    this.userRegeditForm.controls['id'].setValue(user.id);
+    this.userRegeditForm.controls['ID'].setValue(user.id);
     this.userRegeditForm.controls['firstName'].setValue(user.firstName);
     this.userRegeditForm.controls['lastName'].setValue(user.lastName);
     this.userRegeditForm.controls['email'].setValue(user.email);
-    this.userRegeditForm.controls['userId'].setValue(user.userId);
     this.userRegeditForm.controls['cities'].setValue(user.cities);
     this.userRegeditForm.controls['role'].setValue(user.role);
   }
 
   intiliazeFormGroup() {
     this.userRegForm.setValue({
-      id: '',
       firstName: '',
       lastName: '',
       email: '',

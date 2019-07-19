@@ -20,12 +20,6 @@
       <mat-error *ngIf="hasError('email', 'pattern')">Please Enter a Valid Email</mat-error>
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="User Id" formControlName="userId" required maxlength="10">
-      <mat-error *ngIf="hasError('userId', 'required')">User Id is required</mat-error>
-      <mat-error *ngIf="hasError('userId', 'maxlength')">User Id should not exceed 10 Characters</mat-error>
-      <mat-error *ngIf="hasError('userId', 'minlength')">User Id should be more than 7 Characters</mat-error>
-    </mat-form-field>
-    <mat-form-field>
       <mat-label>Account Type</mat-label>
       <mat-select [(value)]="role" formControlName="role" required>
         <mat-option value="1">Admin</mat-option>

@@ -12,6 +12,7 @@ import { MatDialogRef } from '@angular/material';
 export class AddUserComponent implements OnInit {
   userreg: UserReg;
   cities;
+  hide = true;
 
   constructor(public userservice: UserService, private dialogService: DialogService, public dialogRef: MatDialogRef<AddUserComponent>) { }
 

@@ -118,7 +118,7 @@ import { EditUserComponent } from './user-registration/edit-user/edit-user.compo
     AuditingLogComponent,
     UserRegistrationComponent,
     AddUserComponent,
-    EditUserComponent
+    EditUserComponent,
     ShipperListModelComponent
   ],
   imports: [

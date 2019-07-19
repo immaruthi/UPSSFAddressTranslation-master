@@ -6,6 +6,10 @@
   display:inline-block;
 
 }
+.glyphicon.glyphicon-plus-sign {
+  font-size: 40px;
+  color: #351C15;
+}
 .regform {
   float:left;
   padding: 2% 4% 4% 4%;
@@ -15,9 +19,6 @@
   min-width: 300px;
   min-height:100%;
   width:30%;
-}
-mat-form-field{
-  width:100%;
 }
 h2 {
   font-weight: 700;
@@ -39,7 +40,7 @@ h2 {
 }
 .table-div {
   width: 100%;
-  max-height: calc(100vh - 120px);
+  max-height: calc(100vh - 222px);
   overflow:auto;
 }
 mat-table{

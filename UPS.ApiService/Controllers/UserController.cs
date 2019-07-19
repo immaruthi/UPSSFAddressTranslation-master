@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -29,7 +31,8 @@ namespace AtService.Controllers
         [Route("create")]
         public IActionResult CreatedUser(User user)
         {
-            string userResponse = this.userService.CreateUser(user);
+            int loggedUserId = Convert.ToInt32(HttpContext.User.Claims.FirstOrDefault(x => x.Type == JwtConstant.UserId).Value);
+            string userResponse = this.userService.CreateUser(user, loggedUserId);
             
             JsonResult response = new JsonResult(userResponse);
             response.StatusCode =
@@ -55,16 +58,24 @@ namespace AtService.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         [Route("update")]
         [Authorize(Roles = Constants.Role.Admin)]
-        public IActionResult UpdateUser(User user)
+        public async Task<IActionResult> UpdateUser(User user)
         {
             if (user == null || user.ID == 0)
             {
                 return BadRequest();
             }
-            return Ok(user.ID);
+            int userId = Convert.ToInt32(HttpContext.User.Claims.FirstOrDefault(x => x.Type == JwtConstant.UserId).Value);
+            string responseMessage =await this.userService.UpdateUser(user,userId);
+
+            JsonResult response = new JsonResult(responseMessage);
+            response.StatusCode =
+               responseMessage.Equals(ResponseConstant.Update_Error) || responseMessage.Equals(ResponseConstant.Something_Went_Wrong)
+               ? (int)HttpStatusCode.InternalServerError : (int)HttpStatusCode.OK;
+
+            return response;
         }
     }
 }

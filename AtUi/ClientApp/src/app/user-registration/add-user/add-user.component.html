@@ -21,6 +21,9 @@
     </mat-form-field>
     <mat-form-field>
       <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'" formControlName="password" required maxlength="50">
+      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
       <mat-error *ngIf="hasError('password', 'required')">Password is required</mat-error>
       <mat-error *ngIf="hasError('password', 'maxlength')">Password should not exceed 50 Characters</mat-error>
     </mat-form-field>

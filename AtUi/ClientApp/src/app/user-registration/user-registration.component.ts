@@ -8,6 +8,7 @@ import { MatTableDataSource, MatPaginator, MatDialogConfig, MatDialog } from '@a
 import { Constants } from '../shared/Constants';
 import { AddUserComponent } from './add-user/add-user.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-user-registration',
@@ -26,6 +27,8 @@ export class UserRegistrationComponent implements OnInit {
   usersList: UserReg[] = [];
   dataSource = new MatTableDataSource<UserReg>();
   Roles = Constants.userRoles;
+  filterText: string = '';
+  selection = new SelectionModel<any>(true, []);
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -56,7 +59,9 @@ export class UserRegistrationComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.width = "50%";
     dialogConfig.autoFocus = true;
-    this.dialog.open(AddUserComponent, dialogConfig);
+    this.dialog.open(AddUserComponent, dialogConfig).afterClosed().subscribe(result => {
+      this.GetAllUsers();
+    });
   }
 
   onClickEdit(user) {
@@ -65,7 +70,16 @@ export class UserRegistrationComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = "50%";
-    this.dialog.open(EditUserComponent, dialogConfig);
+    this.dialog.open(EditUserComponent, dialogConfig).afterClosed().subscribe(result => {
+      this.GetAllUsers();
+    });
   }
 
+  applyFilter(filterValue: string) {
+    this.filterText = filterValue;
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+    this.selection.clear();
+  }
 }

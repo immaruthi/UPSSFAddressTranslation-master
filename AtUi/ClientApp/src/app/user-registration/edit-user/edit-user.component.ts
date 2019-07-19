@@ -32,6 +32,7 @@ export class EditUserComponent implements OnInit {
       return this.userservice.updateUser(this.userreg).subscribe((result: any) => {
         this.dialogservice.openAlertDialog(result);
         this.onClose();
+        
       })
     }
   }

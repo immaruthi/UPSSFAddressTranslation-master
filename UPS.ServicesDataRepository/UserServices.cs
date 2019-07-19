@@ -23,7 +23,7 @@ namespace UPS.ServicesDataRepository
             this.entityValidationService = entityValidationService;
         }
 
-        public string CreateUser(User user)
+        public string CreateUser(User user, int loggedUserId)
         {
             string responseMessage = string.Empty;
             bool isUserExist = CheckExistingUser(user);
@@ -34,6 +34,8 @@ namespace UPS.ServicesDataRepository
                     try
                     {
                         user.IsActive = true;
+                        user.CreatedDate = DateTime.Now;
+                        user.CreatedBy = loggedUserId;
                         var userInfo = this.context.Add(user).Entity;
                         this.context.SaveChanges();
 
@@ -42,7 +44,7 @@ namespace UPS.ServicesDataRepository
                             && userInfo.ID > 0)
 
                         {
-                           responseMessage = AddRoleForUser(user, userInfo);
+                            responseMessage = AddRoleForUser(user, userInfo.ID);
 
                             if (
                                 user.Cities != null
@@ -50,7 +52,7 @@ namespace UPS.ServicesDataRepository
                             {
                                 responseMessage = AddUserCities(user, userInfo.ID);
                             }
-                          
+
                         }
                     }
                     catch (Exception exception)
@@ -68,12 +70,12 @@ namespace UPS.ServicesDataRepository
             {
                 responseMessage = ResponseConstant.User_Exist;
             }
-            
+
 
             return responseMessage;
         }
 
-        private string AddRoleForUser(User user, User userInfo)
+        private string AddRoleForUser(User user, int userId)
         {
             try
             {
@@ -83,7 +85,7 @@ namespace UPS.ServicesDataRepository
                     {
                         IsAcive = true,
                         RoleId = user.Role,
-                        UserId = userInfo.ID,
+                        UserId =userId,
                     }
                 };
 
@@ -95,7 +97,7 @@ namespace UPS.ServicesDataRepository
             {
                 return string.Format(ResponseConstant.Create_Error, "Roles");
             }
-           
+
         }
 
         private string AddUserCities(User user, int userId)
@@ -121,9 +123,9 @@ namespace UPS.ServicesDataRepository
             }
             catch (Exception exception)
             {
-                return string.Format(ResponseConstant.Create_Error, "City");
+                return string.Format(ResponseConstant.Create_Error, "City", exception.Message);
             }
-           
+
         }
 
         private bool CheckExistingUser(User user)
@@ -175,7 +177,7 @@ namespace UPS.ServicesDataRepository
             {
                 List<UserCityMapping> existingCityMapping =
                     this.context.UserCityMapping
-                    .Where(_ => _.UserId == user.ID) 
+                    .Where(_ => _.UserId == user.ID)
                     .ToList();
 
                 this.context.BulkDelete(existingCityMapping);
@@ -185,11 +187,12 @@ namespace UPS.ServicesDataRepository
             }
             catch (Exception exception)
             {
-              
+
             }
 
         }
-        public async Task<int> UpdateUser(User user, int loggedUserId)
+
+        public async Task<string> UpdateUser(User user, int loggedUserId)
         {
             User existingUser =
               await this.context.UserData
@@ -199,30 +202,48 @@ namespace UPS.ServicesDataRepository
 
             if (existingUser != null)
             {
-                existingUser.FirstName = user.FirstName;
-                existingUser.LastName = user.LastName;
-                existingUser.Email = user.Email;
-                existingUser.UpdatedBy = loggedUserId;
-                existingUser.UpdatedDate = DateTime.Now;
-
-                this.context.BulkUpdateAsync(new List<User>() { existingUser });
-
-                UserRole userRole =
-                    this.context.UserRoles
-                     .FirstOrDefault(
-                        (UserRole role) => role.UserId == user.ID);
-
-                if (!(userRole != null && userRole.RoleId == user.Role))
+                try
                 {
-                    userRole.RoleId = user.Role;
-                    this.context.BulkUpdateAsync(new List<UserRole>() { userRole });
+                    existingUser.FirstName = user.FirstName;
+                    existingUser.LastName = user.LastName;
+                    existingUser.Email = user.Email;
+                    existingUser.UpdatedBy = loggedUserId;
+                    existingUser.UpdatedDate = DateTime.Now;
 
+                    await this.context.BulkUpdateAsync(new List<User>() { existingUser });
+
+                    UserRole userRole =
+                        this.context.UserRoles
+                         .FirstOrDefault(
+                            (UserRole role) => role.UserId == user.ID);
+
+                    if (userRole == null)
+                    {
+                        this.AddRoleForUser(user, user.ID);
+                    }
+                    else if (userRole.RoleId != user.Role)
+                    {
+                        userRole.RoleId = user.Role;
+                        await this.context.BulkUpdateAsync(new List<UserRole>() { userRole });
+
+                    }
+
+                    this.UpdateUserCities(user);
+
+                    return string.Format(ResponseConstant.Update_Success, "User");
                 }
-
-                this.UpdateUserCities(user);
+                catch (Exception exception)
+                {
+                    return string.Format(ResponseConstant.Update_Error, "User", exception.Message);
+                }
             }
 
-            return existingUser.ID;
+            else
+            {
+                return string.Format(ResponseConstant.Not_Exists, "User");
+            }
+
+            return string.Format(ResponseConstant.Something_Went_Wrong);
         }
 
         public UserDataResponse GetUserData()

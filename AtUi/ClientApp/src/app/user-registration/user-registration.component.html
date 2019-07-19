@@ -1,95 +1,56 @@
 <div class="routepage">
-  <!--<div class="regform">
-    <h2>User Registration</h2><hr class="line" />
-    <form [formGroup]="userRegForm">
-      <mat-form-field>
-        <input matInput placeholder="First Name" formControlName="firstName" required maxlength="50">
-        <mat-error *ngIf="hasError('firstName', 'required')">First Name is required</mat-error>
-        <mat-error *ngIf="hasError('firstName', 'maxlength')">First Name should not exceed 50 Characters</mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput placeholder="Last Name" formControlName="lastName" required maxlength="50">
-        <mat-error *ngIf="hasError('lastName', 'required')">Last Name is required</mat-error>
-        <mat-error *ngIf="hasError('lastName', 'maxlength')">Last Name should not exceed 50 Characters</mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput placeholder="Email Id" formControlName="email" required maxlength="50">
-        <mat-error *ngIf="hasError('email', 'required')">Email Id is required</mat-error>
-        <mat-error *ngIf="hasError('email', 'pattern')">Please Enter a Valid Email</mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'" formControlName="password" required maxlength="50">
-        <mat-error *ngIf="hasError('password', 'required')">Password is required</mat-error>
-        <mat-error *ngIf="hasError('password', 'maxlength')">Password should not exceed 50 Characters</mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput placeholder="User Id" formControlName="userId" required maxlength="10">
-        <mat-error *ngIf="hasError('userId', 'required')">User Id is required</mat-error>
-        <mat-error *ngIf="hasError('userId', 'maxlength')">User Id should not exceed 10 Characters</mat-error>
-        <mat-error *ngIf="hasError('userId', 'minlength')">User Id should be more than 7 Characters</mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Account Type</mat-label>
-        <mat-select [(value)]="role" formControlName="role" required>
-          <mat-option value="1">Admin</mat-option>
-          <mat-option value="2">Operations User</mat-option>
-        </mat-select>
-        <mat-error *ngIf="hasError('role', 'required')">Account Type is required</mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>City</mat-label>
-        <mat-select multiple formControlName="cities" required>
-          <mat-option *ngFor="let city of cities" [value]="city">
-            {{city}}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="hasError('cities', 'required')">City is required</mat-error>
-      </mat-form-field>
-    </form>
+  <div class="row">
+    <div class="pageTitle"><span>User Registration</span></div>
     <br />
-    <button style="float:right" mat-stroked-button color="primary" (click)="onSubmit()" [disabled]="!this.userRegForm.valid">Submit</button>
-  </div>
-  <div class="grid">-->
-  <div class="col-md-1"><button style="border:none; border-radius:100%; background-color:#FFB500; color:#351C15;" (click)="openDialog()"><span class="glyphicon glyphicon-plus"></span></button></div>
-    <mat-paginator class="col-md-11" #paginator
-                   [pageSize]="10"
-                   [pageSizeOptions]="[5, 10, 20, 50, 100]"
-                   [showFirstLastButtons]="true">
-    </mat-paginator>
-
-    <div class="table-div">
-      <mat-table class="table" [dataSource]="dataSource" matSort>
-        <ng-container matColumnDef="edit" class="container">
-          <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header>  </mat-header-cell>
-          <mat-cell *matCellDef="let user" class="cell"><button (click)="onClickEdit(user)" mat-icon-button><span><i class="material-icons">edit</i></span></button></mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="firstName" class="container">
-          <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> First Name </mat-header-cell>
-          <mat-cell *matCellDef="let user" class="cell"> {{user.firstName}} </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="lastName" class="container">
-          <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Last Name </mat-header-cell>
-          <mat-cell *matCellDef="let user" class="cell"> {{user.lastName}} </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="email" class="container">
-          <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Email </mat-header-cell>
-          <mat-cell *matCellDef="let user" class="cell"> {{user.email}} </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="userId" class="container">
-          <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> User ID </mat-header-cell>
-          <mat-cell *matCellDef="let user" class="cell"> {{user.userId}} </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="cities" class="container">
-          <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Cities </mat-header-cell>
-          <mat-cell *matCellDef="let user" class="cell"> {{user.cities}} </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="role" class="container">
-          <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Role </mat-header-cell>
-          <mat-cell *matCellDef="let user" class="cell"> {{Roles[user.role]}} </mat-cell>
-        </ng-container>
-        <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
-      </mat-table>
+    <div class="col-md-6">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="filterText" placeholder="Filter">
+      </mat-form-field>
     </div>
-  <!--</div>-->
+    <div class="col-md-6 text-right addNew">
+      <button mat-icon-button (click)="openDialog()" data-toggle="tooltip" title="Add New Shipper">
+        <span class="glyphicon glyphicon-plus-sign"></span>
+      </button>
+    </div>
+  </div>
+  <mat-paginator #paginator
+                 [pageSize]="10"
+                 [pageSizeOptions]="[5, 10, 20, 50, 100]"
+                 [showFirstLastButtons]="true">
+  </mat-paginator>
+
+  <div class="table-div">
+    <mat-table class="table" [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="edit" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header>  </mat-header-cell>
+        <mat-cell *matCellDef="let user" class="cell"><button (click)="onClickEdit(user)" mat-icon-button><span><i class="material-icons">edit</i></span></button></mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="firstName" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> First Name </mat-header-cell>
+        <mat-cell *matCellDef="let user" class="cell"> {{user.firstName}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="lastName" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Last Name </mat-header-cell>
+        <mat-cell *matCellDef="let user" class="cell"> {{user.lastName}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="email" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Email </mat-header-cell>
+        <mat-cell *matCellDef="let user" class="cell"> {{user.email}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="userId" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> User ID </mat-header-cell>
+        <mat-cell *matCellDef="let user" class="cell"> {{user.userId}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="cities" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Cities </mat-header-cell>
+        <mat-cell *matCellDef="let user" class="cell"> {{user.cities}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="role" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Role </mat-header-cell>
+        <mat-cell *matCellDef="let user" class="cell"> {{Roles[user.role]}} </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
+    </mat-table>
+  </div>
 </div>
