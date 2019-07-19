@@ -19,7 +19,7 @@ export class DialogService {
 
     const dialogConfig = new MatDialogConfig();
 
-    this.dialog.open(SummaryDialogComponent, { width: '600px', panelClass: 'confirm-dialog-container', disableClose: true, data: { message: msg } });
+    this.dialog.open(SummaryDialogComponent, { width: '700px', panelClass: 'confirm-dialog-container', disableClose: true, data: { message: msg } });
 
   }
 

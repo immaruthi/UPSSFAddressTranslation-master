@@ -185,7 +185,7 @@ export class SentToSfComponent implements OnInit {
             const ErrorEN = SFErrors[ErrorCode] ? SFErrors[ErrorCode] : 'Unspecified Error';
             const ErrorCH = FailedDetails[2];
             //FailedMainList.push(PKGNR + ' ' + ErrorCode + ' ' + ErrorEN);
-            FailedMainList.push({ 'PKGNR': PKGNR, 'ErrorCode': ErrorCode, 'ErrorEN': ErrorEN});
+            FailedMainList.push({ 'PKGNR': PKGNR, 'ErrorCode': ErrorCode, 'ErrorEN': ErrorEN, 'ErrorCH': ErrorCH});
           }
 
           const data = {
