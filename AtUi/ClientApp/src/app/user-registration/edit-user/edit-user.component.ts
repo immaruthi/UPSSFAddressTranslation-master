@@ -12,6 +12,7 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 export class EditUserComponent implements OnInit {
   cities;
   userreg: UserReg;
+  role: string;
 
   constructor(public userservice: UserService, private dialogservice: DialogService, private dialogref: MatDialogRef<EditUserComponent>) { }
 

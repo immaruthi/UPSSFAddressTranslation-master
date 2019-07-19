@@ -13,6 +13,7 @@ export class AddUserComponent implements OnInit {
   userreg: UserReg;
   cities;
   hide = true;
+  role: string;
 
   constructor(public userservice: UserService, private dialogService: DialogService, public dialogRef: MatDialogRef<AddUserComponent>) { }
 
