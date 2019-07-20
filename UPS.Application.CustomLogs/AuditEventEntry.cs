@@ -82,16 +82,34 @@ namespace UPS.Application.CustomLogs
 
         public static LogDataModel[] GetLogFileDataFromFileName(string filePath)
         {
-
-            string jsonText = File.ReadAllText(filePath.ToString());
-
-            jsonText = "[" + jsonText + "]";
+            try
+            {
 
 
-            var logDataModels = JsonConvert.DeserializeObject<LogDataModel[]>(jsonText).OrderByDescending(date => date.dateTime);
+                string jsonText = File.ReadAllText(filePath.ToString());
+
+                jsonText = "[" + jsonText + "]";
 
 
-            return logDataModels.ToArray();
+                var logDataModels = JsonConvert.DeserializeObject<LogDataModel[]>(jsonText).OrderByDescending(date => date.dateTime);
+
+
+                return logDataModels.ToArray();
+            } 
+            catch(Exception ex)
+            {
+                LogDataModel logDataModel = new LogDataModel();
+                logDataModel.LogInformation = new LogInformation()
+                {
+                    LogException = ex.Message.ToString(),
+                    LogRequest = "Request File Found " + filePath,
+                    LogResponse = "Please contact support"
+                };
+
+                LogDataModel[] logDataModels = new LogDataModel[1] { logDataModel };
+
+                return logDataModels;
+            }
         }
 
         public string[] GetLogFileList()

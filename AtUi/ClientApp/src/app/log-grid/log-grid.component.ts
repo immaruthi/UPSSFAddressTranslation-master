@@ -27,6 +27,7 @@ export class LogGridComponent implements OnInit {
   }
 
   onclicklogfile(filename: any) {
+    this.logGrid = [];
     this.logService.GetLogGrid(filename).subscribe((result: any) => {
       //this.logGrid = result;
       for (let data of result) {
@@ -37,7 +38,7 @@ export class LogGridComponent implements OnInit {
             apiType: data.apiType,
             logRequest: data.logInformation.logRequest,
             logResponse: data.logInformation.logResponse,
-            logException: data.logInformation.logException ? data.logInformation.logException.Message : ''
+            logException: data.logInformation.logException
           })
       }
       this.dataSource.data = this.logGrid;
