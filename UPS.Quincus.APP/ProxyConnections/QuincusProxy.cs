@@ -59,7 +59,7 @@
 
                 httpResponse.Close();
 
-                AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
+                Task.Run(()=>AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
                 {
                     dateTime = DateTime.Now,
                     apiTypes = DataObjects.LogData.APITypes.QuincusAPI_Token,
@@ -71,13 +71,13 @@
                         LogException = null
 
                     }
-                });
+                }));
 
             }
             catch (Exception exception)
             {
                 quincusTokenDataResponse.exception = exception;
-                AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
+                Task.Run(()=>AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
                 {
                     dateTime = DateTime.Now,
                     apiTypes = DataObjects.LogData.APITypes.QuincusAPI_Token,
@@ -86,10 +86,10 @@
                     {
                         LogResponse = null,
                         LogRequest = input,
-                        LogException = exception
+                        LogException = exception.InnerException.ToString()
 
                     }
-                });
+                }));
             }
 
             return quincusTokenDataResponse;
@@ -170,7 +170,7 @@
                     });
 
 
-                    AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
+                    Task.Run(()=>AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
                     {
                         dateTime = DateTime.Now,
                         apiTypes = DataObjects.LogData.APITypes.QuincusAPI_Translation,
@@ -182,14 +182,14 @@
                             LogException = null
 
                         }
-                    });
+                    }));
 
                 });
             }
             catch (Exception exception)
             {
                 quincusTranslatedAddressResponse.exception = exception;
-                AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
+                Task.Run(()=>AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
                 {
                     dateTime = DateTime.Now,
                     apiTypes = DataObjects.LogData.APITypes.QuincusAPI_Translation,
@@ -198,10 +198,10 @@
                     {
                         LogResponse = null,
                         LogRequest = input,
-                        LogException = exception
+                        LogException = exception.InnerException.ToString()
 
                     }
-                });
+                }));
             }
 
             return quincusTranslatedAddressResponse;
@@ -308,7 +308,7 @@
                     httpResponse.Dispose();
                     httpWebRequest.Abort();
 
-                    AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
+                    Task.Run(()=>AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
                     {
                         dateTime = DateTime.Now,
                         apiTypes = DataObjects.LogData.APITypes.QuincusAPI_Batch,
@@ -321,13 +321,13 @@
                             LogException = null
 
                         }
-                    });
+                    }));
                 });
             }
             catch (Exception exception)
             {
                 quincusResponse.Exception = exception;
-                AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
+                Task.Run(()=>AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
                 {
                     dateTime = DateTime.Now,
                     apiTypes = DataObjects.LogData.APITypes.QuincusAPI_Batch,
@@ -336,10 +336,10 @@
                     {
                         LogResponse = null,
                         LogRequest = "",
-                        LogException = exception
+                        LogException = exception.InnerException.ToString()
 
                     }
-                });
+                }));
             }
 
             return quincusResponse;

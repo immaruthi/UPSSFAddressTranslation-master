@@ -1,0 +1,24 @@
+.regform {
+  float: left;
+  padding: 2% 4% 4% 4%;
+  align-items: center;
+  flex: 1 1 auto;
+  border: 0.8px #a6a9ad solid;
+  min-width: 300px;
+  min-height: 100%;
+  width: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+h2 {
+  font-weight: 700;
+  color: #351C15 !important;
+  text-align: center !important;
+}
+
+.line {
+  border-top: 2px solid #FFB500;
+}

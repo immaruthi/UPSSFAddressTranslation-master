@@ -32,23 +32,22 @@ namespace UPS.AddressTranslationService.Controllers
         //}
 
         public ICustomLog iCustomLog { get; set; }
-
-        // GET: api/<controller>
-        //[Authorize(AuthenticationSchemes = "JwtBearer")]
+        
         [HttpGet]
+        //[Authorize(Roles = Constants.Role.Admin)]
         public IEnumerable<string> Get()
         {
-            iCustomLog.AddLogEntry(new DataObjects.LogData.LogDataModel()
+            Task.Run(()=>iCustomLog.AddLogEntry(new DataObjects.LogData.LogDataModel()
             {
                 apiTypes = DataObjects.LogData.APITypes.AddressBookSetup,
                 dateTime = System.DateTime.Now,
                 LogInformation = new DataObjects.LogData.LogInformation()
                 {
-                    LogException = new Exception("Test Exception"),
+                    LogException = new Exception("Test Exception").InnerException.ToString(),
                     LogRequest = "Test Request",
                     LogResponse = "Test Response"
                 }
-            });
+            }));
 
             return new string[] { "value1", "value2" };
         }
