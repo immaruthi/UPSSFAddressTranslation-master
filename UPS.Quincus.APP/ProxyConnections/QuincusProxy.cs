@@ -116,6 +116,7 @@
                 quincusTranslatedAddressResponse.RequestDataCount = quincusAddressTranslationRequest.shipmentWorkFlowRequests.Count;
 
                 List<string> content = GetRequestContextForAddress.GetAddressStringFromRequest(quincusAddressTranslationRequest.shipmentWorkFlowRequests);
+                quincusTranslatedAddressResponse.QuincusContentRequest = JsonConvert.SerializeObject(content);
 
                 content.ForEach(requestdata =>
                 {

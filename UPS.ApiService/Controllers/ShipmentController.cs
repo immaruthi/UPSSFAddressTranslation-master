@@ -644,8 +644,8 @@
                             LogInformation = new UPS.DataObjects.LogData.LogInformation()
                             {
                                 LogException = null,
-                                LogRequest = JsonConvert.SerializeObject(QuincusResponse.QuincusReponseDataList),
-                                LogResponse = null
+                                LogRequest = quincusTranslatedAddressResponse.QuincusContentRequest,
+                                LogResponse = JsonConvert.SerializeObject(QuincusResponse.QuincusReponseDataList)
                             }
                         }));
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -663,7 +663,7 @@
                             LogInformation = new UPS.DataObjects.LogData.LogInformation()
                             {
                                 LogException = QuincusResponse.Exception.InnerException.ToString(),
-                                LogRequest = JsonConvert.SerializeObject(_shipmentDataRequest),
+                                LogRequest = quincusTranslatedAddressResponse.QuincusContentRequest,
                                 LogResponse = null
                             }
                         }));
