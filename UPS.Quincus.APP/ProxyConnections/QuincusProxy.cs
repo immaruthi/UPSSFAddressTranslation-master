@@ -175,11 +175,11 @@
                     {
                         dateTime = DateTime.Now,
                         apiTypes = DataObjects.LogData.APITypes.QuincusAPI_Translation,
-                        apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
+                        apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 4),
                         LogInformation = new DataObjects.LogData.LogInformation()
                         {
                             LogResponse = response,
-                            LogRequest = input,
+                            LogRequest = JsonConvert.SerializeObject(quincusAddressTranslationRequest.shipmentWorkFlowRequests), 
                             LogException = null
 
                         }
@@ -194,11 +194,11 @@
                 {
                     dateTime = DateTime.Now,
                     apiTypes = DataObjects.LogData.APITypes.QuincusAPI_Translation,
-                    apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
+                    apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 4),
                     LogInformation = new DataObjects.LogData.LogInformation()
                     {
                         LogResponse = null,
-                        LogRequest = input,
+                        LogRequest = JsonConvert.SerializeObject(quincusAddressTranslationRequest.shipmentWorkFlowRequests),
                         LogException = exception.InnerException.ToString()
 
                     }
@@ -318,7 +318,7 @@
                         LogInformation = new DataObjects.LogData.LogInformation()
                         {
                             LogResponse = response,
-                            LogRequest = "",
+                            LogRequest = JsonConvert.SerializeObject(quincusGeoCodeDataRequest.batchIDList),
                             LogException = null
 
                         }
@@ -336,7 +336,7 @@
                     LogInformation = new DataObjects.LogData.LogInformation()
                     {
                         LogResponse = null,
-                        LogRequest = "",
+                        LogRequest = JsonConvert.SerializeObject(quincusGeoCodeDataRequest.batchIDList),
                         LogException = exception.InnerException.ToString()
 
                     }
