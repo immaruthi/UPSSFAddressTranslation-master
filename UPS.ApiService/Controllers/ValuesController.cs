@@ -43,7 +43,7 @@ namespace UPS.AddressTranslationService.Controllers
                 dateTime = System.DateTime.Now,
                 LogInformation = new DataObjects.LogData.LogInformation()
                 {
-                    LogException = new Exception("Test Exception"),
+                    LogException = new Exception("Test Exception").InnerException.ToString(),
                     LogRequest = "Test Request",
                     LogResponse = "Test Response"
                 }

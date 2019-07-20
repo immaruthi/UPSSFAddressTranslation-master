@@ -142,7 +142,7 @@
                                     dateTime = System.DateTime.Now,
                                     LogInformation = new UPS.DataObjects.LogData.LogInformation()
                                     {
-                                        LogException = excelExtensionReponse.exception,
+                                        LogException = excelExtensionReponse.exception.InnerException.ToString(),
                                         LogRequest = "Excel Uploaded",
                                         LogResponse = JsonConvert.SerializeObject(excelExtensionReponse)
                                     }
@@ -502,7 +502,7 @@
                     dateTime = System.DateTime.Now,
                     LogInformation = new UPS.DataObjects.LogData.LogInformation()
                     {
-                        LogException = getSFCancelOrderServiceResponse.exception,
+                        LogException = getSFCancelOrderServiceResponse.exception.InnerException.ToString(),
                         LogRequest = JsonConvert.SerializeObject(sFOrderXMLRequest),
                         LogResponse = null
                     }
@@ -638,8 +638,8 @@
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                         Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                         {
-                            apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
-                            apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
+                            apiTypes = UPS.DataObjects.LogData.APITypes.QuincusAPI_Translation,
+                            apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 4),
                             dateTime = System.DateTime.Now,
                             LogInformation = new UPS.DataObjects.LogData.LogInformation()
                             {
@@ -657,12 +657,12 @@
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                         Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                         {
-                            apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
-                            apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
+                            apiTypes = UPS.DataObjects.LogData.APITypes.QuincusAPI_Translation,
+                            apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 4),
                             dateTime = System.DateTime.Now,
                             LogInformation = new UPS.DataObjects.LogData.LogInformation()
                             {
-                                LogException = QuincusResponse.Exception,
+                                LogException = QuincusResponse.Exception.InnerException.ToString(),
                                 LogRequest = JsonConvert.SerializeObject(_shipmentDataRequest),
                                 LogResponse = null
                             }
@@ -677,12 +677,12 @@
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                     Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                     {
-                        apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
-                        apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes),1),
+                        apiTypes = UPS.DataObjects.LogData.APITypes.QuincusAPI_Translation,
+                        apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes),4),
                         dateTime = System.DateTime.Now,
                         LogInformation = new UPS.DataObjects.LogData.LogInformation()
                         {
-                            LogException = quincusTranslatedAddressResponse.exception,
+                            LogException = quincusTranslatedAddressResponse.exception.InnerException.ToString(),
                             LogRequest = JsonConvert.SerializeObject(_shipmentDataRequest),
                             LogResponse = null
                         }

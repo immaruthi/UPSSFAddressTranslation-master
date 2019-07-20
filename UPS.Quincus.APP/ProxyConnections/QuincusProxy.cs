@@ -86,7 +86,7 @@
                     {
                         LogResponse = null,
                         LogRequest = input,
-                        LogException = exception
+                        LogException = exception.InnerException.ToString()
 
                     }
                 }));
@@ -198,7 +198,7 @@
                     {
                         LogResponse = null,
                         LogRequest = input,
-                        LogException = exception
+                        LogException = exception.InnerException.ToString()
 
                     }
                 }));
@@ -336,7 +336,7 @@
                     {
                         LogResponse = null,
                         LogRequest = "",
-                        LogException = exception
+                        LogException = exception.InnerException.ToString()
 
                     }
                 }));

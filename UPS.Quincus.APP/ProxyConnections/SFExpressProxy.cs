@@ -83,7 +83,7 @@
                     dateTime = System.DateTime.Now,
                     LogInformation = new UPS.DataObjects.LogData.LogInformation()
                     {
-                        LogException = exception,
+                        LogException = exception.InnerException.ToString(),
                         LogRequest = JsonConvert.SerializeObject(sFCreateOrderServiceRequest),
                         LogResponse = null
                     }
@@ -155,7 +155,7 @@
                     dateTime = System.DateTime.Now,
                     LogInformation = new UPS.DataObjects.LogData.LogInformation()
                     {
-                        LogException = exception,
+                        LogException = exception.InnerException.ToString(),
                         LogRequest = JsonConvert.SerializeObject(sFCancelOrderServiceRequest),
                         LogResponse = null
                     }
