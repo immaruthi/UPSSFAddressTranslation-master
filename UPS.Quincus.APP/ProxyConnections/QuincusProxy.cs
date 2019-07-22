@@ -67,9 +67,8 @@
                     LogInformation = new DataObjects.LogData.LogInformation()
                     {
                         LogResponse = response,
-                        LogRequest = input,
+                        LogRequest = string.Format("Senstive Information Identified {0}", System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(input))),
                         LogException = null
-
                     }
                 }));
 
@@ -85,7 +84,7 @@
                     LogInformation = new DataObjects.LogData.LogInformation()
                     {
                         LogResponse = null,
-                        LogRequest = input,
+                        LogRequest = string.Format("Senstive Information Identified {0}", System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(input))),
                         LogException = exception.InnerException.ToString()
 
                     }
