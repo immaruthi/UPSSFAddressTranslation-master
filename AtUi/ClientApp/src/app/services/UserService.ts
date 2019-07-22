@@ -81,9 +81,14 @@ export class UserService {
     return this.httpService.makeGetRequest('api/User/getall');
   }
 
+  GetAllRoles(): Observable<any> {
+    return this.httpService.makeGetRequest('api/role/getall');
+  }
+
   updateUser(data:any):Observable<any> {
     return this.httpService.makePostRequest('api/User/update', data);
   }
+
 
   userRegForm: FormGroup = new FormGroup({
     firstName: new FormControl('', [Validators.required, Validators.maxLength(50)]),

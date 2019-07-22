@@ -13,13 +13,15 @@ import { NotificationService } from '../../services/NotificationService';
 export class EditUserComponent implements OnInit {
   cities;
   userreg: UserReg;
-  role: string;
+    role: string;
+    roles: any[];
 
   constructor(public userservice: UserService, private dialogservice: DialogService, private notificationService: NotificationService,
     private dialogref: MatDialogRef<EditUserComponent>) { }
 
   ngOnInit() {
     this.GetAllCities();
+    this.GetAllRoles();
   }
   public hasError = (controlName: string, errorName: string) => {
     return this.userservice.userRegForm.controls[controlName].hasError(errorName);
@@ -42,5 +44,12 @@ export class EditUserComponent implements OnInit {
   onClose() {
     this.userservice.userRegeditForm.reset();
     this.dialogref.close();
+  }
+
+  GetAllRoles() {
+    this.userservice.GetAllRoles().subscribe((response) => {
+      this.roles = response as any[];
+    },
+      error => console.log(error))
   }
 }

@@ -150,6 +150,7 @@ namespace UPS.ServicesDataRepository
                     (from user in this.context.UserData
                      from roles in this.context.UserRoles
                          .Where(role => role.UserId == user.ID).DefaultIfEmpty()
+                    orderby user.ID descending
                      select new User()
                      {
                          ID = user.ID,

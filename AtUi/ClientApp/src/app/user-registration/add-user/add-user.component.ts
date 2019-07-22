@@ -15,12 +15,14 @@ export class AddUserComponent implements OnInit {
   cities;
   hide = true;
   role: string;
+  roles: any[];
 
   constructor(public userservice: UserService, private dialogService: DialogService, private notificationService: NotificationService,
     public dialogRef: MatDialogRef<AddUserComponent>) { }
 
   ngOnInit() {
     this.GetAllCities();
+    this.GetAllRoles();
   }
 
   onSubmit() {
@@ -50,5 +52,12 @@ export class AddUserComponent implements OnInit {
     this.userservice.GetAllCities().subscribe((data) => {
       this.cities = data;
     });
+  }
+
+  GetAllRoles() {
+    this.userservice.GetAllRoles().subscribe((response) => {
+      this.roles = response as any[];
+    },
+      error => console.log(error))
   }
 }
