@@ -29,7 +29,7 @@
       <input matInput placeholder="Contact" maxlength="50" value="{{data.Contact}}" [(ngModel)]="data.Contact" name="Contact">
     </mat-form-field><br />
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="SLIC Number" type="number" value="{{data.SLICNumber}}" [(ngModel)]="data.SLICNumber" name="SLICNumber" required>
+      <input matInput placeholder="SLIC Number" type="number" value="{{data.SLICNumber}}" (keypress)="numberOnly($event)" [(ngModel)]="data.SLICNumber" name="SLICNumber" required>
     </mat-form-field><br />
     <mat-form-field class="example-full-width">
       <input matInput placeholder="Customer ID" maxlength="50" value="{{data.CustomerID}}" [(ngModel)]="data.CustomerID" name="CustomerID" required>

@@ -3,6 +3,7 @@ import { UserService } from '../../services/UserService';
 import { UserReg } from '../../models/UserReg';
 import { DialogService } from '../../services/dialog.service';
 import { MatDialog, MatDialogRef } from '@angular/material';
+import { NotificationService } from '../../services/NotificationService';
 
 @Component({
   selector: 'app-edit-user',
@@ -14,7 +15,8 @@ export class EditUserComponent implements OnInit {
   userreg: UserReg;
   role: string;
 
-  constructor(public userservice: UserService, private dialogservice: DialogService, private dialogref: MatDialogRef<EditUserComponent>) { }
+  constructor(public userservice: UserService, private dialogservice: DialogService, private notificationService: NotificationService,
+    private dialogref: MatDialogRef<EditUserComponent>) { }
 
   ngOnInit() {
     this.GetAllCities();
@@ -31,7 +33,7 @@ export class EditUserComponent implements OnInit {
     if (this.userservice.userRegeditForm.valid) {
       this.userreg = Object.assign({}, this.userservice.userRegeditForm.value);
       return this.userservice.updateUser(this.userreg).subscribe((result: any) => {
-        this.dialogservice.openAlertDialog(result);
+        this.notificationService.openSuccessMessageNotification(result);
         this.onClose();
         
       })

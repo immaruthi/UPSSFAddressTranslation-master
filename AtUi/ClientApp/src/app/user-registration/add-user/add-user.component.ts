@@ -3,6 +3,7 @@ import { UserService } from '../../services/UserService';
 import { UserReg } from '../../models/UserReg';
 import { DialogService } from '../../services/dialog.service';
 import { MatDialogRef } from '@angular/material';
+import { NotificationService } from '../../services/NotificationService';
 
 @Component({
   selector: 'app-add-user',
@@ -15,7 +16,8 @@ export class AddUserComponent implements OnInit {
   hide = true;
   role: string;
 
-  constructor(public userservice: UserService, private dialogService: DialogService, public dialogRef: MatDialogRef<AddUserComponent>) { }
+  constructor(public userservice: UserService, private dialogService: DialogService, private notificationService: NotificationService,
+    public dialogRef: MatDialogRef<AddUserComponent>) { }
 
   ngOnInit() {
     this.GetAllCities();
@@ -26,9 +28,10 @@ export class AddUserComponent implements OnInit {
       this.userreg = Object.assign({}, this.userservice.userRegForm.value);
       return this.userservice.CreateNewUser(this.userreg).subscribe(
         (result: any) => {
-          this.dialogService.openAlertDialog(result);
+          //this.dialogService.openAlertDialog(result);
+          this.notificationService.openSuccessMessageNotification(result);
           this.onClose();
-        }, error => { this.dialogService.openAlertDialog('Error while creating user') }
+        }, error => { this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText) }
       );
     }
   }

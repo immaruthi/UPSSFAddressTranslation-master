@@ -3,6 +3,7 @@ import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { LogFilesService } from '../services/LogFilesService';
 import { ExcelService } from '../services/ExcelExport';
 import { DialogService } from '../services/dialog.service';
+import { DatePipe } from '@angular/common'
 
 @Component({
   selector: 'app-log-grid',
@@ -61,7 +62,7 @@ export class LogGridComponent implements OnInit {
       for (let data of this.tableData) {
         this.excelMainData.push(
           {
-            'Date': data.dateTime,
+            'Date': this.datepipe.transform(data.dateTime, 'MMMM dd, yyyy hh:mm a'),
             'User Id': data.userID,
             'Application Name': data.apiType,
             'Request': data.logRequest,
@@ -75,7 +76,8 @@ export class LogGridComponent implements OnInit {
     }
   }
 
-  constructor(private logService: LogFilesService, private excelService: ExcelService, private dialogService: DialogService) { }  
+  constructor(private logService: LogFilesService, private excelService: ExcelService,
+    private dialogService: DialogService, private datepipe: DatePipe) { }  
 
   ngOnInit() {
     this.LoadLogFilesList();
