@@ -32,7 +32,9 @@ export class AddUserComponent implements OnInit {
         (result: any) => {
           //this.dialogService.openAlertDialog(result);
           this.notificationService.openSuccessMessageNotification(result);
-          this.onClose();
+          this.userservice.userRegForm.reset();
+          this.userservice.intiliazeFormGroup();
+          this.dialogRef.close(result);
         }, error => { this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText) }
       );
     }
