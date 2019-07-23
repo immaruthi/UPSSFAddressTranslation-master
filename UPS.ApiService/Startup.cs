@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
+using UPS.Application.CustomLogs;
 using UPS.Quincus.APP.Request;
 using UPS.ServicesAsyncActions;
 using UPS.ServicesDataRepository;
@@ -90,6 +91,8 @@ namespace UPS.AddressTranslationService
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             services.IocSetup();
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

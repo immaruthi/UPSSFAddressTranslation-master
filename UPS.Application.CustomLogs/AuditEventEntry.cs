@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using System.Collections.Generic;
 using System.Linq;
+using UPS.ServicesDataRepository.Common;
 
 namespace UPS.Application.CustomLogs
 {
@@ -52,6 +53,15 @@ namespace UPS.Application.CustomLogs
             LogInit();
             using (StreamWriter sw = File.AppendText(filePath))
             {
+                try
+                {
+                    logDataModel.userID = CustomHttpContextInterceptor.Current.User.Claims.FirstOrDefault(x => x.Type == JwtConstant.UserId).Value;
+                }
+                catch(Exception ex)
+                {
+                    logDataModel.userID = "Not Found";
+                }
+
                 sw.WriteLine(JsonConvert.SerializeObject(logDataModel) + ",");
             }
         }
