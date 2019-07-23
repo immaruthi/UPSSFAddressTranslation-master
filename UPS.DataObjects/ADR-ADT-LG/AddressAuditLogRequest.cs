@@ -29,5 +29,7 @@ namespace UPS.DataObjects.ADR_ADT_LG
         [NotMapped]
         [Column("UPD-BY-TE")]
         public string UPD_BY_TE { get; set; }
+        [Column("WFL-ID")]
+        public int? WFL_ID { get; set; }
     }
 }
