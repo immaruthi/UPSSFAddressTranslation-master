@@ -3,7 +3,7 @@
 <div class="pageroute">
   <div class="grid" [hidden]="search">
     <button mat-raised-button color="primary" (click)="LogsexportToExcel()" style="float:right;">Export</button>
-    <div class="col-md-6">
+    <div class="col-md-3">
       <mat-form-field>
         <input matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="filterText" placeholder="Filter">
       </mat-form-field>

@@ -36,8 +36,9 @@ export class EditUserComponent implements OnInit {
       this.userreg = Object.assign({}, this.userservice.userRegeditForm.value);
       return this.userservice.updateUser(this.userreg).subscribe((result: any) => {
         this.notificationService.openSuccessMessageNotification(result);
-        this.onClose();
-        
+        //this.onClose();
+        this.userservice.userRegeditForm.reset();
+        this.dialogref.close(result);
       })
     }
   }
