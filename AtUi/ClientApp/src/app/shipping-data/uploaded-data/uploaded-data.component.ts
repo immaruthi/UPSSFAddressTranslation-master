@@ -101,7 +101,8 @@ export class UploadedDataComponent implements OnInit {
   }
 
   isAllSelected() {
-    const ValidData: any[] = this.dataSource._pageData(this.dataSource.filteredData);
+    const currentData = this.dataSource._orderData(this.dataSource.filteredData);
+    const ValidData: any[] = this.dataSource._pageData(currentData);
     const checkedDataCount = ValidData.length;
     var count: number = 0;
     ValidData.forEach(row => {
@@ -116,7 +117,8 @@ export class UploadedDataComponent implements OnInit {
   masterToggle() {
     this.checkedData = [];
     //this.dataSource.data.forEach(row => this.mainData.push(row));
-    this.checkedData = this.dataSource._pageData(this.dataSource.filteredData);
+    const currentData = this.dataSource._orderData(this.dataSource.filteredData);
+    this.checkedData = this.dataSource._pageData(currentData);
     this.isAllSelected() ? this.AllSelectedTrue() : this.AllSelectionFalse();
   }
 
