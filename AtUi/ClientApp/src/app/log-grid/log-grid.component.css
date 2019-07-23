@@ -57,6 +57,11 @@ mat-header-row {
   z-index: 1;
   color: white;
 }
+
+mat-header-cell {
+  color: white;
+}
+
 /*Date*/
 mat-cell:nth-child(1) {
   margin-left: 0px 15px 0px 15px;

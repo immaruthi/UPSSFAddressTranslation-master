@@ -111,6 +111,9 @@ namespace UPS.DataObjects.AddressBook
         [Column("CSG-CPY-NA")]
         [StringLength(50)]
         public string ConsigneeCompany { get; set; }
+        [NotMapped]
+        [Column("WFL-ID")]
+        public int? WFL_ID { get; set; }
 
     }
 }

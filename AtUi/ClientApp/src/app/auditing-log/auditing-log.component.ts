@@ -7,6 +7,8 @@ import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../services/data.service';
 import { Observable } from 'rxjs';
 import { AuditingLogService } from '../services/AuditingLogService';
+import { DialogService } from '../services/dialog.service';
+import { DatePipe } from '@angular/common'
 
 @Component({
   selector: 'app-auditing-log',
@@ -28,7 +30,7 @@ export class AuditingLogComponent implements OnInit {
 
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
     public dialog: MatDialog, public dataService: DataService,
-    private auditingLogService: AuditingLogService) {
+    private auditingLogService: AuditingLogService, private dialogService: DialogService, private datepipe: DatePipe) {
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -67,6 +69,34 @@ export class AuditingLogComponent implements OnInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+  }
+
+  onDateFilter() {
+    const FROM = (<HTMLInputElement>document.getElementById('fromDate')).value;
+    const TO = (<HTMLInputElement>document.getElementById('toDate')).value;
+
+    if (FROM && TO) {
+      const fromdate = this.datepipe.transform(FROM, 'yyyy-MM-dd');
+      const todate = this.datepipe.transform(TO, 'yyyy-MM-dd');
+      if (fromdate > todate) {
+        this.dialogService.openAlertDialog('Invalid dates for search.');
+      } else {
+        this.applyFilter('');
+        this.dataSource.data = this.ResponseData.filter(data => {
+          var rowDate = this.datepipe.transform(data.upD_DT, 'yyyy-MM-dd');
+          return (rowDate >= fromdate && rowDate <= todate);
+        });
+      }
+    } else {
+      this.dialogService.openAlertDialog('Please select From and To dates to search.');
+    }
+  }
+
+  onResetDateSearch() {
+    this.applyFilter('');
+    (<HTMLInputElement>document.getElementById('fromDate')).value = ' ';
+    (<HTMLInputElement>document.getElementById('toDate')).value = ' ';
+    this.dataSource.data = this.ResponseData;
   }
 
 }

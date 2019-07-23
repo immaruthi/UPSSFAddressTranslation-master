@@ -1,6 +1,16 @@
+.glyphicon.glyphicon-search {
+  font-size: 24px;
+  color: #351C15;
+}
+
+.glyphicon.glyphicon-refresh {
+  font-size: 24px;
+  color: #351C15;
+}
+
 .table-div {
   width: 100%;
-  height: calc(100vh - 214px);
+  height: calc(100vh - 220px);
   overflow: auto;
 }
 

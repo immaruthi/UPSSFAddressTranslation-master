@@ -56,6 +56,7 @@ namespace AtService.Controllers
                     addressAuditLogRequest.UPD_BY = userId;
                     addressAuditLogRequest.UPD_FRM = "AddressBook";
                     addressAuditLogRequest.UPD_DT = DateTime.Now;
+                    addressAuditLogRequest.WFL_ID = addressBookData.WFL_ID;
                     AddressAuditLogResponse addressAuditLogResponse = this.addressAuditLogService.Insert(addressAuditLogRequest);
                     if (addressAuditLogResponse.Success)
                     {
