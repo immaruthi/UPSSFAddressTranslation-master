@@ -403,8 +403,13 @@
             {
                 try
                 {
-                    shipperCompanyResponse.ShipperCompanies = context.shipperCompanyRequests.ToList();
+                    shipperCompanyResponse.ShipperCompanies = 
+                        context.shipperCompanyRequests
+                        .OrderByDescending(
+                            (ShipperCompanyList shpCompany)=> shpCompany.ID)
+                        .ToList();
                     shipperCompanyResponse.Success = true;
+
                     return shipperCompanyResponse;
                 }
                 catch (Exception ex)
