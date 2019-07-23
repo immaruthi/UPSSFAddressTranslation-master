@@ -761,7 +761,7 @@
                         }
 
                         //shipmentDataRequest.PCS_QTY_NR = null;//Convert.ToInt32(Convert.ToDouble(excelDataObject.pcs));
-                        shipmentDataRequest.PH_NR = excelDataObject.S_ph;
+                        shipmentDataRequest.PH_NR = excelDataObject.S_ph != null && excelDataObject.S_ph.Contains('.') ? excelDataObject.S_ph.Split('.')[0] : excelDataObject.S_ph;
                         shipmentDataRequest.PKG_NR_TE = excelDataObject.S_packageno;
                         shipmentDataRequest.PKG_WGT_DE = Convert.ToDecimal(excelDataObject.S_pkgwei);
                         shipmentDataRequest.PK_UP_TM = null;//Convert.ToString(excelDataObject.S_pkuptime),
@@ -769,7 +769,7 @@
                         shipmentDataRequest.RCV_ADR_TE = excelDataObject.S_address1;
                         shipmentDataRequest.RCV_CPY_TE = excelDataObject.S_receivercompany;
                         shipmentDataRequest.SHP_ADR_TE = excelDataObject.address;
-                     
+
                         AddressBook translatedAddress =
                             addressBooks
                             ?.FirstOrDefault(
@@ -821,7 +821,7 @@
                         //}
                         shipmentDataRequest.SHP_DT = null; //Convert.ToDateTime(excelDataObject.S_shipdate);
                         shipmentDataRequest.SHP_NR = excelDataObject.S_shpr;
-                        shipmentDataRequest.SHP_PH_TE = excelDataObject.S_shptph;
+                        shipmentDataRequest.SHP_PH_TE = excelDataObject.S_shptph != null && excelDataObject.S_shptph.Contains('.') ? excelDataObject.S_shptph.Split('.')[0] : excelDataObject.S_shptph;
                         shipmentDataRequest.SMT_NR_TE = excelDataObject.S_shipmentno;
 
                         shipmentDataRequest.SMT_VAL_DE = 0;
