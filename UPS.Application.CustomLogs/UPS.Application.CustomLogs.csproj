@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Quincus.Implementations\Quincus.Implementations.csproj" />
     <ProjectReference Include="..\UPS.DataObjects\UPS.DataObjects.csproj" />
+    <ProjectReference Include="..\UPS.ServicesDataRepository\UPS.ServicesDataRepository.csproj" />
   </ItemGroup>
 
 </Project>
