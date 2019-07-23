@@ -55,7 +55,7 @@ namespace UPS.Application.CustomLogs
             {
                 try
                 {
-                    logDataModel.userID = CustomHttpContextInterceptor.Current.User.Claims.FirstOrDefault(x => x.Type == JwtConstant.UserId).Value;
+                    logDataModel.userID = CustomHttpContextInterceptor.Current.User.Claims.FirstOrDefault(x => x.Type == JwtConstant.UserIdText).Value;
                 }
                 catch(Exception ex)
                 {
