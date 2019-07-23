@@ -7,7 +7,7 @@
   margin: 0;
   float: left;
   width: 90%;
-  height: calc(100vh - 61px);
+  height: calc(100vh - 62px);
   padding: 1% 1% 0% 1%;
   overflow: auto;
 }
@@ -33,7 +33,7 @@ li{
 }
 .table-div {
   width: 100%;
-  height: calc(100vh - 137px);
+  height: calc(100vh - 180px);
   overflow: auto;
 }
 mat-table{
@@ -45,6 +45,10 @@ mat-row:nth-child(odd) {
 }
 mat-header-row {
   background-color: gray;
+}
+
+.mat-row {
+  align-items:unset;
 }
 
 .mat-header-row {

@@ -1,0 +1,43 @@
+<div class="regform">
+  <div class="col-md-12">
+    <button style="float:right; background-color:inherit; border:none"><mat-icon (click)="onClose()">clear</mat-icon></button>
+  </div>
+  <h2>User Registration</h2><hr class="line" />
+  <form [formGroup]="userservice.userRegeditForm">
+    <mat-form-field>
+      <input matInput placeholder="First Name" formControlName="firstName" required maxlength="50">
+      <mat-error *ngIf="hasError('firstName', 'required')">First Name is required</mat-error>
+      <mat-error *ngIf="hasError('firstName', 'maxlength')">First Name should not exceed 50 Characters</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Last Name" formControlName="lastName" required maxlength="50">
+      <mat-error *ngIf="hasError('lastName', 'required')">Last Name is required</mat-error>
+      <mat-error *ngIf="hasError('lastName', 'maxlength')">Last Name should not exceed 50 Characters</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Email Id" formControlName="email" required maxlength="50">
+      <mat-error *ngIf="hasError('email', 'required')">Email Id is required</mat-error>
+      <mat-error *ngIf="hasError('email', 'pattern')">Please Enter a Valid Email</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Account Type</mat-label>
+      <mat-select [(value)]="role" formControlName="role" required>
+        <mat-option *ngFor="let role of roles" [value]="role.id">
+          {{role.name}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="hasError('role', 'required')">Account Type is required</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>City</mat-label>
+      <mat-select multiple formControlName="cities" required>
+        <mat-option *ngFor="let city of cities" [value]="city">
+          {{city}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="hasError('cities', 'required')">City is required</mat-error>
+    </mat-form-field>
+  </form>
+  <br />
+  <button style="float:right" mat-stroked-button color="primary" (click)="onSubmit()" [disabled]="!this.userservice.userRegeditForm.valid">Submit</button>
+</div>

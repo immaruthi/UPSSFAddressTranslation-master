@@ -8,12 +8,14 @@ namespace UPS.ServicesAsyncActions
 {
     public interface IUserService
     {
-        string CreateUser(User userData);
+        string CreateUser(User userData, int loggedUserId);
 
         int DeleteUser(User userData);
 
-        UserDataResponse GetUserData();
+        Task<List<User>> GetAllUser();
 
-        UserDataResponse UpdateUser(User userData);
+        Task<string> UpdateUser(User user, int loggedUserId);
+        UserDataResponse GetUserData();
+        
     }
 }

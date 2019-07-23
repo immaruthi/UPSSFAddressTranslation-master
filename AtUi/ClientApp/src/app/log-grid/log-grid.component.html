@@ -1,3 +1,5 @@
+<div class="pageTitle"><span>Logs</span></div>
+<br />
 <div class="pageroute">
   <div class="grid" [hidden]="search">
     <button mat-raised-button color="primary" (click)="LogsexportToExcel()" style="float:right;">Export</button>
@@ -12,7 +14,7 @@
         <!-- Date Column -->
         <ng-container matColumnDef="logDate">
           <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
-          <mat-cell *matCellDef="let log"> {{log.dateTime | date: 'dd-MMM-yyyy HH:mm:ss'}} </mat-cell>
+          <mat-cell *matCellDef="let log"> {{log.dateTime | date: 'MMMM dd, yyyy hh:mm a'}} </mat-cell>
         </ng-container>
         <!-- UserID Column -->
         <ng-container matColumnDef="userId">

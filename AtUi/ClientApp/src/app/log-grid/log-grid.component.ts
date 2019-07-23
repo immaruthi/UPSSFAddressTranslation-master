@@ -3,6 +3,7 @@ import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { LogFilesService } from '../services/LogFilesService';
 import { ExcelService } from '../services/ExcelExport';
 import { DialogService } from '../services/dialog.service';
+import { DatePipe } from '@angular/common'
 
 @Component({
   selector: 'app-log-grid',
@@ -27,6 +28,7 @@ export class LogGridComponent implements OnInit {
   }
 
   onclicklogfile(filename: any) {
+    this.logGrid = [];
     this.logService.GetLogGrid(filename).subscribe((result: any) => {
       //this.logGrid = result;
       for (let data of result) {
@@ -37,7 +39,7 @@ export class LogGridComponent implements OnInit {
             apiType: data.apiType,
             logRequest: data.logInformation.logRequest,
             logResponse: data.logInformation.logResponse,
-            logException: data.logInformation.logException ? data.logInformation.logException.message : ''
+            logException: data.logInformation.logException
           })
       }
       this.dataSource.data = this.logGrid;
@@ -60,7 +62,7 @@ export class LogGridComponent implements OnInit {
       for (let data of this.tableData) {
         this.excelMainData.push(
           {
-            'Date': data.dateTime,
+            'Date': this.datepipe.transform(data.dateTime, 'MMMM dd, yyyy hh:mm a'),
             'User Id': data.userID,
             'Application Name': data.apiType,
             'Request': data.logRequest,
@@ -74,7 +76,8 @@ export class LogGridComponent implements OnInit {
     }
   }
 
-  constructor(private logService: LogFilesService, private excelService: ExcelService, private dialogService: DialogService) { }  
+  constructor(private logService: LogFilesService, private excelService: ExcelService,
+    private dialogService: DialogService, private datepipe: DatePipe) { }  
 
   ngOnInit() {
     this.LoadLogFilesList();

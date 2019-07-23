@@ -119,6 +119,13 @@ mat-flat-button {
   font-size: 20px;
 }
 
+.pageTitle {
+  text-align: center;
+  background-color: khaki;
+  font-weight: bold;
+  font-style: italic;
+}
+
 /*.mat-header-row {
   background: #f2f2f2;
 
@@ -219,3 +226,19 @@ mat-header-cell:nth-child(5) {
 .overflow-x-none .mat-table {
   overflow: hidden !important;
 }*/
+
+.mat-paginator-navigation-first  {
+  position: static !important;
+}
+
+.mat-paginator-navigation-last {
+  position: static !important;
+}
+
+.mat-button-focus-overlay {
+  display: none !important;
+}
+
+.mat-button-ripple {
+  display: none !important;
+}

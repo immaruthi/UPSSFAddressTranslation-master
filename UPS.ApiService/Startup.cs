@@ -58,6 +58,7 @@ namespace UPS.AddressTranslationService
             services.AddTransient<IEntityValidationService, EntityValidationServic>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IShipperCompanyAsync, ShipperCompanyService>();
+            services.AddTransient<IRoleService, RoleService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Core API", Description = "Swagger Core API" });

@@ -769,10 +769,10 @@
                         shipmentDataRequest.RCV_ADR_TE = excelDataObject.S_address1;
                         shipmentDataRequest.RCV_CPY_TE = excelDataObject.S_receivercompany;
                         shipmentDataRequest.SHP_ADR_TE = excelDataObject.address;
-
+                     
                         AddressBook translatedAddress =
                             addressBooks
-                            .FirstOrDefault(
+                            ?.FirstOrDefault(
                                 (AddressBook address) =>
                                     address.ConsigneeAddress.Replace(" ","").ToLower().Trim().Equals(
                                     excelDataObject.S_address1.Replace(" ", "").ToLower().Trim(), StringComparison.OrdinalIgnoreCase));

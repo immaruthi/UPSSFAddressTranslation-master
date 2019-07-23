@@ -1,0 +1,48 @@
+::ng-deep snack-bar-container.custom-class-success {
+  background: #F2F2F2;
+  position: absolute;
+  top: 50px;
+  right: 16px;
+}
+
+::ng-deep .custom-class-success .mat-simple-snackbar {
+  color: #339900 !important;
+  font-weight: bold;
+}
+
+::ng-deep snack-bar-container.custom-class-error {
+  background: #F2F2F2;
+  position: absolute;
+  top: 50px;
+  right: 16px;
+}
+
+::ng-deep .custom-class-error .mat-simple-snackbar {
+  color: red !important;
+  font-weight: bold;
+}
+
+.regform {
+  float: left;
+  padding: 2% 4% 4% 4%;
+  align-items: center;
+  flex: 1 1 auto;
+  border: 0.8px #a6a9ad solid;
+  min-width: 300px;
+  min-height: 100%;
+  width: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+h2 {
+  font-weight: 700;
+  color: #351C15 !important;
+  text-align: center !important;
+}
+
+.line {
+  border-top: 2px solid #FFB500;
+}

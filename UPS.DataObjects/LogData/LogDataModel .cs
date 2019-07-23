@@ -9,7 +9,7 @@ namespace UPS.DataObjects.LogData
     {
         public string LogRequest { get; set; }
         public string LogResponse { get; set; }
-        public Exception LogException { get; set; }
+        public string LogException { get; set; }
     }
 
     public class LogDataModel

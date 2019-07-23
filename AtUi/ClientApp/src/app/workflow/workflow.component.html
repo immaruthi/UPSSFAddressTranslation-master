@@ -1,5 +1,6 @@
   <div class="routepage">
-    <h4>Work Flow </h4>
+    <div class="pageTitle"><span>Workflow</span></div>
+    <br />
     <div class="row">
       <div class="col-md-3">
         <mat-form-field>
@@ -28,7 +29,7 @@
       </div>
     </div>
     <div>
-      <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+      <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20, 50, 100]" showFirstLastButtons>
       </mat-paginator>
       <div class="table-div">
         <mat-table [dataSource]="dataSource" matSort>

@@ -1,0 +1,43 @@
+<div>
+  <h1 *ngIf="data.NEW === true"> Add New Shipper Data</h1>
+  <h1 *ngIf="data.NEW === false"> Edit Shipper Data</h1>
+</div>
+<mat-dialog-content class="container">
+  <form (ngSubmit)="submit" #formControl="ngForm" class="example-form">
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Postal Code" maxlength="50" value="{{data.PostalCode}}" [(ngModel)]="data.PostalCode" name="PostalCode" required>
+    </mat-form-field><br />
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="City" maxlength="100" value="{{data.City}}" [(ngModel)]="data.City" name="City" required>
+    </mat-form-field><br />
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Centre" maxlength="50" value="{{data.Centre}}" [(ngModel)]="data.Centre" name="Centre" required>
+    </mat-form-field><br />
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Shipping Company" maxlength="50" value="{{data.ShippingCompany}}" [(ngModel)]="data.ShippingCompany" name="ShippingCompany" required>
+    </mat-form-field><br />
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Shipping Name" maxlength="100" value="{{data.ShippingName}}" [(ngModel)]="data.ShippingName" name="ShippingName" required>
+    </mat-form-field><br />
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Sending Party Contact" maxlength="100" value="{{data.SendingPartyContact}}" [(ngModel)]="data.SendingPartyContact" name="SendingPartyContact" required>
+    </mat-form-field><br />
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Shipping Address" value="{{data.ShippingAddress}}" [(ngModel)]="data.ShippingAddress" name="ShippingAddress" required>
+    </mat-form-field><br />
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Contact" maxlength="50" value="{{data.Contact}}" [(ngModel)]="data.Contact" name="Contact">
+    </mat-form-field><br />
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="SLIC Number" type="number" value="{{data.SLICNumber}}" (keypress)="numberOnly($event)" [(ngModel)]="data.SLICNumber" name="SLICNumber" required>
+    </mat-form-field><br />
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Customer ID" maxlength="50" value="{{data.CustomerID}}" [(ngModel)]="data.CustomerID" name="CustomerID" required>
+    </mat-form-field><br />
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button (click)="onNoClick()" color="warn">Cancel</button>
+  <button mat-raised-button [type]="submit" [disabled]="!formControl.valid" (click)="stopEdit()" color="primary">Save</button>
+</mat-dialog-actions>
+
