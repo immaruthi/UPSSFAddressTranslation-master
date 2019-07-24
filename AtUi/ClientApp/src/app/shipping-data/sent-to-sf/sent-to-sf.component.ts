@@ -111,7 +111,8 @@ export class SentToSfComponent implements OnInit {
   }
 
   isAllSelected() {
-    const MainData: any[] = this.dataSource._pageData(this.dataSource.filteredData);
+    const currentData = this.dataSource._orderData(this.dataSource.filteredData);
+    const MainData: any[] = this.dataSource._pageData(currentData);
     const ValidData: any[] = this.getValidData(MainData);
     const checkedDataCount = ValidData.length;
     var count: number = 0;
@@ -128,7 +129,8 @@ export class SentToSfComponent implements OnInit {
     this.mainData = [];
     this.checkedData = [];
     //this.dataSource.data.forEach(row => this.mainData.push(row));
-    this.mainData = this.dataSource._pageData(this.dataSource.filteredData);
+    const currentData = this.dataSource._orderData(this.dataSource.filteredData);
+    this.mainData = this.dataSource._pageData(currentData);
     this.checkedData = this.getValidData(this.mainData);
     this.isAllSelected() ? this.AllSelectedTrue() : this.AllSelectionFalse();
   }

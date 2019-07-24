@@ -39,6 +39,9 @@ namespace UPS.DataObjects.UserData
         [Column("USR-ID-TE")]
         [StringLength(10)]
         public string UserId { get; set; }
+        [Column("USR-CNY-TE")]
+        [StringLength(100)]
+        public string Country { get; set; }
         [NotMapped]
         public List<string> Cities { get; set; }
 

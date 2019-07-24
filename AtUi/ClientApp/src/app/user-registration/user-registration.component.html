@@ -41,6 +41,10 @@
         <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> User ID </mat-header-cell>
         <mat-cell *matCellDef="let user" class="cell"> {{user.userId}} </mat-cell>
       </ng-container>
+      <ng-container matColumnDef="country" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Country </mat-header-cell>
+        <mat-cell *matCellDef="let user" class="cell"> {{user.country}} </mat-cell>
+      </ng-container>
       <ng-container matColumnDef="cities" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Cities </mat-header-cell>
         <mat-cell *matCellDef="let user" class="cell"> {{user.cities}} </mat-cell>
