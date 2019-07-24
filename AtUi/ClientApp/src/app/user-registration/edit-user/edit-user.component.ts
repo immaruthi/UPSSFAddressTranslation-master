@@ -13,8 +13,9 @@ import { NotificationService } from '../../services/NotificationService';
 export class EditUserComponent implements OnInit {
   cities;
   userreg: UserReg;
-    role: string;
-    roles: any[];
+  role: string;
+  country: string;
+  roles: any[];
 
   constructor(public userservice: UserService, private dialogservice: DialogService, private notificationService: NotificationService,
     private dialogref: MatDialogRef<EditUserComponent>) { }

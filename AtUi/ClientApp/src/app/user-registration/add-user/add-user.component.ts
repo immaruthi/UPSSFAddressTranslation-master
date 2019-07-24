@@ -15,6 +15,7 @@ export class AddUserComponent implements OnInit {
   cities;
   hide = true;
   role: string;
+  country: string;
   roles: any[];
 
   constructor(public userservice: UserService, private dialogService: DialogService, private notificationService: NotificationService,

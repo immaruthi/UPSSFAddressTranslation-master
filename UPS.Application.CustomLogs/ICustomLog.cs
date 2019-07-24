@@ -2,13 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using UPS.DataObjects.LogData;
 
 namespace UPS.Application.CustomLogs
 {
     public interface ICustomLog:IAction
     {
-        void AddLogEntry(LogDataModel logDataModel);
+        Task AddLogEntry(LogDataModel logDataModel);
 
         string[] GetLogFileList();
 

@@ -437,8 +437,7 @@
 
 
 
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+            await iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
             {
                 apiTypes = UPS.DataObjects.LogData.APITypes.SFExpress,
                 apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
@@ -449,8 +448,7 @@
                     LogRequest = JsonConvert.SerializeObject(uIOrderRequestBodyDatas),
                     LogResponse = JsonConvert.SerializeObject(createOrderShipmentResponse)
                 }
-            }));
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            });
 
             return Ok(createOrderShipmentResponse);
         }
