@@ -629,7 +629,6 @@
                                             (ShipmentDataRequest data) =>
                                                 data.RCV_ADR_TE.ToLower().Replace(" ", "")
                                                 .Equals(currentShipmentDataRequest.RCV_ADR_TE.ToLower().Replace(" ", ""))
-                                                && data.ID != currentShipmentDataRequest.ID
                                                 )
                                         .ToList();
                                     if (sameAddressShpRequest.Any())
