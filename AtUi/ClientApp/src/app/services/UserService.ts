@@ -98,7 +98,7 @@ export class UserService {
     userId: new FormControl('', [Validators.required, Validators.maxLength(10), Validators.minLength(7)]),
     cities: new FormControl('', [Validators.required]),
     role: new FormControl('', [Validators.required]),
-    country: new FormControl('')
+    country: new FormControl('', [Validators.required])
   });
 
   userRegeditForm: FormGroup = new FormGroup({
@@ -108,7 +108,7 @@ export class UserService {
     email: new FormControl('', [Validators.required, Validators.email, Validators.maxLength(50)]),
     cities: new FormControl('', [Validators.required]),
     role: new FormControl('', [Validators.required]),
-    country: new FormControl('')
+    country: new FormControl('', [Validators.required])
   });
 
   onEdit(user) {
