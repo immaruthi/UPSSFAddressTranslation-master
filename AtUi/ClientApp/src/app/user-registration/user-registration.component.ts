@@ -18,7 +18,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 export class UserRegistrationComponent implements OnInit {
 
   displayedColumns =
-    ['edit', 'firstName', 'lastName', 'email', 'userId', 'cities', 'role'];
+    ['edit', 'firstName', 'lastName', 'email', 'userId', 'cities', 'country',  'role'];
 
   hide = true;
   userreg: UserReg;
@@ -60,7 +60,9 @@ export class UserRegistrationComponent implements OnInit {
     dialogConfig.width = "50%";
     dialogConfig.autoFocus = true;
     this.dialog.open(AddUserComponent, dialogConfig).afterClosed().subscribe(result => {
-      this.GetAllUsers();
+      if (result) {
+        this.GetAllUsers();
+      }
     });
   }
 
@@ -71,7 +73,9 @@ export class UserRegistrationComponent implements OnInit {
     dialogConfig.autoFocus = true;
     dialogConfig.width = "50%";
     this.dialog.open(EditUserComponent, dialogConfig).afterClosed().subscribe(result => {
-      this.GetAllUsers();
+      if (result) {
+        this.GetAllUsers();
+      }
     });
   }
 

@@ -29,6 +29,13 @@
       <mat-error *ngIf="hasError('role', 'required')">Account Type is required</mat-error>
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Country</mat-label>
+      <mat-select [(value)]="country" formControlName="country" required>
+        <mat-option value="China">China</mat-option>
+      </mat-select>
+      <mat-error *ngIf="hasError('country', 'required')">Country is required</mat-error>
+    </mat-form-field>
+    <mat-form-field>
       <mat-label>City</mat-label>
       <mat-select multiple formControlName="cities" required>
         <mat-option *ngFor="let city of cities" [value]="city">

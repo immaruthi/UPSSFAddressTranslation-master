@@ -22,7 +22,7 @@
   <div class="table-div">
     <mat-table class="table" [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="edit" class="container">
-        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header>  </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Action </mat-header-cell>
         <mat-cell *matCellDef="let user" class="cell"><button (click)="onClickEdit(user)" mat-icon-button><span><i class="material-icons">edit</i></span></button></mat-cell>
       </ng-container>
       <ng-container matColumnDef="firstName" class="container">
@@ -40,6 +40,10 @@
       <ng-container matColumnDef="userId" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> User ID </mat-header-cell>
         <mat-cell *matCellDef="let user" class="cell"> {{user.userId}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="country" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Country </mat-header-cell>
+        <mat-cell *matCellDef="let user" class="cell"> {{user.country}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="cities" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Cities </mat-header-cell>

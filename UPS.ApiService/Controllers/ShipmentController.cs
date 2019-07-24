@@ -218,6 +218,7 @@
                     addressAuditLogRequest.UPD_BY = userId;
                     addressAuditLogRequest.UPD_FRM = "Shipment";
                     addressAuditLogRequest.UPD_DT = DateTime.Parse(DateTime.Now.ToString()).ToLocalTime();
+                    addressAuditLogRequest.WFL_ID = shipmentDataResponse.ShipmentDataRequest.WFL_ID;
                     AddressAuditLogResponse addressAuditLogResponse = addressAuditLogService.Insert(addressAuditLogRequest);
                     if (addressAuditLogResponse.Success)
                     {

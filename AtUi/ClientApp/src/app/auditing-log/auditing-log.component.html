@@ -6,18 +6,24 @@
       <input matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="filterText" placeholder="Filter">
     </mat-form-field>
   </div>
-  <!--<div class="col-md-6 text-right">
+  <div class="col-md-6 text-right">
     <mat-form-field class="dateSelect">
-      <input matInput [matDatepicker]="picker1" placeholder="From" readonly>
+      <input matInput id="fromDate" [matDatepicker]="picker1" placeholder="From" readonly>
       <mat-datepicker-toggle class="mat_datepicker_toggle" matSuffix [for]="picker1"></mat-datepicker-toggle>
       <mat-datepicker #picker1></mat-datepicker>
     </mat-form-field>
     <mat-form-field class="dateSelect">
-      <input matInput [matDatepicker]="picker2" placeholder="To" readonly>
+      <input matInput id="toDate" [matDatepicker]="picker2" placeholder="To" readonly>
       <mat-datepicker-toggle class="mat_datepicker_toggle" matSuffix [for]="picker2"></mat-datepicker-toggle>
       <mat-datepicker #picker2></mat-datepicker>
     </mat-form-field>
-  </div>-->
+    <button mat-icon-button (click)="onDateFilter()" data-toggle="tooltip" title="Serach">
+      <span class="glyphicon glyphicon-search"></span>
+    </button>
+    <button mat-icon-button (click)="onResetDateSearch()" data-toggle="tooltip" title="Reset">
+      <span class="glyphicon glyphicon-refresh"></span>
+    </button>
+  </div>
 </div>
 <mat-paginator #paginator
                [pageSize]="10"
