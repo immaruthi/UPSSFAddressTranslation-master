@@ -591,50 +591,75 @@
 
                     if (QuincusResponse.ResponseStatus)
                     {
-                        
                         // Insert Address into AddressBook
                         _addressBookService.InsertAddress(QuincusResponse.QuincusReponseDataList,shipmentDetailsDictionary);
-                        QuincusResponse.QuincusReponseDataList.ForEach(datalist =>
+
+                        try
                         {
-                            List<Geocode> geocodes = (List<Geocode>)((QuincusReponseData)datalist).geocode;
-                            List<ShipmentDataRequest> shipmentDataRequestList = new List<ShipmentDataRequest>(geocodes.Count);
+                            var requestIds = _shipmentDataRequest.Select(_ => _.ID).ToList();
+                            List<ShipmentDataRequest> existingShipmentDetails =
+                                this._context.shipmentDataRequests
+                                .Where(ShpDetail =>
+                                    ShpDetail.WFL_ID == wid
+                                    &&
+                                        (ShpDetail.SMT_STA_NR == ((int)Enums.ATStatus.Uploaded)
+                                        || ShpDetail.SMT_STA_NR == ((int)Enums.ATStatus.Curated))
+                                     && (!requestIds.Contains(ShpDetail.ID))
+                                    )
+                                .ToList();
 
-                            foreach (Geocode geocode in geocodes)
+
+                            QuincusResponse.QuincusReponseDataList.ForEach(datalist =>
                             {
+                                List<Geocode> geocodes = (List<Geocode>)((QuincusReponseData)datalist).geocode;
+                                List<ShipmentDataRequest> shipmentDataRequestList = new List<ShipmentDataRequest>(geocodes.Count);
 
-                            
-                                ShipmentDataRequest shipmentDataRequest =
-                                _shipmentDataRequest.FirstOrDefault(_ => _.PKG_NR_TE == geocode.id);
-                                shipmentDataRequest.SHP_ADR_TR_TE = geocode.translated_adddress;
-                                shipmentDataRequest.ACY_TE = geocode.accuracy;
-                                shipmentDataRequest.CON_NR = geocode.confidence;
-                                shipmentDataRequest.TranslationScore = geocode.translation_score;
-
-                                if (
-                                            !string.IsNullOrEmpty(geocode.translated_adddress)
-                                   //&& geocode.translated_adddress != "NA"
-                                   //&& !string.Equals(_shipmentDataRequest.Where(s => s.ID == Convert.ToInt32(geocode.id)).FirstOrDefault().RCV_ADR_TE.Trim(),
-                                   //    geocode.translated_adddress.Trim())
-                                   )
+                                foreach (Geocode geocode in geocodes)
                                 {
-                                    shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Translated);
-                                }
-                                else
-                                {
-                                    shipmentDataRequest.SMT_STA_NR = Convert.ToInt32(_shipmentDataRequest.Where(s => s.ID == shipmentDataRequest.ID).FirstOrDefault().SMT_STA_NR);
+                                    ShipmentDataRequest currentShipmentDataRequest =
+                                           _shipmentDataRequest.FirstOrDefault(_ => _.PKG_NR_TE == geocode.id);
+                                    ShipmentDataRequest shipmentDataRequest = CreateShipmentAddressUpdateRequest(currentShipmentDataRequest, geocode);
+
+                                    shipmentDataRequestList.Add(shipmentDataRequest);
+
+                                    // Checking any same address are avaible, If there then updating those address also
+
+                                    List<ShipmentDataRequest> sameAddressShpRequest =
+                                        existingShipmentDetails.Where(
+                                            (ShipmentDataRequest data) =>
+                                                data.RCV_ADR_TE.ToLower().Replace(" ", "")
+                                                .Equals(currentShipmentDataRequest.RCV_ADR_TE.ToLower().Replace(" ", ""))
+                                                && data.ID != currentShipmentDataRequest.ID
+                                                )
+                                        .ToList();
+                                    if (sameAddressShpRequest.Any())
+                                    {
+                                        sameAddressShpRequest.ForEach(shpDetails =>
+                                        {
+                                            var sameaddressRequest = CreateShipmentAddressUpdateRequest(shpDetails, geocode);
+                                            shipmentDataRequestList.Add(sameaddressRequest);
+
+                                        });
+                                    }
                                 }
 
-                                shipmentDataRequestList.Add(shipmentDataRequest);
-                            }
-                            _shipmentService.UpdateShipmentAddressByIds(shipmentDataRequestList);
+                                shipmentDataRequestList = shipmentDataRequestList.GroupBy(x => x.ID).Select(x => x.First()).ToList();
+                                _shipmentService.UpdateShipmentAddressByIds(shipmentDataRequestList);
 
-                        //we need to update the workflow status
-                        int? workflowstatus = _shipmentService.SelectShipmentTotalStatusByWorkflowId(wid);
-                            WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
-                            workflowDataRequest.ID = wid;
-                            workflowDataRequest.WFL_STA_TE = workflowstatus;
-                            _workflowService.UpdateWorkflowStatusById(workflowDataRequest);
-                        });
+                                //we need to update the workflow status
+                                int? workflowstatus = _shipmentService.SelectShipmentTotalStatusByWorkflowId(wid);
+                                WorkflowDataRequest workflowDataRequest = new WorkflowDataRequest();
+                                workflowDataRequest.ID = wid;
+                                workflowDataRequest.WFL_STA_TE = workflowstatus;
+                                _workflowService.UpdateWorkflowStatusById(workflowDataRequest);
+                            });
+                        }
+                        catch (Exception exception)
+                        {
+
+                        }
+
+                       
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                         Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
@@ -697,6 +722,29 @@
             {
                 return Ok(quincusTokenDataResponse.exception);
             }
+        }
+
+        private  ShipmentDataRequest CreateShipmentAddressUpdateRequest(ShipmentDataRequest shipmentDataRequest, Geocode geocode)
+        {
+            
+            shipmentDataRequest.SHP_ADR_TR_TE = geocode.translated_adddress;
+            shipmentDataRequest.ACY_TE = geocode.accuracy;
+            shipmentDataRequest.CON_NR = geocode.confidence;
+            shipmentDataRequest.TranslationScore = geocode.translation_score;
+
+            if (
+                        !string.IsNullOrEmpty(geocode.translated_adddress)
+
+               )
+            {
+                shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Translated);
+            }
+            else
+            {
+                shipmentDataRequest.SMT_STA_NR = shipmentDataRequest.SMT_STA_NR;
+            }
+
+            return shipmentDataRequest;
         }
 
         [Route("UpdateShipmentCode")]
