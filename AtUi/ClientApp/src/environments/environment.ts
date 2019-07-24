@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  LOCAL_API_URL: 'https://atservicetest.azurewebsites.net/'
-  //LOCAL_API_URL: 'http://localhost:4348/'
+  //LOCAL_API_URL: 'https://atservicetest.azurewebsites.net/'
+  LOCAL_API_URL: 'http://localhost:4348/'
   //LOCAL_API_URL: 'http://localhost:81/'
 };
