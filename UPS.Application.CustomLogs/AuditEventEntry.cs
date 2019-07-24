@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.Collections.Generic;
 using System.Linq;
 using UPS.ServicesDataRepository.Common;
+using System.Threading.Tasks;
 
 namespace UPS.Application.CustomLogs
 {
@@ -71,9 +72,9 @@ namespace UPS.Application.CustomLogs
             GC.SuppressFinalize(this);
         }
 
-        public void AddLogEntry(LogDataModel logDataModel)
+        public Task AddLogEntry(LogDataModel logDataModel)
         {
-            LogEntry(logDataModel);
+            return Task.Run(() => LogEntry(logDataModel));
         }
 
         public static string[] GetLogFiles()
