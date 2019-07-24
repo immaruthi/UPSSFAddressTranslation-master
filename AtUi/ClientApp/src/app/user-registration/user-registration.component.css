@@ -45,7 +45,7 @@ h2 {
 }
 mat-table {
   width: 100%;
-  min-width: 1450px;
+  min-width: 1570px;
   padding: 0;
 }
 mat-row {
@@ -163,7 +163,7 @@ mat-header-cell:nth-child(6) {
   font-size: 14px;
   font-weight: bold;
 }
-/*Role*/
+/*Country*/
 mat-cell:nth-child(7) {
   width: 150px;
   flex: none;
@@ -171,8 +171,23 @@ mat-cell:nth-child(7) {
   font-size: 12px;
 }
 
-/*Role*/
+/*Country*/
 mat-header-cell:nth-child(7) {
+  width: 150px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+/*Role*/
+mat-cell:nth-child(8) {
+  width: 150px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Role*/
+mat-header-cell:nth-child(8) {
   width: 150px;
   flex: none;
   font-size: 14px;

@@ -98,6 +98,7 @@ export class UserService {
     userId: new FormControl('', [Validators.required, Validators.maxLength(10), Validators.minLength(7)]),
     cities: new FormControl('', [Validators.required]),
     role: new FormControl('', [Validators.required]),
+    country: new FormControl('')
   });
 
   userRegeditForm: FormGroup = new FormGroup({
@@ -107,6 +108,7 @@ export class UserService {
     email: new FormControl('', [Validators.required, Validators.email, Validators.maxLength(50)]),
     cities: new FormControl('', [Validators.required]),
     role: new FormControl('', [Validators.required]),
+    country: new FormControl('')
   });
 
   onEdit(user) {
@@ -116,6 +118,7 @@ export class UserService {
     this.userRegeditForm.controls['email'].setValue(user.email);
     this.userRegeditForm.controls['cities'].setValue(user.cities);
     this.userRegeditForm.controls['role'].setValue(user.role);
+    this.userRegeditForm.controls['country'].setValue(user.country);
   }
 
   intiliazeFormGroup() {
@@ -127,6 +130,7 @@ export class UserService {
       userId: '',
       cities: '',
       role: '',
+      country:'China'
     });
   }
 }

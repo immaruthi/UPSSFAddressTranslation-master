@@ -33,11 +33,17 @@
       <mat-error *ngIf="hasError('userId', 'maxlength')">User Id should not exceed 10 Characters</mat-error>
       <mat-error *ngIf="hasError('userId', 'minlength')">User Id should be more than 7 Characters</mat-error>
     </mat-form-field>
+      <mat-form-field>
+      <mat-label>Country</mat-label>
+      <mat-select [(value)]="country" formControlName="country" required>
+         <mat-option value="China">China</mat-option>
+      </mat-select>
+      <mat-error *ngIf="hasError('country', 'required')">Country is required</mat-error>
+    </mat-form-field>
     <mat-form-field>
       <mat-label>Account Type</mat-label>
       <mat-select [(value)]="role" formControlName="role" required>
-        <!--<mat-option value="1">Admin</mat-option>
-  <mat-option value="2">Operations User</mat-option>-->
+
         <mat-option *ngFor="let role of roles" [value]="role.id">
           {{role.name}}
         </mat-option>

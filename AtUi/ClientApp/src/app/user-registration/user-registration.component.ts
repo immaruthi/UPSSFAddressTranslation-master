@@ -18,7 +18,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 export class UserRegistrationComponent implements OnInit {
 
   displayedColumns =
-    ['edit', 'firstName', 'lastName', 'email', 'userId', 'cities', 'role'];
+    ['edit', 'firstName', 'lastName', 'email', 'userId', 'cities', 'country',  'role'];
 
   hide = true;
   userreg: UserReg;
