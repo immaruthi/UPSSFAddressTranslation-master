@@ -22,6 +22,7 @@
     using UPS.DataObjects.Shipment;
     using UPS.DataObjects.WR_FLW;
     using UPS.Quincus.APP;
+    using UPS.Quincus.APP.Configuration;
     using UPS.Quincus.APP.Request;
     using UPS.Quincus.APP.Response;
     using UPS.ServicesAsyncActions;
@@ -533,14 +534,15 @@
                 wid = _shipmentDataRequest.FirstOrDefault().WFL_ID;
             }
             QuincusTranslatedAddressResponse quincusTranslatedAddressResponse = new QuincusTranslatedAddressResponse();
-
-            QuincusTokenDataResponse quincusTokenDataResponse = QuincusService.GetToken(new UPS.Quincus.APP.Configuration.QuincusParams()
+            QuincusParams quincusParams = new UPS.Quincus.APP.Configuration.QuincusParams()
             {
                 endpoint = configuration["Quincus:TokenEndPoint"],
                 password = configuration["Quincus:Password"],
                 username = configuration["Quincus:UserName"],
+                chunkSize = int.TryParse(configuration["Quincus:BatchSize"], out int size) == true ? size : 10,
+            };
 
-            });
+            QuincusTokenDataResponse quincusTokenDataResponse = QuincusService.GetToken(quincusParams);
 
             if (quincusTokenDataResponse.ResponseStatus)
             {
@@ -559,7 +561,7 @@
                 this._quincusAddressTranslationRequest.shipmentWorkFlowRequests = shipmentWorkFlowRequests;
                 this._quincusAddressTranslationRequest.token = quincusTokenDataResponse.quincusTokenData.token;
 
-                quincusTranslatedAddressResponse = QuincusService.GetTranslationAddress(this._quincusAddressTranslationRequest);
+                quincusTranslatedAddressResponse = QuincusService.GetTranslationAddress(this._quincusAddressTranslationRequest, quincusParams);
 
                 if (quincusTranslatedAddressResponse.Response)
                 {
@@ -600,8 +602,7 @@
                                 .Where(ShpDetail =>
                                     ShpDetail.WFL_ID == wid
                                     &&
-                                        (ShpDetail.SMT_STA_NR == ((int)Enums.ATStatus.Uploaded)
-                                        || ShpDetail.SMT_STA_NR == ((int)Enums.ATStatus.Curated))
+                                        (ShpDetail.SMT_STA_NR == ((int)Enums.ATStatus.Uploaded))
                                      && (!requestIds.Contains(ShpDetail.ID))
                                     )
                                 .ToList();
@@ -635,7 +636,6 @@
                                         {
                                             var sameaddressRequest = CreateShipmentAddressUpdateRequest(shpDetails, geocode);
                                             shipmentDataRequestList.Add(sameaddressRequest);
-
                                         });
                                     }
                                 }

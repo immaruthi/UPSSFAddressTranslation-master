@@ -103,7 +103,7 @@
                 .ToList();
         }
 
-        public static QuincusTranslatedAddressResponse GetTranslatedAddressResponse(IQuincusAddressTranslationRequest quincusAddressTranslationRequest)
+        public static QuincusTranslatedAddressResponse GetTranslatedAddressResponse(IQuincusAddressTranslationRequest quincusAddressTranslationRequest, QuincusParams quincusParams)
         {
             string response = string.Empty;
             var input = string.Empty;
@@ -114,7 +114,7 @@
             {
                 quincusTranslatedAddressResponse.RequestDataCount = quincusAddressTranslationRequest.shipmentWorkFlowRequests.Count;
 
-                List<string> content = GetRequestContextForAddress.GetAddressStringFromRequest(quincusAddressTranslationRequest.shipmentWorkFlowRequests);
+                List<string> content = GetRequestContextForAddress.GetAddressStringFromRequest(quincusAddressTranslationRequest.shipmentWorkFlowRequests, quincusParams);
                 quincusTranslatedAddressResponse.QuincusContentRequest = JsonConvert.SerializeObject(content);
 
                 content.ForEach(requestdata =>
