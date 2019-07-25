@@ -20,7 +20,8 @@
         </div>
         <div class="col-md-4" style="float:right">
           <div class="form-group">
-            <label for="file" class="btn btn-primary">Upload </label>
+            <!--<label for="file" class="btn btn-primary" color="primary">Upload </label>-->
+            <label for="file" class="mat-raised-button" style="background-color: #3f51b5;color: white">Upload </label>
             <input type="file"
                    id="file" hidden accept=".xls, .xlsx"
                    (change)="handleFileInput($event.target.files)" style="width:0px;">
