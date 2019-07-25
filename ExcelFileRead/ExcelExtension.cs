@@ -131,7 +131,10 @@ namespace ExcelFileRead
                     {
                         validationFailedSet.Add("Delivery Address Field is missing ! Which was placed beside - receiver company in your upload excel file");
                     }
-                    validationFailedSet.Add(validationColumn);
+                    else
+                    {
+                        validationFailedSet.Add(validationColumn);
+                    }
                     desiredResult = false;
                 }
             }
