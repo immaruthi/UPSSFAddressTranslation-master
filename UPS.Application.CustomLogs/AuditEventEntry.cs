@@ -87,7 +87,9 @@ namespace UPS.Application.CustomLogs
                                          {
                                              fileNames.Add(Path.GetFileName(filename));
                                          });
-            
+
+            fileNames.Reverse();
+
             return fileNames.ToArray();
         }
 
