@@ -93,7 +93,7 @@ export class TranslateComponent implements OnInit {
   }
 
   getValidData(dataArray: any[]) {
-    return dataArray.filter(data => !(data.smT_STA_NR === 2 || data.smT_STA_NR === 3 || (data.smT_STA_NR === 1 && data.coN_NR != null && data.acY_TE != null)));
+    return dataArray.filter(data => !(data.smT_STA_NR === 2 || data.smT_STA_NR === 3 || data.smT_STA_NR === 1));
   }
 
   applyFilter(filterValue: string) {

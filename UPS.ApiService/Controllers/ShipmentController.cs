@@ -600,8 +600,7 @@
                                 .Where(ShpDetail =>
                                     ShpDetail.WFL_ID == wid
                                     &&
-                                        (ShpDetail.SMT_STA_NR == ((int)Enums.ATStatus.Uploaded)
-                                        || ShpDetail.SMT_STA_NR == ((int)Enums.ATStatus.Curated))
+                                        (ShpDetail.SMT_STA_NR == ((int)Enums.ATStatus.Uploaded))
                                      && (!requestIds.Contains(ShpDetail.ID))
                                     )
                                 .ToList();
@@ -635,7 +634,6 @@
                                         {
                                             var sameaddressRequest = CreateShipmentAddressUpdateRequest(shpDetails, geocode);
                                             shipmentDataRequestList.Add(sameaddressRequest);
-
                                         });
                                     }
                                 }
