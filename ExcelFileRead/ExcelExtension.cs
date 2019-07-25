@@ -24,9 +24,9 @@ namespace ExcelFileRead
     {
 
 
-        
 
-        public ExcelExtensionReponse Test(string fileName,string[] validationSet)
+
+        public ExcelExtensionReponse Test(string fileName, string[] validationSet)
         {
             ExcelExtensionReponse excelExtensionReponse = new ExcelExtensionReponse();
 
@@ -80,7 +80,7 @@ namespace ExcelFileRead
                 }
                 else
                 {
-                    excelExtensionReponse.exception = new ArgumentException("Required Columns "+ JsonConvert.SerializeObject(getValidationErrors) +" are not found");
+                    excelExtensionReponse.exception = new ArgumentException("Required Columns " + JsonConvert.SerializeObject(getValidationErrors) + " are not found");
                 }
 
             }
@@ -93,31 +93,31 @@ namespace ExcelFileRead
 
         }
 
-        private static bool ColExistence(DataSet result,string[] validationSet,out List<string> validationFailedSet)
+        private static bool ColExistence(DataSet result, string[] validationSet, out List<string> validationFailedSet)
         {
             bool desiredResult = true;
             int addressesCount = 0;
             validationFailedSet = new List<string>();
 
-            for (int i = 0; i < result.Tables[0].Columns.Count; i++)
-            {
-                if(string.Equals(result.Tables[0].Columns[i].ToString(), "address", StringComparison.OrdinalIgnoreCase))
-                {
-                    addressesCount++;
-                }
-            }
+            //for (int i = 0; i < result.Tables[0].Columns.Count; i++)
+            //{
+            //    if(string.Equals(result.Tables[0].Columns[i].ToString(), "address", StringComparison.OrdinalIgnoreCase))
+            //    {
+            //        addressesCount++;
+            //    }
+            //}
 
-            if (addressesCount == 2)
-            {
-                desiredResult = DefaultValidation(result, validationSet, validationFailedSet, desiredResult);
-            }
-            else
-            {
-                desiredResult = DefaultValidation(result, validationSet, validationFailedSet, desiredResult);
-                validationFailedSet.Add("address");
-                desiredResult = false;
-            }
-      
+            //if (addressesCount == 2)
+            //{
+            desiredResult = DefaultValidation(result, validationSet, validationFailedSet, desiredResult);
+            //}
+            //else
+            //{
+            //    desiredResult = DefaultValidation(result, validationSet, validationFailedSet, desiredResult);
+            //    validationFailedSet.Add("address");
+            //    desiredResult = false;
+            //}
+
             return desiredResult;
         }
 
@@ -127,6 +127,10 @@ namespace ExcelFileRead
             {
                 if (!result.Tables[0].Columns.Contains(validationColumn))
                 {
+                    if (string.Equals(validationColumn, "address_1", StringComparison.OrdinalIgnoreCase))
+                    {
+                        validationFailedSet.Add("Delivery Address Field is missing ! Which was placed beside - receiver company in your upload excel file");
+                    }
                     validationFailedSet.Add(validationColumn);
                     desiredResult = false;
                 }

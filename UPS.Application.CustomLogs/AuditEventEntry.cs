@@ -25,7 +25,7 @@ namespace UPS.Application.CustomLogs
             using (var myLog = new EventLog())
             {
                 myLog.Source = "Application";   
-                myLog.WriteEntry(exception.Message, EventLogEntryType.Error);
+                myLog.WriteEntry(exception.Message+ "  "+ exception.StackTrace, EventLogEntryType.Error);
             }
         }
 

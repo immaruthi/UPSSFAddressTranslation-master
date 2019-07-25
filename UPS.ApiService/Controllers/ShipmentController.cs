@@ -181,6 +181,7 @@
             catch (Exception ex)
             {
                 // new AuditEventEntry.WriteEntry(new Exception(ex.Message));
+                AuditEventEntry.WriteEntry(ex);
                 return Ok(shipmentDataResponse.OperationExceptionMsg = ex.Message);
             }
         }
@@ -659,7 +660,7 @@
                         }
                         catch (Exception exception)
                         {
-
+                            AuditEventEntry.WriteEntry(exception);
                         }
 
                        
