@@ -15,7 +15,7 @@ export class LogGridComponent implements OnInit {
   logFilesList = [];
   logGrid = [];
   dataSource = new MatTableDataSource<any>();
-  displayedColumns: string[] = ['logDate', 'userId', 'apiType', 'logRequest', 'logResponse', 'logException'];
+  displayedColumns: string[] = ['info','logDate', 'userId', 'apiType', 'logRequest', 'logResponse', 'logException'];
   search = true;
   filterText: string = '';
   tableData;

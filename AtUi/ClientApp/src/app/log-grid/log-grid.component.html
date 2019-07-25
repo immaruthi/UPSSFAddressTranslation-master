@@ -10,7 +10,15 @@
     </div>
     <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     <div class="table-div">
-      <mat-table id="matTable"  [dataSource]="dataSource">
+      <mat-table id="matTable" [dataSource]="dataSource">
+        <ng-container matColumnDef="info" class="container">
+          <mat-header-cell *matHeaderCellDef class="header-cell"> </mat-header-cell>
+          <mat-cell *matCellDef="let row; let i=index;" class="cell">
+            <button mat-icon-button (click)="onRowClick(i,row)">
+              <span><i class="material-icons">arrow_drop_down_circle</i></span>
+            </button>
+          </mat-cell>
+        </ng-container>
         <!-- Date Column -->
         <ng-container matColumnDef="logDate">
           <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
@@ -42,7 +50,7 @@
           <mat-cell *matCellDef="let log"> {{log.logException}} </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;let i=index;" (click)="onRowClick(i, row)"></mat-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;let i=index;"></mat-row>
       </mat-table>
     </div>
   </div>
