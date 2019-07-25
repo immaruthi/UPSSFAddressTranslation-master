@@ -42,6 +42,8 @@ namespace UPS.AddressTranslationService
 
             services.ContextSetup(Configuration);
 
+            services.AddResponseCompression();
+
             services.AddSingleton<IQuincusAddressTranslationRequest>(new QuincusAddressTranslationRequest() { endpoint = Configuration["Quincus:GeoCodeEndPoint"] });
             /* Dependancy Injection */
 
@@ -115,6 +117,8 @@ namespace UPS.AddressTranslationService
          
             app.UseHttpsRedirection();
             app.UseAuthentication();
+
+            app.UseResponseCompression();
             app.UseMvc();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
