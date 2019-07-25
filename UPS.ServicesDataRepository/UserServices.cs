@@ -166,7 +166,8 @@ namespace UPS.ServicesDataRepository
                          Role = roles == null ? 0 : roles.RoleId,
                          Cities = userCityMappings
                                   .Where(_ => _.UserId == user.ID)
-                                  .Select(_ => _.City).ToList()
+                                  .Select(_ => _.City).ToList(),
+                         Country = user.Country
 
                      }).ToListAsync();
 
@@ -210,6 +211,7 @@ namespace UPS.ServicesDataRepository
                     existingUser.Email = user.Email;
                     existingUser.UpdatedBy = loggedUserId;
                     existingUser.UpdatedDate = DateTime.Now;
+                    existingUser.Country = user.Country;
 
                     await this.context.BulkUpdateAsync(new List<User>() { existingUser });
 

@@ -93,7 +93,7 @@ export class TranslateComponent implements OnInit {
   }
 
   getValidData(dataArray: any[]) {
-    return dataArray.filter(data => !(data.smT_STA_NR === 2 || data.smT_STA_NR === 3 || (data.smT_STA_NR === 1 && data.coN_NR != null && data.acY_TE != null)));
+    return dataArray.filter(data => !(data.smT_STA_NR === 2 || data.smT_STA_NR === 3 || data.smT_STA_NR === 1));
   }
 
   applyFilter(filterValue: string) {
@@ -106,7 +106,8 @@ export class TranslateComponent implements OnInit {
   }
 
   isAllSelected() {
-    const MainData: any[] = this.dataSource._pageData(this.dataSource.filteredData);
+    const currentData = this.dataSource._orderData(this.dataSource.filteredData);
+    const MainData: any[] = this.dataSource._pageData(currentData);
     const ValidData: any[] = this.getValidData(MainData);
     const checkedDataCount = ValidData.length;
     var count: number = 0;
@@ -123,7 +124,8 @@ export class TranslateComponent implements OnInit {
     this.mainData = [];
     this.checkedData = [];
     //this.dataSource.data.forEach(row => this.mainData.push(row));
-    this.mainData = this.dataSource._pageData(this.dataSource.filteredData);
+    const currentData = this.dataSource._orderData(this.dataSource.filteredData);
+    this.mainData = this.dataSource._pageData(currentData);
     this.checkedData = this.getValidData(this.mainData);
     this.isAllSelected() ? this.AllSelectedTrue() : this.AllSelectionFalse();
   }

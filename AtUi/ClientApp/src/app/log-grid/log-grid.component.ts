@@ -84,7 +84,24 @@ export class LogGridComponent implements OnInit {
     this.dataSource.data = this.logGrid;
     this.dataSource.paginator = this.paginator;
     this.search = true;
-  } 
+  }
+
+  onRowClick(i: number, row: any) {
+    var matRow = <HTMLElement>document.getElementById('matTable');
+    for (let j = 1; j < matRow.childElementCount; j++) {
+      if (j === (i + 1)) {
+        const currentStyle = matRow.children[j].getAttribute('style');
+
+        if (currentStyle === 'height: 100% !important') {
+          matRow.children[j].setAttribute('style', 'height: 56px !important'); //Same height mentioned in CSS as default
+        } else {
+          matRow.children[j].setAttribute('style', 'height: 100% !important');
+        }
+      } else {
+        matRow.children[j].setAttribute('style', 'height: 56px !important'); //Same height mentioned in CSS as default
+      }
+    }
+  }
 }
 
 

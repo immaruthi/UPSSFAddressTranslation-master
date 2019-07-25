@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using System.Collections.Generic;
 using System.Linq;
+using UPS.ServicesDataRepository.Common;
+using System.Threading.Tasks;
 
 namespace UPS.Application.CustomLogs
 {
@@ -52,6 +54,15 @@ namespace UPS.Application.CustomLogs
             LogInit();
             using (StreamWriter sw = File.AppendText(filePath))
             {
+                try
+                {
+                    logDataModel.userID = CustomHttpContextInterceptor.Current.User.Claims.FirstOrDefault(x => x.Type == JwtConstant.UserIdText).Value;
+                }
+                catch(Exception ex)
+                {
+                    logDataModel.userID = "Not Found";
+                }
+
                 sw.WriteLine(JsonConvert.SerializeObject(logDataModel) + ",");
             }
         }
@@ -61,9 +72,9 @@ namespace UPS.Application.CustomLogs
             GC.SuppressFinalize(this);
         }
 
-        public void AddLogEntry(LogDataModel logDataModel)
+        public Task AddLogEntry(LogDataModel logDataModel)
         {
-            LogEntry(logDataModel);
+            return Task.Run(() => LogEntry(logDataModel));
         }
 
         public static string[] GetLogFiles()
