@@ -10,7 +10,7 @@
 
 .table-div {
   width: 100%;
-  height: calc(100vh - 220px);
+  max-height: calc(100vh - 220px);
   overflow: auto;
 }
 

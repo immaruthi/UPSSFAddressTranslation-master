@@ -33,7 +33,7 @@ li{
 }
 .table-div {
   width: 100%;
-  height: calc(100vh - 180px);
+  max-height: calc(100vh - 180px);
   overflow: auto;
 }
 mat-table{
