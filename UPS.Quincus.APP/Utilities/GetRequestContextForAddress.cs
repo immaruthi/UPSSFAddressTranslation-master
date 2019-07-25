@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UPS.DataObjects.Shipment;
+using UPS.Quincus.APP.Configuration;
 using UPS.Quincus.APP.Request;
 using static UPS.Quincus.APP.Request.QuincusAddressRequestData;
 
@@ -10,7 +11,7 @@ namespace UPS.Quincus.APP.Utilities
 {
     public class GetRequestContextForAddress
     {
-        public static List<string> GetAddressStringFromRequest(List<ShipmentWorkFlowRequest> shipmentWorkFlowRequests)
+        public static List<string> GetAddressStringFromRequest(List<ShipmentWorkFlowRequest> shipmentWorkFlowRequests, QuincusParams quincusParams)
         {
             List<string> addressesSearlizationList = new List<string>();
             
@@ -40,7 +41,7 @@ namespace UPS.Quincus.APP.Utilities
 
                 
 
-                var getBatchList = quincusAddressRequestData.addresses.ChunkBy<QuincusAddressRequestDataObject>(10);
+                var getBatchList = quincusAddressRequestData.addresses.ChunkBy<QuincusAddressRequestDataObject>(quincusParams.chunkSize);
 
                 
                 getBatchList.ForEach(trans =>
