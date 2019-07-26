@@ -20,7 +20,7 @@ export class AuditingLogComponent implements OnInit {
 
 
   displayedColumns =
-    ['smT_ID', 'csG_ADR', 'bfR_ADR', 'afR_ADR', 'upD_BY_TE', 'upD_DT', 'upD_FRM'];
+    ['wfL_ID','smT_ID', 'csG_ADR', 'bfR_ADR', 'afR_ADR', 'upD_BY_TE', 'upD_DT', 'upD_FRM'];
 
   public ResponseData: any[] = [];
   dataSource = new MatTableDataSource<Element>();
