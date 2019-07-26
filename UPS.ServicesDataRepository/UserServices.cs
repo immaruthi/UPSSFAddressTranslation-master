@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
+using UPS.DataObjects.SPC_LST;
 using UPS.DataObjects.UserData;
 using UPS.ServicesAsyncActions;
 using UPS.ServicesDataRepository.Common;
@@ -144,7 +145,7 @@ namespace UPS.ServicesDataRepository
         public async Task<List<User>> GetAllUser()
         {
             List<UserCityMapping> userCityMappings = this.context.UserCityMapping.ToList();
-
+            List<string> availableCities = await this.GetAvailableCities();
             List<User> users =
                 await
                     (from user in this.context.UserData
@@ -165,7 +166,10 @@ namespace UPS.ServicesDataRepository
                          IsActive = user.IsActive,
                          Role = roles == null ? 0 : roles.RoleId,
                          Cities = userCityMappings
-                                  .Where(_ => _.UserId == user.ID)
+                                  .Where(
+                                    (UserCityMapping cityMap) => 
+                                        cityMap.UserId == user.ID
+                                        && availableCities.Contains(cityMap.City.ToLower().Trim()))
                                   .Select(_ => _.City).ToList(),
                          Country = user.Country
 
@@ -246,12 +250,25 @@ namespace UPS.ServicesDataRepository
                 return string.Format(ResponseConstant.Not_Exists, "User");
             }
 
-            return string.Format(ResponseConstant.Something_Went_Wrong);
         }
 
         public UserDataResponse GetUserData()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<string>> GetAvailableCities()
+        {
+            List<string> cities =
+                await this.context.shipperCompanyRequests
+                        .Select(
+                            (ShipperCompanyList shipperList) =>
+                                shipperList.SPC_CTY_TE.ToLower().Trim())
+                        .Distinct()
+                        .OrderBy(city => city)
+                        .ToListAsync();
+
+            return cities;
         }
     }
 }
