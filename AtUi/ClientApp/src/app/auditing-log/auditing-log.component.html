@@ -37,6 +37,10 @@
         <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> S.No </mat-header-cell>
         <mat-cell *matCellDef="let element, let i = index" class="cell"> {{i+1}} </mat-cell>
       </ng-container>
+      <ng-container matColumnDef="wfL_ID" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Workflow ID </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.wfL_ID}} </mat-cell>
+      </ng-container>
       <ng-container matColumnDef="smT_ID" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Shipment ID </mat-header-cell>
         <mat-cell *matCellDef="let element" class="cell"> {{element.smT_ID}} </mat-cell>
