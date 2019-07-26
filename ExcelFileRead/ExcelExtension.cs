@@ -24,56 +24,9 @@ namespace ExcelFileRead
     {
 
 
-        //public static DataSet Parse(string fileName)
-        //{
-        //    string connectionString = string.Format("provider=Microsoft.Jet.OLEDB.4.0; data source={0};Extended Properties=Excel 8.0;", fileName);
 
 
-        //    DataSet data = new DataSet();
-
-        //    foreach (var sheetName in GetExcelSheetNames(connectionString))
-        //    {
-        //        using (OleDbConnection con = new OleDbConnection(connectionString))
-        //        {
-        //            var dataTable = new DataTable();
-        //            string query = string.Format("SELECT * FROM [{0}]", sheetName);
-        //            con.Open();
-        //            OleDbDataAdapter adapter = new OleDbDataAdapter(query, con);
-        //            adapter.Fill(dataTable);
-        //            data.Tables.Add(dataTable);
-        //        }
-        //    }
-
-        //    return data;
-        //}
-
-        //public static string[] GetExcelSheetNames(string connectionString)
-        //{
-        //    OleDbConnection con = null;
-        //    DataTable dt = null;
-        //    con = new OleDbConnection(connectionString);
-        //    con.Open();
-        //    dt = con.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-
-        //    if (dt == null)
-        //    {
-        //        return null;
-        //    }
-
-        //    String[] excelSheetNames = new String[dt.Rows.Count];
-        //    int i = 0;
-
-        //    foreach (DataRow row in dt.Rows)
-        //    {
-        //        excelSheetNames[i] = row["TABLE_NAME"].ToString();
-        //        i++;
-        //    }
-
-        //    return excelSheetNames;
-        //}
-
-
-        public ExcelExtensionReponse Test(string fileName)
+        public ExcelExtensionReponse Test(string fileName, string[] validationSet)
         {
             ExcelExtensionReponse excelExtensionReponse = new ExcelExtensionReponse();
 
@@ -83,8 +36,7 @@ namespace ExcelFileRead
             {
                 FileStream stream = File.Open(fileName, FileMode.Open, FileAccess.Read);
 
-
-                if(fileName.Contains("xlsx"))
+                if (fileName.Contains("xlsx"))
                 {
                     excelReader = ExcelReaderFactory.CreateReader(stream);
                 }
@@ -93,7 +45,7 @@ namespace ExcelFileRead
                     excelReader = ExcelReaderFactory.CreateBinaryReader(stream);
                 }
 
-                
+
 
                 DataSet result = excelReader.AsDataSet(new ExcelDataSetConfiguration()
                 {
@@ -104,16 +56,13 @@ namespace ExcelFileRead
                 });
 
                 excelReader.Close();
-                bool getDesiredColumnExistence = result.Tables[0].Columns.Contains("package no");
+                List<string> getValidationErrors;
+                bool getDesiredColumnExistence = ColExistence(result, validationSet, out getValidationErrors);
 
                 if (getDesiredColumnExistence)
                 {
 
-
-
                     var regexItem = new Regex("[^0-9a-zA-Z]+");
-
-
 
                     for (int i = 0; i < result.Tables[0].Columns.Count; i++)
                     {
@@ -131,9 +80,9 @@ namespace ExcelFileRead
                 }
                 else
                 {
-                    excelExtensionReponse.exception= new ArgumentException("Required Column 'package no' is not found");
+                    excelExtensionReponse.exception = new ArgumentException("Required Columns " + JsonConvert.SerializeObject(getValidationErrors) + " are not found");
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -144,5 +93,53 @@ namespace ExcelFileRead
 
         }
 
+        private static bool ColExistence(DataSet result, string[] validationSet, out List<string> validationFailedSet)
+        {
+            bool desiredResult = true;
+            int addressesCount = 0;
+            validationFailedSet = new List<string>();
+
+            //for (int i = 0; i < result.Tables[0].Columns.Count; i++)
+            //{
+            //    if(string.Equals(result.Tables[0].Columns[i].ToString(), "address", StringComparison.OrdinalIgnoreCase))
+            //    {
+            //        addressesCount++;
+            //    }
+            //}
+
+            //if (addressesCount == 2)
+            //{
+            desiredResult = DefaultValidation(result, validationSet, validationFailedSet, desiredResult);
+            //}
+            //else
+            //{
+            //    desiredResult = DefaultValidation(result, validationSet, validationFailedSet, desiredResult);
+            //    validationFailedSet.Add("address");
+            //    desiredResult = false;
+            //}
+
+            return desiredResult;
+        }
+
+        private static bool DefaultValidation(DataSet result, string[] validationSet, List<string> validationFailedSet, bool desiredResult)
+        {
+            foreach (string validationColumn in validationSet)
+            {
+                if (!result.Tables[0].Columns.Contains(validationColumn))
+                {
+                    if (string.Equals(validationColumn, "address_1", StringComparison.OrdinalIgnoreCase))
+                    {
+                        validationFailedSet.Add("Delivery Address Field is missing ! Which was placed beside - receiver company in your upload excel file");
+                    }
+                    else
+                    {
+                        validationFailedSet.Add(validationColumn);
+                    }
+                    desiredResult = false;
+                }
+            }
+
+            return desiredResult;
+        }
     }
 }

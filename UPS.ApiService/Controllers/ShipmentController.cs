@@ -82,6 +82,8 @@
       
         public async Task<ActionResult> ExcelFile(IList<IFormFile> excelFileName)
         {
+            string[] validationSet = configuration.GetSection("ExcelFileValidation:mandatoryFields").GetChildren().Select(val => val.Value).ToArray();
+
             ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
             try
             {
@@ -109,7 +111,11 @@
                             }
 
 
-                            ExcelExtensionReponse excelExtensionReponse = new ExcelExtension().Test(filePath);
+                            ExcelExtensionReponse excelExtensionReponse = 
+                                new ExcelExtension()
+                                .Test(
+                                    filePath, 
+                                    configuration.GetSection("ExcelFileValidation:mandatoryFields").GetChildren().Select(val => val.Value).ToArray());
                             if (excelExtensionReponse.success)
                             {
                                 var excelDataObject2 = JsonConvert.DeserializeObject<List<ExcelDataObject>>(excelExtensionReponse.ExcelExtensionReponseData);
@@ -137,13 +143,13 @@
                             else
                             {
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                                Task.Run(()=>iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
+                                Task.Run(() => iCustomLog.AddLogEntry(new UPS.DataObjects.LogData.LogDataModel()
                                 {
-                                    apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes),7),
+                                    apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 7),
                                     dateTime = System.DateTime.Now,
                                     LogInformation = new UPS.DataObjects.LogData.LogInformation()
                                     {
-                                        LogException = excelExtensionReponse.exception.InnerException.ToString(),
+                                        LogException = string.Empty,
                                         LogRequest = "Excel Uploaded",
                                         LogResponse = JsonConvert.SerializeObject(excelExtensionReponse)
                                     }
@@ -175,6 +181,7 @@
             catch (Exception ex)
             {
                 // new AuditEventEntry.WriteEntry(new Exception(ex.Message));
+                AuditEventEntry.WriteEntry(ex);
                 return Ok(shipmentDataResponse.OperationExceptionMsg = ex.Message);
             }
         }
@@ -653,7 +660,7 @@
                         }
                         catch (Exception exception)
                         {
-
+                            AuditEventEntry.WriteEntry(exception);
                         }
 
                        
