@@ -118,7 +118,7 @@ namespace UPS.ServicesDataRepository
                                  GeoCodeError = Convert.ToString(quincusReponseData?.geocode_errors ?? string.Empty),
                                  Latitude = geocode?.latitude?.Trim(),
                                  Longitude = geocode?.longitude?.Trim(),
-                                 PostalCode = geocode?.postcode,
+                                 PostalCode = geocode?.corrected_postcode,
                                  Organization = quincusReponseData?.organisation != null ? Convert.ToString(quincusReponseData?.organisation) : string.Empty,
                                  Region = geocode?.region,
                                  Road = geocode?.road,
