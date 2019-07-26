@@ -61,32 +61,45 @@ namespace UPS.ServicesDataRepository
             return userDataResponse;
         }
 
-        public string GenerateValidationToken(string userIdText,int role, int? Id)
+        public string GenerateValidationToken(UserDataResponse userDataResponse)
         {
-            var signingKey = Convert.FromBase64String(configuration[JwtConstant.SigningKey]);
-            var expiryDuration = int.Parse(configuration[JwtConstant.ExpiryInMinutes]);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
+            try
             {
-                Issuer = configuration[JwtConstant.Site],
-                Audience = configuration[JwtConstant.Site],
-                IssuedAt = DateTime.UtcNow,
-                NotBefore = DateTime.UtcNow,
-                Expires = DateTime.UtcNow.AddMinutes(expiryDuration),
-                Subject =
-                    new ClaimsIdentity(new List<Claim>
-                    {
-                        new Claim(JwtConstant.UserIdText, userIdText),
-                        new Claim(JwtConstant.UserId,Convert.ToString(Id)),
-                        new Claim(JwtConstant.Role,role==1?Constants.Role.Admin:Constants.Role.User)
-                    }),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(signingKey), SecurityAlgorithms.HmacSha256Signature)
-            };
-            JwtSecurityTokenHandler jwtTokenHandler = new JwtSecurityTokenHandler();
-            JwtSecurityToken jwtToken = jwtTokenHandler.CreateJwtSecurityToken(tokenDescriptor);
-            string token = jwtTokenHandler.WriteToken(jwtToken);
+                var signingKey = Convert.FromBase64String(configuration[JwtConstant.SigningKey]);
+                var expiryDuration = int.Parse(configuration[JwtConstant.ExpiryInMinutes]);
 
-            return token;
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Issuer = configuration[JwtConstant.Site],
+                    Audience = configuration[JwtConstant.Site],
+                    IssuedAt = DateTime.UtcNow,
+                    NotBefore = DateTime.UtcNow,
+                    Expires = DateTime.UtcNow.AddMinutes(expiryDuration),
+                    Subject =
+                        new ClaimsIdentity(new List<Claim>
+                        {
+                        new Claim(JwtConstant.UserIdText, userDataResponse.User.UserId),
+                        new Claim(JwtConstant.UserId,Convert.ToString(userDataResponse.User.ID)),
+                        new Claim(JwtConstant.Role,userDataResponse.User.Role==1?Constants.Role.Admin:Constants.Role.User),
+                        new Claim(JwtConstant.Country,
+                                    string.IsNullOrEmpty(userDataResponse.User.Country)
+                                    ?string.Empty
+                                    :userDataResponse.User.Country)
+                        }),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(signingKey), SecurityAlgorithms.HmacSha256Signature)
+                };
+                JwtSecurityTokenHandler jwtTokenHandler = new JwtSecurityTokenHandler();
+                JwtSecurityToken jwtToken = jwtTokenHandler.CreateJwtSecurityToken(tokenDescriptor);
+                string token = jwtTokenHandler.WriteToken(jwtToken);
+
+                return token;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+           
         }
     }
 }

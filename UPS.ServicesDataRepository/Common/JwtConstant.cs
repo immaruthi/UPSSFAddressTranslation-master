@@ -8,5 +8,6 @@
         public const string UserIdText = "USR_ID_TE";
         public const string UserId = "Id";
         public const string Role = "roles";
+        public const string Country = "Country";
     }
 }

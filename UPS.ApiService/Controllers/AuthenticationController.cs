@@ -30,7 +30,7 @@ namespace AtService.Controllers
             UserDataResponse userResponse = await authenticationService.AuthenticateUserAsync(loginRequest.USR_ID_TE, loginRequest.USR_PWD_TE);
             if (userResponse.Success)
             {
-                string token = authenticationService.GenerateValidationToken(userResponse.User.UserId,userResponse.User.Role, userResponse.User.ID);
+                string token = authenticationService.GenerateValidationToken(userResponse);
                 LoginDataResponse loginDataResponse =
                     new LoginDataResponse()
                     {
