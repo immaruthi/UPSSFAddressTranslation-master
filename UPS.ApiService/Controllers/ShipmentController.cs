@@ -359,10 +359,16 @@
                 XMLMessage += " d_contact=\"" + orderRequest.csG_CTC_TE + "\"";
                 XMLMessage += " d_tel=\"" + orderRequest.pH_NR + "\"";
                 XMLMessage += " specifications=\"" + orderRequest.fsT_INV_LN_DES_TE + "\"";
+                XMLMessage += " routelabelService=\"1\"";
                 XMLMessage += " d_address=\"" + orderRequest.shP_ADR_TR_TE + "\" cargo_total_weight=\"" + orderRequest.pkG_WGT_DE + "\"";
                 XMLMessage += " pay_method=\"1\" is_docall=\"" + 1 + "\" need_return_tracking_no=\"" + orderRequest.poD_RTN_SVC + "\" express_type=\"6\"";
                 XMLMessage += " >";
-                XMLMessage += " </Order><AddedService name='COD' value=\"" + orderRequest.coD_TE + "\"></AddedService></Body></Request>";
+                XMLMessage += " </Order>";
+                if (!string.IsNullOrEmpty(orderRequest.coD_TE))
+                {
+                    XMLMessage += "<AddedService name='COD' value=\"" + orderRequest.coD_TE + "\"></AddedService>";
+                }
+                XMLMessage += "</Body></Request>";
 
 
                 SFCreateOrderServiceRequest sFCreateOrderServiceRequest = new SFCreateOrderServiceRequest()
