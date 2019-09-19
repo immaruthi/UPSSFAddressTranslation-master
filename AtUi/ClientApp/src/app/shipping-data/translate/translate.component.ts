@@ -299,6 +299,7 @@ export class TranslateComponent implements OnInit {
             'Receiving Company': data.rcV_CPY_TE,
             'Receiving Address': data.rcV_ADR_TE,
             'Translated Address': data.shP_ADR_TR_TE,
+            'Translation Score': data.translationScore,
             'Confidence': data.coN_NR,
             'Accuracy': data.acY_TE,
             'Receiving City': data.dsT_CTY_TE,
