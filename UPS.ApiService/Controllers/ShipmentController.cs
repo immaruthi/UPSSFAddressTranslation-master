@@ -568,7 +568,8 @@
                         dsT_CTY_TE = _.DST_CTY_TE,
                         wfL_ID = _.WFL_ID,
                         pkG_NR_TE = _.PKG_NR_TE,
-                        rcV_CPY_TE = _.RCV_CPY_TE
+                        rcV_CPY_TE = _.RCV_CPY_TE,
+                        dsT_PSL_TE = _.DST_PSL_TE
                     }).ToList();
 
                 this._quincusAddressTranslationRequest.shipmentWorkFlowRequests = shipmentWorkFlowRequests;

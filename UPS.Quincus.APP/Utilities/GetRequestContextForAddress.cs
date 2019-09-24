@@ -29,7 +29,7 @@ namespace UPS.Quincus.APP.Utilities
                     quincusAddressRequestDataObject.addressline1 = string.Empty;
                     quincusAddressRequestDataObject.addressline2 = string.Empty;
                     quincusAddressRequestDataObject.addressline3 = string.Empty;
-                    quincusAddressRequestDataObject.addressline4 = string.Empty;
+                    quincusAddressRequestDataObject.addressline4 = Quinc.dsT_PSL_TE.ToString();
                     quincusAddressRequestDataObject.address_type_flag = bool.TrueString;
                     quincusAddressRequestDataObject.city = Quinc.dsT_CTY_TE;
                     quincusAddressRequestDataObject.region = string.Empty;
