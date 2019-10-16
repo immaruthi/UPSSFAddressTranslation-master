@@ -1,5 +1,6 @@
 ﻿namespace AtService.Controllers
 {
+    using AtService.Extensions;
     using AtService.HeadController;
     using ExcelFileRead;
     using Microsoft.AspNetCore.Authorization;
@@ -347,21 +348,21 @@
                 XMLMessage += "<Order orderid=\"" + orderRequest.pkG_NR_TE + "\" custid=\"" + orderRequest.spC_CST_ID_TE + "\"";
                 XMLMessage += " parcel_quantity=\"" + orderRequest.pcS_QTY_NR + "\"";
                 XMLMessage += " total_net_weight=\"" + orderRequest.pkG_WGT_DE + "\"";
-                XMLMessage += " j_company=\"" + orderRequest.shP_CPY_NA + "\"";
-                XMLMessage += " j_address=\"" + orderRequest.shP_ADR_TE + "\"";
-                XMLMessage += " j_city=\"" + orderRequest.orG_CTY_TE + "\"";
+                XMLMessage += " j_company=\"" + orderRequest.shP_CPY_NA.ampReplacment() + "\"";
+                XMLMessage += " j_address=\"" + orderRequest.shP_ADR_TE.ampReplacment() + "\"";
+                XMLMessage += " j_city=\"" + orderRequest.orG_CTY_TE.ampReplacment() + "\"";
                 XMLMessage += " j_post_code=\"" + orderRequest.orG_PSL_CD + "\"";
-                XMLMessage += " j_contact=\"" + orderRequest.shP_CTC_TE + "\"";
+                XMLMessage += " j_contact=\"" + orderRequest.shP_CTC_TE.ampReplacment() + "\"";
                 XMLMessage += " j_tel=\"" + orderRequest.shP_PH_TE + "\"";
-                XMLMessage += " d_company=\"" + orderRequest.rcV_CPY_TE + "\"";
-                XMLMessage += " d_city=\"" + orderRequest.dsT_CTY_TE + "\"";
+                XMLMessage += " d_company=\"" + orderRequest.rcV_CPY_TE.ampReplacment() + "\"";
+                XMLMessage += " d_city=\"" + orderRequest.dsT_CTY_TE.ampReplacment() + "\"";
                 XMLMessage += " d_post_code=\"" + orderRequest.dsT_PSL_TE + "\"";
-                XMLMessage += " d_contact=\"" + orderRequest.csG_CTC_TE + "\"";
+                XMLMessage += " d_contact=\"" + orderRequest.csG_CTC_TE.ampReplacment() + "\"";
                 XMLMessage += " d_tel=\"" + orderRequest.pH_NR + "\"";
                 XMLMessage += " specifications=\"" + orderRequest.fsT_INV_LN_DES_TE + "\"";
                 XMLMessage += " routelabelService=\"1\"";
                 XMLMessage += " d_address=\"" + orderRequest.shP_ADR_TR_TE + "\" cargo_total_weight=\"" + orderRequest.pkG_WGT_DE + "\"";
-                XMLMessage += " pay_method=\"1\" is_docall=\"" + 1 + "\" need_return_tracking_no=\"" + orderRequest.poD_RTN_SVC + "\" express_type=\"6\"";
+                XMLMessage += " pay_method=\"1\" is_docall=\"" + 0 + "\" need_return_tracking_no=\"" + orderRequest.poD_RTN_SVC + "\" express_type=\"6\"";
                 XMLMessage += " >";
                 XMLMessage += " </Order>";
                 if (!string.IsNullOrEmpty(orderRequest.coD_TE))
