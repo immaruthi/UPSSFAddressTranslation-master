@@ -63,9 +63,9 @@ import { AgGridModule } from 'ag-grid-angular';
 import { SentToSfComponent } from './shipping-data/sent-to-sf/sent-to-sf.component';
 import { CompletedComponent } from './shipping-data/completed/completed.component';
 import { TranslateComponent } from './shipping-data/translate/translate.component';
-import { EditableComponent } from './shared/editable/editable.component';
-import { EditModeDirective } from './shared/editable/edit-mode.directive';
-import { ViewModeDirective } from './shared/editable/view-mode.directive';
+//import { EditableComponent } from './shared/editable/editable.component';
+//import { EditModeDirective } from './shared/editable/edit-mode.directive';
+//import { ViewModeDirective } from './shared/editable/view-mode.directive';
 import { EditOnEnterDirective } from './shared/editable/edit-on-enter.directive';
 import { AddressEditModelComponent } from './shipping-data/address-edit-model/address-edit-model.component';
 import { DatePipe } from '@angular/common';
@@ -80,6 +80,12 @@ import { ShipperListModelComponent } from './shipper-list/shipper-list-model/shi
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
 import { AddUserComponent } from './user-registration/add-user/add-user.component';
 import { EditUserComponent } from './user-registration/edit-user/edit-user.component';
+
+import { EditableComponent } from './editable/editable.component';
+import { ViewModeDirective } from './editable/view-mode.directive';
+import { EditModeDirective } from './editable/edit-mode.directive';
+import { FocusableDirective } from './editable/focusable.directive';
+import { EditableOnEnterDirective } from './editable/edit-on-enter.directive';
 
 @NgModule({
   declarations: [
@@ -105,6 +111,8 @@ import { EditUserComponent } from './user-registration/edit-user/edit-user.compo
     EditModeDirective,
     ViewModeDirective,
     EditOnEnterDirective,
+    FocusableDirective,
+    EditableOnEnterDirective,
     LoaderComponent,
     AlertDialog,
     ConfirmDialog,

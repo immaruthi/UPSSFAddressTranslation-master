@@ -9,7 +9,7 @@ import { AddressEditModelComponent } from '../address-edit-model/address-edit-mo
 import { ShipmentDetails } from '../../models/shipmentDetails';
 import { Constants } from '../../shared/Constants';
 import { DialogService } from '../../services/dialog.service';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { MatStepperTab } from '../../shared/enums.service';
 import { NotificationService } from '../../services/NotificationService';
 import { ExcelService } from '../../services/ExcelExport';
@@ -45,6 +45,10 @@ export class TranslateComponent implements OnInit {
   filterText: string = '';
   toggleSelectAll: string = 'Select All';
 
+  list$: BehaviorSubject<any[]> = new BehaviorSubject(this.dataSource.data);
+  controls: FormArray;
+
+
   constructor(private shippingService: ShippingService, private activatedRoute: ActivatedRoute,
     private router: Router, public dialog: MatDialog,
     public dataService: DataService,
@@ -70,6 +74,8 @@ export class TranslateComponent implements OnInit {
         this.getTranslateData(this.WorkflowID)
       }
     });
+
+   
   }
 
   ngOnDestroy() {
@@ -89,7 +95,25 @@ export class TranslateComponent implements OnInit {
       this.filterText = '';
       this.applyFilter('');
       this.toggleSelectAll = 'Select All';
+      this.craeteFormControlsForEdit();
     }, error => (this.errorMessage = <any>error));
+
+
+    
+    
+  }
+
+  craeteFormControlsForEdit() {
+    var data: any[] = this.dataSource.filteredData;
+    if (data.length > 0) {
+      const toGroups = data.map(entity => {
+        return new FormGroup({
+          shP_ADR_TR_TE: new FormControl(entity.shP_ADR_TR_TE, Validators.required)
+        }, { updateOn: "blur" });
+      });
+
+      this.controls = new FormArray(toGroups);
+    }
   }
 
   getValidData(dataArray: any[]) {
@@ -322,5 +346,32 @@ export class TranslateComponent implements OnInit {
     } else {
       this.dialogService.openAlertDialog('No data for export.');
     }
+  }
+
+
+  updateField(index, field) {
+    const control = this.getControl(index, field);
+    if (control.valid) {
+      this.update(index, field, control.value);
+    }
+
+  }
+
+  getControl(index, fieldName) {
+    const a = this.controls.at(index).get(fieldName) as FormControl;
+    return this.controls.at(index).get(fieldName) as FormControl;
+  }
+
+  update(index, field, value) {
+    this.dataSource.data = this.dataSource.data.map((e, i) => {
+      if (index === i) {
+        return {
+          ...e,
+          [field]: value
+        }
+      }
+      return e;
+    });
+    this.list$.next(this.dataSource.data);
   }
 }
