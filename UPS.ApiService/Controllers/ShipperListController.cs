@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UPS.Application.CustomLogs;
 using UPS.DataObjects.Shipment;
 using UPS.DataObjects.SPC_LST;
 using UPS.ServicesAsyncActions;
@@ -52,6 +53,7 @@ namespace AtService.Controllers
             }
             catch (Exception ex)
             {
+                AuditEventEntry.WriteEntry(ex);
             }
 
             return Ok(shipperCompanyResponse);
@@ -76,6 +78,7 @@ namespace AtService.Controllers
             }
             catch (Exception ex)
             {
+                AuditEventEntry.WriteEntry(ex);
             }
 
             return Ok(shipperCompanyResponse);
@@ -100,6 +103,7 @@ namespace AtService.Controllers
             }
             catch (Exception ex)
             {
+                AuditEventEntry.WriteEntry(ex);
             }
 
             return Ok(shipperCompanyResponse);

@@ -23,10 +23,24 @@ namespace AtService.Extensions
     public static class AppBuilderExtensions
     {
 
+        public static string ampReplacment(this String inputString)
+        {
+            if (!string.IsNullOrEmpty(inputString))
+            {
+                if (inputString.Contains("&"))
+                {
+                    inputString = inputString.Replace("&", "&amp;");
+                }
+            }
+
+            return inputString;   
+        }
+
         //public static IServiceCollection iServiceCollection { get; set; }
 
         public static void AddLogFile(this IApplicationBuilder app, IHostingEnvironment env, IConfiguration Configuration)
         {
+            app.UseStaticHttpContext();
             AuditEventEntry.Configuration = Configuration;
             AuditEventEntry.HostingEnvironment = env;
         }
@@ -65,9 +79,8 @@ namespace AtService.Extensions
 
         public static void IocSetup(this IServiceCollection services)
         {
-            
-
             IoCContainer.BuildUp(services);
+            StaticHttpContextExtensions.AddHttpContextAccessor(services);
         }
 
             public static void ContextSetup(this IServiceCollection services, IConfiguration Configuration)

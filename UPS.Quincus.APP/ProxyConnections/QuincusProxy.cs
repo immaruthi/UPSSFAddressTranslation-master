@@ -59,7 +59,7 @@
 
                 httpResponse.Close();
 
-                AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
+                Task.Run(()=>AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
                 {
                     dateTime = DateTime.Now,
                     apiTypes = DataObjects.LogData.APITypes.QuincusAPI_Token,
@@ -67,17 +67,16 @@
                     LogInformation = new DataObjects.LogData.LogInformation()
                     {
                         LogResponse = response,
-                        LogRequest = input,
+                        LogRequest = string.Format("Senstive Information Identified {0}", System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(input))),
                         LogException = null
-
                     }
-                });
+                }));
 
             }
             catch (Exception exception)
             {
                 quincusTokenDataResponse.exception = exception;
-                AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
+                Task.Run(()=>AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
                 {
                     dateTime = DateTime.Now,
                     apiTypes = DataObjects.LogData.APITypes.QuincusAPI_Token,
@@ -85,11 +84,11 @@
                     LogInformation = new DataObjects.LogData.LogInformation()
                     {
                         LogResponse = null,
-                        LogRequest = input,
-                        LogException = exception
+                        LogRequest = string.Format("Senstive Information Identified {0}", System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(input))),
+                        LogException = exception.InnerException.ToString()
 
                     }
-                });
+                }));
             }
 
             return quincusTokenDataResponse;
@@ -104,7 +103,7 @@
                 .ToList();
         }
 
-        public static QuincusTranslatedAddressResponse GetTranslatedAddressResponse(IQuincusAddressTranslationRequest quincusAddressTranslationRequest)
+        public static QuincusTranslatedAddressResponse GetTranslatedAddressResponse(IQuincusAddressTranslationRequest quincusAddressTranslationRequest, QuincusParams quincusParams)
         {
             string response = string.Empty;
             var input = string.Empty;
@@ -115,7 +114,8 @@
             {
                 quincusTranslatedAddressResponse.RequestDataCount = quincusAddressTranslationRequest.shipmentWorkFlowRequests.Count;
 
-                List<string> content = GetRequestContextForAddress.GetAddressStringFromRequest(quincusAddressTranslationRequest.shipmentWorkFlowRequests);
+                List<string> content = GetRequestContextForAddress.GetAddressStringFromRequest(quincusAddressTranslationRequest.shipmentWorkFlowRequests, quincusParams);
+                quincusTranslatedAddressResponse.QuincusContentRequest = JsonConvert.SerializeObject(content);
 
                 content.ForEach(requestdata =>
                 {
@@ -155,41 +155,53 @@
 
                     quincusTranslatedAddressResponse.ResponseData.Add(JsonConvert.DeserializeObject<GetBatchResponseForAddressTranslation>(response));
                     quincusTranslatedAddressResponse.Response = true;
+                    quincusTranslatedAddressResponse.ResponseData.ForEach(record =>
+                    {
+                        record.addresses.ForEach(address =>
+                        {
+                            address.rcV_CPY_TE =
+                              Convert.ToString(
+                                  quincusAddressTranslationRequest.shipmentWorkFlowRequests
+                                  .FirstOrDefault(_ =>
+                                    Convert.ToString(_.pkG_NR_TE) == address.id)
+                                  .rcV_CPY_TE);
+                        });
+
+                    });
 
 
-
-                    AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
+                    Task.Run(()=>AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
                     {
                         dateTime = DateTime.Now,
                         apiTypes = DataObjects.LogData.APITypes.QuincusAPI_Translation,
-                        apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
+                        apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 4),
                         LogInformation = new DataObjects.LogData.LogInformation()
                         {
                             LogResponse = response,
-                            LogRequest = input,
+                            LogRequest = JsonConvert.SerializeObject(quincusAddressTranslationRequest.shipmentWorkFlowRequests), 
                             LogException = null
 
                         }
-                    });
+                    }));
 
                 });
             }
             catch (Exception exception)
             {
                 quincusTranslatedAddressResponse.exception = exception;
-                AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
+                Task.Run(()=>AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
                 {
                     dateTime = DateTime.Now,
                     apiTypes = DataObjects.LogData.APITypes.QuincusAPI_Translation,
-                    apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 1),
+                    apiType = Enum.GetName(typeof(UPS.DataObjects.LogData.APITypes), 4),
                     LogInformation = new DataObjects.LogData.LogInformation()
                     {
                         LogResponse = null,
-                        LogRequest = input,
-                        LogException = exception
+                        LogRequest = JsonConvert.SerializeObject(quincusAddressTranslationRequest.shipmentWorkFlowRequests),
+                        LogException = exception.InnerException.ToString()
 
                     }
-                });
+                }));
             }
 
             return quincusTranslatedAddressResponse;
@@ -296,7 +308,7 @@
                     httpResponse.Dispose();
                     httpWebRequest.Abort();
 
-                    AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
+                    Task.Run(()=>AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
                     {
                         dateTime = DateTime.Now,
                         apiTypes = DataObjects.LogData.APITypes.QuincusAPI_Batch,
@@ -305,17 +317,17 @@
                         LogInformation = new DataObjects.LogData.LogInformation()
                         {
                             LogResponse = response,
-                            LogRequest = "",
+                            LogRequest = JsonConvert.SerializeObject(quincusGeoCodeDataRequest.batchIDList),
                             LogException = null
 
                         }
-                    });
+                    }));
                 });
             }
             catch (Exception exception)
             {
                 quincusResponse.Exception = exception;
-                AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
+                Task.Run(()=>AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
                 {
                     dateTime = DateTime.Now,
                     apiTypes = DataObjects.LogData.APITypes.QuincusAPI_Batch,
@@ -323,11 +335,11 @@
                     LogInformation = new DataObjects.LogData.LogInformation()
                     {
                         LogResponse = null,
-                        LogRequest = "",
-                        LogException = exception
+                        LogRequest = JsonConvert.SerializeObject(quincusGeoCodeDataRequest.batchIDList),
+                        LogException = exception.InnerException.ToString()
 
                     }
-                });
+                }));
             }
 
             return quincusResponse;

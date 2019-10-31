@@ -9,6 +9,7 @@
     using NLog.Targets.Wrappers;
     using UPS.DataObjects.Shipment;
     using UPS.DataObjects.SPC_LST;
+    using UPS.DataObjects.UserData;
     using UPS.ServicesAsyncActions;
     using UPS.ServicesDataRepository.Common;
     using UPS.ServicesDataRepository.DataContext;
@@ -27,7 +28,7 @@
             this.response.Success = true;
         }
 
-        public ShipmentDataResponse SelectMatchedShipmentsWithShipperCompanies(int workflowID)
+        public ShipmentDataResponse SelectMatchedShipmentsWithShipperCompanies(int workflowID, int userId)
 
         {
             ShipmentDataResponse mappedShipAndShipperCompanyResponse = new ShipmentDataResponse();
@@ -38,6 +39,7 @@
 
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
                 {
+                  List<string> mappedCities =  GetCityByUserId(userId);
                     shipmentDataRequests = new List<ShipmentDataRequest>();
                     var anonymousList =
                         (
@@ -45,12 +47,13 @@
                             join c in context.shipperCompanyRequests on s.DST_PSL_TE equals c.SPC_PSL_CD_TE
                             where
                                 s.WFL_ID == workflowID
-                                &&  
+                                &&
                                 (
                                         s.SMT_STA_NR == (int)Enums.ATStatus.Translated
                                     ||  s.SMT_STA_NR == (int)Enums.ATStatus.Curated
                                 )
-                                orderby s.ID
+                                && mappedCities.Contains(c.SPC_CTY_TE.ToUpper())
+                            orderby s.ID
                             select new
                             {
                                 s.ID,
@@ -100,7 +103,7 @@
                                 s.WGT_UNT_TE,
                                 s.POD_RTN_SVC,
                                 c.SPC_CST_ID_TE,
-                                s.TR_SCR_NR
+                                s.TranslationScore
                             }).ToList();
 
                     foreach (var shipmentData in anonymousList)
@@ -176,7 +179,7 @@
                         shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
                         shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
                         shipmentDataRequest.SPC_CST_ID_TE = shipmentData.SPC_CST_ID_TE;
-                        shipmentDataRequest.TR_SCR_NR = shipmentData.TR_SCR_NR;
+                        shipmentDataRequest.TranslationScore = shipmentData.TranslationScore;
 
                         shipmentDataRequests.Add(shipmentDataRequest);
                     }
@@ -193,6 +196,19 @@
             }
             return mappedShipAndShipperCompanyResponse;
         }
+
+        private List<string> GetCityByUserId(int userId)
+        {
+            return this.context.UserCityMapping
+                    .Where(
+                        (UserCityMapping city) => 
+                            city.UserId == userId)
+                    .Select(
+                        (UserCityMapping cityMapping) =>
+                            cityMapping.City.ToUpper()).
+                    ToList();
+        }
+
         public ShipmentDataResponse SelectCompletedShipments(int workflowID)
 
         {
@@ -261,7 +277,7 @@
                                 s.WGT_UNT_TE,
                                 s.POD_RTN_SVC,
                                 c.SPC_CST_ID_TE,
-                                s.TR_SCR_NR
+                                s.TranslationScore
                             }).ToList();
 
                     foreach (var shipmentData in anonymousList)
@@ -337,7 +353,7 @@
                         shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
                         shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
                         shipmentDataRequest.SPC_CST_ID_TE = shipmentData.SPC_CST_ID_TE;
-                        shipmentDataRequest.TR_SCR_NR = shipmentData.TR_SCR_NR;
+                        shipmentDataRequest.TranslationScore = shipmentData.TranslationScore;
 
                         shipmentDataRequests.Add(shipmentDataRequest);
                     }
@@ -387,8 +403,13 @@
             {
                 try
                 {
-                    shipperCompanyResponse.ShipperCompanies = context.shipperCompanyRequests.ToList();
+                    shipperCompanyResponse.ShipperCompanies = 
+                        context.shipperCompanyRequests
+                        .OrderByDescending(
+                            (ShipperCompanyList shpCompany)=> shpCompany.ID)
+                        .ToList();
                     shipperCompanyResponse.Success = true;
+
                     return shipperCompanyResponse;
                 }
                 catch (Exception ex)

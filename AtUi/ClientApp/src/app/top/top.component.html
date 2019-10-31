@@ -7,11 +7,18 @@
     <mat-nav-list>
       <ul class="list-unstyled components">
         <li routerLinkActive="active"><a routerLink="/workflow"><span class="glyphicon glyphicon-calendar"></span> Workflow</a></li>
-        <li routerLinkActive="active"><a routerLink="#"><span class="glyphicon glyphicon-list-alt"></span> Shipper List</a></li>
+        <li routerLinkActive="active"><a routerLink="/shipperlist"><span class="glyphicon glyphicon-list-alt"></span> Shipper List</a></li>
         <li routerLinkActive="active"><a routerLink="/addressbook"><span class="glyphicon glyphicon-book"></span> Address Book</a></li>
         <li routerLinkActive="active"><a routerLink="/auditinglog"><span class="glyphicon glyphicon-signal"></span> Auditing Log</a></li>
-        <li routerLinkActive="active"><a routerLink="/logs"><span class="glyphicon glyphicon-align-justify"></span> Logs</a></li>
-        <li routerLinkActive="active"><a routerLink="#"><span class="glyphicon glyphicon-user"></span> User Management</a></li>
+        <mat-expansion-panel *ngIf="role==='Admin'">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <span style="padding:2px" class="glyphicon glyphicon-wrench"></span>Administration
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <li style="width:180px; padding-left:-8px;" routerLinkActive="active"><a routerLink="/user/registration"><span class="glyphicon glyphicon-user"></span> User Registration</a></li>
+          <li style="width:180px;" routerLinkActive="active"><a routerLink="/logs"><span class="glyphicon glyphicon-align-left"></span> Logs</a></li>
+        </mat-expansion-panel>
       </ul>
     </mat-nav-list>
   </mat-sidenav>

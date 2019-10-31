@@ -34,6 +34,16 @@ export class ShipperListModelComponent {
     this.dialogRef.close();
   }
 
+  numberOnly(event: any) {
+    const pattern = /[0-9\+\-\ ]/;
+    const isPrintableKey = !!event.charCode;
+
+    let inputChar = String.fromCharCode(event.charCode);
+    if (isPrintableKey && event.keyCode !== 8 && !pattern.test(inputChar)) {
+      event.preventDefault();
+    }
+  }
+
   stopEdit(): void {
     //this.dataService.updateIssue(this.data);
 
@@ -52,7 +62,7 @@ export class ShipperListModelComponent {
 
           this.notificationService.openSuccessMessageNotification("No changes found to update");
           return;
-       }
+      }
 
       const details = {
         ID: this.data.ID,

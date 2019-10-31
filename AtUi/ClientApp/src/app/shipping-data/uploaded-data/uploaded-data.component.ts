@@ -101,7 +101,8 @@ export class UploadedDataComponent implements OnInit {
   }
 
   isAllSelected() {
-    const ValidData: any[] = this.dataSource._pageData(this.dataSource.filteredData);
+    const currentData = this.dataSource._orderData(this.dataSource.filteredData);
+    const ValidData: any[] = this.dataSource._pageData(currentData);
     const checkedDataCount = ValidData.length;
     var count: number = 0;
     ValidData.forEach(row => {
@@ -116,7 +117,8 @@ export class UploadedDataComponent implements OnInit {
   masterToggle() {
     this.checkedData = [];
     //this.dataSource.data.forEach(row => this.mainData.push(row));
-    this.checkedData = this.dataSource._pageData(this.dataSource.filteredData);
+    const currentData = this.dataSource._orderData(this.dataSource.filteredData);
+    this.checkedData = this.dataSource._pageData(currentData);
     this.isAllSelected() ? this.AllSelectedTrue() : this.AllSelectionFalse();
   }
 
@@ -175,7 +177,11 @@ export class UploadedDataComponent implements OnInit {
   deleteUploadedData(data: any) {
     this.shippingService.deleteUploadedData(data).subscribe((response: any) => {
       if (response != null && response.success === true) {
-        this.getUploadedData(this.WorkflowID);
+        if (response.hasWorkflow === false) {
+          this.router.navigate(['/workflow']);
+        } else {
+          this.getUploadedData(this.WorkflowID);
+        }
         this.notificationService.openSuccessMessageNotification("Deleted Successfully");
       } else {
         this.notificationService.openErrorMessageNotification("Invalid exception occured, please contact administrator.");

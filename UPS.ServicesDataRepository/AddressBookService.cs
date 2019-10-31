@@ -74,7 +74,7 @@ namespace UPS.ServicesDataRepository
             return addressBookResponse;
         }
 
-        public void InsertAddress(List<QuincusReponseData> quincusReponseDataList)
+        public void InsertAddress(List<QuincusReponseData> quincusReponseDataList,Dictionary<string,string> shipmentDetails)
         {
             try
             {
@@ -118,7 +118,7 @@ namespace UPS.ServicesDataRepository
                                  GeoCodeError = Convert.ToString(quincusReponseData?.geocode_errors ?? string.Empty),
                                  Latitude = geocode?.latitude?.Trim(),
                                  Longitude = geocode?.longitude?.Trim(),
-                                 PostalCode = geocode?.postcode,
+                                 PostalCode = geocode?.corrected_postcode,
                                  Organization = quincusReponseData?.organisation != null ? Convert.ToString(quincusReponseData?.organisation) : string.Empty,
                                  Region = geocode?.region,
                                  Road = geocode?.road,
@@ -126,7 +126,9 @@ namespace UPS.ServicesDataRepository
                                  ShipmentId = null, //address?.id != null ? Convert.ToInt32(address?.id) : -1,
                                  StatusCode = quincusReponseData?.status_code,
                                  Unit = geocode?.unit,
-                                 VerifyMatch = geocode?.verify_match
+                                 VerifyMatch = geocode?.verify_match,
+                                 TranslationScore = geocode?.translation_score,
+                                 ConsigneeCompany = shipmentDetails.ContainsKey(address.id) ? shipmentDetails[address.id] : string.Empty
                              }).ToList();
 
                         List<AddressBook> validEntity = this.entityValidationService.FilterValidEntity<AddressBook>(addressBooks);
@@ -155,8 +157,8 @@ namespace UPS.ServicesDataRepository
                            !this.context.AddressBooks
                                .Select(
                                (AddressBook x) =>
-                                   x.ConsigneeAddress.ToLower()).ToList()
-                               .Contains(ad.address.ToLower()))
+                                   x.ConsigneeAddress.Replace(" ","").ToLower().Trim()).ToList()
+                                   .Contains(ad.address.Replace(" ", "").ToLower().Trim()))
                     .GroupBy(_=>_.address)
                     .Select(x=>x.First())
                     .ToList();

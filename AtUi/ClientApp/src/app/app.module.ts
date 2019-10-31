@@ -77,6 +77,9 @@ import { LogGridComponent } from './log-grid/log-grid.component';
 import { AuditingLogComponent } from './auditing-log/auditing-log.component';
 import { LogFilesService } from './services/LogFilesService';
 import { ShipperListModelComponent } from './shipper-list/shipper-list-model/shipper-list-model.component';
+import { UserRegistrationComponent } from './user-registration/user-registration.component';
+import { AddUserComponent } from './user-registration/add-user/add-user.component';
+import { EditUserComponent } from './user-registration/edit-user/edit-user.component';
 
 @NgModule({
   declarations: [
@@ -113,6 +116,9 @@ import { ShipperListModelComponent } from './shipper-list/shipper-list-model/shi
     AddressBookEditModelComponent,
     LogGridComponent,
     AuditingLogComponent,
+    UserRegistrationComponent,
+    AddUserComponent,
+    EditUserComponent,
     ShipperListModelComponent
   ],
   imports: [
@@ -160,7 +166,7 @@ import { ShipperListModelComponent } from './shipper-list/shipper-list-model/shi
     ],
   bootstrap: [AppComponent],
   entryComponents: [LoginComponent, AlertDialogComponent, SummaryDialogComponent, ConfirmationDialogComponent, AddressEditModelComponent,
-    AddressBookEditModelComponent, ShipperListModelComponent]
+    AddressBookEditModelComponent, ShipperListModelComponent, AddUserComponent, EditUserComponent]
 
 })
 export class AppModule { }

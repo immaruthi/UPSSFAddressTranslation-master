@@ -27,6 +27,9 @@ namespace UPS.DataObjects.Common
         public string addressline3 { get; set; }
         public string addressline4 { get; set; }
         public string address_type_flag { get; set; }
+
+        //Custom field 
+        public string rcV_CPY_TE { get; set; }
     }
 
     public class Geocode
@@ -54,7 +57,7 @@ namespace UPS.DataObjects.Common
         public string corrected_postcode { get; set; }
         public string translated_adddress { get; set; }
         public string corrected_house_number { get; set; }
-        public string translation_score_number { get; set; }
+        public string translation_score { get; set; }
     }
 
     public class QuincusReponseData

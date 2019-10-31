@@ -24,7 +24,7 @@
 
 .table-div {
   width: 100%;
-  height: calc(100vh - 214px);
+  max-height: calc(100vh - 214px);
   overflow: auto;
 }
 

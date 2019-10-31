@@ -30,10 +30,10 @@
         <table class="table">
           <thead>
             <tr>
-              <th>S.No</th>
-              <th>Package Number</th>
-              <th>Error Code</th>
-              <th>Error Description</th>
+              <th style="width: 7%">S.No</th>
+              <th style="width: 25%">Package Number</th>
+              <th style="width: 18%">Error Code</th>
+              <th style="width: 50%">Error Description</th>
             </tr>
           </thead>
           <tbody>
@@ -41,7 +41,8 @@
               <td> {{i+1}} </td>
               <td> {{FailList.PKGNR}} </td>
               <td> {{FailList.ErrorCode}} </td>
-              <td> {{FailList.ErrorEN}} </td>
+              <!--<td> {{FailList.ErrorEN}} </td>-->
+              <td> {{FailList.ErrorCH}} </td>
             </tr>
           </tbody>
         </table>

@@ -9,6 +9,7 @@
     using UPS.DataObjects.AddressBook;
     using UPS.DataObjects.CST_DTL;
     using UPS.DataObjects.Shipment;
+    using UPS.DataObjects.WR_FLW;
     using UPS.ServicesAsyncActions;
     using UPS.ServicesDataRepository.Common;
     using UPS.ServicesDataRepository.DataContext;
@@ -98,7 +99,7 @@
                             s.SVL_NR,
                             s.WGT_UNT_TE,
                             s.POD_RTN_SVC,
-                            s.TR_SCR_NR
+                            s.TranslationScore
                         }).ToList();
 
                 foreach (var shipmentData in anonymousList)
@@ -173,7 +174,156 @@
                     shipmentDataRequest.CON_NR = shipmentData.CON_NR;
                     shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
                     shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
-                    shipmentDataRequest.TR_SCR_NR = shipmentData.TR_SCR_NR;
+                    shipmentDataRequest.TranslationScore = shipmentData.TranslationScore;
+
+                    shipmentDataRequests.Add(shipmentDataRequest);
+                }
+            }
+            catch
+            {
+
+            }
+
+            return shipmentDataRequests;
+        }
+
+        public List<ShipmentDataRequest> GetAllShipment(int workflowID)
+        {
+
+            List<ShipmentDataRequest> shipmentDataRequests = null;
+            try
+            {
+                shipmentDataRequests = new List<ShipmentDataRequest>();
+                var anonymousList =
+                    (
+                        from s in this.context.shipmentDataRequests
+                        where s.WFL_ID == workflowID
+                        && s.SMT_STA_NR != (int)Enums.ATStatus.Inactive
+                        orderby s.ID
+                        select new
+                        {
+                            s.ID,
+                            s.WFL_ID,
+                            s.ACY_TE,
+                            s.BIL_TYP_TE,
+                            s.CCY_VAL_TE,
+                            s.COD_TE,
+                            s.CON_NR,
+                            s.CSG_CTC_TE,
+                            s.DIM_WGT_DE,
+                            s.DST_CTY_TE,
+                            s.DST_PSL_TE,
+                            s.EXP_SLC_CD,
+                            s.EXP_TYP,
+                            s.FST_INV_LN_DES_TE,
+                            s.IMP_NR,
+                            s.IMP_SLC_TE,
+                            s.IN_FLG_TE,
+                            s.ORG_CTY_TE,
+                            s.ORG_PSL_CD,
+                            s.OU_FLG_TE,
+                            s.PCS_QTY_NR,
+                            s.PH_NR,
+                            s.PKG_NR_TE,
+                            s.PKG_WGT_DE,
+                            s.PK_UP_TM,
+                            s.PYM_MTD,
+                            s.PY_MT_TE,
+                            s.QQS_TRA_LG_ID,
+                            s.RCV_ADR_TE,
+                            s.RCV_CPY_TE,
+                            s.SF_TRA_LG_ID,
+                            s.SHP_ADR_TE,
+                            s.SHP_ADR_TR_TE,
+                            s.SHP_CPY_NA,
+                            s.SHP_CTC_TE,
+                            s.SHP_DT,
+                            s.SHP_NR,
+                            s.SHP_PH_TE,
+                            s.SMT_NR_TE,
+                            s.SMT_STA_NR,
+                            s.SMT_VAL_DE,
+                            s.SMT_WGT_DE,
+                            s.SPC_SLIC_NR,
+                            s.SVL_NR,
+                            s.WGT_UNT_TE,
+                            s.POD_RTN_SVC,
+                            s.TranslationScore
+                        }).ToList();
+
+                foreach (var shipmentData in anonymousList)
+                {
+                    ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
+                    shipmentDataRequest.ID = shipmentData.ID;
+                    shipmentDataRequest.BIL_TYP_TE = shipmentData.BIL_TYP_TE;
+                    shipmentDataRequest.CCY_VAL_TE = shipmentData.CCY_VAL_TE;
+                    shipmentDataRequest.COD_TE = shipmentData.COD_TE;
+                    shipmentDataRequest.CSG_CTC_TE = shipmentData.CSG_CTC_TE;
+                    shipmentDataRequest.DIM_WGT_DE = shipmentData.DIM_WGT_DE;
+                    shipmentDataRequest.DST_CTY_TE = shipmentData.DST_CTY_TE;
+                    shipmentDataRequest.DST_PSL_TE = shipmentData.DST_PSL_TE;
+                    shipmentDataRequest.EXP_SLC_CD = shipmentData.EXP_SLC_CD;
+                    shipmentDataRequest.EXP_TYP = shipmentData.EXP_TYP;
+                    shipmentDataRequest.FST_INV_LN_DES_TE = shipmentData.FST_INV_LN_DES_TE;
+                    shipmentDataRequest.IMP_NR = shipmentData.IMP_NR;
+                    shipmentDataRequest.IMP_SLC_TE = shipmentData.IMP_SLC_TE;
+                    shipmentDataRequest.IN_FLG_TE = shipmentData.IN_FLG_TE;
+                    shipmentDataRequest.ORG_CTY_TE = shipmentData.ORG_CTY_TE;
+                    shipmentDataRequest.ORG_PSL_CD = shipmentData.ORG_PSL_CD;
+                    shipmentDataRequest.OU_FLG_TE = shipmentData.OU_FLG_TE;
+                    shipmentDataRequest.PCS_QTY_NR = shipmentData.PCS_QTY_NR;
+                    shipmentDataRequest.PH_NR = shipmentData.PH_NR;
+                    shipmentDataRequest.PKG_NR_TE = shipmentData.PKG_NR_TE;
+                    shipmentDataRequest.PKG_WGT_DE = shipmentData.PKG_WGT_DE;
+                    shipmentDataRequest.PK_UP_TM = shipmentData.PK_UP_TM;
+                    shipmentDataRequest.PYM_MTD = shipmentData.PYM_MTD;
+                    shipmentDataRequest.PY_MT_TE = shipmentData.PY_MT_TE;
+                    shipmentDataRequest.QQS_TRA_LG_ID = shipmentData.QQS_TRA_LG_ID;
+                    shipmentDataRequest.RCV_ADR_TE = shipmentData.RCV_ADR_TE;
+                    shipmentDataRequest.RCV_CPY_TE = shipmentData.RCV_CPY_TE;
+                    shipmentDataRequest.SF_TRA_LG_ID = shipmentData.SF_TRA_LG_ID;
+                    shipmentDataRequest.SHP_ADR_TE = shipmentData.SHP_ADR_TE;
+                    shipmentDataRequest.SHP_ADR_TR_TE = shipmentData.SHP_ADR_TR_TE;
+                    shipmentDataRequest.SHP_CPY_NA = shipmentData.SHP_CPY_NA;
+                    shipmentDataRequest.SHP_CTC_TE = shipmentData.SHP_CTC_TE;
+                    shipmentDataRequest.SHP_DT = shipmentData.SHP_DT;
+                    shipmentDataRequest.SHP_NR = shipmentData.SHP_NR;
+                    shipmentDataRequest.SHP_PH_TE = shipmentData.SHP_PH_TE;
+                    shipmentDataRequest.SMT_NR_TE = shipmentData.SMT_NR_TE;
+                    shipmentDataRequest.SMT_STA_NR = shipmentData.SMT_STA_NR;
+
+                    switch (shipmentDataRequest.SMT_STA_NR)
+                    {
+                        case 0:
+                            shipmentDataRequest.SMT_STA_TE = "Uploaded";
+                            break;
+                        case 1:
+                            shipmentDataRequest.SMT_STA_TE = "Curated";
+                            break;
+                        case 2:
+                            shipmentDataRequest.SMT_STA_TE = "Translated";
+                            break;
+                        case 3:
+                            shipmentDataRequest.SMT_STA_TE = "Completed";
+                            break;
+                        case 4:
+                            shipmentDataRequest.SMT_STA_TE = "Inactive";
+                            break;
+                        default:
+                            shipmentDataRequest.SMT_STA_TE = "Uploaded";
+                            break;
+                    }
+
+                    shipmentDataRequest.SMT_VAL_DE = shipmentData.SMT_VAL_DE;
+                    shipmentDataRequest.SMT_WGT_DE = shipmentData.SMT_WGT_DE;
+                    shipmentDataRequest.SVL_NR = shipmentData.SVL_NR;
+                    shipmentDataRequest.WFL_ID = shipmentData.WFL_ID;
+                    shipmentDataRequest.WGT_UNT_TE = shipmentData.WGT_UNT_TE;
+                    shipmentDataRequest.ACY_TE = shipmentData.ACY_TE;
+                    shipmentDataRequest.CON_NR = shipmentData.CON_NR;
+                    shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
+                    shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
+                    shipmentDataRequest.TranslationScore = shipmentData.TranslationScore;
 
                     shipmentDataRequests.Add(shipmentDataRequest);
                 }
@@ -234,7 +384,7 @@
             shipmentDataRequest.CON_NR = shipmentData.CON_NR;
             shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
             shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
-            shipmentDataRequest.TR_SCR_NR = shipmentData.TR_SCR_NR;
+            shipmentDataRequest.TranslationScore = shipmentData.TranslationScore;
             this.context.shipmentDataRequests.Add(shipmentDataRequest);
             this.context.Entry(shipmentDataRequest).State = EntityState.Added;
             this.context.SaveChanges();
@@ -464,6 +614,9 @@
             ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
             try
             {
+                int? workflowID = shipmentDataRequest?.FirstOrDefault().WFL_ID;
+                int shipmentCount = 0;
+
                 foreach (ShipmentDataRequest request in shipmentDataRequest)
                 {
                     ShipmentDataRequest data = this.context.shipmentDataRequests.Where(s => s.ID == request.ID).FirstOrDefault();
@@ -471,6 +624,26 @@
                     this.context.Entry(request).State = EntityState.Detached;
                     this.context.SaveChanges();
                 }
+
+                if (workflowID.HasValue)
+                {
+                    shipmentCount = this.context.shipmentDataRequests.Where(ship => ship.WFL_ID == workflowID).Count();
+                }
+
+                if (shipmentCount == 0)
+                {
+                    WorkflowService workflowService = new WorkflowService(this.context, this.addressBookService, this.entityValidationService);
+                    WorkflowDataResponse workflowDataResponse = workflowService.DeleteWorkflowById(workflowID.Value);
+                    if(workflowDataResponse.Success)
+                    {
+                        shipmentDataResponse.HasWorkflow = false;
+                    }
+                }
+                else
+                {
+                    shipmentDataResponse.HasWorkflow = true;
+                }
+
                 shipmentDataResponse.Success = true;
                 return shipmentDataResponse;
             }
@@ -588,7 +761,7 @@
                         }
 
                         //shipmentDataRequest.PCS_QTY_NR = null;//Convert.ToInt32(Convert.ToDouble(excelDataObject.pcs));
-                        shipmentDataRequest.PH_NR = excelDataObject.S_ph;
+                        shipmentDataRequest.PH_NR = excelDataObject.S_ph != null && excelDataObject.S_ph.Contains('.') ? excelDataObject.S_ph.Split('.')[0] : excelDataObject.S_ph;
                         shipmentDataRequest.PKG_NR_TE = excelDataObject.S_packageno;
                         shipmentDataRequest.PKG_WGT_DE = Convert.ToDecimal(excelDataObject.S_pkgwei);
                         shipmentDataRequest.PK_UP_TM = null;//Convert.ToString(excelDataObject.S_pkuptime),
@@ -599,10 +772,10 @@
 
                         AddressBook translatedAddress =
                             addressBooks
-                            .FirstOrDefault(
+                            ?.FirstOrDefault(
                                 (AddressBook address) =>
-                                    address.ConsigneeAddress.ToLower().Trim().Equals(
-                                    excelDataObject.S_address1.ToLower().Trim(), StringComparison.OrdinalIgnoreCase));
+                                    address.ConsigneeAddress.Replace(" ","").ToLower().Trim().Equals(
+                                    excelDataObject.S_address1.Replace(" ", "").ToLower().Trim(), StringComparison.OrdinalIgnoreCase));
 
                         if (translatedAddress != null)
                         {
@@ -612,6 +785,7 @@
                             shipmentDataRequest.SMT_STA_TE = Convert.ToString(Enums.ATStatus.Translated);
                             shipmentDataRequest.CON_NR = translatedAddress.Confidence;
                             shipmentDataRequest.ACY_TE = translatedAddress.Accuracy;
+                            shipmentDataRequest.TranslationScore = translatedAddress.TranslationScore;
                         }
                         else
                         {
@@ -647,7 +821,7 @@
                         //}
                         shipmentDataRequest.SHP_DT = null; //Convert.ToDateTime(excelDataObject.S_shipdate);
                         shipmentDataRequest.SHP_NR = excelDataObject.S_shpr;
-                        shipmentDataRequest.SHP_PH_TE = excelDataObject.S_shptph;
+                        shipmentDataRequest.SHP_PH_TE = excelDataObject.S_shptph != null && excelDataObject.S_shptph.Contains('.') ? excelDataObject.S_shptph.Split('.')[0] : excelDataObject.S_shptph;
                         shipmentDataRequest.SMT_NR_TE = excelDataObject.S_shipmentno;
 
                         shipmentDataRequest.SMT_VAL_DE = 0;

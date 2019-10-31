@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using System.Collections.Generic;
 using System.Linq;
+using UPS.ServicesDataRepository.Common;
+using System.Threading.Tasks;
 
 namespace UPS.Application.CustomLogs
 {
@@ -23,7 +25,7 @@ namespace UPS.Application.CustomLogs
             using (var myLog = new EventLog())
             {
                 myLog.Source = "Application";   
-                myLog.WriteEntry(exception.Message, EventLogEntryType.Error);
+                myLog.WriteEntry(exception.Message+ "  "+ exception.StackTrace, EventLogEntryType.Error);
             }
         }
 
@@ -52,6 +54,15 @@ namespace UPS.Application.CustomLogs
             LogInit();
             using (StreamWriter sw = File.AppendText(filePath))
             {
+                try
+                {
+                    logDataModel.userID = CustomHttpContextInterceptor.Current.User.Claims.FirstOrDefault(x => x.Type == JwtConstant.UserIdText).Value;
+                }
+                catch(Exception ex)
+                {
+                    logDataModel.userID = "Not Found";
+                }
+
                 sw.WriteLine(JsonConvert.SerializeObject(logDataModel) + ",");
             }
         }
@@ -61,9 +72,9 @@ namespace UPS.Application.CustomLogs
             GC.SuppressFinalize(this);
         }
 
-        public void AddLogEntry(LogDataModel logDataModel)
+        public Task AddLogEntry(LogDataModel logDataModel)
         {
-            LogEntry(logDataModel);
+            return Task.Run(() => LogEntry(logDataModel));
         }
 
         public static string[] GetLogFiles()
@@ -76,22 +87,42 @@ namespace UPS.Application.CustomLogs
                                          {
                                              fileNames.Add(Path.GetFileName(filename));
                                          });
-            
+
+            fileNames.Reverse();
+
             return fileNames.ToArray();
         }
 
         public static LogDataModel[] GetLogFileDataFromFileName(string filePath)
         {
-
-            string jsonText = File.ReadAllText(filePath.ToString());
-
-            jsonText = "[" + jsonText + "]";
+            try
+            {
 
 
-            var logDataModels = JsonConvert.DeserializeObject<LogDataModel[]>(jsonText);
+                string jsonText = File.ReadAllText(filePath.ToString());
+
+                jsonText = "[" + jsonText + "]";
 
 
-            return logDataModels;
+                var logDataModels = JsonConvert.DeserializeObject<LogDataModel[]>(jsonText).OrderByDescending(date => date.dateTime);
+
+
+                return logDataModels.ToArray();
+            } 
+            catch(Exception ex)
+            {
+                LogDataModel logDataModel = new LogDataModel();
+                logDataModel.LogInformation = new LogInformation()
+                {
+                    LogException = ex.Message.ToString(),
+                    LogRequest = "Request File Found " + filePath,
+                    LogResponse = "Please contact support"
+                };
+
+                LogDataModel[] logDataModels = new LogDataModel[1] { logDataModel };
+
+                return logDataModels;
+            }
         }
 
         public string[] GetLogFileList()

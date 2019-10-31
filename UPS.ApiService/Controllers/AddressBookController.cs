@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UPS.Application.CustomLogs;
 using UPS.DataObjects.AddressBook;
 using UPS.DataObjects.ADR_ADT_LG;
 using UPS.ServicesAsyncActions;
@@ -56,6 +57,7 @@ namespace AtService.Controllers
                     addressAuditLogRequest.UPD_BY = userId;
                     addressAuditLogRequest.UPD_FRM = "AddressBook";
                     addressAuditLogRequest.UPD_DT = DateTime.Now;
+                    addressAuditLogRequest.WFL_ID = addressBookData.WFL_ID;
                     AddressAuditLogResponse addressAuditLogResponse = this.addressAuditLogService.Insert(addressAuditLogRequest);
                     if (addressAuditLogResponse.Success)
                     {
@@ -69,7 +71,7 @@ namespace AtService.Controllers
                 }
                 catch (Exception ex)
                 {
-
+                    AuditEventEntry.WriteEntry(ex);
                 }
 
             }

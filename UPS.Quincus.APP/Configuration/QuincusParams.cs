@@ -5,5 +5,6 @@
         public string endpoint { get; set; }
         public string username { get; set; }
         public string password { get; set; }
+        public int chunkSize { get; set; }
     }
 }

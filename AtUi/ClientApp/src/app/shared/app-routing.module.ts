@@ -14,6 +14,7 @@ import { AddressBookComponent } from '../address-book/address-book.component';
 import { AdminconfigComponent } from '../adminconfig/adminconfig.component';
 import { LogGridComponent } from '../log-grid/log-grid.component';
 import { AuditingLogComponent } from '../auditing-log/auditing-log.component';
+import { UserRegistrationComponent } from '../user-registration/user-registration.component';
 const routes: Routes = [
 
   { path: '', redirectTo: '/login', pathMatch: 'full', canActivate: [LoginGuard], },
@@ -22,7 +23,6 @@ const routes: Routes = [
     component: LoginlayoutComponent,
     children: [
       { path: '', canActivate: [LoginGuard], component: LoginComponent, pathMatch: 'full' },
-     
     ]
   },
   {
@@ -36,7 +36,8 @@ const routes: Routes = [
       { path: 'config', canActivate: [AuthGuard], component: AdminconfigComponent },
       { path: 'logs', canActivate: [AuthGuard], component: LogGridComponent },
       { path: 'auditinglog', canActivate: [AuthGuard], component: AuditingLogComponent },
-      { path: 'home', canActivate: [AuthGuard], component: WorkflowComponent }
+      { path: 'home', canActivate: [AuthGuard], component: WorkflowComponent },
+      { path: 'user/registration', canActivate: [AuthGuard], component: UserRegistrationComponent }
     ]
   },
   //{path: 'notauthorized', component: NotauthorizedComponent},

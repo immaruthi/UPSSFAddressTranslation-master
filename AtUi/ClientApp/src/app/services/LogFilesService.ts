@@ -15,7 +15,7 @@ export class LogFilesService {
   }
 
   public GetLogGrid(filename) {
-    return this.httpService.makeGetRequest('api/LogFile/ReadLogFileData?filePath=' + filename);
+    return this.httpService.makeGetRequest('api/LogFile/ReadFileData?filePath=' + filename);
   }
 
 }

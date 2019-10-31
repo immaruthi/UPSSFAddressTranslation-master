@@ -13,5 +13,9 @@ namespace UPS.Quincus.APP.Response
         public Exception exception { get; set; }
 
         public int RequestDataCount { get; set; }
+
+
+        public string QuincusContentRequest { get; set; }
+
     }
 }
