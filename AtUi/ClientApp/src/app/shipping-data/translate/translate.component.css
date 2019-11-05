@@ -22,9 +22,44 @@
   color: red !important;
   font-weight: bold;
 }
+
+::ng-deep .nobmargin .mat-form-field-wrapper {
+  padding-bottom: 0em;
+}
+
+::ng-deep .nobmargin .mat-form-field-underline {
+  bottom: 0.25em;
+}
+
+::ng-deep .mat-button, .mat-fab, .mat-flat-button, .mat-icon-button, .mat-mini-fab, .mat-raised-button, .mat-stroked-button {
+  height: 30px;
+  line-height: 0px;
+}
+
+::ng-deep .mat-form-field-infix {
+  border-top: 0em;
+}
+
+::ng-deep .mat-paginator-container {
+  min-height: 48px !important;
+}
+
+::ng-deep .translateGrid .mat-checkbox-inner-container {
+  height: 15px !important;
+  width: 15px !important;
+}
+
+::ng-deep .translateGrid .material-icons {
+  font-size: 18px !important;
+}
+
+::ng-deep .translateGrid .mat-icon-button {
+  width: 20px;
+}
+
 .table-div {
   width: 100%;
-  max-height: calc(100vh - 325px);
+  max-height: calc(100vh - 188px);
   overflow: auto;
 }
 .rowPaginator {
@@ -38,16 +73,21 @@ mat-table {
 }
 
 mat-row {
+  align-items: unset;
   padding: 0;
   margin: 0% 1% 0% 0%;
+  height: 40px;
+  min-height: 0px;
 }
 
 mat-header-row {
   padding: 0;
+  height: 42px;
+  min-height: 0px;
 }
 
 mat-cell {
-  padding: 0px 15px 0px 15px;
+  padding: 0px 5px 0px 5px;
   width: 150px;
   flex: none;
   float: left;
@@ -55,7 +95,7 @@ mat-cell {
 }
 
 mat-header-cell {
-  padding: 0px 15px 0px 15px;
+  padding: 0px 5px 0px 5px;
   width: 150px;
   flex: none;
   font-size: 14px;
@@ -66,8 +106,8 @@ mat-header-cell {
 /*Select*/
 mat-cell:nth-child(1) {
   margin-left: 0px 15px 0px 15px;
-  padding: 20px;
-  width: 70px;
+  padding: 10px 10px 10px 20px;
+  width: 50px;
   flex: none;
   float: left;
   font-size: 12px;
@@ -77,114 +117,167 @@ mat-cell:nth-child(1) {
 mat-header-cell:nth-child(1) {
   margin-left: 0px 15px 0px 15px;
   padding: 20px;
-  width: 70px;
+  width: 50px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
 }
-/*package Number*/
-mat-cell:nth-child(5) {
+/*Action*/
+mat-cell:nth-child(2) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 0px 10px 10px 10px;
+  width: 80px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Action*/
+mat-header-cell:nth-child(2) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 10px 10px 10px 15px;
+  width: 80px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+/*Workflow ID*/
+/*mat-cell:nth-child(3) {
+  padding: 0px 10px 0px 10px;
+  width: 120px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}*/
+
+/*Workflow ID*/
+/*mat-header-cell:nth-child(3) {
+  padding: 0px 10px 0px 10px;
+  width: 120px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}*/
+/*Status*/
+/*mat-cell:nth-child(4) {
   padding: 0px 15px 0px 15px;
-  width: 180px;
+  width: 140px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}*/
+
+/*Status*/
+/*mat-header-cell:nth-child(4) {
+  padding: 0px 15px 0px 15px;
+  width: 140px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}*/
+/*package Number*/
+mat-cell:nth-child(3) {
+  padding: 0px 5px 0px 5px;
+  width: 150px;
   flex: none;
   float: left;
   font-size: 12px;
 }
 
 /*package Number*/
-mat-header-cell:nth-child(5) {
-  padding: 0px 15px 0px 15px;
-  width: 180px;
+mat-header-cell:nth-child(3) {
+  padding: 0px 5px 0px 5px;
+  width: 150px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
 }
 
 /*SHP Company Name*/
+mat-cell:nth-child(16) {
+  padding: 0px 5px 0px 5px;
+  width: 200px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*SHP Company Name*/
+mat-header-cell:nth-child(16) {
+  padding: 0px 5px 0px 5px;
+  width: 200px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*SHP Address*/
 mat-cell:nth-child(17) {
-  padding: 0px 15px 0px 15px;
-  width: 200px;
+  padding: 0px 5px 0px 5px;
+  width: 250px;
   flex: none;
   float: left;
   font-size: 12px;
 }
 
-/*SHP Company Name*/
+/*SHP Address*/
 mat-header-cell:nth-child(17) {
-  padding: 0px 15px 0px 15px;
+  padding: 0px 5px 0px 5px;
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Receiving Company*/
+mat-cell:nth-child(4) {
+  padding: 0px 5px 0px 5px;
+  width: 200px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Receiving Company*/
+mat-header-cell:nth-child(4) {
+  padding: 0px 5px 0px 5px;
   width: 200px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
 }
 
-/*SHP Address*/
-mat-cell:nth-child(18) {
-  padding: 0px 15px 0px 15px;
-  width: 250px;
+/*Receive Address*/
+mat-cell:nth-child(5) {
+  padding: 0px 5px 0px 5px;
+  width: 220px;
   flex: none;
   float: left;
   font-size: 12px;
 }
 
-/*SHP Address*/
-mat-header-cell:nth-child(18) {
-  padding: 0px 15px 0px 15px;
-  width: 250px;
+/*Receive Address*/
+mat-header-cell:nth-child(5) {
+  padding: 0px 5px 0px 5px;
+  width: 220px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
 }
 
-/*Receiving Company*/
+/*SHP Translated Address*/
 mat-cell:nth-child(6) {
-  padding: 0px 15px 0px 15px;
-  width: 250px;
+  padding: 0px 5px 0px 5px;
+  width: 220px;
   flex: none;
   float: left;
   font-size: 12px;
 }
 
-/*Receiving Company*/
+/*SHP Translated Address*/
 mat-header-cell:nth-child(6) {
-  padding: 0px 15px 0px 15px;
-  width: 250px;
-  flex: none;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-/*Receive Address*/
-mat-cell:nth-child(7) {
-  padding: 0px 15px 0px 15px;
-  width: 250px;
-  flex: none;
-  float: left;
-  font-size: 12px;
-}
-
-/*Receive Address*/
-mat-header-cell:nth-child(7) {
-  padding: 0px 15px 0px 15px;
-  width: 250px;
-  flex: none;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-/*SHP Translated Address*/
-mat-cell:nth-child(8) {
-  padding: 0px 15px 0px 15px;
-  width: 250px;
-  flex: none;
-  float: left;
-  font-size: 12px;
-}
-
-/*SHP Translated Address*/
-mat-header-cell:nth-child(8) {
-  padding: 0px 15px 0px 15px;
-  width: 250px;
+  padding: 0px 5px 0px 5px;
+  width: 220px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
@@ -208,3 +301,5 @@ mat-header-row {
 mat-cell {
   font-size: 12px;
 }
+
+
