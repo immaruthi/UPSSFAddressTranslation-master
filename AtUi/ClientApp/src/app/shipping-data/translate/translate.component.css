@@ -73,11 +73,11 @@ mat-table {
 }
 
 mat-row {
-  align-items: unset;
+  /*align-items: unset;*/
   padding: 0;
   margin: 0% 1% 0% 0%;
-  height: 40px;
-  min-height: 0px;
+  /*height: 40px;*/
+  min-height: 32px;
 }
 
 mat-header-row {
@@ -106,7 +106,7 @@ mat-header-cell {
 /*Select*/
 mat-cell:nth-child(1) {
   margin-left: 0px 15px 0px 15px;
-  padding: 10px 10px 10px 20px;
+  padding: 10px 10px 0px 20px;
   width: 50px;
   flex: none;
   float: left;
@@ -124,9 +124,8 @@ mat-header-cell:nth-child(1) {
 }
 /*Action*/
 mat-cell:nth-child(2) {
-  margin-left: 0px 15px 0px 15px;
-  padding: 0px 10px 10px 10px;
-  width: 80px;
+  padding: 0px 10px 0px 0px;
+  width: 70px;
   flex: none;
   float: left;
   font-size: 12px;
@@ -134,9 +133,8 @@ mat-cell:nth-child(2) {
 
 /*Action*/
 mat-header-cell:nth-child(2) {
-  margin-left: 0px 15px 0px 15px;
-  padding: 10px 10px 10px 15px;
-  width: 80px;
+  padding: 10px 10px 10px 5px;
+  width: 70px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
@@ -193,6 +191,24 @@ mat-header-cell:nth-child(3) {
   font-weight: bold;
 }
 
+/*Specification*/
+mat-cell:nth-child(15) {
+  padding: 0px 5px 0px 5px;
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Specification*/
+mat-header-cell:nth-child(15) {
+  padding: 0px 5px 0px 5px;
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
 /*SHP Company Name*/
 mat-cell:nth-child(16) {
   padding: 0px 5px 0px 5px;
@@ -232,7 +248,7 @@ mat-header-cell:nth-child(17) {
 /*Receiving Company*/
 mat-cell:nth-child(4) {
   padding: 0px 5px 0px 5px;
-  width: 200px;
+  width: 140px;
   flex: none;
   float: left;
   font-size: 12px;
@@ -241,7 +257,7 @@ mat-cell:nth-child(4) {
 /*Receiving Company*/
 mat-header-cell:nth-child(4) {
   padding: 0px 5px 0px 5px;
-  width: 200px;
+  width: 140px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
@@ -250,7 +266,7 @@ mat-header-cell:nth-child(4) {
 /*Receive Address*/
 mat-cell:nth-child(5) {
   padding: 0px 5px 0px 5px;
-  width: 220px;
+  width: 325px;
   flex: none;
   float: left;
   font-size: 12px;
@@ -259,7 +275,7 @@ mat-cell:nth-child(5) {
 /*Receive Address*/
 mat-header-cell:nth-child(5) {
   padding: 0px 5px 0px 5px;
-  width: 220px;
+  width: 325px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
@@ -268,7 +284,7 @@ mat-header-cell:nth-child(5) {
 /*SHP Translated Address*/
 mat-cell:nth-child(6) {
   padding: 0px 5px 0px 5px;
-  width: 220px;
+  width: 310px;
   flex: none;
   float: left;
   font-size: 12px;
@@ -277,7 +293,43 @@ mat-cell:nth-child(6) {
 /*SHP Translated Address*/
 mat-header-cell:nth-child(6) {
   padding: 0px 5px 0px 5px;
-  width: 220px;
+  width: 310px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Consignee Contact*/
+mat-cell:nth-child(7) {
+  padding: 0px 5px 0px 5px;
+  width: 100px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Consignee Contact*/
+mat-header-cell:nth-child(7) {
+  padding: 0px 5px 0px 5px;
+  width: 100px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Consignee Phone*/
+mat-cell:nth-child(8) {
+  padding: 0px 5px 0px 5px;
+  width: 110px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Consignee Phone*/
+mat-header-cell:nth-child(8) {
+  padding: 0px 5px 0px 5px;
+  width: 110px;
   flex: none;
   font-size: 14px;
   font-weight: bold;

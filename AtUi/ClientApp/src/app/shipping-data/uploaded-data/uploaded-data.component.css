@@ -46,11 +46,11 @@ mat-table {
 }
 
 mat-row {
-  align-items: unset;
+  /*align-items: unset;*/
   padding: 0;
   margin: 0% 1% 0% 0%;
-  height: 40px;
-  min-height: 0px;
+  /*height: 40px;*/
+  min-height: 32px;
 }
 
 mat-header-row {
@@ -83,7 +83,7 @@ mat-header-cell {
 /*Select*/
 mat-cell:nth-child(1) {
   margin-left: 0px 5px 0px 5px;
-  padding: 10px;
+  padding: 10px 10px 0px 10px;
   width: 50px;
   flex: none;
   float: left;
@@ -95,6 +95,44 @@ mat-header-cell:nth-child(1) {
   margin-left: 0px 5px 0px 5px;
   padding: 10px;
   width: 50px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+/*Workflow ID*/
+mat-cell:nth-child(2) {
+  margin-left: 0px 5px 0px 5px;
+  padding: 10px;
+  width: 120px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Workflow ID*/
+mat-header-cell:nth-child(2) {
+  margin-left: 0px 5px 0px 5px;
+  padding: 10px;
+  width: 120px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+/*Status*/
+mat-cell:nth-child(3) {
+  margin-left: 0px 5px 0px 5px;
+  padding: 10px;
+  width: 120px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Status*/
+mat-header-cell:nth-child(3) {
+  margin-left: 0px 5px 0px 5px;
+  padding: 10px;
+  width: 120px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
@@ -118,6 +156,24 @@ mat-header-cell:nth-child(1) {
   font-size: 14px;
   font-weight: bold;
 }*/
+
+/*Specification*/
+mat-cell:nth-child(12) {
+  padding: 0px 5px 0px 5px;
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Specification*/
+mat-header-cell:nth-child(12) {
+  padding: 0px 5px 0px 5px;
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
 
 /*SHP Company Name*/
 mat-cell:nth-child(13) {
@@ -193,7 +249,7 @@ mat-header-cell:nth-child(5) {
 /*Receive Address*/
 mat-cell:nth-child(6) {
   padding: 0px 5px 0px 5px;
-  width: 220px;
+  width: 325px;
   flex: none;
   float: left;
   font-size: 12px;
@@ -202,7 +258,7 @@ mat-cell:nth-child(6) {
 /*Receive Address*/
 mat-header-cell:nth-child(6) {
   padding: 0px 5px 0px 5px;
-  width: 220px;
+  width: 325px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
@@ -211,7 +267,7 @@ mat-header-cell:nth-child(6) {
 /*SHP Translated Address*/
 mat-cell:nth-child(7) {
   padding: 0px 5px 0px 5px;
-  width: 250px;
+  width: 310px;
   flex: none;
   float: left;
   font-size: 12px;
@@ -220,7 +276,7 @@ mat-cell:nth-child(7) {
 /*SHP Translated Address*/
 mat-header-cell:nth-child(7) {
   padding: 0px 5px 0px 5px;
-  width: 250px;
+  width: 310px;
   flex: none;
   font-size: 14px;
   font-weight: bold;
