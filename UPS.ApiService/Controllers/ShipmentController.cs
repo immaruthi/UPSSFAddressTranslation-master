@@ -360,6 +360,7 @@
                 XMLMessage += " d_contact=\"" + orderRequest.csG_CTC_TE.ampReplacment() + "\"";
                 XMLMessage += " d_tel=\"" + orderRequest.pH_NR + "\"";
                 XMLMessage += " specifications=\"" + orderRequest.fsT_INV_LN_DES_TE + "\"";
+                XMLMessage += " order_cert_no=\"" + orderRequest.imP_NR + "\"";
                 XMLMessage += " routelabelService=\"1\"";
                 XMLMessage += " d_address=\"" + orderRequest.shP_ADR_TR_TE + "\" cargo_total_weight=\"" + orderRequest.pkG_WGT_DE + "\"";
                 XMLMessage += " pay_method=\"1\" is_docall=\"" + 0 + "\" need_return_tracking_no=\"" + orderRequest.poD_RTN_SVC + "\" express_type=\"6\"";

@@ -710,7 +710,7 @@
 
                     ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
 
-                    if (!string.IsNullOrWhiteSpace(excelDataObject.S_shipmentno))
+                    if (!string.IsNullOrWhiteSpace(excelDataObject.S_packageno))
                     {
 
                         shipmentDataRequest.BIL_TYP_TE = excelDataObject.S_billtype;
@@ -770,30 +770,30 @@
                         shipmentDataRequest.RCV_CPY_TE = excelDataObject.S_receivercompany;
                         shipmentDataRequest.SHP_ADR_TE = excelDataObject.address;
 
-                        AddressBook translatedAddress =
-                            addressBooks
-                            ?.FirstOrDefault(
-                                (AddressBook address) =>
-                                    address.ConsigneeAddress.Replace(" ","").ToLower().Trim().Equals(
-                                    excelDataObject.S_address1.Replace(" ", "").ToLower().Trim(), StringComparison.OrdinalIgnoreCase));
+                        //AddressBook translatedAddress =
+                        //    addressBooks
+                        //    ?.FirstOrDefault(
+                        //        (AddressBook address) =>
+                        //            address.ConsigneeAddress.Replace(" ","").ToLower().Trim().Equals(
+                        //            excelDataObject.S_address1.Replace(" ", "").ToLower().Trim(), StringComparison.OrdinalIgnoreCase));
 
-                        if (translatedAddress != null)
-                        {
-                            shipmentDataRequest.SHP_ADR_TR_TE = translatedAddress.ConsigneeTranslatedAddress;
+                        //if (translatedAddress != null)
+                        //{
+                        //shipmentDataRequest.SHP_ADR_TR_TE = translatedAddress.ConsigneeTranslatedAddress;
+                        //shipmentDataRequest.SMT_STA_NR = (int)Enums.ATStatus.Translated;
+                        //wfStatus = shipmentDataRequest.SMT_STA_NR;
+                        //shipmentDataRequest.SMT_STA_TE = Convert.ToString(Enums.ATStatus.Translated);
+                        //shipmentDataRequest.CON_NR = translatedAddress.Confidence;
+                        //shipmentDataRequest.ACY_TE = translatedAddress.Accuracy;
+                        //shipmentDataRequest.TranslationScore = translatedAddress.TranslationScore;
+                        //}
+                        //else
+                        //{
+                            shipmentDataRequest.SHP_ADR_TR_TE = excelDataObject.S_address1; ;
                             shipmentDataRequest.SMT_STA_NR = (int)Enums.ATStatus.Translated;
-                            wfStatus = shipmentDataRequest.SMT_STA_NR;
                             shipmentDataRequest.SMT_STA_TE = Convert.ToString(Enums.ATStatus.Translated);
-                            shipmentDataRequest.CON_NR = translatedAddress.Confidence;
-                            shipmentDataRequest.ACY_TE = translatedAddress.Accuracy;
-                            shipmentDataRequest.TranslationScore = translatedAddress.TranslationScore;
-                        }
-                        else
-                        {
-                            shipmentDataRequest.SHP_ADR_TR_TE = string.Empty;
-                            shipmentDataRequest.SMT_STA_NR = (int)Enums.ATStatus.Uploaded;
-                            shipmentDataRequest.SMT_STA_TE = Convert.ToString(Enums.ATStatus.Uploaded);
 
-                        }
+                        //}
 
                         shipmentDataRequest.SHP_CPY_NA = excelDataObject.S_shippercompany;
                         shipmentDataRequest.SHP_CTC_TE = excelDataObject.S_shptctc;
@@ -825,7 +825,14 @@
                         shipmentDataRequest.SMT_NR_TE = excelDataObject.S_shipmentno;
 
                         shipmentDataRequest.SMT_VAL_DE = 0;
-                        shipmentDataRequest.SMT_WGT_DE = Convert.ToDecimal(excelDataObject.S_shptwei);
+                        shipmentDataRequest.SMT_WGT_DE = 0;
+                        if (!string.IsNullOrEmpty(excelDataObject.S_shptwei))
+                        {
+                            if (decimal.TryParse(excelDataObject.S_shptwei, out decimalvalue))
+                            {
+                                shipmentDataRequest.SMT_WGT_DE = decimalvalue;
+                            }
+                        }
                         shipmentDataRequest.SVL_NR = Convert.ToString(excelDataObject.svl);
                         shipmentDataRequest.WGT_UNT_TE = excelDataObject.S_weiunit;
                         shipmentDataRequest.WFL_ID = workflowID;
