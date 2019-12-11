@@ -30,6 +30,7 @@
     using UPS.ServicesDataRepository;
     using UPS.ServicesDataRepository.Common;
     using UPS.ServicesDataRepository.DataContext;
+    using UPS.ShipmentServices.HK;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -340,90 +341,19 @@
 
             foreach (var orderRequest in uIOrderRequestBodyDatas)
             {
-                string XMLMessage = string.Empty;
-
-                XMLMessage = "<Request lang=\"zh-CN\" service=\"OrderService\">";
-                XMLMessage += "<Head>" + configuration["SFExpress:Access Number"] + "</Head>";
-                XMLMessage += "<Body>";
-                XMLMessage += "<Order orderid=\"" + orderRequest.pkG_NR_TE + "\" custid=\"" + orderRequest.spC_CST_ID_TE + "\"";
-                XMLMessage += " parcel_quantity=\"" + orderRequest.pcS_QTY_NR + "\"";
-                XMLMessage += " total_net_weight=\"" + orderRequest.pkG_WGT_DE + "\"";
-                XMLMessage += " j_company=\"" + orderRequest.shP_CPY_NA.ampReplacment() + "\"";
-                XMLMessage += " j_address=\"" + orderRequest.shP_ADR_TE.ampReplacment() + "\"";
-                XMLMessage += " j_city=\"" + orderRequest.orG_CTY_TE.ampReplacment() + "\"";
-                XMLMessage += " j_post_code=\"" + orderRequest.orG_PSL_CD + "\"";
-                XMLMessage += " j_contact=\"" + orderRequest.shP_CTC_TE.ampReplacment() + "\"";
-                XMLMessage += " j_tel=\"" + orderRequest.shP_PH_TE + "\"";
-                XMLMessage += " d_company=\"" + orderRequest.rcV_CPY_TE.ampReplacment() + "\"";
-                XMLMessage += " d_city=\"" + orderRequest.dsT_CTY_TE.ampReplacment() + "\"";
-                XMLMessage += " d_post_code=\"" + orderRequest.dsT_PSL_TE + "\"";
-                XMLMessage += " d_contact=\"" + orderRequest.csG_CTC_TE.ampReplacment() + "\"";
-                XMLMessage += " d_tel=\"" + orderRequest.pH_NR + "\"";
-                XMLMessage += " specifications=\"" + orderRequest.fsT_INV_LN_DES_TE + "\"";
-                XMLMessage += " order_cert_no=\"" + orderRequest.imP_NR + "\"";
-                XMLMessage += " routelabelService=\"1\"";
-                XMLMessage += " d_address=\"" + orderRequest.shP_ADR_TR_TE + "\" cargo_total_weight=\"" + orderRequest.pkG_WGT_DE + "\"";
-                XMLMessage += " pay_method=\"1\" is_docall=\"" + 0 + "\" need_return_tracking_no=\"" + orderRequest.poD_RTN_SVC + "\" express_type=\"6\"";
-                XMLMessage += " >";
-                XMLMessage += " </Order>";
-                if (!string.IsNullOrEmpty(orderRequest.coD_TE))
+                try
                 {
-                    XMLMessage += "<AddedService name='COD' value=\"" + orderRequest.coD_TE + "\"></AddedService>";
-                }
-                XMLMessage += "</Body></Request>";
-
-
-                SFCreateOrderServiceRequest sFCreateOrderServiceRequest = new SFCreateOrderServiceRequest()
-                {
-                    AccessNumber = configuration["SFExpress:Access Number"],
-                    BaseURI = configuration["SFExpress:Base URI"],
-                    Checkword = configuration["SFExpress:Checkword"],
-                    RequestURI = configuration["SFExpress:Place Order URI"],
-                    Checkcode = configuration["SFExpress:CheckCode"],
-                    RequestOrderXMLMessage = XMLMessage,
-
-                };
-
-                GetSFCreateOrderServiceResponse getSFCreateOrderServiceResponse = QuincusService.SFExpressCreateOrder(sFCreateOrderServiceRequest);
-
-                //shipmentDataResponse = shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
-                //if (!shipmentDataResponse.Success)
-                //{
-                //    AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
-                //}
-
-                if (getSFCreateOrderServiceResponse.Response)
-                {
-                    XmlDocument xmlDocumentShipmentResponse = new XmlDocument();
-                    xmlDocumentShipmentResponse.LoadXml(getSFCreateOrderServiceResponse.OrderResponse);
-
-                    string xmlDocumentShipmentResponseParser = xmlDocumentShipmentResponse.InnerXml;
-
-                    if (xmlDocumentShipmentResponseParser.Contains("<ERROR"))
+                    string lstWaybill = null;
+                    string msg = null;
+                    string errorCode = null;
+                    XmlDocument xml = new XmlDocument();
+                    xml.LoadXml(HKConnectedServices.CreateShipment(orderRequest, configuration["SFExpress:Checkword"], configuration["SFExpress:Access Number"]));
+                    XmlElement root = xml.DocumentElement;
+                    string head = root.SelectNodes("/Response/Head")[0].InnerText;
+                    if (head == "OK")
                     {
-                        XmlDocument xmlDocument = new XmlDocument();
-
-                        xmlDocument.LoadXml(getSFCreateOrderServiceResponse.OrderResponse);
-
-                        //if (xmlDocumentShipmentResponseParser.Contains("8019"))
-                        //{
-                        //    createOrderShipmentResponse.FailedToProcessShipments.Add("Customer order number(" + orderRequest.pkG_NR_TE + ") is already confirmed");
-                        //}
-                        //else if (xmlDocumentShipmentResponseParser.Contains("8016"))
-                        //{
-                        //    createOrderShipmentResponse.FailedToProcessShipments.Add("Repeat order numbers ( " + orderRequest.pkG_NR_TE + " )");
-                        //}
-                        //else
-                        //{
-                            createOrderShipmentResponse.FailedToProcessShipments.Add(
-                                string.Format("{0}:{1}:{2}",
-                                orderRequest.pkG_NR_TE,
-                                xmlDocument.GetElementsByTagName("ERROR")[0].Attributes[0].InnerText,
-                                xmlDocument.GetElementsByTagName("ERROR")[0].InnerXml));
-                        //}
-                    }
-                    else
-                    {
+                        lstWaybill = root.SelectNodes("/Response/Body/OrderResponse/mailNo")[0].InnerText.Split(',').ToString();
+                        
                         createOrderShipmentResponse.ProcessedShipments.Add(orderRequest.pkG_NR_TE);
 
                         ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
@@ -435,13 +365,155 @@
 
                         _shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
                     }
+                    else
+                    {
+                        msg = root.SelectNodes("/Response/ERROR")[0].InnerText;
+                        errorCode = root.SelectNodes("/Response/ERROR")[0].Attributes[0].InnerText;
+
+                        createOrderShipmentResponse.FailedToProcessShipments.Add(
+                                string.Format("{0}:{1}:{2}",
+                                orderRequest.pkG_NR_TE,
+                                errorCode,
+                                msg));
+
+                    }
 
                     createOrderShipmentResponse.Response = true;
                 }
-                else
+                catch(Exception exception)
                 {
-                    createOrderShipmentResponse.Response = false;
+                    return BadRequest(exception);
                 }
+
+
+                //string XMLMessage = string.Empty;
+
+                //XMLMessage = "<Request lang=\"en\" service=\"apiOrderService\">";
+                //XMLMessage += "<Head>" + configuration["SFExpress:Access Number"] + "</Head>";
+                //XMLMessage += "<Body>";
+                ////XMLMessage += "<Order orderid=\"" + orderRequest.pkG_NR_TE + "\" custid=\"" + orderRequest.spC_CST_ID_TE + "\"";
+                ////XMLMessage += " parcel_quantity=\"" + orderRequest.pcS_QTY_NR + "\"";
+                ////XMLMessage += " total_net_weight=\"" + orderRequest.pkG_WGT_DE + "\"";
+                ////XMLMessage += " j_company=\"" + orderRequest.shP_CPY_NA.ampReplacment() + "\"";
+                ////XMLMessage += " j_address=\"" + orderRequest.shP_ADR_TE.ampReplacment() + "\"";
+                ////XMLMessage += " j_city=\"" + orderRequest.orG_CTY_TE.ampReplacment() + "\"";
+                ////XMLMessage += " j_post_code=\"" + orderRequest.orG_PSL_CD + "\"";
+                ////XMLMessage += " j_contact=\"" + orderRequest.shP_CTC_TE.ampReplacment() + "\"";
+                ////XMLMessage += " j_tel=\"" + orderRequest.shP_PH_TE + "\"";
+                ////XMLMessage += " d_company=\"" + orderRequest.rcV_CPY_TE.ampReplacment() + "\"";
+                ////XMLMessage += " d_city=\"" + orderRequest.dsT_CTY_TE.ampReplacment() + "\"";
+                ////XMLMessage += " d_post_code=\"" + orderRequest.dsT_PSL_TE + "\"";
+                ////XMLMessage += " d_contact=\"" + orderRequest.csG_CTC_TE.ampReplacment() + "\"";
+                ////XMLMessage += " d_tel=\"" + orderRequest.pH_NR + "\"";
+                ////XMLMessage += " specifications=\"" + orderRequest.fsT_INV_LN_DES_TE + "\"";
+                ////XMLMessage += " order_cert_no=\"" + orderRequest.imP_NR + "\"";
+                ////XMLMessage += " routelabelService=\"1\"";
+                ////XMLMessage += " d_address=\"" + orderRequest.shP_ADR_TR_TE + "\" cargo_total_weight=\"" + orderRequest.pkG_WGT_DE + "\"";
+                ////XMLMessage += " pay_method=\"1\" is_docall=\"" + 0 + "\" need_return_tracking_no=\"" + orderRequest.poD_RTN_SVC + "\" express_type=\"6\"";
+                ////XMLMessage += " >";
+                ////XMLMessage += " </Order>";
+                //XMLMessage += "<Order ";
+                //XMLMessage += " reference_no1=\"" + orderRequest.pkG_NR_TE + "\"";
+                //XMLMessage += " j_contact=\"" + orderRequest.shP_CTC_TE.ampReplacment() + "\"";
+                //XMLMessage += " j_tel=\"" + orderRequest.shP_PH_TE + "\"";
+                //XMLMessage += " j_country=\"" + "HK" + "\"";
+                //XMLMessage += " j_province=\"" + "HONGKONG" + "\"";
+                //XMLMessage += " j_city=\"" + "Kwai Chung" + "\"";
+                //XMLMessage += " j_county=\"" + "HK" + "\""; //Not in Sample
+                //XMLMessage += " j_address=\"" + orderRequest.shP_ADR_TE.ampReplacment() + "\"";
+                //XMLMessage += " j_post_code=\"" + "852" + "\"";
+                //XMLMessage += " d_email=\"" + orderRequest.csG_CTC_TE.ampReplacment() + "\""; //Not in Sample
+                //XMLMessage += " d_contact=\"" + orderRequest.shP_CPY_NA + "\"";
+                //XMLMessage += " d_tel=\"" + orderRequest.pH_NR + "\"";
+                //XMLMessage += " d_country=\"" + "KR" + "\"";
+                //XMLMessage += " d_address=\"" + orderRequest.shP_ADR_TR_TE + "\"";
+                //XMLMessage += " d_post_code=\"" + orderRequest.dsT_PSL_TE + "\"";
+                //XMLMessage += " custid=\"" + "8526898978" + "\"";
+                //XMLMessage += " pay_method=\"1\"";
+                //XMLMessage += " express_type =\"1\"";
+                //XMLMessage += " parcel_quantity=\"" + "1" + "\"";
+                //XMLMessage += " tax_pay_type=\"" + "1" + "\"";
+                //XMLMessage += " currency=\"" + "USD" + "\""; //Currency
+                //XMLMessage += " operate_type=\"" + "1" + "\"";
+                //XMLMessage += " order_cert_no=\"" + orderRequest.imP_NR + "\"";
+                //XMLMessage += " >";
+                //XMLMessage += " </Order>";
+                ////if (!string.IsNullOrEmpty(orderRequest.coD_TE))
+                ////{
+                ////    XMLMessage += "<AddedService name='COD' value=\"" + orderRequest.coD_TE + "\"></AddedService>";
+                ////}
+                //XMLMessage += "</Body></Request>";
+
+
+                //SFCreateOrderServiceRequest sFCreateOrderServiceRequest = new SFCreateOrderServiceRequest()
+                //{
+                //    AccessNumber = configuration["SFExpress:Access Number"],
+                //    BaseURI = configuration["SFExpress:Base URI"],
+                //    Checkword = configuration["SFExpress:Checkword"],
+                //    RequestURI = configuration["SFExpress:Place Order URI"],
+                //    Checkcode = configuration["SFExpress:CheckCode"],
+                //    RequestOrderXMLMessage = XMLMessage,
+
+                //};
+
+                //GetSFCreateOrderServiceResponse getSFCreateOrderServiceResponse = QuincusService.SFExpressCreateOrder(sFCreateOrderServiceRequest);
+
+                //shipmentDataResponse = shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
+                //if (!shipmentDataResponse.Success)
+                //{
+                //    AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
+                //}
+
+                //if (getSFCreateOrderServiceResponse.Response)
+                //{
+                //    XmlDocument xmlDocumentShipmentResponse = new XmlDocument();
+                //    xmlDocumentShipmentResponse.LoadXml(getSFCreateOrderServiceResponse.OrderResponse);
+
+                //    string xmlDocumentShipmentResponseParser = xmlDocumentShipmentResponse.InnerXml;
+
+                //    if (xmlDocumentShipmentResponseParser.Contains("<ERROR"))
+                //    {
+                //        XmlDocument xmlDocument = new XmlDocument();
+
+                //        xmlDocument.LoadXml(getSFCreateOrderServiceResponse.OrderResponse);
+
+                //        //if (xmlDocumentShipmentResponseParser.Contains("8019"))
+                //        //{
+                //        //    createOrderShipmentResponse.FailedToProcessShipments.Add("Customer order number(" + orderRequest.pkG_NR_TE + ") is already confirmed");
+                //        //}
+                //        //else if (xmlDocumentShipmentResponseParser.Contains("8016"))
+                //        //{
+                //        //    createOrderShipmentResponse.FailedToProcessShipments.Add("Repeat order numbers ( " + orderRequest.pkG_NR_TE + " )");
+                //        //}
+                //        //else
+                //        //{
+                //            createOrderShipmentResponse.FailedToProcessShipments.Add(
+                //                string.Format("{0}:{1}:{2}",
+                //                orderRequest.pkG_NR_TE,
+                //                xmlDocument.GetElementsByTagName("ERROR")[0].Attributes[0].InnerText,
+                //                xmlDocument.GetElementsByTagName("ERROR")[0].InnerXml));
+                //        //}
+                //    }
+                //    else
+                //    {
+                //        createOrderShipmentResponse.ProcessedShipments.Add(orderRequest.pkG_NR_TE);
+
+                //        ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
+                //        shipmentDataRequest.ID = orderRequest.id;
+                //        shipmentDataRequest.WFL_ID = orderRequest.wfL_ID;
+                //        shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Completed);
+                //        shipmentDataRequest.SMT_STA_TE = "Completed";
+                //        _workflowID = orderRequest.wfL_ID;
+
+                //        _shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
+                //    }
+
+                //    createOrderShipmentResponse.Response = true;
+                //}
+                //else
+                //{
+                //    createOrderShipmentResponse.Response = false;
+                //}
             }
             //we need to update the workflow status
             int? workflowstatus = _shipmentService.SelectShipmentTotalStatusByWorkflowId(_workflowID);

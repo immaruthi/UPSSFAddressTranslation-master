@@ -30,6 +30,7 @@
     <ProjectReference Include="..\UPS.Quincus.APP\UPS.Quincus.APP.csproj" />
     <ProjectReference Include="..\UPS.ServicesAsyncActions\UPS.ServicesAsyncActions.csproj" />
     <ProjectReference Include="..\UPS.ServicesDataRepository\UPS.ServicesDataRepository.csproj" />
+    <ProjectReference Include="..\UPS.ShipmentServices.HK\UPS.ShipmentServices.HK.csproj" />
   </ItemGroup>
 
   <ItemGroup>
