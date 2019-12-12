@@ -45,19 +45,28 @@ namespace UPS.ShipmentServices.HK
                 data += " j_address=\"" + uIOrderRequestBody.shP_ADR_TE.ampReplacment() + "\"";
                 data += " j_post_code=\"" + "852" + "\"";
                 data += " d_email=\"" + uIOrderRequestBody.csG_CTC_TE.ampReplacment() + "\"";
-                data += " d_contact=\"" + uIOrderRequestBody.shP_CPY_NA + "\"";
+                data += " d_contact=\"" + uIOrderRequestBody.shP_CPY_NA.ampReplacment() + "\"";
                 data += " d_tel=\"" + uIOrderRequestBody.pH_NR + "\"";
                 data += " d_country=\"" + "KR" + "\"";
-                data += " d_address=\"" + uIOrderRequestBody.shP_ADR_TR_TE + "\"";
+                data += " d_address=\"" + uIOrderRequestBody.shP_ADR_TR_TE.ampReplacment() + "\"";
                 data += " d_post_code=\"" + uIOrderRequestBody.dsT_PSL_TE + "\"";
                 data += " custid=\"" + custID + "\"";
                 data += " pay_method=\"" + "1" + "\"";
                 data += " express_type =\"" + "101" + "\"";
                 data += " parcel_quantity=\"" + "1" + "\"";
-                data += " tax_pay_type=\"" + "1" + "\"";
+                data += " tax_pay_type=\"" + "2" + "\"";
                 data += " currency=\"" + "USD" + "\"";
                 data += " operate_type=\"" + "1" + "\"";
                 data += " order_cert_no=\"" + uIOrderRequestBody.imP_NR + "\"" + ">";
+                //Cargo
+                data += "<Cargo name=\"" + uIOrderRequestBody.fsT_INV_LN_DES_TE + "\"";
+                data += " count =\"" + uIOrderRequestBody.pcS_QTY_NR + "\"";
+                data += " unit =\"" + "PCS" + "\"";
+                data += " weight =\"" + uIOrderRequestBody.pkG_WGT_DE + "\"";
+                data += " amount =\"" + uIOrderRequestBody.smT_VAL_DE + "\"";
+                data += " total_value =\"" + uIOrderRequestBody.pcS_QTY_NR * uIOrderRequestBody.smT_VAL_DE + "\"";
+                data += " source_area =\"" + uIOrderRequestBody.diM_WGT_DE + "\"" + "/>";
+                //Cargo
                 data += " </Order></Body></Request>";
 
                 XmlDocument xmldc = new XmlDocument();

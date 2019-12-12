@@ -754,6 +754,7 @@
                         shipmentDataRequest.PCS_QTY_NR = 0;
                         if (!string.IsNullOrEmpty(excelDataObject.pcs))
                         {
+                            excelDataObject.pcs = excelDataObject.pcs.Contains('.') ? excelDataObject.pcs.Split('.')[0] : excelDataObject.pcs;
                             if (int.TryParse(excelDataObject.pcs, out intvalue))
                             {
                                 shipmentDataRequest.PCS_QTY_NR = intvalue;
@@ -825,6 +826,13 @@
                         shipmentDataRequest.SMT_NR_TE = excelDataObject.S_shipmentno;
 
                         shipmentDataRequest.SMT_VAL_DE = 0;
+                        if (!string.IsNullOrEmpty(excelDataObject.value))
+                        {
+                            if (decimal.TryParse(excelDataObject.value, out decimalvalue))
+                            {
+                                shipmentDataRequest.SMT_VAL_DE = decimalvalue;
+                            }
+                        }
                         shipmentDataRequest.SMT_WGT_DE = 0;
                         if (!string.IsNullOrEmpty(excelDataObject.S_shptwei))
                         {
