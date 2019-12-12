@@ -347,7 +347,7 @@
                     string msg = null;
                     string errorCode = null;
                     XmlDocument xml = new XmlDocument();
-                    xml.LoadXml(HKConnectedServices.CreateShipment(orderRequest, configuration["SFExpress:Checkword"], configuration["SFExpress:Access Number"]));
+                    xml.LoadXml(HKConnectedServices.CreateShipment(orderRequest, configuration["SFExpress:Checkword"], configuration["SFExpress:Access Number"], configuration["SFExpress:CustID"]));
                     XmlElement root = xml.DocumentElement;
                     string head = root.SelectNodes("/Response/Head")[0].InnerText;
                     if (head == "OK")

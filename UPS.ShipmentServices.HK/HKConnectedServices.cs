@@ -25,7 +25,7 @@ namespace UPS.ShipmentServices.HK
             return inputString;
         }
 
-        public static string CreateShipment(UIOrderRequestBodyData uIOrderRequestBody,string checkWord, string accessNumber)
+        public static string CreateShipment(UIOrderRequestBodyData uIOrderRequestBody,string checkWord, string accessNumber, string custID)
         {
             HKShipmentServices.sfexpressServiceResponse sfexpressService = null;
             
@@ -50,9 +50,9 @@ namespace UPS.ShipmentServices.HK
                 data += " d_country=\"" + "KR" + "\"";
                 data += " d_address=\"" + uIOrderRequestBody.shP_ADR_TR_TE + "\"";
                 data += " d_post_code=\"" + uIOrderRequestBody.dsT_PSL_TE + "\"";
-                data += " custid=\"" + "8526898978" + "\"";
+                data += " custid=\"" + custID + "\"";
                 data += " pay_method=\"" + "1" + "\"";
-                data += " express_type =\"" + "1" + "\"";
+                data += " express_type =\"" + "101" + "\"";
                 data += " parcel_quantity=\"" + "1" + "\"";
                 data += " tax_pay_type=\"" + "1" + "\"";
                 data += " currency=\"" + "USD" + "\"";
