@@ -80,6 +80,7 @@ import { ShipperListModelComponent } from './shipper-list/shipper-list-model/shi
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
 import { AddUserComponent } from './user-registration/add-user/add-user.component';
 import { EditUserComponent } from './user-registration/edit-user/edit-user.component';
+import { CargosComponent } from './dialogs/cargos/cargos.component';
 
 @NgModule({
   declarations: [
@@ -119,7 +120,8 @@ import { EditUserComponent } from './user-registration/edit-user/edit-user.compo
     UserRegistrationComponent,
     AddUserComponent,
     EditUserComponent,
-    ShipperListModelComponent
+    ShipperListModelComponent,
+    CargosComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -166,7 +168,7 @@ import { EditUserComponent } from './user-registration/edit-user/edit-user.compo
     ],
   bootstrap: [AppComponent],
   entryComponents: [LoginComponent, AlertDialogComponent, SummaryDialogComponent, ConfirmationDialogComponent, AddressEditModelComponent,
-    AddressBookEditModelComponent, ShipperListModelComponent, AddUserComponent, EditUserComponent]
+    AddressBookEditModelComponent, ShipperListModelComponent, AddUserComponent, EditUserComponent, CargosComponent]
 
 })
 export class AppModule { }

@@ -7,6 +7,7 @@ import { ShippingService } from '../../services/shipping.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Constants } from '../../shared/Constants';
 import { AddressEditModelComponent } from '../address-edit-model/address-edit-model.component';
+import { CargosComponent } from '../../dialogs/cargos/cargos.component';
 import { DataService } from '../../services/data.service';
 import { DialogService } from '../../services/dialog.service';
 import { Observable } from 'rxjs';
@@ -338,7 +339,9 @@ export class SentToSfComponent implements OnInit {
       error => this.notificationService.openErrorMessageNotification(error.status + ' : ' + error.statusText));
   }
 
-  openCargos() {
+  openCargos(shipmentData: any) {
 
+    let cargoDetails = shipmentData.cargos;
+    const dialogRef = this.dialogService.openCargoDialog(cargoDetails);
   }
 }

@@ -68,7 +68,7 @@
       </ng-container>
       <ng-container matColumnDef="shipments" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Shipments </mat-header-cell>
-        <mat-cell *matCellDef="let element" class="cell"><a> {{element.cargos?.length}}</a></mat-cell>
+        <mat-cell *matCellDef="let element" class="cell"><a (click)="openCargos(element)"> {{element.cargos?.length}}</a></mat-cell>
       </ng-container>
       <ng-container matColumnDef="shP_DT" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> SHP Date </mat-header-cell>
