@@ -45,6 +45,7 @@
         private IEntityValidationService _entityValidationService;
         private IAddressBookService _addressBookService;
         private ShipmentDataResponse shipmentDataResponse;
+        private SFRequest sFRequest;
 
         //private ShipmentService shipmentService { get; set; }
         private WorkflowService _workflowService { get; set; }
@@ -328,10 +329,10 @@
 
         [Route("CreateOrderShipment")]
         [HttpPost]
-        public async Task<ActionResult> CreateOrderShipment([FromBody] List<UIOrderRequestBodyData> uIOrderRequestBodyDatas)
+        public async Task<ActionResult> CreateOrderShipment([FromBody] List<SFDataRequest> uIOrderRequestBodyDatas)
         {
-            string customerID = uIOrderRequestBodyDatas[0].spC_CST_ID_TE;//_shipmentService.GetShipmentCustomCodesInformation().CST_ID;
-            _workflowID = uIOrderRequestBodyDatas[0].wfL_ID;
+            string customerID = uIOrderRequestBodyDatas[0].SPC_CST_ID_TE;//_shipmentService.GetShipmentCustomCodesInformation().CST_ID;
+            _workflowID = uIOrderRequestBodyDatas[0].WFL_ID;
             CreateOrderShipmentResponse createOrderShipmentResponse = new CreateOrderShipmentResponse();
             createOrderShipmentResponse.FailedToProcessShipments = new List<string>();
             createOrderShipmentResponse.ProcessedShipments = new List<string>();
@@ -354,16 +355,31 @@
                     {
                         lstWaybill = root.SelectNodes("/Response/Body/OrderResponse/mailNo")[0].InnerText.Split(',').ToString();
                         
-                        createOrderShipmentResponse.ProcessedShipments.Add(orderRequest.pkG_NR_TE);
+                        createOrderShipmentResponse.ProcessedShipments.Add(orderRequest.PKG_NR_TE);
 
-                        ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
-                        shipmentDataRequest.ID = orderRequest.id;
-                        shipmentDataRequest.WFL_ID = orderRequest.wfL_ID;
-                        shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Completed);
-                        shipmentDataRequest.SMT_STA_TE = "Completed";
-                        _workflowID = orderRequest.wfL_ID;
+                        //ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
+                        //shipmentDataRequest.ID = orderRequest.ID;
+                        //shipmentDataRequest.WFL_ID = orderRequest.WFL_ID;
+                        //shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Completed);
+                        //shipmentDataRequest.SMT_STA_TE = "Completed";
 
-                        _shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
+
+                        //_shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
+
+                        _workflowID = orderRequest.WFL_ID;
+
+                        foreach (var cargo in orderRequest.Cargos)
+                        {
+                            ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
+                            shipmentDataRequest.ID = cargo.MST_ID;
+                            shipmentDataRequest.WFL_ID = _workflowID;
+                            shipmentDataRequest.SMT_STA_NR = ((int)Enums.ATStatus.Completed);
+                            shipmentDataRequest.SMT_STA_TE = "Completed";
+
+                            _shipmentService.UpdateShipmentStatusById(shipmentDataRequest);
+                        }
+
+                        
                     }
                     else
                     {
@@ -372,7 +388,7 @@
 
                         createOrderShipmentResponse.FailedToProcessShipments.Add(
                                 string.Format("{0}:{1}:{2}",
-                                orderRequest.pkG_NR_TE,
+                                orderRequest.PKG_NR_TE,
                                 errorCode,
                                 msg));
 
@@ -889,8 +905,8 @@
             }
 
             int userId = Convert.ToInt32(id);
-            shipmentDataResponse = this._shipperCompanyService.SelectMatchedShipmentsWithShipperCompanies(wid, userId);
-            if (!shipmentDataResponse.Success)
+            sFRequest = this._shipperCompanyService.SelectMatchedShipmentsWithShipperCompanies(wid, userId);
+            if (!sFRequest.Success)
             {
                 //AuditEventEntry.WriteEntry(new Exception(shipmentDataResponse.OperationExceptionMsg));
             }
@@ -899,7 +915,7 @@
             //    var json = JsonConvert.SerializeObject(shipmentDataResponse.Shipments).ToString();
             //    AuditEventEntry.WriteEntry(new Exception(json));
             //}
-            return Ok(shipmentDataResponse);
+            return Ok(sFRequest);
         }
 
         [Route("GetCompletedShipments")]

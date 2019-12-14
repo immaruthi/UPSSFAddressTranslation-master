@@ -713,7 +713,7 @@
                     if (!string.IsNullOrWhiteSpace(excelDataObject.S_packageno))
                     {
 
-                        shipmentDataRequest.BIL_TYP_TE = excelDataObject.S_billtype;
+                        shipmentDataRequest.BIL_TYP_TE = excelDataObject.S_billtype != null && excelDataObject.S_billtype.Contains('.') ? excelDataObject.S_billtype.Split('.')[0] : excelDataObject.S_billtype;
                         shipmentDataRequest.CCY_VAL_TE = string.Empty;
                         shipmentDataRequest.COD_TE = string.Empty;
                         shipmentDataRequest.CSG_CTC_TE = excelDataObject.S_cneectc;

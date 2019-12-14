@@ -134,7 +134,7 @@ mat-header-cell:nth-child(3) {
 }
 
 /*Specification*/
-mat-cell:nth-child(12) {
+mat-cell:nth-child(13) {
   padding: 0px 5px 0px 5px;
   width: 250px;
   flex: none;
@@ -143,7 +143,7 @@ mat-cell:nth-child(12) {
 }
 
 /*Specification*/
-mat-header-cell:nth-child(12) {
+mat-header-cell:nth-child(13) {
   padding: 0px 5px 0px 5px;
   width: 250px;
   flex: none;
@@ -152,26 +152,26 @@ mat-header-cell:nth-child(12) {
 }
 
 /*SHP Company Name*/
-mat-cell:nth-child(14) {
-  padding: 0px 5px 0px 5px;
-  width: 200px;
-  flex: none;
-  float: left;
-  font-size: 12px;
-}
-
-/*SHP Company Name*/
-mat-header-cell:nth-child(14) {
-  padding: 0px 5px 0px 5px;
-  width: 200px;
-  flex: none;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-/*SHP Address*/
 mat-cell:nth-child(15) {
   padding: 0px 5px 0px 5px;
+  width: 200px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*SHP Company Name*/
+mat-header-cell:nth-child(15) {
+  padding: 0px 5px 0px 5px;
+  width: 200px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*SHP Address*/
+mat-cell:nth-child(16) {
+  padding: 0px 5px 0px 5px;
   width: 250px;
   flex: none;
   float: left;
@@ -179,7 +179,7 @@ mat-cell:nth-child(15) {
 }
 
 /*SHP Address*/
-mat-header-cell:nth-child(15) {
+mat-header-cell:nth-child(16) {
   padding: 0px 5px 0px 5px;
   width: 250px;
   flex: none;
@@ -188,7 +188,7 @@ mat-header-cell:nth-child(15) {
 }
 
 /*Receiving Company*/
-mat-cell:nth-child(4) {
+mat-cell:nth-child(5) {
   padding: 0px 5px 0px 5px;
   width: 140px;
   flex: none;
@@ -197,7 +197,7 @@ mat-cell:nth-child(4) {
 }
 
 /*Receiving Company*/
-mat-header-cell:nth-child(4) {
+mat-header-cell:nth-child(5) {
   padding: 0px 5px 0px 5px;
   width: 140px;
   flex: none;
@@ -206,7 +206,7 @@ mat-header-cell:nth-child(4) {
 }
 
 /*Receive Address*/
-mat-cell:nth-child(5) {
+mat-cell:nth-child(6) {
   padding: 0px 5px 0px 5px;
   width: 325px;
   flex: none;
@@ -215,7 +215,7 @@ mat-cell:nth-child(5) {
 }
 
 /*Receive Address*/
-mat-header-cell:nth-child(5) {
+mat-header-cell:nth-child(6) {
   padding: 0px 5px 0px 5px;
   width: 325px;
   flex: none;
@@ -224,7 +224,7 @@ mat-header-cell:nth-child(5) {
 }
 
 /*SHP Translated Address*/
-mat-cell:nth-child(6) {
+mat-cell:nth-child(7) {
   padding: 0px 5px 0px 5px;
   width: 310px;
   flex: none;
@@ -233,7 +233,7 @@ mat-cell:nth-child(6) {
 }
 
 /*SHP Translated Address*/
-mat-header-cell:nth-child(6) {
+mat-header-cell:nth-child(7) {
   padding: 0px 5px 0px 5px;
   width: 310px;
   flex: none;
@@ -242,7 +242,7 @@ mat-header-cell:nth-child(6) {
 }
 
 /*Consignee Contact*/
-mat-cell:nth-child(7) {
+mat-cell:nth-child(8) {
   padding: 0px 5px 0px 5px;
   width: 100px;
   flex: none;
@@ -251,7 +251,7 @@ mat-cell:nth-child(7) {
 }
 
 /*Consignee Contact*/
-mat-header-cell:nth-child(7) {
+mat-header-cell:nth-child(8) {
   padding: 0px 5px 0px 5px;
   width: 100px;
   flex: none;
@@ -260,7 +260,7 @@ mat-header-cell:nth-child(7) {
 }
 
 /*Consignee Phone*/
-mat-cell:nth-child(8) {
+mat-cell:nth-child(9) {
   padding: 0px 5px 0px 5px;
   width: 110px;
   flex: none;
@@ -269,7 +269,7 @@ mat-cell:nth-child(8) {
 }
 
 /*Consignee Phone*/
-mat-header-cell:nth-child(8) {
+mat-header-cell:nth-child(9) {
   padding: 0px 5px 0px 5px;
   width: 110px;
   flex: none;

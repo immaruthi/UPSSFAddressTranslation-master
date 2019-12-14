@@ -9,7 +9,7 @@ namespace UPS.ServicesAsyncActions
 {
     public interface IShipperCompanyAsync
     {
-        ShipmentDataResponse SelectMatchedShipmentsWithShipperCompanies(int workflowID, int userId=0);
+        SFRequest SelectMatchedShipmentsWithShipperCompanies(int workflowID, int userId=0);
         ShipmentDataResponse SelectCompletedShipments(int workflowID);
         ShipperCompanyResponse SelectShipperCompanies();
         ShipperCompanyResponse GetShipperList();

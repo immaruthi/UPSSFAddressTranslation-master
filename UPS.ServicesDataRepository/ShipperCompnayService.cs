@@ -28,11 +28,13 @@
             this.response.Success = true;
         }
 
-        public ShipmentDataResponse SelectMatchedShipmentsWithShipperCompanies(int workflowID, int userId)
+        public SFRequest SelectMatchedShipmentsWithShipperCompanies(int workflowID, int userId)
 
         {
-            ShipmentDataResponse mappedShipAndShipperCompanyResponse = new ShipmentDataResponse();
-            List<ShipmentDataRequest> shipmentDataRequests = null;
+            //ShipmentDataResponse mappedShipAndShipperCompanyResponse = new ShipmentDataResponse();
+            SFRequest mappedShipAndShipperCompanyResponse = new SFRequest();
+            //List<ShipmentDataRequest> shipmentDataRequests = null;
+            List<SFDataRequest> sFDataRequests = null;
             try
             {
                 optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
@@ -40,7 +42,8 @@
                 using (var context = new ApplicationDbContext(optionsBuilder.Options))
                 {
                   List<string> mappedCities =  GetCityByUserId(userId);
-                    shipmentDataRequests = new List<ShipmentDataRequest>();
+                    //shipmentDataRequests = new List<ShipmentDataRequest>();
+                    sFDataRequests = new List<SFDataRequest>();
                     var anonymousList =
                         (
                             from s in context.shipmentDataRequests
@@ -106,86 +109,186 @@
                                 s.TranslationScore
                             }).ToList();
 
-                    foreach (var shipmentData in anonymousList)
-                    {
-                        ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
-                        shipmentDataRequest.ID = shipmentData.ID;
-                        shipmentDataRequest.BIL_TYP_TE = shipmentData.BIL_TYP_TE;
-                        shipmentDataRequest.CCY_VAL_TE = shipmentData.CCY_VAL_TE;
-                        shipmentDataRequest.COD_TE = shipmentData.COD_TE;
-                        shipmentDataRequest.CSG_CTC_TE = shipmentData.CSG_CTC_TE;
-                        shipmentDataRequest.DIM_WGT_DE = shipmentData.DIM_WGT_DE;
-                        shipmentDataRequest.DST_CTY_TE = shipmentData.DST_CTY_TE;
-                        shipmentDataRequest.DST_PSL_TE = shipmentData.DST_PSL_TE;
-                        shipmentDataRequest.EXP_SLC_CD = shipmentData.EXP_SLC_CD;
-                        shipmentDataRequest.EXP_TYP = shipmentData.EXP_TYP;
-                        shipmentDataRequest.FST_INV_LN_DES_TE = shipmentData.FST_INV_LN_DES_TE;
-                        shipmentDataRequest.IMP_NR = shipmentData.IMP_NR;
-                        shipmentDataRequest.IMP_SLC_TE = shipmentData.IMP_SLC_TE;
-                        shipmentDataRequest.IN_FLG_TE = shipmentData.IN_FLG_TE;
-                        shipmentDataRequest.ORG_CTY_TE = shipmentData.ORG_CTY_TE;
-                        shipmentDataRequest.ORG_PSL_CD = shipmentData.ORG_PSL_CD;
-                        shipmentDataRequest.OU_FLG_TE = shipmentData.OU_FLG_TE;
-                        shipmentDataRequest.PCS_QTY_NR = shipmentData.PCS_QTY_NR;
-                        shipmentDataRequest.PH_NR = shipmentData.PH_NR;
-                        shipmentDataRequest.PKG_NR_TE = shipmentData.PKG_NR_TE;
-                        shipmentDataRequest.PKG_WGT_DE = shipmentData.PKG_WGT_DE;
-                        shipmentDataRequest.PK_UP_TM = shipmentData.PK_UP_TM;
-                        shipmentDataRequest.PYM_MTD = shipmentData.PYM_MTD;
-                        shipmentDataRequest.PY_MT_TE = shipmentData.PY_MT_TE;
-                        shipmentDataRequest.QQS_TRA_LG_ID = shipmentData.QQS_TRA_LG_ID;
-                        shipmentDataRequest.RCV_ADR_TE = shipmentData.RCV_ADR_TE;
-                        shipmentDataRequest.RCV_CPY_TE = shipmentData.RCV_CPY_TE;
-                        shipmentDataRequest.SF_TRA_LG_ID = shipmentData.SF_TRA_LG_ID;
-                        shipmentDataRequest.SHP_ADR_TE = shipmentData.SHP_ADR_TE;
-                        shipmentDataRequest.SHP_ADR_TR_TE = shipmentData.SHP_ADR_TR_TE;
-                        shipmentDataRequest.SHP_CPY_NA = shipmentData.SHP_CPY_NA;
-                        shipmentDataRequest.SHP_CTC_TE = shipmentData.SHP_CTC_TE;
-                        shipmentDataRequest.SHP_DT = shipmentData.SHP_DT;
-                        shipmentDataRequest.SHP_NR = shipmentData.SHP_NR;
-                        shipmentDataRequest.SHP_PH_TE = shipmentData.SHP_PH_TE;
-                        shipmentDataRequest.SMT_NR_TE = shipmentData.SMT_NR_TE;
-                        shipmentDataRequest.SMT_STA_NR = shipmentData.SMT_STA_NR;
 
-                        switch (shipmentDataRequest.SMT_STA_NR)
+                    IEnumerable<string> packageNumbers = anonymousList.Select(X => X.PKG_NR_TE).Distinct();
+
+                    foreach (string pkgNum in packageNumbers)
+                    {
+                        var shpDetails = anonymousList.Where(data => data.PKG_NR_TE == pkgNum).ToList();
+                        SFDataRequest sFDataRequest = new SFDataRequest();
+
+                        sFDataRequest.ID = shpDetails[0].ID;
+                        sFDataRequest.BIL_TYP_TE = shpDetails[0].BIL_TYP_TE;
+                        sFDataRequest.CCY_VAL_TE = shpDetails[0].CCY_VAL_TE;
+                        sFDataRequest.COD_TE = shpDetails[0].COD_TE;
+                        sFDataRequest.CSG_CTC_TE = shpDetails[0].CSG_CTC_TE;
+                        sFDataRequest.DIM_WGT_DE = shpDetails[0].DIM_WGT_DE;
+                        sFDataRequest.DST_CTY_TE = shpDetails[0].DST_CTY_TE;
+                        sFDataRequest.DST_PSL_TE = shpDetails[0].DST_PSL_TE;
+                        sFDataRequest.EXP_SLC_CD = shpDetails[0].EXP_SLC_CD;
+                        sFDataRequest.EXP_TYP = shpDetails[0].EXP_TYP;
+                        sFDataRequest.FST_INV_LN_DES_TE = shpDetails[0].FST_INV_LN_DES_TE;
+                        sFDataRequest.IMP_NR = shpDetails[0].IMP_NR;
+                        sFDataRequest.IMP_SLC_TE = shpDetails[0].IMP_SLC_TE;
+                        sFDataRequest.IN_FLG_TE = shpDetails[0].IN_FLG_TE;
+                        sFDataRequest.ORG_CTY_TE = shpDetails[0].ORG_CTY_TE;
+                        sFDataRequest.ORG_PSL_CD = shpDetails[0].ORG_PSL_CD;
+                        sFDataRequest.OU_FLG_TE = shpDetails[0].OU_FLG_TE;
+                        sFDataRequest.PCS_QTY_NR = shpDetails[0].PCS_QTY_NR;
+                        sFDataRequest.PH_NR = shpDetails[0].PH_NR;
+                        sFDataRequest.PKG_NR_TE = shpDetails[0].PKG_NR_TE;
+                        sFDataRequest.PKG_WGT_DE = shpDetails[0].PKG_WGT_DE;
+                        sFDataRequest.PK_UP_TM = shpDetails[0].PK_UP_TM;
+                        sFDataRequest.PYM_MTD = shpDetails[0].PYM_MTD;
+                        sFDataRequest.PY_MT_TE = shpDetails[0].PY_MT_TE;
+                        sFDataRequest.QQS_TRA_LG_ID = shpDetails[0].QQS_TRA_LG_ID;
+                        sFDataRequest.RCV_ADR_TE = shpDetails[0].RCV_ADR_TE;
+                        sFDataRequest.RCV_CPY_TE = shpDetails[0].RCV_CPY_TE;
+                        sFDataRequest.SF_TRA_LG_ID = shpDetails[0].SF_TRA_LG_ID;
+                        sFDataRequest.SHP_ADR_TE = shpDetails[0].SHP_ADR_TE;
+                        sFDataRequest.SHP_ADR_TR_TE = shpDetails[0].SHP_ADR_TR_TE;
+                        sFDataRequest.SHP_CPY_NA = shpDetails[0].SHP_CPY_NA;
+                        sFDataRequest.SHP_CTC_TE = shpDetails[0].SHP_CTC_TE;
+                        sFDataRequest.SHP_DT = shpDetails[0].SHP_DT;
+                        sFDataRequest.SHP_NR = shpDetails[0].SHP_NR;
+                        sFDataRequest.SHP_PH_TE = shpDetails[0].SHP_PH_TE;
+                        sFDataRequest.SMT_NR_TE = shpDetails[0].SMT_NR_TE;
+                        sFDataRequest.SMT_STA_NR = shpDetails[0].SMT_STA_NR;
+
+                        switch (sFDataRequest.SMT_STA_NR)
                         {
                             case 0:
-                                shipmentDataRequest.SMT_STA_TE = "Uploaded";
+                                sFDataRequest.SMT_STA_TE = "Uploaded";
                                 break;
                             case 1:
-                                shipmentDataRequest.SMT_STA_TE = "Curated";
+                                sFDataRequest.SMT_STA_TE = "Curated";
                                 break;
                             case 2:
-                                shipmentDataRequest.SMT_STA_TE = "Translated";
+                                sFDataRequest.SMT_STA_TE = "Translated";
                                 break;
                             case 3:
-                                shipmentDataRequest.SMT_STA_TE = "Completed";
+                                sFDataRequest.SMT_STA_TE = "Completed";
                                 break;
                             case 4:
-                                shipmentDataRequest.SMT_STA_TE = "Inactive";
+                                sFDataRequest.SMT_STA_TE = "Inactive";
                                 break;
                             default:
-                                shipmentDataRequest.SMT_STA_TE = "Uploaded";
+                                sFDataRequest.SMT_STA_TE = "Uploaded";
                                 break;
                         }
 
-                        shipmentDataRequest.SMT_VAL_DE = shipmentData.SMT_VAL_DE;
-                        shipmentDataRequest.SMT_WGT_DE = shipmentData.SMT_WGT_DE;
-                        shipmentDataRequest.SVL_NR = shipmentData.SVL_NR;
-                        shipmentDataRequest.WFL_ID = shipmentData.WFL_ID;
-                        shipmentDataRequest.WGT_UNT_TE = shipmentData.WGT_UNT_TE;
-                        shipmentDataRequest.ACY_TE = shipmentData.ACY_TE;
-                        shipmentDataRequest.CON_NR = shipmentData.CON_NR;
-                        shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
-                        shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
-                        shipmentDataRequest.SPC_CST_ID_TE = shipmentData.SPC_CST_ID_TE;
-                        shipmentDataRequest.TranslationScore = shipmentData.TranslationScore;
+                        sFDataRequest.SMT_VAL_DE = shpDetails[0].SMT_VAL_DE;
+                        sFDataRequest.SMT_WGT_DE = shpDetails[0].SMT_WGT_DE;
+                        sFDataRequest.SVL_NR = shpDetails[0].SVL_NR;
+                        sFDataRequest.WFL_ID = shpDetails[0].WFL_ID;
+                        sFDataRequest.WGT_UNT_TE = shpDetails[0].WGT_UNT_TE;
+                        sFDataRequest.ACY_TE = shpDetails[0].ACY_TE;
+                        sFDataRequest.CON_NR = shpDetails[0].CON_NR;
+                        sFDataRequest.SPC_SLIC_NR = shpDetails[0].SPC_SLIC_NR;
+                        sFDataRequest.POD_RTN_SVC = shpDetails[0].POD_RTN_SVC;
+                        sFDataRequest.SPC_CST_ID_TE = shpDetails[0].SPC_CST_ID_TE;
+                        sFDataRequest.TranslationScore = shpDetails[0].TranslationScore;
+                        sFDataRequest.Cargos = new List<CargoRequest>();
 
-                        shipmentDataRequests.Add(shipmentDataRequest);
+                        foreach (var filterData in shpDetails)
+                        {
+                            CargoRequest cargoRequest = new CargoRequest();
+
+                            cargoRequest.MST_ID = filterData.ID;
+                            cargoRequest.SMT_NR_TE = filterData.SMT_NR_TE.Contains('.') ? filterData.SMT_NR_TE.Split('.')[0] : filterData.SMT_NR_TE;
+                            cargoRequest.FST_INV_LN_DES_TE = filterData.FST_INV_LN_DES_TE;
+                            cargoRequest.PCS_QTY_NR = filterData.PCS_QTY_NR;
+                            cargoRequest.PKG_WGT_DE = filterData.PKG_WGT_DE;
+                            cargoRequest.SMT_VAL_DE = filterData.SMT_VAL_DE;
+                            cargoRequest.DIM_WGT_DE = filterData.DIM_WGT_DE;
+
+                            sFDataRequest.Cargos.Add(cargoRequest);
+                        }
+
+                        sFDataRequests.Add(sFDataRequest);
                     }
+
+                    //foreach (var shipmentData in anonymousList)
+                    //{
+                    //    ShipmentDataRequest shipmentDataRequest = new ShipmentDataRequest();
+                    //    shipmentDataRequest.ID = shipmentData.ID;
+                    //    shipmentDataRequest.BIL_TYP_TE = shipmentData.BIL_TYP_TE;
+                    //    shipmentDataRequest.CCY_VAL_TE = shipmentData.CCY_VAL_TE;
+                    //    shipmentDataRequest.COD_TE = shipmentData.COD_TE;
+                    //    shipmentDataRequest.CSG_CTC_TE = shipmentData.CSG_CTC_TE;
+                    //    shipmentDataRequest.DIM_WGT_DE = shipmentData.DIM_WGT_DE;
+                    //    shipmentDataRequest.DST_CTY_TE = shipmentData.DST_CTY_TE;
+                    //    shipmentDataRequest.DST_PSL_TE = shipmentData.DST_PSL_TE;
+                    //    shipmentDataRequest.EXP_SLC_CD = shipmentData.EXP_SLC_CD;
+                    //    shipmentDataRequest.EXP_TYP = shipmentData.EXP_TYP;
+                    //    shipmentDataRequest.FST_INV_LN_DES_TE = shipmentData.FST_INV_LN_DES_TE;
+                    //    shipmentDataRequest.IMP_NR = shipmentData.IMP_NR;
+                    //    shipmentDataRequest.IMP_SLC_TE = shipmentData.IMP_SLC_TE;
+                    //    shipmentDataRequest.IN_FLG_TE = shipmentData.IN_FLG_TE;
+                    //    shipmentDataRequest.ORG_CTY_TE = shipmentData.ORG_CTY_TE;
+                    //    shipmentDataRequest.ORG_PSL_CD = shipmentData.ORG_PSL_CD;
+                    //    shipmentDataRequest.OU_FLG_TE = shipmentData.OU_FLG_TE;
+                    //    shipmentDataRequest.PCS_QTY_NR = shipmentData.PCS_QTY_NR;
+                    //    shipmentDataRequest.PH_NR = shipmentData.PH_NR;
+                    //    shipmentDataRequest.PKG_NR_TE = shipmentData.PKG_NR_TE;
+                    //    shipmentDataRequest.PKG_WGT_DE = shipmentData.PKG_WGT_DE;
+                    //    shipmentDataRequest.PK_UP_TM = shipmentData.PK_UP_TM;
+                    //    shipmentDataRequest.PYM_MTD = shipmentData.PYM_MTD;
+                    //    shipmentDataRequest.PY_MT_TE = shipmentData.PY_MT_TE;
+                    //    shipmentDataRequest.QQS_TRA_LG_ID = shipmentData.QQS_TRA_LG_ID;
+                    //    shipmentDataRequest.RCV_ADR_TE = shipmentData.RCV_ADR_TE;
+                    //    shipmentDataRequest.RCV_CPY_TE = shipmentData.RCV_CPY_TE;
+                    //    shipmentDataRequest.SF_TRA_LG_ID = shipmentData.SF_TRA_LG_ID;
+                    //    shipmentDataRequest.SHP_ADR_TE = shipmentData.SHP_ADR_TE;
+                    //    shipmentDataRequest.SHP_ADR_TR_TE = shipmentData.SHP_ADR_TR_TE;
+                    //    shipmentDataRequest.SHP_CPY_NA = shipmentData.SHP_CPY_NA;
+                    //    shipmentDataRequest.SHP_CTC_TE = shipmentData.SHP_CTC_TE;
+                    //    shipmentDataRequest.SHP_DT = shipmentData.SHP_DT;
+                    //    shipmentDataRequest.SHP_NR = shipmentData.SHP_NR;
+                    //    shipmentDataRequest.SHP_PH_TE = shipmentData.SHP_PH_TE;
+                    //    shipmentDataRequest.SMT_NR_TE = shipmentData.SMT_NR_TE;
+                    //    shipmentDataRequest.SMT_STA_NR = shipmentData.SMT_STA_NR;
+
+                    //    switch (shipmentDataRequest.SMT_STA_NR)
+                    //    {
+                    //        case 0:
+                    //            shipmentDataRequest.SMT_STA_TE = "Uploaded";
+                    //            break;
+                    //        case 1:
+                    //            shipmentDataRequest.SMT_STA_TE = "Curated";
+                    //            break;
+                    //        case 2:
+                    //            shipmentDataRequest.SMT_STA_TE = "Translated";
+                    //            break;
+                    //        case 3:
+                    //            shipmentDataRequest.SMT_STA_TE = "Completed";
+                    //            break;
+                    //        case 4:
+                    //            shipmentDataRequest.SMT_STA_TE = "Inactive";
+                    //            break;
+                    //        default:
+                    //            shipmentDataRequest.SMT_STA_TE = "Uploaded";
+                    //            break;
+                    //    }
+
+                    //    shipmentDataRequest.SMT_VAL_DE = shipmentData.SMT_VAL_DE;
+                    //    shipmentDataRequest.SMT_WGT_DE = shipmentData.SMT_WGT_DE;
+                    //    shipmentDataRequest.SVL_NR = shipmentData.SVL_NR;
+                    //    shipmentDataRequest.WFL_ID = shipmentData.WFL_ID;
+                    //    shipmentDataRequest.WGT_UNT_TE = shipmentData.WGT_UNT_TE;
+                    //    shipmentDataRequest.ACY_TE = shipmentData.ACY_TE;
+                    //    shipmentDataRequest.CON_NR = shipmentData.CON_NR;
+                    //    shipmentDataRequest.SPC_SLIC_NR = shipmentData.SPC_SLIC_NR;
+                    //    shipmentDataRequest.POD_RTN_SVC = shipmentData.POD_RTN_SVC;
+                    //    shipmentDataRequest.SPC_CST_ID_TE = shipmentData.SPC_CST_ID_TE;
+                    //    shipmentDataRequest.TranslationScore = shipmentData.TranslationScore;
+
+                    //    shipmentDataRequests.Add(shipmentDataRequest);
+                    //}
                     //shipmentDataRequests = anonymousList.Cast<ShipmentDataRequest>().ToList();
+                    //sFDataRequests = GetModifiedSFData(anonymousList);
                     mappedShipAndShipperCompanyResponse.Success = true;
-                    mappedShipAndShipperCompanyResponse.Shipments = shipmentDataRequests;
+                    mappedShipAndShipperCompanyResponse.Shipments = sFDataRequests;
                 }
             }
             catch (Exception ex)
