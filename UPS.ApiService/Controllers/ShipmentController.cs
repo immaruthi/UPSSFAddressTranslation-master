@@ -348,7 +348,17 @@
                     string msg = null;
                     string errorCode = null;
                     XmlDocument xml = new XmlDocument();
-                    xml.LoadXml(HKConnectedServices.CreateShipment(orderRequest, configuration["SFExpress:Checkword"], configuration["SFExpress:Access Number"], configuration["SFExpress:CustID"]));
+                    xml.LoadXml(
+                        HKConnectedServices.CreateShipment(
+                            orderRequest, 
+                            configuration["SFExpress:Checkword"], 
+                            configuration["SFExpress:Access Number"], 
+                            configuration["SFExpress:CustID"],
+                            Convert.ToBoolean(configuration["webProxy:Enable"]),
+                            configuration["webProxy:URL"],
+                            configuration["webProxy:Username"],
+                            configuration["webProxy:Password"],
+                            configuration["SFHKShipment:endpoint"]));
                     XmlElement root = xml.DocumentElement;
                     string head = root.SelectNodes("/Response/Head")[0].InnerText;
                     if (head == "OK")

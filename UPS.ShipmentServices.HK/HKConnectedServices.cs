@@ -6,7 +6,8 @@ using System.Text;
 using System.Xml;
 using UPS.Quincus.APP.Request;
 using UPS.DataObjects.Shipment;
-
+using HKShipmentServices;
+using System.ServiceModel.Channels;
 
 namespace UPS.ShipmentServices.HK
 {
@@ -26,7 +27,44 @@ namespace UPS.ShipmentServices.HK
             return inputString;
         }
 
-        public static string CreateShipment(SFDataRequest uIOrderRequestBody,string checkWord, string accessNumber, string custID)
+        public static OrderWebService GetServiceClient(string proxyUrl,string proxyUserName,string proxyPassword,string endPointInfo)
+        {
+            ChannelFactory<OrderWebService> myChannelFactory =
+                new ChannelFactory<OrderWebService>(
+                    GetBinding(proxyUrl),
+                    new EndpointAddress(endPointInfo));//"http://osms.sit.sf-express.com:2080/osms/services/OrderWebService"));
+
+            myChannelFactory.Credentials.UserName.UserName = proxyUserName;//System.Configuration.ConfigurationSettings.AppSettings["Username"].ToString();
+            myChannelFactory.Credentials.UserName.Password = proxyPassword;// System.Configuration.ConfigurationSettings.AppSettings["Password"].ToString();
+
+            return myChannelFactory.CreateChannel();
+        }
+
+        private static Binding GetBinding(string proxyUrl)
+        {
+            BasicHttpBinding basicHttpBinding = new BasicHttpBinding();
+            basicHttpBinding.UseDefaultWebProxy = false;
+
+            basicHttpBinding.Security.Mode = BasicHttpSecurityMode.TransportCredentialOnly;
+            basicHttpBinding.Security.Transport.ProxyCredentialType = HttpProxyCredentialType.Basic;
+            basicHttpBinding.UseDefaultWebProxy = false;
+            //basicHttpBinding.ProxyAddress = new Uri(string.Format("http://{0}:{1}", proxyIpAddress, proxyPort));
+            basicHttpBinding.ProxyAddress = new Uri(proxyUrl);
+
+            return basicHttpBinding;
+
+        }
+
+        public static string CreateShipment(
+            SFDataRequest uIOrderRequestBody,
+            string checkWord, 
+            string accessNumber, 
+            string custID,
+            bool proxyChannel,
+            string proxyUrl,
+            string proxyUserName,
+            string proxyPassword,
+            string endPoint)
         {
             HKShipmentServices.sfexpressServiceResponse sfexpressService = null;
             
@@ -99,16 +137,30 @@ namespace UPS.ShipmentServices.HK
                 //encrypt with Base64 and MD5 to get the validateStr
                 string validateStr = BAse64(Md5(data + checkWord), true);
 
-                
+                if (!proxyChannel)
+                {
 
-                HKShipmentServices.OrderWebServiceClient wsClient = new HKShipmentServices.OrderWebServiceClient();
+                    HKShipmentServices.OrderWebServiceClient wsClient = new HKShipmentServices.OrderWebServiceClient();
+                    sfexpressService = wsClient.sfexpressServiceAsync(orderData, validateStr, accessNumber).Result;
+                }
 
-                
-               // wsClient.ClientCredentials.Windows.ClientCredential = 
+                if(proxyChannel)
+                {
+                    sfexpressService sfexpressServices = new sfexpressService();
 
-                //string result = HKShipmentServices.sfexpressService(orderData, validateStr, client_id);
+                    sfexpressServices.Body = new sfexpressServiceBody()
+                    {
+                        customerCode = accessNumber,
+                        data = orderData,
+                        validateStr = validateStr
 
-                sfexpressService = wsClient.sfexpressServiceAsync(orderData, validateStr, accessNumber).Result; 
+                    };
+
+                    sfexpressServiceResponse sfexpressServiceResponse =
+                        GetServiceClient(proxyUrl, proxyUserName, proxyPassword, endPoint).sfexpressServiceAsync(sfexpressServices).Result;
+
+                    return sfexpressServiceResponse.Body.Return;
+                }
             }
             catch (Exception ex)
             {
