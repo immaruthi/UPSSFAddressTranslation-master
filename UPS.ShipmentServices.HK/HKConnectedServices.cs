@@ -12,6 +12,8 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Linq;
+using System.Threading.Tasks;
+using UPS.Application.CustomLogs;
 
 namespace UPS.ShipmentServices.HK
 {
@@ -145,6 +147,19 @@ namespace UPS.ShipmentServices.HK
                 {
                     HKShipmentServices.OrderWebServiceClient wsClient = new HKShipmentServices.OrderWebServiceClient();
                     sfexpressService = wsClient.sfexpressServiceAsync(orderData, validateStr, accessNumber).Result;
+
+                    Task.Run(() => AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
+                    {
+                        dateTime = DateTime.Now,
+                        apiTypes = DataObjects.LogData.APITypes.SF_Payload,
+                        apiType = "SF_Payload",
+                        LogInformation = new DataObjects.LogData.LogInformation()
+                        {
+                            LogResponse = sfexpressService.Body.Return,
+                            LogRequest = data,
+                            LogException = null
+                        }
+                    }));
                 }
 
                 if(proxyChannel)
@@ -184,6 +199,19 @@ namespace UPS.ShipmentServices.HK
 
                     XmlDocument xmdcl = new XmlDocument();
                     xmdcl.LoadXml(responses);
+
+                    Task.Run(() => AuditEventEntry.LogEntry(new DataObjects.LogData.LogDataModel()
+                    {
+                        dateTime = DateTime.Now,
+                        apiTypes = DataObjects.LogData.APITypes.SF_Payload,
+                        apiType = "SF_Payload",
+                        LogInformation = new DataObjects.LogData.LogInformation()
+                        {
+                            LogResponse = data,
+                            LogRequest = responses,
+                            LogException = null
+                        }
+                    }));
 
                     return xmdcl.GetElementsByTagName("Return")[0].InnerText;
                 }
