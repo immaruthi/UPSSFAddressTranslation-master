@@ -1,0 +1,6 @@
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+<s:Body>
+<sfexpressService xmlns="http://impl.server.order.services.wbs.osms.sf.com/" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+<data xmlns="">
+{0}</data><validateStr xmlns="">{1}</validateStr>
+<customerCode xmlns="">{2}</customerCode></sfexpressService></s:Body></s:Envelope>

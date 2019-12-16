@@ -8,6 +8,10 @@ using UPS.Quincus.APP.Request;
 using UPS.DataObjects.Shipment;
 using HKShipmentServices;
 using System.ServiceModel.Channels;
+using System.IO;
+using System.Net;
+using System.Reflection;
+using System.Linq;
 
 namespace UPS.ShipmentServices.HK
 {
@@ -139,27 +143,49 @@ namespace UPS.ShipmentServices.HK
 
                 if (!proxyChannel)
                 {
-
                     HKShipmentServices.OrderWebServiceClient wsClient = new HKShipmentServices.OrderWebServiceClient();
                     sfexpressService = wsClient.sfexpressServiceAsync(orderData, validateStr, accessNumber).Result;
                 }
 
                 if(proxyChannel)
                 {
-                    sfexpressService sfexpressServices = new sfexpressService();
 
-                    sfexpressServices.Body = new sfexpressServiceBody()
+                    HttpWebRequest request = WebRequest.Create("http://osms.sit.sf-express.com:2080/osms/services/OrderWebService") as HttpWebRequest;
+                    string executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+
+  
+                    string parameters = System.IO.File.ReadAllText(Path.Combine(executableLocation, "Request\\SOAPRequest.txt"));
+
+                    parameters = string.Format(parameters, orderData, validateStr, accessNumber);
+
+                    //"{\"name\":\"Umais\"}"; // or any other way to send parameters
+                    WebProxy myProxy = new WebProxy(proxyUrl, false, null, new NetworkCredential(proxyUserName, proxyPassword));
+                    request.Proxy = myProxy;
+                    request.Method = "POST";
+                    request.ContentLength = 0;
+                    request.ContentType = "text/xml; charset=utf-8";
+                    if (!string.IsNullOrEmpty(parameters))
                     {
-                        customerCode = accessNumber,
-                        data = orderData,
-                        validateStr = validateStr
+                        byte[] byteArray = Encoding.UTF8.GetBytes(parameters);
+                        request.ContentLength = byteArray.Length;
+                        Stream dataStream = request.GetRequestStream();
+                        dataStream.Write(byteArray, 0, byteArray.Length);
+                        dataStream.Close();
+                    }
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
-                    };
+                    string responses = string.Empty;
 
-                    sfexpressServiceResponse sfexpressServiceResponse =
-                        GetServiceClient(proxyUrl, proxyUserName, proxyPassword, endPoint).sfexpressServiceAsync(sfexpressServices).Result;
+                    using (Stream stream = response.GetResponseStream())
+                    {
+                        responses = (new StreamReader(stream)).ReadToEnd();
+                    }
 
-                    return sfexpressServiceResponse.Body.Return;
+                    XmlDocument xmdcl = new XmlDocument();
+                    xmdcl.LoadXml(responses);
+
+                    return xmdcl.GetElementsByTagName("Return")[0].InnerText;
                 }
             }
             catch (Exception ex)
