@@ -103,7 +103,12 @@ namespace UPS.ShipmentServices.HK
                 data += " currency=\"" + "USD" + "\"";
                 data += " operate_type=\"" + "1" + "\"";
 
-                if(uIOrderRequestBody.SMT_NR_TE.StartsWith("1Z"))
+                //if(uIOrderRequestBody.SMT_NR_TE.StartsWith("1Z"))
+                //{
+                //    data += " reference_no2=\"" + uIOrderRequestBody.SMT_NR_TE + "\"";
+                //}
+
+                if (uIOrderRequestBody.SMT_NR_TE.Any(x => char.IsLetter(x)))
                 {
                     data += " reference_no2=\"" + uIOrderRequestBody.SMT_NR_TE + "\"";
                 }
