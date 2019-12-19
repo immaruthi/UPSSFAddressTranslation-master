@@ -90,7 +90,6 @@ namespace UPS.ShipmentServices.HK
                 data += " j_address=\"" + uIOrderRequestBody.SHP_ADR_TE.ampReplacment() + "\"";
                 data += " j_post_code=\"" + "852" + "\"";
                 data += " d_email=\"" + uIOrderRequestBody.CSG_CTC_TE.ampReplacment() + "\"";
-                data += " d_contact=\"" + uIOrderRequestBody.SHP_CPY_NA.ampReplacment() + "\"";
                 data += " d_tel=\"" + uIOrderRequestBody.PH_NR + "\"";
                 data += " d_country=\"" + "KR" + "\"";
                 data += " d_address=\"" + uIOrderRequestBody.SHP_ADR_TR_TE.ampReplacment() + "\"";
@@ -98,25 +97,45 @@ namespace UPS.ShipmentServices.HK
                 data += " custid=\"" + custID + "\"";
                 data += " pay_method=\"" + "1" + "\"";
                 data += " express_type =\"" + "101" + "\"";
-                data += " parcel_quantity=\"" + "1" + "\"";
                 data += " tax_pay_type=\"" + uIOrderRequestBody.BIL_TYP_TE + "\"";
                 data += " currency=\"" + "USD" + "\"";
                 data += " operate_type=\"" + "1" + "\"";
+                
+                if (!string.IsNullOrEmpty(uIOrderRequestBody.EXP_SLC_CD))
+                {
+                    data += " parcel_quantity=\"" + uIOrderRequestBody.EXP_SLC_CD + "\"";
+                } else
+                {
+                    data += " parcel_quantity=\"" + "1" + "\"";
+                }
 
-                //if(uIOrderRequestBody.SMT_NR_TE.StartsWith("1Z"))
-                //{
-                //    data += " reference_no2=\"" + uIOrderRequestBody.SMT_NR_TE + "\"";
-                //}
+                data += " order_cert_no=\"" + uIOrderRequestBody.IMP_NR + "\"";
+                if (!string.IsNullOrEmpty(uIOrderRequestBody.BIL_TYP_TE))
+                {
+                    if (uIOrderRequestBody.BIL_TYP_TE.Trim() == "1")
+                    {
+                        data += " order_cert_type=\"" + "CUC" + "\"";
+                        data += " receiver_type=\"" + "1" + "\"";
+                    }
+                    else if (uIOrderRequestBody.BIL_TYP_TE.Trim() == "2")
+                    {
+                        data += " order_cert_type=\"" + "CCUC" + "\"";
+                        data += " receiver_type=\"" + "2" + "\"";
+                    }
+                }
+
+                string dContact = uIOrderRequestBody.RCV_CPY_TE != null && uIOrderRequestBody.RCV_CPY_TE.Contains('@') ? uIOrderRequestBody.RCV_CPY_TE.Split('@')[0] : uIOrderRequestBody.RCV_CPY_TE;
+                string dCompany = uIOrderRequestBody.RCV_CPY_TE != null && uIOrderRequestBody.RCV_CPY_TE.Contains('@') ? uIOrderRequestBody.RCV_CPY_TE.Split('@')[1] : uIOrderRequestBody.RCV_CPY_TE;
+                                             
+                data += " d_contact=\"" + dContact.ampReplacment() + "\"";
+                data += " d_company=\"" + dCompany.ampReplacment() + "\"";
 
                 if (uIOrderRequestBody.SMT_NR_TE.Any(x => char.IsLetter(x)))
                 {
                     data += " reference_no2=\"" + uIOrderRequestBody.SMT_NR_TE + "\"";
                 }
-
-
-                data += " order_cert_no=\"" + uIOrderRequestBody.IMP_NR + "\"" + ">";
+                data += ">";
                 //Cargo
-                //New Senarios for multiple cargos
                 foreach (var cargo in uIOrderRequestBody.Cargos)
                 {
                     data += "<Cargo name=\"" + cargo.FST_INV_LN_DES_TE + "\"";
@@ -127,15 +146,6 @@ namespace UPS.ShipmentServices.HK
                     data += " total_value =\"" + cargo.PCS_QTY_NR * cargo.SMT_VAL_DE + "\"";
                     data += " source_area =\"" + cargo.DIM_WGT_DE + "\"" + "/>";
                 }
-
-                //data += "<Cargo name=\"" + uIOrderRequestBody.fsT_INV_LN_DES_TE + "\"";
-                //data += " count =\"" + uIOrderRequestBody.pcS_QTY_NR + "\"";
-                //data += " unit =\"" + "PCS" + "\"";
-                //data += " weight =\"" + uIOrderRequestBody.pkG_WGT_DE + "\"";
-                //data += " amount =\"" + uIOrderRequestBody.smT_VAL_DE + "\"";
-                //data += " total_value =\"" + uIOrderRequestBody.pcS_QTY_NR * uIOrderRequestBody.smT_VAL_DE + "\"";
-                //data += " source_area =\"" + uIOrderRequestBody.diM_WGT_DE + "\"" + "/>";
-
                 //Cargo
                 data += " </Order></Body></Request>";
 
