@@ -110,14 +110,14 @@ namespace UPS.ShipmentServices.HK
                 }
 
                 data += " order_cert_no=\"" + uIOrderRequestBody.IMP_NR + "\"";
-                if (!string.IsNullOrEmpty(uIOrderRequestBody.BIL_TYP_TE))
+                if (!string.IsNullOrEmpty(uIOrderRequestBody.IMP_SLC_TE))
                 {
-                    if (uIOrderRequestBody.BIL_TYP_TE.Trim() == "1")
+                    if (uIOrderRequestBody.IMP_SLC_TE.Trim() == "1")
                     {
                         data += " order_cert_type=\"" + "CUC" + "\"";
                         data += " receiver_type=\"" + "1" + "\"";
                     }
-                    else if (uIOrderRequestBody.BIL_TYP_TE.Trim() == "2")
+                    else if (uIOrderRequestBody.IMP_SLC_TE.Trim() == "2")
                     {
                         data += " order_cert_type=\"" + "CCUC" + "\"";
                         data += " receiver_type=\"" + "2" + "\"";
@@ -222,8 +222,8 @@ namespace UPS.ShipmentServices.HK
                         apiType = "SF_Payload",
                         LogInformation = new DataObjects.LogData.LogInformation()
                         {
-                            LogResponse = data,
-                            LogRequest = responses,
+                            LogResponse = responses,
+                            LogRequest = data,
                             LogException = null
                         }
                     }));

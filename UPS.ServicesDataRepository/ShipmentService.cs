@@ -734,7 +734,7 @@
                         shipmentDataRequest.EXP_SLC_CD = excelDataObject.S_expslic != null && excelDataObject.S_expslic.Contains('.') ? excelDataObject.S_expslic.Split('.')[0] : excelDataObject.S_expslic; 
                         shipmentDataRequest.EXP_TYP = "顺丰即日";//excelDataObject.S_expslic;
                         shipmentDataRequest.IMP_NR = excelDataObject.S_impr;
-                        shipmentDataRequest.IMP_SLC_TE = excelDataObject.S_impslic;
+                        shipmentDataRequest.IMP_SLC_TE = excelDataObject.S_impslic != null && excelDataObject.S_impslic.Contains('.') ? excelDataObject.S_impslic.Split('.')[0] : excelDataObject.S_impslic;
                         shipmentDataRequest.IN_FLG_TE = excelDataObject.S_inflight;
                         shipmentDataRequest.ORG_CTY_TE = excelDataObject.S_orgcity;
 
