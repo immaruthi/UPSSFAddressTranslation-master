@@ -764,7 +764,17 @@
                         //shipmentDataRequest.PCS_QTY_NR = null;//Convert.ToInt32(Convert.ToDouble(excelDataObject.pcs));
                         shipmentDataRequest.PH_NR = excelDataObject.S_ph != null && excelDataObject.S_ph.Contains('.') ? excelDataObject.S_ph.Split('.')[0] : excelDataObject.S_ph;
                         shipmentDataRequest.PKG_NR_TE = excelDataObject.S_packageno;
-                        shipmentDataRequest.PKG_WGT_DE = Convert.ToDecimal(excelDataObject.S_pkgwei);
+                        //shipmentDataRequest.PKG_WGT_DE = Convert.ToDecimal(excelDataObject.S_pkgwei);
+
+                        shipmentDataRequest.PKG_WGT_DE = 0;
+                        if (!string.IsNullOrEmpty(excelDataObject.S_pkgwei))
+                        {
+                            if (decimal.TryParse(excelDataObject.S_pkgwei, out decimalvalue))
+                            {
+                                shipmentDataRequest.PKG_WGT_DE = decimalvalue;
+                            }
+                        }
+
                         shipmentDataRequest.PK_UP_TM = null;//Convert.ToString(excelDataObject.S_pkuptime),
                         shipmentDataRequest.PYM_MTD = "寄付月结";//excelDataObject.pymt;
                         shipmentDataRequest.RCV_ADR_TE = excelDataObject.S_address1;

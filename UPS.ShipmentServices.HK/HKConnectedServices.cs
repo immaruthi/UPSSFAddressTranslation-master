@@ -143,7 +143,7 @@ namespace UPS.ShipmentServices.HK
                     data += " unit =\"" + "PCS" + "\"";
                     data += " weight =\"" + cargo.PKG_WGT_DE + "\"";
                     data += " amount =\"" + cargo.SMT_VAL_DE + "\"";
-                    data += " total_value =\"" + cargo.PCS_QTY_NR * cargo.SMT_VAL_DE + "\"";
+                    data += " total_value =\"" + Math.Round((cargo.PCS_QTY_NR * cargo.SMT_VAL_DE)??0, 2) + "\"";
                     data += " source_area =\"" + cargo.DIM_WGT_DE + "\"" + "/>";
                 }
                 //Cargo

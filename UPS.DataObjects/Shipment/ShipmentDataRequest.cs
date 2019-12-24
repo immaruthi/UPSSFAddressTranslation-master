@@ -91,7 +91,7 @@ namespace UPS.DataObjects.Shipment
         [StringLength(50)]
         public string IMP_NR { get; set; }
         [Column("RCV-CPY-TE")]
-        [StringLength(50)]
+        [StringLength(100)]
         public string RCV_CPY_TE { get; set; }
         [Column("RCV-ADR-TE")]
         [StringLength(500)]
