@@ -12,6 +12,7 @@ namespace UPS.DataObjects.Shipment
         public int? PCS_QTY_NR { get; set; }
         public decimal? PKG_WGT_DE { get; set; }
         public decimal? SMT_VAL_DE { get; set; }
-        public decimal? DIM_WGT_DE { get; set; }
+        //public decimal? DIM_WGT_DE { get; set; }
+        public string EXP_TYP { get; set; }
     }
 }

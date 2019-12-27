@@ -200,7 +200,7 @@
                             cargoRequest.PCS_QTY_NR = filterData.PCS_QTY_NR;
                             cargoRequest.PKG_WGT_DE = filterData.PKG_WGT_DE;
                             cargoRequest.SMT_VAL_DE = filterData.SMT_VAL_DE;
-                            cargoRequest.DIM_WGT_DE = filterData.DIM_WGT_DE;
+                            cargoRequest.EXP_TYP = filterData.EXP_TYP;
 
                             sFDataRequest.Cargos.Add(cargoRequest);
                         }

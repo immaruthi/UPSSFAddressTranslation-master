@@ -98,7 +98,7 @@ namespace UPS.ShipmentServices.HK
                 data += " pay_method=\"" + "1" + "\"";
                 data += " express_type =\"" + "101" + "\"";
                 data += " tax_pay_type=\"" + uIOrderRequestBody.BIL_TYP_TE + "\"";
-                data += " currency=\"" + "USD" + "\"";
+                data += " currency=\"" + uIOrderRequestBody.CCY_VAL_TE + "\"";
                 data += " operate_type=\"" + "1" + "\"";
                 
                 if (!string.IsNullOrEmpty(uIOrderRequestBody.EXP_SLC_CD))
@@ -144,7 +144,7 @@ namespace UPS.ShipmentServices.HK
                     data += " weight =\"" + cargo.PKG_WGT_DE + "\"";
                     data += " amount =\"" + cargo.SMT_VAL_DE + "\"";
                     data += " total_value =\"" + Math.Round((cargo.PCS_QTY_NR * cargo.SMT_VAL_DE)??0, 2) + "\"";
-                    data += " source_area =\"" + cargo.DIM_WGT_DE + "\"" + "/>";
+                    data += " source_area =\"" + cargo.EXP_TYP + "\"" + "/>";
                 }
                 //Cargo
                 data += " </Order></Body></Request>";

@@ -714,7 +714,7 @@
                     {
 
                         shipmentDataRequest.BIL_TYP_TE = excelDataObject.S_billtype != null && excelDataObject.S_billtype.Contains('.') ? excelDataObject.S_billtype.Split('.')[0] : excelDataObject.S_billtype;
-                        shipmentDataRequest.CCY_VAL_TE = string.Empty;
+                        shipmentDataRequest.CCY_VAL_TE = excelDataObject.currency; //string.Empty;
                         shipmentDataRequest.COD_TE = string.Empty;
                         shipmentDataRequest.CSG_CTC_TE = excelDataObject.S_cneectc;
 
@@ -731,8 +731,8 @@
                         //shipmentDataRequest.DIM_WGT_DE = null; //Convert.ToDecimal(excelDataObject.S_dimwei);
                         shipmentDataRequest.DST_CTY_TE = excelDataObject.S_dstcity;
                         shipmentDataRequest.DST_PSL_TE = excelDataObject.S_dstpsl != null && excelDataObject.S_dstpsl.Contains('.') ? excelDataObject.S_dstpsl.Split('.')[0] : excelDataObject.S_dstpsl;
-                        shipmentDataRequest.EXP_SLC_CD = excelDataObject.S_expslic != null && excelDataObject.S_expslic.Contains('.') ? excelDataObject.S_expslic.Split('.')[0] : excelDataObject.S_expslic; 
-                        shipmentDataRequest.EXP_TYP = "顺丰即日";//excelDataObject.S_expslic;
+                        shipmentDataRequest.EXP_SLC_CD = excelDataObject.S_expslic != null && excelDataObject.S_expslic.Contains('.') ? excelDataObject.S_expslic.Split('.')[0] : excelDataObject.S_expslic;
+                        shipmentDataRequest.EXP_TYP = excelDataObject.S_dimwei;//"顺丰即日";//excelDataObject.S_expslic;
                         shipmentDataRequest.IMP_NR = excelDataObject.S_impr;
                         shipmentDataRequest.IMP_SLC_TE = excelDataObject.S_impslic != null && excelDataObject.S_impslic.Contains('.') ? excelDataObject.S_impslic.Split('.')[0] : excelDataObject.S_impslic;
                         shipmentDataRequest.IN_FLG_TE = excelDataObject.S_inflight;
@@ -776,7 +776,7 @@
                         }
 
                         shipmentDataRequest.PK_UP_TM = null;//Convert.ToString(excelDataObject.S_pkuptime),
-                        shipmentDataRequest.PYM_MTD = "寄付月结";//excelDataObject.pymt;
+                        shipmentDataRequest.PYM_MTD = excelDataObject.pymt;//"寄付月结";
                         shipmentDataRequest.RCV_ADR_TE = excelDataObject.S_address1;
                         shipmentDataRequest.RCV_CPY_TE = excelDataObject.S_receivercompany;
                         shipmentDataRequest.SHP_ADR_TE = excelDataObject.address;
