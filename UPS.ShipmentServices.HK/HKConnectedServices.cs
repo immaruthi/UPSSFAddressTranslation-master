@@ -180,7 +180,7 @@ namespace UPS.ShipmentServices.HK
                 if(proxyChannel)
                 {
 
-                    HttpWebRequest request = WebRequest.Create("http://osms.sit.sf-express.com:2080/osms/services/OrderWebService") as HttpWebRequest;
+                    HttpWebRequest request = WebRequest.Create(endPoint) as HttpWebRequest;
                     string executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
 
