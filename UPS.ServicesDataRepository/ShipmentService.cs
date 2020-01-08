@@ -676,13 +676,13 @@
             return shipmentDataResponse;
         }
 
-        public ShipmentDataResponse CreateShipments(List<ExcelDataObject> excelDataObjects, int workflowID, out int? workflowStatus)
+        public ShipmentDataResponse CreateShipments(List<ExcelDataObject> excelDataObjects, int workflowID, string addressBookEnable, out int? workflowStatus)
         {
             ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
             workflowStatus = 0;
             try
             {
-                List<ShipmentDataRequest> shipmentDataRequest = ExtractShipmentDataRequest(excelDataObjects, workflowID,out workflowStatus);
+                List<ShipmentDataRequest> shipmentDataRequest = ExtractShipmentDataRequest(excelDataObjects, workflowID, addressBookEnable, out workflowStatus);
                 shipmentDataResponse = CreateShipments(shipmentDataRequest);
                 shipmentDataResponse.Success = true;
                 return shipmentDataResponse;
@@ -696,7 +696,7 @@
             return shipmentDataResponse;
         }
 
-        private List<ShipmentDataRequest> ExtractShipmentDataRequest(List<ExcelDataObject> excelDataObjects, int workflowID, out int? workflowStatus)
+        private List<ShipmentDataRequest> ExtractShipmentDataRequest(List<ExcelDataObject> excelDataObjects, int workflowID, string addressBookEnable, out int? workflowStatus)
         {
             List<ShipmentDataRequest> shipmentData = new List<ShipmentDataRequest>();
             List<AddressBook> addressBooks = this.addressBookService.GetAddressBooks();
@@ -770,29 +770,37 @@
                         shipmentDataRequest.RCV_CPY_TE = excelDataObject.S_receivercompany;
                         shipmentDataRequest.SHP_ADR_TE = excelDataObject.address;
 
-                        AddressBook translatedAddress =
-                            addressBooks
-                            ?.FirstOrDefault(
-                                (AddressBook address) =>
-                                    address.ConsigneeAddress.Replace(" ","").ToLower().Trim().Equals(
-                                    excelDataObject.S_address1.Replace(" ", "").ToLower().Trim(), StringComparison.OrdinalIgnoreCase));
-
-                        if (translatedAddress != null)
+                        if (addressBookEnable.ToLower() == "true")
                         {
-                            shipmentDataRequest.SHP_ADR_TR_TE = translatedAddress.ConsigneeTranslatedAddress;
-                            shipmentDataRequest.SMT_STA_NR = (int)Enums.ATStatus.Translated;
-                            wfStatus = shipmentDataRequest.SMT_STA_NR;
-                            shipmentDataRequest.SMT_STA_TE = Convert.ToString(Enums.ATStatus.Translated);
-                            shipmentDataRequest.CON_NR = translatedAddress.Confidence;
-                            shipmentDataRequest.ACY_TE = translatedAddress.Accuracy;
-                            shipmentDataRequest.TranslationScore = translatedAddress.TranslationScore;
-                        }
-                        else
+                            AddressBook translatedAddress =
+                                addressBooks
+                                ?.FirstOrDefault(
+                                    (AddressBook address) =>
+                                        address.ConsigneeAddress.Replace(" ", "").ToLower().Trim().Equals(
+                                        excelDataObject.S_address1.Replace(" ", "").ToLower().Trim(), StringComparison.OrdinalIgnoreCase));
+
+                            if (translatedAddress != null)
+                            {
+                                shipmentDataRequest.SHP_ADR_TR_TE = translatedAddress.ConsigneeTranslatedAddress;
+                                shipmentDataRequest.SMT_STA_NR = (int)Enums.ATStatus.Translated;
+                                wfStatus = shipmentDataRequest.SMT_STA_NR;
+                                shipmentDataRequest.SMT_STA_TE = Convert.ToString(Enums.ATStatus.Translated);
+                                shipmentDataRequest.CON_NR = translatedAddress.Confidence;
+                                shipmentDataRequest.ACY_TE = translatedAddress.Accuracy;
+                                shipmentDataRequest.TranslationScore = translatedAddress.TranslationScore;
+                            }
+                            else
+                            {
+                                shipmentDataRequest.SHP_ADR_TR_TE = string.Empty;
+                                shipmentDataRequest.SMT_STA_NR = (int)Enums.ATStatus.Uploaded;
+                                shipmentDataRequest.SMT_STA_TE = Convert.ToString(Enums.ATStatus.Uploaded);
+
+                            }
+                        } else if (addressBookEnable.ToLower() == "false")
                         {
                             shipmentDataRequest.SHP_ADR_TR_TE = string.Empty;
                             shipmentDataRequest.SMT_STA_NR = (int)Enums.ATStatus.Uploaded;
                             shipmentDataRequest.SMT_STA_TE = Convert.ToString(Enums.ATStatus.Uploaded);
-
                         }
 
                         shipmentDataRequest.SHP_CPY_NA = excelDataObject.S_shippercompany;

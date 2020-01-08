@@ -84,6 +84,7 @@
         public async Task<ActionResult> ExcelFile(IList<IFormFile> excelFileName)
         {
             string[] validationSet = configuration.GetSection("ExcelFileValidation:mandatoryFields").GetChildren().Select(val => val.Value).ToArray();
+            string addressBookEnable = configuration["AddressBook:Enable"];
 
             ShipmentDataResponse shipmentDataResponse = new ShipmentDataResponse();
             try
@@ -123,7 +124,7 @@
                                 WorkflowController workflowController = new WorkflowController(this._hostingEnvironment, this._context, this._addressBookService, this._entityValidationService);
                                 WorkflowDataResponse response = ((WorkflowDataResponse)((ObjectResult)(workflowController.CreateWorkflow(file, userId)).Result).Value);
                                 _workflowID = response.Workflow.ID;
-                                result = _shipmentService.CreateShipments(excelDataObject2, _workflowID, out int? workflowStatus);
+                                result = _shipmentService.CreateShipments(excelDataObject2, _workflowID, addressBookEnable, out int? workflowStatus);
                                 if (result.Success)
                                 {
                                     shipmentDataResponse.Success = true;
