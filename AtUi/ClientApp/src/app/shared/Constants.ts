@@ -10,4 +10,9 @@ export class Constants {
     { key: 0, value: '  ' },
     { key: 1, value: '签回单' }
   ];
+  static userRoles = {
+    '0': 'Operations User',
+    '1': 'Admin',
+    '2': 'Operations User'
+  }
 }

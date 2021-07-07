@@ -65,5 +65,14 @@ mat-toolbar a, a:hover {
   margin: 0px 20px 0px 10px;
 }
 mat-sidenav-content{
-  overflow:auto;
+  overflow:hidden;
+}
+mat-expansion-panel, mat-expansion-panel-header{
+  background:inherit;
+  border:none;
+  box-shadow:unset;
+  padding:0px 5px 0px 5px;
+}
+mat-panel-title {
+  color: white;
 }

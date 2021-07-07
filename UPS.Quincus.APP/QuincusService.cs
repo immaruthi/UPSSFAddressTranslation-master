@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UPS.DataObjects.Common;
 using UPS.DataObjects.Shipment;
 using UPS.Quincus.APP.Configuration;
 using UPS.Quincus.APP.ProxyConnections;
@@ -18,17 +19,17 @@ namespace UPS.Quincus.APP
 
         }
 
-        public static QuincusTranslatedAddressResponse GetTranslationAddress(IQuincusAddressTranslationRequest quincusAddressTranslationRequest)
+        public static QuincusTranslatedAddressResponse GetTranslationAddress(IQuincusAddressTranslationRequest quincusAddressTranslationRequest, QuincusParams quincusParams)
         {
 
-            QuincusTranslatedAddressResponse quincusTranslatedAddressResponse = QuincusProxy.GetTranslatedAddressResponse(quincusAddressTranslationRequest);
+            QuincusTranslatedAddressResponse quincusTranslatedAddressResponse = QuincusProxy.GetTranslatedAddressResponse(quincusAddressTranslationRequest, quincusParams);
 
             return quincusTranslatedAddressResponse;
         }
 
-        public static QuincusResponse GetGeoCodeReponseFromQuincus(QuincusGeoCodeDataRequest quincusGeoCodeDataRequest, decimal shipmentsCount = 30)
+        public static QuincusResponse GetGeoCodeReponseFromQuincus(QuincusGeoCodeDataRequest quincusGeoCodeDataRequest)
         {
-            QuincusResponse quincusReponse = QuincusProxy.GetQuincusResponse(quincusGeoCodeDataRequest,shipmentsCount);
+            QuincusResponse quincusReponse = QuincusProxy.GetQuincusResponse(quincusGeoCodeDataRequest);
             return quincusReponse;
         }
 

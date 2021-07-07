@@ -44,13 +44,10 @@ export class HttpService {
  * @param body
  * @returns {Observable<any>}
  */
-  makePostRequestWithList(url: string, shipmentWorkFlowRequest?: any[]): Observable<any> {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this._http.post(this.LOCAL_API_URL + url, shipmentWorkFlowRequest)
-      .map((response) => {
-        console.log(response);
-        return response;
-      });
+  makePostRequestforFormData(url: string, body?: any): Observable<any> {
+    let headers = new HttpHeaders();
+    headers = headers.append('fileupload', 'fileupload');
+    return this._http.post(this.LOCAL_API_URL + url, body, { headers: headers });
   }
 
   /**

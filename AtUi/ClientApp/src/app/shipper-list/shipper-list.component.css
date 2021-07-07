@@ -1,0 +1,204 @@
+::ng-deep snack-bar-container.custom-class-success {
+  background: #F2F2F2;
+  position: absolute;
+  top: 50px;
+  right: 16px;
+}
+
+::ng-deep .custom-class-success .mat-simple-snackbar {
+  color: #339900 !important;
+  font-weight: bold;
+}
+
+::ng-deep snack-bar-container.custom-class-error {
+  background: #F2F2F2;
+  position: absolute;
+  top: 50px;
+  right: 16px;
+}
+
+::ng-deep .custom-class-error .mat-simple-snackbar {
+  color: red !important;
+  font-weight: bold;
+}
+
+.table-div {
+  width: 100%;
+  max-height: calc(100vh - 214px);
+  overflow: auto;
+}
+
+mat-table {
+  width: 100%;
+  min-width: 1930px;
+  padding: 0;
+}
+
+mat-row {
+  padding: 0;
+  margin: 0% 1% 0% 0%;
+}
+
+mat-header-row {
+  padding: 0;
+}
+
+mat-cell {
+  padding: 0px 15px 0px 15px;
+  width: 150px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+mat-header-cell {
+  padding: 0px 15px 0px 15px;
+  width: 150px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+}
+
+mat-row:nth-child(odd) {
+  background: #F2F2F2;
+}
+
+mat-header-row {
+  background-color: gray;
+}
+
+.mat-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  color: white;
+}
+
+.glyphicon.glyphicon-plus-sign {
+  font-size: 40px;
+  color: #351C15;
+}
+
+.glyphicon.glyphicon-trash {
+  font-size: 30px;
+  color: #351C15;
+}
+
+.addNew {
+  padding-right: 40px;
+}
+
+/*Select*/
+mat-cell:nth-child(1) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 70px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Select*/
+mat-header-cell:nth-child(1) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 70px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Action*/
+mat-cell:nth-child(2) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 100px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Action*/
+mat-header-cell:nth-child(2) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 100px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Postal Code*/
+mat-cell:nth-child(3) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 150px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Postal Code*/
+mat-header-cell:nth-child(3) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 150px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Shipping Address*/
+mat-cell:nth-child(9) {
+  padding: 0px 15px 0px 15px;
+  width: 325px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Shipping Address*/
+mat-header-cell:nth-child(9) {
+  padding: 0px 15px 0px 15px;
+  width: 325px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Shipping Company*/
+mat-cell:nth-child(6) {
+  padding: 0px 15px 0px 15px;
+  width: 200px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Shipping Company*/
+mat-header-cell:nth-child(6) {
+  padding: 0px 15px 0px 15px;
+  width: 200px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Sending Contact*/
+mat-cell:nth-child(8) {
+  padding: 0px 15px 0px 15px;
+  width: 200px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Sending Contact*/
+mat-header-cell:nth-child(8) {
+  padding: 0px 15px 0px 15px;
+  width: 200px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}

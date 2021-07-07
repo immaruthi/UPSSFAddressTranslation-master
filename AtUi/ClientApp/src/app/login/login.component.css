@@ -1,3 +1,6 @@
+body{
+  overflow:auto;
+}
 .login-block {
   width: 100%;
   min-height:100vh;
@@ -6,6 +9,7 @@
   float:left;
   margin: 0;
   padding: 0;
+  overflow:auto;
 }
 
 .row {
@@ -46,7 +50,7 @@
 }
 
 .app-txt {
-  font-size: 2vw;
+  font-size: 1.75vw;
   width: auto;
   margin: 0% 0% 0% 18%;
   font-family: helvetica;

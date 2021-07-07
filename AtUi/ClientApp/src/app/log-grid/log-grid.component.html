@@ -1,0 +1,62 @@
+<div class="pageTitle"><span>Logs</span></div>
+<br />
+<div class="pageroute">
+  <div class="grid" [hidden]="search">
+    <button mat-raised-button color="primary" (click)="LogsexportToExcel()" style="float:right;">Export</button>
+    <div class="col-md-3">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="filterText" placeholder="Filter">
+      </mat-form-field>
+    </div>
+    <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    <div class="table-div">
+      <mat-table id="matTable" [dataSource]="dataSource">
+        <ng-container matColumnDef="info" class="container">
+          <mat-header-cell *matHeaderCellDef class="header-cell"> </mat-header-cell>
+          <mat-cell *matCellDef="let row; let i=index;" class="cell">
+            <button mat-icon-button (click)="onRowClick(i,row)">
+              <span><i class="material-icons">arrow_drop_down_circle</i></span>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <!-- Date Column -->
+        <ng-container matColumnDef="logDate">
+          <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+          <mat-cell *matCellDef="let log"> {{log.dateTime | date: 'MMMM dd, yyyy hh:mm a'}} </mat-cell>
+        </ng-container>
+        <!-- UserID Column -->
+        <ng-container matColumnDef="userId">
+          <mat-header-cell *matHeaderCellDef> User Id </mat-header-cell>
+          <mat-cell *matCellDef="let log"> {{log.userID}} </mat-cell>
+        </ng-container>
+        <!-- App Name Column -->
+        <ng-container matColumnDef="apiType">
+          <mat-header-cell *matHeaderCellDef> Application Name </mat-header-cell>
+          <mat-cell *matCellDef="let log"> {{log.apiType}} </mat-cell>
+        </ng-container>
+        <!-- Request Column -->
+        <ng-container matColumnDef="logRequest">
+          <mat-header-cell *matHeaderCellDef> Request </mat-header-cell>
+          <mat-cell *matCellDef="let log"> {{log.logRequest}} </mat-cell>
+        </ng-container>
+        <!-- Response Column -->
+        <ng-container matColumnDef="logResponse">
+          <mat-header-cell *matHeaderCellDef> Response </mat-header-cell>
+          <mat-cell *matCellDef="let log"> {{log.logResponse}} </mat-cell>
+        </ng-container>
+        <!-- Exception Column -->
+        <ng-container matColumnDef="logException">
+          <mat-header-cell *matHeaderCellDef> Exception </mat-header-cell>
+          <mat-cell *matCellDef="let log"> {{log.logException}} </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;let i=index;"></mat-row>
+      </mat-table>
+    </div>
+  </div>
+  <div class="rightnavbar">
+    <ul style="list-style:none;" *ngFor="let list of logFilesList">
+      <li><a style="cursor:pointer" (click)="onclicklogfile(list)">{{list}}</a></li>
+    </ul>
+  </div>
+</div>

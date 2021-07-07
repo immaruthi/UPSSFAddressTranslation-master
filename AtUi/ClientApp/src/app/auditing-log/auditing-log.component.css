@@ -1,0 +1,182 @@
+.glyphicon.glyphicon-search {
+  font-size: 24px;
+  color: #351C15;
+}
+
+.glyphicon.glyphicon-refresh {
+  font-size: 24px;
+  color: #351C15;
+}
+
+.table-div {
+  width: 100%;
+  max-height: calc(100vh - 220px);
+  overflow: auto;
+}
+
+mat-table {
+  width: 100%;
+  min-width: 1800px;
+  padding: 0;
+}
+
+mat-row {
+  padding: 0;
+  margin: 0% 1% 0% 0%;
+}
+
+mat-header-row {
+  padding: 0;
+}
+
+mat-cell {
+  padding: 0px 15px 0px 15px;
+  width: 150px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+mat-header-cell {
+  padding: 0px 15px 0px 15px;
+  width: 150px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+}
+
+mat-row:nth-child(odd) {
+  background: #F2F2F2;
+}
+
+mat-header-row {
+  background-color: gray;
+}
+
+.mat-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  color: white;
+}
+
+.dateSelect {
+  width: 120px;
+}
+
+.mat_datepicker_toggle {
+  font-size: 30px;
+}
+
+/*Workflow ID*/
+mat-cell:nth-child(1) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 150px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Workflow ID*/
+mat-header-cell:nth-child(1) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 150px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Shipment ID*/
+mat-cell:nth-child(2) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 150px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Shipment ID*/
+mat-header-cell:nth-child(2) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 150px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Consignee Address*/
+mat-cell:nth-child(3) {
+  padding: 0px 15px 0px 15px;
+  width: 325px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Consignee Address*/
+mat-header-cell:nth-child(3) {
+  padding: 0px 15px 0px 15px;
+  width: 325px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Previous Address*/
+mat-cell:nth-child(4) {
+  padding: 0px 15px 0px 15px;
+  width: 325px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Previous Address*/
+mat-header-cell:nth-child(4) {
+  padding: 0px 15px 0px 15px;
+  width: 325px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Modified Address*/
+mat-cell:nth-child(5) {
+  padding: 0px 15px 0px 15px;
+  width: 325px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Modified Address*/
+mat-header-cell:nth-child(5) {
+  padding: 0px 15px 0px 15px;
+  width: 325px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Updated Date*/
+mat-cell:nth-child(7) {
+  padding: 0px 15px 0px 15px;
+  width: 200px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Updated Date*/
+mat-header-cell:nth-child(7) {
+  padding: 0px 15px 0px 15px;
+  width: 200px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}

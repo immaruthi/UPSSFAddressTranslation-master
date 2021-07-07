@@ -6,30 +6,47 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Request\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ElmahCore" Version="1.2.5" />
+    <PackageReference Include="EFCore.BulkExtensions" Version="2.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.11" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Examples" Version="2.9.0" />
+    <PackageReference Include="Unity" Version="4.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ExcelFileRead\ExcelFileRead.csproj" />
+    <ProjectReference Include="..\Quincus.Implementations\Quincus.Implementations.csproj" />
     <ProjectReference Include="..\UPS.Application.CustomLogs\UPS.Application.CustomLogs.csproj" />
     <ProjectReference Include="..\UPS.DataObjects\UPS.DataObjects.csproj" />
     <ProjectReference Include="..\UPS.Quincus.APP\UPS.Quincus.APP.csproj" />
     <ProjectReference Include="..\UPS.ServicesAsyncActions\UPS.ServicesAsyncActions.csproj" />
     <ProjectReference Include="..\UPS.ServicesDataRepository\UPS.ServicesDataRepository.csproj" />
+    <ProjectReference Include="..\UPS.ShipmentServices.HK\UPS.ShipmentServices.HK.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Update="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Request\SOAPRequest.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

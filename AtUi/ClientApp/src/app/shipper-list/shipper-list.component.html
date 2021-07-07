@@ -1,0 +1,99 @@
+<div class="row">
+  <div class="pageTitle"><span>Shipper List</span></div>
+  <br />
+  <div class="col-md-6">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="filterText" placeholder="Filter">
+    </mat-form-field>
+  </div>
+  <div class="col-md-6 text-right addNew">
+    <label>Selected row count : {{selection.selected.length}}</label>
+    <button mat-icon-button (click)="addNew()" data-toggle="tooltip" title="Add New Shipper">
+      <span class="glyphicon glyphicon-plus-sign"></span>
+    </button>
+    <button mat-icon-button (click)="delete()" data-toggle="tooltip" title="Delete">
+      <span class="glyphicon glyphicon-trash"></span>
+    </button>
+  </div>
+</div>
+<mat-paginator #paginator
+               [pageSize]="10"
+               [pageSizeOptions]="[5, 10, 20, 50, 100]"
+               [showFirstLastButtons]="true">
+</mat-paginator>
+<div class="table-div">
+  <div class="row">
+    <mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="select" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell">
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        [aria-label]="checkboxLabel()">
+          </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <mat-checkbox (click)="$event.stopPropagation()"
+                        (change)="$event ? selection.toggle(row) : null"
+                        [checked]="selection.isSelected(row)"
+                        [aria-label]="checkboxLabel(row)">
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="actions" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell"> Action </mat-header-cell>
+        <mat-cell *matCellDef="let row; let i=index;" class="cell">
+          <button mat-icon-button (click)="startEdit(i,row)">
+            <span><i class="material-icons">edit</i></span>
+          </button>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="S_No" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> S.No </mat-header-cell>
+        <mat-cell *matCellDef="let element, let i = index" class="cell"> {{i+1}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_PSL_CD_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Postal Code </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_PSL_CD_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_CTY_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> City </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_CTY_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_CTR_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Centre </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_CTR_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_CPY_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Shipping Company </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_CPY_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_NA" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Shipping Name </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_NA}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SND_PTY_CTC_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Sending Party Contact </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SND_PTY_CTC_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_ADR_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Shipping Address </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_ADR_TE}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_CTC_PH" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Contact </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_CTC_PH}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_SLIC_NR" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> SLIC Number </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_SLIC_NR}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="spC_CST_ID_TE" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Customer ID </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="cell"> {{element.spC_CST_ID_TE}} </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
+    </mat-table>
+  </div>
+</div>

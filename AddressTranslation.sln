@@ -33,6 +33,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UPS.Application.LogManageme
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UPS.Application.CustomLogs", "UPS.Application.CustomLogs\UPS.Application.CustomLogs.csproj", "{7A85E3C3-E30A-40FE-8D9A-575464EE7A4E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Quincus.FrameworkGroups", "Quincus.FrameworkGroups", "{5D04C0D6-072E-490D-9F8E-EBB166C16B95}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quincus.Implementations", "Quincus.Implementations\Quincus.Implementations.csproj", "{0ED63CCA-11E8-49A6-9337-DC6FCDE87282}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UPS.HK.ShipmentService", "UPS.HK.ShipmentService", "{E7D71939-B678-45AF-84D5-CE14AE132D98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UPS.ShipmentServices.HK", "UPS.ShipmentServices.HK\UPS.ShipmentServices.HK.csproj", "{0D451AC0-B09A-44CB-B795-B3AE56FB57BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +79,14 @@ Global
 		{7A85E3C3-E30A-40FE-8D9A-575464EE7A4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A85E3C3-E30A-40FE-8D9A-575464EE7A4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A85E3C3-E30A-40FE-8D9A-575464EE7A4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ED63CCA-11E8-49A6-9337-DC6FCDE87282}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ED63CCA-11E8-49A6-9337-DC6FCDE87282}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ED63CCA-11E8-49A6-9337-DC6FCDE87282}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ED63CCA-11E8-49A6-9337-DC6FCDE87282}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D451AC0-B09A-44CB-B795-B3AE56FB57BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D451AC0-B09A-44CB-B795-B3AE56FB57BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D451AC0-B09A-44CB-B795-B3AE56FB57BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D451AC0-B09A-44CB-B795-B3AE56FB57BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +99,8 @@ Global
 		{5AB6BB06-5498-4C8C-998C-C33551396024} = {70305DCC-0619-43D2-9549-F273D15DE758}
 		{5E00665E-0924-44D6-AC64-995CB14A2B17} = {928B122F-65F2-424F-8002-FD079327D4B7}
 		{7A85E3C3-E30A-40FE-8D9A-575464EE7A4E} = {65788ABF-FE75-40E5-A8AF-75B4D53282DD}
+		{0ED63CCA-11E8-49A6-9337-DC6FCDE87282} = {5D04C0D6-072E-490D-9F8E-EBB166C16B95}
+		{0D451AC0-B09A-44CB-B795-B3AE56FB57BC} = {E7D71939-B678-45AF-84D5-CE14AE132D98}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C9A70C0A-3C7D-4AEE-A95E-60847BDA9D7B}

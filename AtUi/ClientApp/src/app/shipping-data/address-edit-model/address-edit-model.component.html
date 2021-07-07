@@ -13,14 +13,14 @@
     </mat-form-field><br />
 
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="Receiving address" value="{{data.rcV_ADR_TE}}" [(ngModel)]="data.rcV_ADR_TE" name="rcV_ADR_TE" readonly>
+      <textarea matInput placeholder="Receiving address" value="{{data.rcV_ADR_TE}}" [(ngModel)]="data.rcV_ADR_TE" name="rcV_ADR_TE" readonly rows="2"></textarea>
     </mat-form-field><br />
     <mat-form-field class="example-full-width">
-      <input matInput class="form-control" placeholder="Translated address" value="{{data.shP_ADR_TR_TE}}" [(ngModel)]="data.shP_ADR_TR_TE" name="shP_ADR_TR_TE">
+      <input matInput placeholder="Translated address" value="{{data.shP_ADR_TR_TE}}" [(ngModel)]="data.shP_ADR_TR_TE" name="shP_ADR_TR_TE" [required]="data.is__ADR_TR_TE_Required">
     </mat-form-field><br />
     <div class="form">
       <mat-form-field class="example-full-width">
-        <input matInput class="form-control" placeholder="COD(CN¥)" value="{{data.coD_TE}}" [(ngModel)]="data.coD_TE" name="coD_TE" pattern="^[0-9]{0,6}(\.[0-9]([0-9])?)?$">
+        <input matInput placeholder="COD(CN¥)" value="{{data.coD_TE}}" [(ngModel)]="data.coD_TE" name="coD_TE" pattern="^[0-9]{0,6}(\.[0-9]([0-9])?)?$">
         <mat-error *ngIf="formControl.invalid">Please Enter valid COD </mat-error>
         <mat-hint>Supported digit format: Max 6 digit with 2 decimal number (Ex. 999999.99)</mat-hint>
       </mat-form-field>
@@ -29,7 +29,7 @@
       <mat-form-field class="example-full-width">
         <mat-label>Extra Service</mat-label>
         <mat-select [(ngModel)]="data.poD_RTN_SVC" name="poD_RTN_SVC">
-          <mat-option *ngFor="let option of PODoptions" [value]="option.key">
+          <mat-option *ngFor="let option of PODoptions" value="{{option.key}}">
             {{option.value}}
           </mat-option>
         </mat-select>

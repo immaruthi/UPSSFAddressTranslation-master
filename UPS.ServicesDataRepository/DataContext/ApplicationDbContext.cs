@@ -6,6 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UPS.DataObjects.AddressBook;
+using UPS.DataObjects.ADR_ADT_LG;
+using UPS.DataObjects.CST_DTL;
 using UPS.DataObjects.Shipment;
 using UPS.DataObjects.SPC_LST;
 using UPS.DataObjects.UserData;
@@ -28,30 +31,24 @@ namespace UPS.ServicesDataRepository.DataContext
                 new { Id = "1", Name = "Admin", NormalizedName = "ADMIN" },
                 new { Id = "2", Name = "Customer", NormalizedName = "Customer" }
                 );
+
             builder.Entity<ShipmentDataRequest>().ToTable("SMT-DTL-FRM-XL");
-            builder.Entity<USR>().ToTable("USR");
+            builder.Entity<User>().ToTable("USR");
             builder.Entity<WorkflowDataRequest>().ToTable("WR-FLW");
-            builder.Entity<ShipperCompanyRequest>().ToTable("SPC-LST");
+            builder.Entity<ShipperCompanyList>().ToTable("SPC-LST");
+            builder.Entity<AddressBook>().ToTable("ADR-BK");
+            builder.Entity<AddressAuditLogRequest>().ToTable("ADR-ADT-LG");
+            builder.Entity<CST_DTL>().ToTable("CST-DTL");
+            builder.Entity<UserCityMapping>().ToTable("USR-CTY-MPG");
+            builder.Entity<UserRole>().ToTable("USR-IN-RLE");
+            builder.Entity<UpsRoles>().ToTable("RLE");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(DBConnectionContext.connectionString);
         }
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (!optionsBuilder.IsConfigured)
-        //    {
-        //        IConfigurationRoot configuration = new ConfigurationBuilder()
-        //        .SetBasePath(Directory.GetCurrentDirectory())
-        //        .AddJsonFile("appsettings.json")
-        //        .Build();
-        //        var connectionString = configuration.GetConnectionString("DbCoreConnectionString");
-        //        optionsBuilder.UseSqlServer(connectionString);
-        //    }
-        //}
-
-        public DbSet<USR> UserData
+        public DbSet<User> UserData
         {
             get;
             set;
@@ -67,7 +64,35 @@ namespace UPS.ServicesDataRepository.DataContext
             get; set;
         }
 
-        public DbSet<ShipperCompanyRequest> shipperCompanyRequests
+        public DbSet<ShipperCompanyList> shipperCompanyRequests
+        {
+            get; set;
+        }
+
+        public DbSet<AddressBook> AddressBooks
+        {
+            get; set;
+        }
+
+        public DbSet<AddressAuditLogRequest> AddressAuditLogRequests
+        {
+            get; set;
+        }
+        public DbSet<CST_DTL> CST_DTL
+        {
+            get; set;
+        }
+
+        public DbSet<UserCityMapping> UserCityMapping
+        {
+            get; set;
+        }
+
+        public new DbSet<UserRole> UserRoles
+        {
+            get; set;
+        }
+        public  DbSet<UpsRoles> UpsRoles
         {
             get; set;
         }

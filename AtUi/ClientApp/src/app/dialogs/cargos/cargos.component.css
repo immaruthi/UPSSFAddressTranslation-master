@@ -1,0 +1,20 @@
+.cargos{
+  padding: 25px;
+  overflow: auto;
+}
+
+th {
+  height: 50px;
+  background-color: maroon;
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+td {
+  height: 40px;
+}
+
+.okButton {
+  width: 100px;
+}

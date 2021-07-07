@@ -1,5 +1,5 @@
   <div class="routepage">
-    <h5 class="section-title card"></h5>
+    <!--<h5 class="section-title card"></h5>-->
     <!--<button mat-raised-button (click)="isLinear = true" id="toggle-linear">Enable linear mode</button>-->
 
     <mat-horizontal-stepper [linear]="isLinear" #stepper="matHorizontalStepper" (selectionChange)="selectionChanged($event)">
@@ -8,9 +8,9 @@
           <ng-template matStepLabel>Uploaded Shipment Details</ng-template>
          
           <app-uploaded-data [events]="eventsSubject.asObservable()"></app-uploaded-data>
-          <div>
+          <!--<div>
             <button mat-stroked-button color="primary" matStepperNext>Next</button>
-          </div>
+          </div>-->
         </form>
       </mat-step>
       <mat-step [stepControl]="secondFormGroup">
@@ -18,10 +18,10 @@
           <ng-template matStepLabel>Translate</ng-template>
           <app-translate [events]="eventsSubject.asObservable()"></app-translate>
 
-          <div>
+          <!--<div>
             <button mat-stroked-button color="primary" matStepperPrevious>Back</button>
             <button mat-stroked-button color="primary" matStepperNext>Next</button>
-          </div>
+          </div>-->
         </form>
       </mat-step>
 
@@ -29,10 +29,10 @@
         <form [formGroup]="secondFormGroup">
           <ng-template matStepLabel>Sent To SF</ng-template>
           <app-sent-to-sf [events]="eventsSubject.asObservable()"></app-sent-to-sf>
-          <div>
+          <!--<div>
             <button mat-stroked-button color="primary" matStepperPrevious>Back</button>
             <button mat-stroked-button color="primary" matStepperNext>Next</button>
-          </div>
+          </div>-->
         </form>
       </mat-step>
       <mat-step [stepControl]="fourthFormGroup">
@@ -40,10 +40,10 @@
           <ng-template matStepLabel>Completed</ng-template>
           <!--You are now done.-->
           <app-completed [events]="eventsSubject.asObservable()"></app-completed>
-          <div>
-            <button mat-stroked-button color="primary" matStepperPrevious>Back</button>
+          <!--<div>
+            <button mat-stroked-button color="primary" matStepperPrevious>Back</button>-->
             <!--<button mat-stroked-button (click)="stepper.reset()">Reset</button>-->
-          </div>
+          <!--</div>-->
         </form>
       </mat-step>
     </mat-horizontal-stepper>

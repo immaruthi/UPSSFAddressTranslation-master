@@ -10,5 +10,7 @@ namespace UPS.DataObjects.Shipment
         public ShipmentDataRequest ShipmentDataRequest { get; set; }
         public bool Success { get; set; }
         public string OperationExceptionMsg { get; set; }
+        public string BeforeAddress { get; set; }
+        public bool HasWorkflow { get; set; }
     }
 }

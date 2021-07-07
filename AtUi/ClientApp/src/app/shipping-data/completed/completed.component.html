@@ -1,16 +1,24 @@
 <div class="row">
-  <div class="col-md-6">
+  <div class="nobmargin col-md-6">
     <mat-form-field>
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+      <input matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="filterText" placeholder="Filter">
     </mat-form-field>
-  </div><br />
+  </div>
   <div class="col-md-6 text-right">
     <button mat-raised-button color="primary" (click)="exportToExcel()"> Export to Excel </button>
   </div>
 </div>
-<br />
+<div class="rowPaginator">
+  <div class="nobmargin">
+    <mat-paginator #paginator
+                   [pageSize]="10"
+                   [pageSizeOptions]="[5, 10, 20]"
+                   [showFirstLastButtons]="true">
+    </mat-paginator>
+  </div>
+</div>
 <div class="table-div">
-  <div class="row">
+  <div class="row completedGrid">
     <mat-table class="table" [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="wfL_ID" class="container">
         <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Workflow ID </mat-header-cell>
@@ -89,7 +97,7 @@
         <mat-cell *matCellDef="let element" class="cell"> {{element.pyM_MTD}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="exP_TYP" class="container">
-        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Express Type </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Source Area </mat-header-cell>
         <mat-cell *matCellDef="let element" class="cell"> {{element.exP_TYP}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="spC_SLIC_NR" class="container">
@@ -108,13 +116,13 @@
         <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Extra Service </mat-header-cell>
         <mat-cell *matCellDef="let element" class="cell"> {{PODoptions[element?.poD_RTN_SVC!=null ?element.poD_RTN_SVC:0].value}} </mat-cell>
       </ng-container>
+      <ng-container hidden matColumnDef="spC_CST_ID_TE" class="container">
+        <mat-header-cell hidden *matHeaderCellDef class="header-cell" mat-sort-header> Customer ID </mat-header-cell>
+        <mat-cell hidden *matCellDef="let element" class="cell"> {{element.spC_CST_ID_TE}} </mat-cell>
+      </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
     </mat-table>
   </div>
 </div>
-<mat-paginator #paginator
-               [pageSize]="10"
-               [pageSizeOptions]="[5, 10, 20]"
-               [showFirstLastButtons]="true">
-</mat-paginator>
+

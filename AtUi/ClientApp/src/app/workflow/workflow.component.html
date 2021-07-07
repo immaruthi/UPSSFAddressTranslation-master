@@ -1,5 +1,6 @@
   <div class="routepage">
-    <h4>Work Flow </h4>
+    <div class="pageTitle"><span>Workflow</span></div>
+    <br />
     <div class="row">
       <div class="col-md-3">
         <mat-form-field>
@@ -19,7 +20,8 @@
         </div>
         <div class="col-md-4" style="float:right">
           <div class="form-group">
-            <label for="file" class="btn btn-primary">Upload </label>
+            <!--<label for="file" class="btn btn-primary" color="primary">Upload </label>-->
+            <label for="file" class="mat-raised-button" style="background-color: #3f51b5;color: white">Upload </label>
             <input type="file"
                    id="file" hidden accept=".xls, .xlsx"
                    (change)="handleFileInput($event.target.files)" style="width:0px;">
@@ -28,8 +30,10 @@
       </div>
     </div>
     <div>
+      <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20, 50, 100]" showFirstLastButtons>
+      </mat-paginator>
       <div class="table-div">
-        <mat-table class="table" [dataSource]="dataSource" matSort>
+        <mat-table [dataSource]="dataSource" matSort>
           <!-- Position Column -->
           <ng-container matColumnDef="id" class="container">
             <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Workflow Id </mat-header-cell>
@@ -77,9 +81,7 @@
           <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
           <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
         </mat-table>
-        </div>
-        <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
-        </mat-paginator>
       </div>
+    </div>
       <app-loader></app-loader>
     </div>

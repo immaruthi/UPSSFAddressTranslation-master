@@ -1,0 +1,36 @@
+<div>
+  <div class="cargos">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>S.No</th>
+          <th>Shp No/Master Pkg No</th>
+          <th>Name</th>
+          <th>Weight</th>
+          <th>Count</th>
+          <th>PCS</th>
+          <th>Amount</th>
+          <th>Total Value</th>
+          <th>Source Area</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cargo of data.message; let i = index">
+          <td> {{i+1}} </td>
+          <td> {{cargo.smT_NR_TE}} </td>
+          <td> {{cargo.fsT_INV_LN_DES_TE}} </td>
+          <td> {{cargo.pkG_WGT_DE}} </td>
+          <td> {{cargo.pcS_QTY_NR}} </td>
+          <td> PCS </td>
+          <td> {{cargo.smT_VAL_DE}} </td>
+          <td> {{getAmount(cargo.pcS_QTY_NR,cargo.smT_VAL_DE)}} </td>
+          <td> {{cargo.exP_TYP}} </td>
+        </tr>
+      </tbody>
+    </table>
+    <div>
+      <button class="pull-right" mat-flat-button id="okay-button" [mat-dialog-close]="true">Ok</button>
+    </div>
+  </div>
+  
+</div>

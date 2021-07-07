@@ -1,0 +1,60 @@
+<div class="routepage">
+  <div class="row">
+    <div class="pageTitle"><span>User Registration</span></div>
+    <br />
+    <div class="col-md-6">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" [(ngModel)]="filterText" placeholder="Filter">
+      </mat-form-field>
+    </div>
+    <div class="col-md-6 text-right addNew">
+      <button mat-icon-button (click)="openDialog()" data-toggle="tooltip" title="Add New Shipper">
+        <span class="glyphicon glyphicon-plus-sign"></span>
+      </button>
+    </div>
+  </div>
+  <mat-paginator #paginator
+                 [pageSize]="10"
+                 [pageSizeOptions]="[5, 10, 20, 50, 100]"
+                 [showFirstLastButtons]="true">
+  </mat-paginator>
+
+  <div class="table-div">
+    <mat-table class="table" [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="edit" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Action </mat-header-cell>
+        <mat-cell *matCellDef="let user" class="cell"><button (click)="onClickEdit(user)" mat-icon-button><span><i class="material-icons">edit</i></span></button></mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="firstName" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> First Name </mat-header-cell>
+        <mat-cell *matCellDef="let user" class="cell"> {{user.firstName}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="lastName" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Last Name </mat-header-cell>
+        <mat-cell *matCellDef="let user" class="cell"> {{user.lastName}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="email" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Email </mat-header-cell>
+        <mat-cell *matCellDef="let user" class="cell"> {{user.email}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="userId" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> User ID </mat-header-cell>
+        <mat-cell *matCellDef="let user" class="cell"> {{user.userId}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="country" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Country </mat-header-cell>
+        <mat-cell *matCellDef="let user" class="cell"> {{user.country}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="cities" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Cities </mat-header-cell>
+        <mat-cell *matCellDef="let user" class="cell"> {{user.cities}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="role" class="container">
+        <mat-header-cell *matHeaderCellDef class="header-cell" mat-sort-header> Role </mat-header-cell>
+        <mat-cell *matCellDef="let user" class="cell"> {{Roles[user.role]}} </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" class="row"></mat-row>
+    </mat-table>
+  </div>
+</div>

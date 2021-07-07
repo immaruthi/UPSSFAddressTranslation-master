@@ -21,16 +21,28 @@ import { LoginGuard } from './services/LoginGuard';
 import { AssignProjectService } from './Services/AssignProjectService';
 import { DataService } from './services/data.service';
 
+/*  Interceptors */
 import { LoaderInterceptor } from "./shared/loader/loaderIntercepter";
+import { AuthInterceptor } from "./shared/Interceptor/AuthInterceptor";
+import { TokenInterceptor } from "./shared/Interceptor/TokenInterceptor";
+
+/* End  Interceptors */
 import { HomeService } from './services/HomeService';
 import { MaterialModule } from './shared/MaterialModule'
 import { AdminconfigComponent } from './adminconfig/adminconfig.component';
 import { AlertDialogComponent } from './dialogs/alert-dialog/alert-dialog.component';
 import { SummaryDialogComponent } from './dialogs/summary-dialog/summary-dialog.component';
+
+/* Service */
 import { DialogService } from './services/dialog.service';
 import { ExcelService } from './services/ExcelExport';
 import { ShippingService } from './services/shipping.service';
+import { ShipperListService } from './services/ShipperListService';
+import { AuditingLogService } from './services/AuditingLogService';
+import { AddressBookService } from './services/AddressBookService';
 import { HttpService } from './shared/http.service';
+import { AuthenticationService } from './services/authentication.service';
+
 
 import { WorkflowComponent } from './workflow/workflow.component';
 import { WorkflowService } from './services/WorkflowService';
@@ -57,7 +69,18 @@ import { ViewModeDirective } from './shared/editable/view-mode.directive';
 import { EditOnEnterDirective } from './shared/editable/edit-on-enter.directive';
 import { AddressEditModelComponent } from './shipping-data/address-edit-model/address-edit-model.component';
 import { DatePipe } from '@angular/common';
-import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component'
+import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component';
+import { ShipperListComponent } from './shipper-list/shipper-list.component';
+import { AddressBookComponent } from './address-book/address-book.component';
+import { AddressBookEditModelComponent } from './address-book/address-book-edit-model/address-book-edit-model.component'
+import { LogGridComponent } from './log-grid/log-grid.component';
+import { AuditingLogComponent } from './auditing-log/auditing-log.component';
+import { LogFilesService } from './services/LogFilesService';
+import { ShipperListModelComponent } from './shipper-list/shipper-list-model/shipper-list-model.component';
+import { UserRegistrationComponent } from './user-registration/user-registration.component';
+import { AddUserComponent } from './user-registration/add-user/add-user.component';
+import { EditUserComponent } from './user-registration/edit-user/edit-user.component';
+import { CargosComponent } from './dialogs/cargos/cargos.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +112,16 @@ import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confi
     ConfirmPopupComponent,
     AddressEditModelComponent,
     ConfirmationDialogComponent,
-   
+    ShipperListComponent,
+    AddressBookComponent,
+    AddressBookEditModelComponent,
+    LogGridComponent,
+    AuditingLogComponent,
+    UserRegistrationComponent,
+    AddUserComponent,
+    EditUserComponent,
+    ShipperListModelComponent,
+    CargosComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -107,20 +139,36 @@ import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confi
     AuthGuard, LoginGuard,
     AssignProjectService, ExcelService, HomeService,
     DialogService,
-      ShippingService,
+    ShippingService,
+    ShipperListService,
+    AuditingLogService,
+    AddressBookService,
       HttpService,
     LoaderService,
     DatePipe,
+    AuthenticationService,
     NotificationService,
     DataService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: LoaderInterceptor,
       multi: true
-    }
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    },
+    LogFilesService
     ],
   bootstrap: [AppComponent],
-  entryComponents: [LoginComponent, AlertDialogComponent, SummaryDialogComponent, ConfirmationDialogComponent, AddressEditModelComponent]
+  entryComponents: [LoginComponent, AlertDialogComponent, SummaryDialogComponent, ConfirmationDialogComponent, AddressEditModelComponent,
+    AddressBookEditModelComponent, ShipperListModelComponent, AddUserComponent, EditUserComponent, CargosComponent]
 
 })
 export class AppModule { }

@@ -1,0 +1,222 @@
+::ng-deep snack-bar-container.custom-class-success {
+  background: #F2F2F2;
+  position: absolute;
+  top: 50px;
+  right: 16px;
+}
+
+::ng-deep .custom-class-success .mat-simple-snackbar {
+  color: #339900 !important;
+  font-weight: bold;
+}
+
+::ng-deep snack-bar-container.custom-class-error {
+  background: #F2F2F2;
+  position: absolute;
+  top: 50px;
+  right: 16px;
+}
+
+::ng-deep .custom-class-error .mat-simple-snackbar {
+  color: red !important;
+  font-weight: bold;
+}
+
+.table-div {
+  width: 100%;
+  max-height: calc(100vh - 214px);
+  overflow: auto;
+}
+
+mat-table {
+  width: 100%;
+  min-width: 5500px;
+  padding: 0;
+}
+
+mat-row {
+  padding: 0;
+  margin: 0% 1% 0% 0%;
+}
+
+mat-header-row {
+  padding: 0;
+}
+
+mat-cell {
+  padding: 0px 15px 0px 15px;
+  width: 150px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+mat-header-cell {
+  padding: 0px 15px 0px 15px;
+  width: 150px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+}
+
+mat-row:nth-child(odd) {
+  background: #F2F2F2;
+}
+
+mat-header-row {
+  background-color: gray;
+}
+
+.mat-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  color: white;
+}
+
+/*Action*/
+mat-cell:nth-child(1) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 100px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Action*/
+mat-header-cell:nth-child(1) {
+  margin-left: 0px 15px 0px 15px;
+  padding: 20px;
+  width: 100px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Consignee Company Name*/
+mat-cell:nth-child(2) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Consignee Company Name*/
+mat-header-cell:nth-child(2) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Consignee Address*/
+mat-cell:nth-child(3) {
+  padding: 0px 15px 0px 15px;
+  width: 300px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Consignee Address*/
+mat-header-cell:nth-child(3) {
+  padding: 0px 15px 0px 15px;
+  width: 300px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Consignee Translated Address*/
+mat-cell:nth-child(4) {
+  padding: 0px 15px 0px 15px;
+  width: 300px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Consignee Translated Address*/
+mat-header-cell:nth-child(4) {
+  padding: 0px 15px 0px 15px;
+  width: 300px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Translation Score*/
+mat-cell:nth-child(7) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Translation Score*/
+mat-header-cell:nth-child(7) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Created Date*/
+mat-cell:nth-child(10) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Created Date*/
+mat-header-cell:nth-child(10) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Modified Date*/
+mat-cell:nth-child(11) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Modified Date*/
+mat-header-cell:nth-child(11) {
+  padding: 0px 15px 0px 15px;
+  width: 180px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*Batch ID*/
+mat-cell:nth-child(13) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  float: left;
+  font-size: 12px;
+}
+
+/*Batch ID*/
+mat-header-cell:nth-child(13) {
+  padding: 0px 15px 0px 15px;
+  width: 250px;
+  flex: none;
+  font-size: 14px;
+  font-weight: bold;
+}

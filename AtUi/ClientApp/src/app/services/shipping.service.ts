@@ -13,7 +13,7 @@ export class ShippingService {
     private httpService: HttpService) { }
 
   public getUploadedData(WorkflowID: any): Observable<any> {
-    return this.httpService.makeGetRequest('api/Shipment/GetShipmentData?wid=' + WorkflowID);
+    return this.httpService.makeGetRequest('api/Shipment/GetAllShipmentData?wid=' + WorkflowID);
   }
   
   public getTranslateData(WorkflowID: any): Observable<any> {
@@ -37,7 +37,7 @@ export class ShippingService {
   }
 
   public UpdateShippingAddress(data: ShipmentDetails): Observable<ShipmentDetails> {
-
+    //var user = localStorage.getItem("userid");
     return this.httpService.makePostRequest('api/Shipment/UpdateShipmentAddressById', data);
   }
 

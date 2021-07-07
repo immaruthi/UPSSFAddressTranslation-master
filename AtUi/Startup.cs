@@ -48,9 +48,15 @@ namespace AtUi
 
             new GetConnectionString().getconnection(Configuration);
 
-            services.Add(new ServiceDescriptor(typeof(LoginContext), new LoginContext(Configuration.GetConnectionString("DefaultConnection"))));
-            services.Add(new ServiceDescriptor(typeof(HomeContext), new HomeContext(Configuration.GetConnectionString("DefaultConnection"))));
-            services.Add(new ServiceDescriptor(typeof(LoginDataContext), new LoginDataContext(Configuration.GetConnectionString("DefaultConnection"))));
+            //  services.Add(new ServiceDescriptor(typeof(LoginContext), new LoginContext(Configuration.GetConnectionString("DefaultConnection"))));
+            //  services.Add(new ServiceDescriptor(typeof(HomeContext), new HomeContext(Configuration.GetConnectionString("DefaultConnection"))));
+            //  services.Add(new ServiceDescriptor(typeof(LoginDataContext), new LoginDataContext(Configuration.GetConnectionString("DefaultConnection"))));
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Core API", Description = "Swagger Core API" });
+            }
+
+              );
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -98,7 +104,12 @@ namespace AtUi
                 }
 
             });
-
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("swagger/v1/swagger.json", "Core API");
+            }
+            );
             app.UseCors("SiteCorsPolicy");
         }
     }

@@ -8,6 +8,27 @@
 }
 .mat-stepper-horizontal {
   background-color: inherit;
-} 
- 
+}
 
+
+:host ::ng-deep .mat-horizontal-stepper-header-container {
+  height: 40px;
+}
+
+:host ::ng-deep .mat-horizontal-stepper-header {
+  height: 35px;
+}
+
+:host ::ng-deep .mat-step-icon {
+  height: 20px;
+  width: 20px;
+}
+
+:host ::ng-deep .mat-step-icon-not-touched {
+  height: 20px;
+  width: 20px;
+}
+
+:host ::ng-deep .mat-step-label {
+  font-size: 13px;
+}

@@ -1,7 +1,9 @@
 .routepage {
   width: 100%;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   height: calc( 100vh - 64px );
+  padding: 0;
 }
 .map-image {
   width: 400px;
@@ -41,8 +43,9 @@ a {
 }
 .table-div {
   width: 100%;
-  height: 435px;
+  max-height: calc(100vh - 230px );
   overflow: auto;
+  padding: 0;
 }
 
 mat-row:nth-child(odd) {
